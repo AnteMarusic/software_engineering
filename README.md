@@ -7,3 +7,11 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 
 Per i diagrammi UML lavoriamo con "StarUML", file: "UML_diagram.mdj".
 
+SUDDIVISIONE LAVORO:
+
+Kala-Andrea implementano le classi: Bookshelf, PersonalGoal
+Filippo-Antonio implementano le classi: Board, State
+Comuni --> coordinates, card, player
+Seguire l'ultima versione del diagramma UML
+
+
