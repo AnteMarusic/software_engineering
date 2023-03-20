@@ -36,7 +36,13 @@ public class BookShelf {
     }
 
     public Card[][] getGrid () {
-        //copy the grid and return it
+        Card[][] miao = new Card[6][5];
+        for(int i=0; i<6; i++){
+            for(int j=0; j<5; j++){
+                miao[i][j]=bookShelf[i][j];
+            }
+        }
+        return miao;
     }
 
     public void notifyAll () {

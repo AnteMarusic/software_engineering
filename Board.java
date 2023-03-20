@@ -9,7 +9,7 @@ public class Board {
             numberOfPlayer = new TwoPlayer()
         }
 
-    } //raandomicamente riempie la matrice con delle carte
+    } //randomicamente riempie la matrice con delle carte
     public Card get(Coordinates c){}
     public boolean valid(Coordinates c) {} // controlla che la tessere abbia un lato libero
     public void remove(Coordinates c) {}
