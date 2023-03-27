@@ -35,7 +35,9 @@ abstract class Board {
 
     //return card in position Coordinate coor
     private Card getCardAtCoordinate(Coordinates coor){
-        return board[grid.get(coor)];
+        Card tmp = new Card(board[grid.get(coor)].getColor() , board[grid.get(coor)].getState());
+        this.removeCardAtCoordinate(coor);
+        return tmp;
     }
 
     //remove a card from the board and set the reference to null, and updates adjacent
@@ -54,7 +56,6 @@ abstract class Board {
         AUXcoor.setX(x+1);
         if (board[grid.get(AUXcoor)]!= null)
             board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
-
         board[grid.get(coor)] = null;
     }
     //probably useless, we'll check during class Game implementation
@@ -92,7 +93,11 @@ class twoPlayersBoard extends Board {
                     start = 3;
                     length = 3;
                 }
-                case 3, 4 -> {
+                case 3 -> {
+                    start = 1;
+                    length = 6;
+                }
+                case 4 -> {
                     start = 1;
                     length = 7;
                 }
@@ -119,6 +124,7 @@ class twoPlayersBoard extends Board {
         }
         //fill board with card the first time
         this.fill(bag);
+        this.updatePickablesAtFirst();
     }
 
     //returns a boolean representing the necessity of refilling the board with cards
@@ -137,14 +143,11 @@ class twoPlayersBoard extends Board {
         return flag;
     }
 
-    private void updatePickables(){
-        //refreshes the state of the cards
-    }
 
     private void updatePickablesAtFirst(){
         Coordinates AUXkey = new Coordinates();
         for (int i = 1; i < 9; i++) {
-           AUXkey.setX(i);
+            AUXkey.setX(i);
             switch (i) {
                 case 1 -> {
                     AUXkey.setY(3);
@@ -190,10 +193,10 @@ class twoPlayersBoard extends Board {
         }
     }
     private boolean cardCheck() {
-        Coordinates AUXkey2 = new Coordinates();
-        boolean needToRefill = true; // a priori assumiamo sia empty
+        int start, length;
+        Coordinates AUXkey = new Coordinates();
         for (int i = 1; i < 9; i++) {
-            AUXkey2.setX(i);
+            AUXkey.setX(i);
             switch (i) {
                 case 1 -> {
                     start = 3;
@@ -222,34 +225,27 @@ class twoPlayersBoard extends Board {
             }
             for (int j = 1; j < 9; j++) {
                 while (j >= start && j < start + length) {
-                    AUXkey2.setXY(i, j);
-                    if (board[grid.get(AUXkey2)] != null) {
-                        int x = coor.getX();
-                        int y = coor.getY();
-                        Coordinates AUXcoor = new Coordinates(x, y - 1);
-                        if (board[grid.get(AUXcoor)] != null){
-                            needToRefill = false;
-                            return needToRefill;
-                            }
-                        coor.setY(y + 1);
-                        if (board[grid.get(AUXcoor)] != null){
-                            needToRefill = false;
-                            return needToRefill;
-                            }
-                        coor.setX(x - 1);
-                        if (board[grid.get(AUXcoor)] != null){
-                            needToRefill = false;
-                            return needToRefill;
-                            }
-                        coor.setX(x + 1);
-                        if (board[grid.get(AUXcoor)] != null){
-                            needToRefill = false;
-                            return needToRefill;
-                            }
-                   }                  
-               }              
-           }          
-       }
-       return needToRefill;
-   }
+                    AUXkey.setXY(i, j);
+                    if (board[grid.get(AUXkey)] != null) {
+                        if (board[grid.get(AUXkey)] != null){
+                            return false;
+                        }
+                        AUXkey.setY(j + 1);
+                        if (board[grid.get(AUXkey)] != null){
+                            return false;
+                        }
+                        AUXkey.setXY(i - 1,j);
+                        if (board[grid.get(AUXkey)] != null){
+                            return false;
+                        }
+                        AUXkey.setX(i + 1);
+                        if (board[grid.get(AUXkey)] != null){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }
