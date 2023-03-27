@@ -1,6 +1,6 @@
 package org.example;
 
-import java.util.Scanner
+import java.util.Scanner;
 
 public class Player {
     final private String name;
@@ -13,7 +13,7 @@ public class Player {
     public Player(String playerName) {
         this.name = playerName;
         this.sharedScore = 0;
-        this.personalGoal = 0;
+        this.personalScore= 0;
     }
 
     public String getName(){
@@ -41,7 +41,7 @@ public class Player {
     //into his bookshelf
     public Coordinates[] chooseCards(){
         int x,y;
-        int exit;
+        int exit=0;
         Coordinates[] AUXcoor= new Coordinates[3];
         Scanner scanner = new Scanner(System.in);
         for(int i=0 ; i<3 || exit==1; i++){
