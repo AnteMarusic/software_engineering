@@ -227,27 +227,29 @@ class twoPlayersBoard extends Board {
                         int x = coor.getX();
                         int y = coor.getY();
                         Coordinates AUXcoor = new Coordinates(x, y - 1);
-                        if (board[grid.get(AUXcoor)] != null)
+                        if (board[grid.get(AUXcoor)] != null){
                             needToRefill = false;
+                            return needToRefill;
+                            }
                         coor.setY(y + 1);
-                        if (board[grid.get(AUXcoor)] != null)
+                        if (board[grid.get(AUXcoor)] != null){
                             needToRefill = false;
+                            return needToRefill;
+                            }
                         coor.setX(x - 1);
-                        if (board[grid.get(AUXcoor)] != null)
+                        if (board[grid.get(AUXcoor)] != null){
                             needToRefill = false;
+                            return needToRefill;
+                            }
                         coor.setX(x + 1);
-                        if (board[grid.get(AUXcoor)] != null)
+                        if (board[grid.get(AUXcoor)] != null){
                             needToRefill = false;
-                    }
-                    if (!needToRefill)
-                        break;
-                }
-                if (!needToRefill)
-                    break;
-            }
-            if (!needToRefill)
-                break;
-        }
-        return needToRefill;
-    }
+                            return needToRefill;
+                            }
+                   }                  
+               }              
+           }          
+       }
+       return needToRefill;
+   }
 }
