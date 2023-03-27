@@ -127,22 +127,6 @@ class twoPlayersBoard extends Board {
         this.updatePickablesAtFirst();
     }
 
-    //returns a boolean representing the necessity of refilling the board with cards
-    private boolean cardCheck(){
-        Coordinates AUXkey = new Coordinates();
-        boolean flag=true;
-        for(int i=0 ; i<9 ; i++){
-            AUXkey.setX(i);
-            for(int j=0 ; j<9 ; j++){
-                AUXkey.setY(j);
-                if(board[grid.get(AUXkey)]!=null && /*controllo adiacenti*/){
-                    flag=false; //caso in cui ci sono adiacenti
-                }
-            }
-        }
-        return flag;
-    }
-
 
     private void updatePickablesAtFirst(){
         Coordinates AUXkey = new Coordinates();
