@@ -30,4 +30,11 @@ public class Card {
         this.state = state;
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "state=" + state +
+                ", color=" + color +
+                '}';
+    }
 }
