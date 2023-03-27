@@ -70,6 +70,11 @@ class twoPlayersBoard extends Board {
         int length;
         int value=0;
         this.board = new HashMap<Coordinates, Card>();
+        //fill board with card the first time
+        this.fill(bag);
+        this.updatePickablesAtFirst();
+    }
+    protected void fill(BagOfCards bag){
         for (int i = 1; i < 9; i++) {
             switch (i) {
                 case 1 -> {
@@ -104,18 +109,9 @@ class twoPlayersBoard extends Board {
             for (int j = 0; j < 9; j++) {
                 Coordinates key = new Coordinates(i,j);
                 while(j>=start && j<start+length){
-                    this.board.put(key, value);
-                    value++;
+                    board.put(key, bag.collectCArd());
                 }
             }
-        }
-        //fill board with card the first time
-        this.fill(bag);
-        this.updatePickablesAtFirst();
-    }
-    protected void fill(BagOfCards bag){
-        for(Coordinates key : board.keySet()) {
-            board.put(key, bag.collectCard());
         }
     }
 
@@ -222,5 +218,19 @@ class twoPlayersBoard extends Board {
             }
         }
         return true;
+    }
+}
+class threePlayersBoard extends twoPlayersBoard{
+    public threePlayersBoard(Player player, BagOfCards bag){
+        super();
+        Coordinates AUXkey = new Coordinates(0,0);
+        AUXkey.setXY(2,3);
+        board.get(AUXkey).setState(Card.State.NOT_PICKABLE);
+        AUXkey.setXY(3,6);
+        board.get(AUXkey).setState(Card.State.NOT_PICKABLE);
+        AUXkey.setXY(5,2);
+        board.get(AUXkey).setState(Card.State.NOT_PICKABLE);
+        AUXkey.setXY(6,5);
+        board.get(AUXkey).setState(Card.State.NOT_PICKABLE);
     }
 }
