@@ -40,10 +40,23 @@ abstract class Board {
 
     //remove a card from the board and set the reference to null, and updates adjacent
     private void removeCardAtCoordinate(Coordinates coor){
-        board[grid.get(coor)] = null;
-        //....
-    }
+        int x = coor.getX();
+        int y = coor.getY();
+        Coordinates AUXcoor = new Coordinates(x,y-1);
+        if (board[grid.get(AUXcoor)]!= null)
+            board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
+        coor.setY(y+1);
+        if (board[grid.get(AUXcoor)]!= null)
+            board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
+        coor.setX(x-1);
+        if (board[grid.get(AUXcoor)]!= null)
+            board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
+        coor.setX(x+1);
+        if (board[grid.get(AUXcoor)]!= null)
+            board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
 
+        board[grid.get(coor)] = null;
+    }
     //probably useless, we'll check during class Game implementation
     public void boardProcedure(){
         //....
