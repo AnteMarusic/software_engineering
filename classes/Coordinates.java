@@ -17,6 +17,12 @@ public class Coordinates {
         return y;
     }
 
+    public void setXY(int i, int j){
+
+        this.x = i;
+        this.y = j;
+    }
+
     public void setX(int i){
         this.x = i;
     }

@@ -63,6 +63,7 @@ abstract class Board {
     }
 
     //checks whether the board needs to be refreshed/refilled
+
     abstract boolean cardCheck();
 
     // //refreshes the state of the cards once the board gets filled/refilled
@@ -187,5 +188,66 @@ class twoPlayersBoard extends Board {
                 }
             }
         }
+    }
+    private boolean cardCheck() {
+        Coordinates AUXkey2 = new Coordinates();
+        boolean needToRefill = true; // a priori assumiamo sia empty
+        for (int i = 1; i < 9; i++) {
+            AUXkey2.setX(i);
+            switch (i) {
+                case 1 -> {
+                    start = 3;
+                    length = 2;
+                }
+                case 2, 6 -> {
+                    start = 3;
+                    length = 3;
+                }
+                case 3 -> {
+                    start = 2;
+                    length = 6;
+                }
+                case 4 -> {
+                    start = 1;
+                    length = 7;
+                }
+                case 5 -> {
+                    start = 1;
+                    length = 6;
+                }
+                case 7 -> {
+                    start = 4;
+                    length = 2;
+                }
+            }
+            for (int j = 1; j < 9; j++) {
+                while (j >= start && j < start + length) {
+                    AUXkey2.setXY(i, j);
+                    if (board[grid.get(AUXkey2)] != null) {
+                        int x = coor.getX();
+                        int y = coor.getY();
+                        Coordinates AUXcoor = new Coordinates(x, y - 1);
+                        if (board[grid.get(AUXcoor)] != null)
+                            needToRefill = false;
+                        coor.setY(y + 1);
+                        if (board[grid.get(AUXcoor)] != null)
+                            needToRefill = false;
+                        coor.setX(x - 1);
+                        if (board[grid.get(AUXcoor)] != null)
+                            needToRefill = false;
+                        coor.setX(x + 1);
+                        if (board[grid.get(AUXcoor)] != null)
+                            needToRefill = false;
+                    }
+                    if (!needToRefill)
+                        break;
+                }
+                if (!needToRefill)
+                    break;
+            }
+            if (!needToRefill)
+                break;
+        }
+        return needToRefill;
     }
 }
