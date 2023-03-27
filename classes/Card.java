@@ -1,3 +1,4 @@
+
 package org.example;
 
 public class Card {
@@ -28,6 +29,14 @@ public class Card {
 
     public void setState(State state){
         this.state = state;
+    }
+
+    public State state() {
+        return state;
+    }
+
+    public Color color() {
+        return color;
     }
 
     @Override
