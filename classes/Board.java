@@ -24,6 +24,7 @@ abstract class Board {
         return this.maxCards;
     }
 
+    //fills board with new card taken from the bag
     protected void fill(BagOfCards bag){
         for(int i=0 ; i<getMaxcards() ; i++){
             if(board[i]==null){
@@ -37,23 +38,14 @@ abstract class Board {
         return board[grid.get(coor)];
     }
 
-    //remove a card from the board and set the reference to null, and updates adjacent cards' state to pickable
+    //remove a card from the board and set the reference to null
     private void removeCardAtCoordinate(Coordinates coor){
         board[grid.get(coor)] = null;
-        //....
     }
 
-
-    //probably useless, we'll check during class Game implementation
+    //probably unuseful, we'll check during class Game implementation
     public void boardProcedure(){
 
-    }
-    abstract boolean cardCheck(){
-        //checks whether the board needs to be refreshed/refilled
-    }
-
-    abstract void updatePickablesAtFirst(){
-        //refreshes the state of the cards once the board gets filled/refilled
     }
 }
 
@@ -66,34 +58,34 @@ class twoPlayersBoard extends Board {
         board = new Card[29];
         //initialize hash map based on num of players
         int start;
-        int length;
+        int lenght;
         int value=0;
         this.grid = new HashMap<Coordinates, Integer>();
         for (int i = 1; i < 9; i++) {
             switch (i) {
                 case 1 -> {
                     start = 4;
-                    length = 2;
+                    lenght = 2;
                 }
                 case 2, 6 -> {
                     start = 3;
-                    length = 3;
+                    lenght = 3;
                 }
                 case 3, 4 -> {
                     start = 1;
-                    length = 7;
+                    lenght = 7;
                 }
                 case 5 -> {
                     start = 2;
-                    length = 6;
+                    lenght = 6;
                 }
                 case 7 -> {
                     start = 3;
-                    length = 2;
+                    lenght = 2;
                 }
                 case 8 -> {
                     start = 0;
-                    length = 0;
+                    lenght = 0;
                 }
             }
             for (int j = 0; j < 9; j++) {
@@ -107,59 +99,73 @@ class twoPlayersBoard extends Board {
         //fill board with card the first time
         this.fill(bag);
     }
+
+    //returns a boolean representing the necessity of refilling the board with cards
     private boolean cardCheck(){
-      //...  
+        Coordinates AUXkey = new Coordinates();
+        boolean flag=true;
+        for(int i=0 ; i<9 ; i++){
+            AUXkey.setX(i);
+            for(int j=0 ; j<9 ; j++){
+                AUXkey.setY(j);
+                if(board[grid.get(AUXkey)]!=null && /*controllo adiacenti*/){
+                    flag=false; //caso in cui ci sono adiacenti
+                }
+            }
+        }
+        return flag;
+    }
+
+    private void updatePickables(){
+        //refreshes the state of the cards
     }
 
     private void updatePickablesAtFirst(){
-         Coordinates AUXkey = new Coordinates(0,0);
-         for (int i = 1; i < 9; i++) {
+        Coordinates AUXkey = new Coordinates();
+        for (int i = 1; i < 9; i++) {
+           AUXkey.setX(i);
             switch (i) {
-                AUXkey.setX(i);
                 case 1 -> {
                     AUXkey.setY(3);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(4);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                 }
                 case 2, 6 -> {
                     AUXkey.setY(3);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(5);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                 }
-                case 3-> {
+                case 3 -> {
                     AUXkey.setY(2);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(6);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(7);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                 }
                 case 4 -> {
                     AUXkey.setY(1);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(7);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                 }
                 case 5 -> {
                     AUXkey.setY(1);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(2);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(6);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                 }
                 case 7 -> {
                     AUXkey.setY(4);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                     AUXkey.setY(5);
-                    board[grid.get(AUXkey)].state=PICKABLE;
+                    board[grid.get(AUXkey)].setState(Card.State.PICKABLE);
                 }
             }
-          
         }
     }
-
-    
 }
