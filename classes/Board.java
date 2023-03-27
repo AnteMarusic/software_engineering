@@ -45,13 +45,13 @@ abstract class Board {
         Coordinates AUXcoor = new Coordinates(x,y-1);
         if (board[grid.get(AUXcoor)]!= null)
             board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
-        coor.setY(y+1);
+        AUXcoor.setY(y+1);
         if (board[grid.get(AUXcoor)]!= null)
             board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
-        coor.setX(x-1);
+        AUXcoor.setXY(x-1, y);
         if (board[grid.get(AUXcoor)]!= null)
             board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
-        coor.setX(x+1);
+        AUXcoor.setX(x+1);
         if (board[grid.get(AUXcoor)]!= null)
             board[grid.get(AUXcoor)].setState(Card.State.PICKABLE);
 
