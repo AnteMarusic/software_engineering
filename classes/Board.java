@@ -328,7 +328,7 @@ class threePlayersBoard extends twoPlayersBoard{
         return true;
     }
 }
-class fourPlayersBoard extends threePlayersBoard(){
+class fourPlayersBoard extends threePlayersBoard {
     public fourPlayersBoard(Player player, BagOfCards bag){
        super();
         Coordinates AUXkey = new Coordinates(0,0);
