@@ -62,11 +62,11 @@ public class Player {
         this.sharedScore  += newPoints;
     }
 
-    public void updatePersonalScore(int newPoints){
+    private void updatePersonalScore(int newPoints){
         this.personalScore  += newPoints;
     }
 
-    public void updatePersonalScore(){
+    public void PersonalScoreProcedure(){
         if(personalGoal.scoreAchieved() > personalScore) {
             this.updatePersonalScore(personalGoal.scoreAchieved() - personalScore);
         }
