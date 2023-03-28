@@ -75,6 +75,7 @@ class twoPlayersBoard extends Board {
         this.updatePickablesAtFirst();
     }
     protected void fill(BagOfCards bag){
+        int start, length;
         for (int i = 1; i < 9; i++) {
             switch (i) {
                 case 1 -> {
