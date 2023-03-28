@@ -8,12 +8,21 @@ public class Player {
     private int personalScore;
     private PersonalGoal personalGoal;
 
+    //boolean which represents if the shared goal 1 is already achieved or not
+    private boolean sharedGoal1Bool;
+
+    //boolean which represents if the shared goal 2 is already achieved or not
+    private boolean sharedGoal2Bool;
+
     private Bookshelf bookshelf;
 
     public Player(String playerName) {
         this.name = playerName;
         this.sharedScore = 0;
         this.personalScore= 0;
+        this.sharedGoal1Bool = false;
+        this.sharedGoal2Bool = false;
+        this.bookshelf = new Bookshelf();
     }
 
     public String getName(){
@@ -26,6 +35,27 @@ public class Player {
 
     public int getPersonalScore(){
         return this.personalScore;
+    }
+
+
+    public boolean getSharedScore1Bool(){
+        return this.sharedGoal1Bool;
+    }
+
+    public boolean getSharedScore2Bool(){
+        return this.sharedGoal2Bool;
+    }
+
+    //game will use this functions if and only if shared goal 1 is achieved from
+    //the player
+    public void setSharedGoal1Bool(){
+        this.sharedGoal1Bool = true;
+    }
+
+    //game will use this functions if and only if shared goal 2 is achieved from
+    //the player
+    public void setSharedGoal2Bool(){
+        this.sharedGoal2Bool = true;
     }
 
     public void updateSharedScore(int newPoints){
