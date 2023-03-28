@@ -6,7 +6,7 @@ public class Player {
     final private String name;
     private int sharedScore;
     private int personalScore;
-    private AbstractPersonalGoal personalGoal;
+    private PersonalGoal personalGoal;
 
     private Bookshelf bookshelf;
 
@@ -33,7 +33,13 @@ public class Player {
     }
 
     public void updatePersonalScore(int newPoints){
-        this.personalScore += newPoints;
+        this.personalScore  += newPoints;
+    }
+
+    public void updatePersonalScore(){
+        if(personalGoal.scoreAchieved() > personalScore) {
+            this.updatePersonalScore(personalGoal.scoreAchieved() - personalScore);
+        }
     }
 
     //passes coordinates buffer to Game who will first check if them are
