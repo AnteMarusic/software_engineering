@@ -30,9 +30,9 @@ abstract class Board {
     }
 
     //remove a card from the board and set the reference to null, and updates adjacent
-    private void removeCardAtCoordinate(Coordinates coor){          // la remove fatta ai lati della tabella (quando ci sono 4 giocatori) potrebbe creare casini quindi ho messo altre condizioni nell'if
-        int x = coor.getX();                                        // la tabella has crea una matrice 9x9? oppure ciò che non inizializzo non fa parte dell'hashmap?, altrimenti devo controllare di non essere al bordo
-        int y = coor.getY();                                        // sia quando siamo 2 giocatiri sia quando siamo 3, e allora il controllo varia in base a quanti siamo, e va implementato in manier diversa in base a quanti giocatori siamo
+    private void removeCardAtCoordinate(Coordinates coor){
+        int x = coor.getX();                                        
+        int y = coor.getY();
         Coordinates AUXcoor = new Coordinates(x,y-1);
         if (y-1>0 && board.get(AUXcoor)!= null)
             board.get(AUXcoor).setState(Card.State.PICKABLE);
@@ -305,7 +305,7 @@ class threePlayersBoard extends twoPlayersBoard{
                 while (j >= start && j < start + length) {
                     AUXkey.setXY(i, j);
                     if (board.get(AUXkey) != null) {
-                        AUXkey.setXY(i, j-1);                            // ho aggiunto questo AUXkey.set
+                        AUXkey.setXY(i, j-1);
                         if (j-1>0 && board.get(AUXkey) != null){
                             return false;
                         }
@@ -412,7 +412,7 @@ private boolean cardCheck() {
                 while (j >= start && j < start + length) {
                     AUXkey.setXY(i, j);
                     if (board.get(AUXkey) != null) {
-                        AUXkey.setXY(i, j-1);                            // ho aggiunto questo AUXkey.set
+                        AUXkey.setXY(i, j-1);
                         if (j-1>0 && board.get(AUXkey) != null){
                             return false;
                         }
