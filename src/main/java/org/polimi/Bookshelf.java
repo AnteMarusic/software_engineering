@@ -54,14 +54,13 @@ public class Bookshelf {
      * @requires 0 <= col <= COL - 1 && b != null && getMaxInsertable >= b.length && getInsertable (col) >= b.length
      *
      */
-    public void insert(@NotNull Buffer b, int col) {
-        Card[] temp = b.getBuffer();
+    public void insert(@NotNull Card[] cards, int col) {
         int j = 0;
-        for (int i = index[col]; i < index[col] + temp.length; i ++) {
-            this.grid[i][col] = temp[j];
+        for (int i = index[col]; i < index[col] + cards.length; i ++) {
+            this.grid[i][col] = cards[j];
             j ++;
         }
-        this.index[col] = index[col] + temp.length;
+        this.index[col] = index[col] + cards.length;
         updateMaxInsertable();
     }
 

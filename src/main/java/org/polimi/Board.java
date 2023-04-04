@@ -147,7 +147,7 @@ public class Board {
     }
 
     //return card in position Coordinate coor
-    private Card getCardAtCoordinate(Coordinates coor){
+    public Card getCardAtCoordinate(Coordinates coor){
         Card tmp = new Card(this.board.get(coor).getColor() , this.board.get(coor).getState());
         this.removeCardAtCoordinate(coor);
         return tmp;

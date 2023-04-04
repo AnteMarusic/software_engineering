@@ -22,6 +22,8 @@ public class PersonalGoal {
         coord = new Coordinates[DIM];
         readFile();
     }
+    
+    
 
     private void readFile() {
         JSONParser jsonParser = new JSONParser();
@@ -58,5 +60,8 @@ public class PersonalGoal {
 
     public void print() {
         Arrays.stream(coord).forEach(System.out::println);
+    }
+
+    public int scoreAchieved() {
     }
 }
