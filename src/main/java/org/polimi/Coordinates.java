@@ -1,8 +1,8 @@
 package org.polimi;
 
 public class Coordinates {
-    private int x;
-    private int y;
+    private int x;//#row
+    private int y;//#column
 
     public Coordinates(int i, int j) {
         setX(i);
@@ -18,8 +18,8 @@ public class Coordinates {
     }
 
     public void setXY(int i, int j){
-        this.x = i;
-        this.y = j;
+            setX(i);
+            setY(j);
     }
 
     public void setX(int i){
@@ -29,4 +29,11 @@ public class Coordinates {
     public void setY(int j){
         this.y = j;
     }
+    public boolean IndexisValid(int k){
+        return k >= 0 && k <= 8;
+    }
+    public boolean CoordsAreValid(){
+        return IndexisValid(x)&&IndexisValid(y);
+    }
+
 }

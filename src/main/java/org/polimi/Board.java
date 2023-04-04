@@ -118,24 +118,17 @@ public class Board {
     private void removeCardAtCoordinate(Coordinates coor){
         int x = coor.getX();
         int y = coor.getY();
-        Coordinates AUXcoor = new Coordinates(x,y-1);
-        if (y-1>0 && this.board.get(AUXcoor)!= null) {
-            this.board.get(AUXcoor).setState(Card.State.PICKABLE);
+        Coordinates[] coords = new Coordinates[4];
+        coords[0]= new Coordinates(x,y+1);
+        coords[1]= new Coordinates(x+1,y);
+        coords[2]= new Coordinates(x,y-1);
+        coords[3]= new Coordinates(x-1,y);
+        for(int i=0; i<4;i++){
+            if(coords[i].CoordsAreValid() && board.get(coords[i])!=null){
+                board.get(coords[i]).setState(Card.State.PICKABLE);
+            }
         }
-        AUXcoor.setY(y+2);
-        if (y+1<9 && this.board.get(AUXcoor)!= null){
-            this.board.get(AUXcoor).setState(Card.State.PICKABLE);
-        }
-        AUXcoor.setXY(x-1, y-1);
-        if (x-1>0 && this.board.get(AUXcoor)!= null) {
-            this.board.get(AUXcoor).setState(Card.State.PICKABLE);
-        }
-        AUXcoor.setX(x+2);
-        if (x+1<9 && this.board.get(AUXcoor)!= null) {
-            this.board.get(AUXcoor).setState(Card.State.PICKABLE);
-        }
-        AUXcoor.setX(x-1);
-        this.board.remove(AUXcoor);
+        this.board.remove(coor);
     }
 
 
