@@ -3,9 +3,9 @@ package org.polimi;
 import java.util.HashMap;
 
 public class Board {
-    private BagOfCards bag;
-    private HashMap<Coordinates, Card> board;
-    private int numOfPlayers;
+    private final BagOfCards bag;
+    private final HashMap<Coordinates, Card> board;
+    private final int numOfPlayers;
 
     //board constructor
     public Board(int numOfPlayers, BagOfCards bag ){
@@ -16,144 +16,105 @@ public class Board {
         this.updatePickablesAtFirst();
     }
 
-    //fills board with new card taken from the bag
+    //fills the board with new cards taken from the bag
     public void fill(){
         int start=0, length=0;
-        switch (this.numOfPlayers) {
-            case 2 :{
-                for (int i = 1; i < 8; i++) {
-                    switch (i) {
-                        case 1 -> {
-                            start = 4;
-                            length = 2;
-                        }
-                        case 2, 6 -> {
-                            start = 3;
-                            length = 3;
-                        }
-                        case 3 -> {
-                            start = 1;
-                            length = 6;
-                        }
-                        case 4 -> {
-                            start = 1;
-                            length = 7;
-                        }
-                        case 5 -> {
-                            start = 2;
-                            length = 6;
-                        }
-                        case 7 -> {
-                            start = 3;
-                            length = 2;
+        for (int i = 0; i < 9; i++) {
+            switch (i) {
+                case 0 -> {
+                    start = 3;
+                    length = 2;
+                    if(this.numOfPlayers <4){
+                        length--;
+                        if(this.numOfPlayers <3){
+                            length--;
                         }
                     }
-                    for (int j = 1; j < 8; j++) {
-                        Coordinates AUXkey = new Coordinates(i, j);
-                        while (j >= start && j < start + length) {
-                            this.board.put(AUXkey, bag.collectCard());
-                            this.board.get(AUXkey).setState(Card.State.NON_PICKABLE); // setto di default tutte le carte messe nella board a non pickable siccome il metodo dopo mi sistema a pickable quelle prendibili
+                }
+                case 1-> {
+                    start = 3;
+                    length = 3;
+                    if(this.numOfPlayers <4){
+                        length--;
+                    }
+                }
+                case 2, 6 -> {
+                    start = 2;
+                    length = 5;
+                    if(this.numOfPlayers <3){
+                        start++;
+                        length--;
+                    }
+                }
+                case 3 -> {
+                    start = 1;
+                    length = 8;
+                    if(this.numOfPlayers <4){
+                        start++;
+                        length--;
+                        if(this.numOfPlayers <3){
+                            length--;
+                        }
+                    }
+                }
+                case 4 -> {
+                    start = 0;
+                    length = 9;
+                    if(this.numOfPlayers <4){
+                        start++;
+                        length--;
+                    }
+                }
+                case 5 -> {
+                    start = 0;
+                    length = 8;
+                    if(this.numOfPlayers <4){
+                        length--;
+                        if(this.numOfPlayers <3){
+                            start++;
+                            length--;
+                        }
+                    }
+                }
+                case 7 -> {
+                    start=3;
+                    length=3;
+                    if(this.numOfPlayers <4){
+                        start++;
+                        length--;
+                    }
+                }
+                case 8 -> {
+                    start = 4;
+                    length = 2;
+                    if(this.numOfPlayers <4){
+                        start++;
+                        length--;
+                        if(this.numOfPlayers <3){
+                            length--;
                         }
                     }
                 }
             }
-            case 3 :{
-                for (int i = 0; i < 9; i++) {
-                    switch (i) {
-                        case 0 -> {
-                            start = 5;
-                            length = 1;
-                        }
-                        case 1 -> {
-                            start = 4;
-                            length = 2;
-                        }
-                        case 2, 6 -> {
-                            start = 2;
-                            length = 5;
-                        }
-                        case 3 -> {
-                            start = 0;
-                            length = 7;
-                        }
-                        case 4 -> {
-                            start = 1;
-                            length = 7;
-                        }
-                        case 5 -> {
-                            start = 2;
-                            length = 7;
-                        }
-                        case 7 -> {
-                            start = 3;
-                            length = 2;
-                        }
-                        case 8 -> {
-                            start = 3;
-                            length = 1;
-                        }
-                    }
-                    for (int j = 0; j < 9; j++) {
-                        Coordinates AUXkey = new Coordinates(i, j);
-                        while (j >= start && j < start + length) {
-                            this.board.put(AUXkey, bag.collectCard());
-                            this.board.get(AUXkey).setState(Card.State.NON_PICKABLE); // setto di defoult tutte le carte messe nella board a non pickable siccome il metodo dopo mi sistema a pickable quelle prendibili
-                        }
-                    }
-                }
-            }
-            case 4 :{
-                for (int i = 0; i < 9; i++) {
-                    switch (i) {
-                        case 0 -> {
-                            start = 4;
-                            length = 2;
-                        }
-                        case 1 , 7 -> {
-                            start = 3;
-                            length = 3;
-                        }
-                        case 2, 6 -> {
-                            start = 2;
-                            length = 5;
-                        }
-                        case 3 -> {
-                            start = 0;
-                            length = 8;
-                        }
-                        case 4 -> {
-                            start = 0;
-                            length = 9;
-                        }
-                        case 5 -> {
-                            start = 1;
-                            length = 8;
-                        }
-                        case 8 -> {
-                            start = 3;
-                            length = 2;
-                        }
-                    }
-                    for (int j = 0; j < 9; j++) {
-                        Coordinates AUXkey = new Coordinates(i, j);
-                        while (j >= start && j < start + length) {
-                            this.board.put(AUXkey, bag.collectCard());
-                            this.board.get(AUXkey).setState(Card.State.NON_PICKABLE); // setto di default tutte le carte messe nella board a non pickable siccome il metodo dopo mi sistema a pickable quelle prendibili
-                        }
-                    }
+            for (int j = 0; j < 9; j++) {
+                Coordinates AUXkey = new Coordinates(i, j);
+                if (j >= start && j < start + length) {
+                    this.board.put(AUXkey, bag.collectCard());
+                    this.board.get(AUXkey).setState(Card.State.NOT_PICKABLE); // sets each card's state to NOT_PICKABLE by default
                 }
             }
         }
     }
 
-    //return card in position Coordinate coor
+
+    //returns the card found at the relative coordinates "coor"
     public Card getCardAtCoordinate(Coordinates coor){
         Card tmp = new Card(this.board.get(coor).getColor() , this.board.get(coor).getState());
         this.removeCardAtCoordinate(coor);
         return tmp;
     }
 
-    //remove a card from the board and set the reference to null, and updates adjacent
+    //removes a card from the board and updates each adjacent card's state to PICKABLE, if present
     private void removeCardAtCoordinate(Coordinates coor){
         int x = coor.getX();
         int y = coor.getY();
@@ -299,7 +260,7 @@ public class Board {
                 }
                 return true;
             }
-            case 4 -> {
+            case 4 ->{
                 for (int i = 0; i < 9; i++) {
                     switch (i) {
                         case 0 -> {

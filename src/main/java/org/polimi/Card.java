@@ -20,7 +20,7 @@ public class Card {
 
     public enum State{
         PICKABLE,
-        NON_PICKABLE,
+        NOT_PICKABLE,
         IN_BAG,
         IN_BOOKSHELF,
     }
