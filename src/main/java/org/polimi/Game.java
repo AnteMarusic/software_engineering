@@ -1,6 +1,6 @@
 package org.polimi;
 
-import org.polimi.SharedGoal.*;
+import org.polimi.shared_goal.*;
 
 public class Game {
     private Board board;

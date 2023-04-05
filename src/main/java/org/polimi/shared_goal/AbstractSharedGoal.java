@@ -1,4 +1,4 @@
-package org.polimi.SharedGoal;
+package org.polimi.shared_goal;
 
 import org.polimi.Bookshelf;
 

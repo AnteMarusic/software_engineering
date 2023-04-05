@@ -1,6 +1,6 @@
 package org.polimi;
 
-import org.polimi.PersonalGoal.PersonalGoal;
+import org.polimi.personal_goal.PersonalGoal;
 
 import java.util.Scanner;
 
@@ -113,9 +113,10 @@ public class Player {
         this.personalScore  += newPoints;
     }
 
-    public void PersonalScoreProcedure(){
-        if(personalGoal.scoreAchieved() > personalScore) {
-            this.increasePersonalScore(personalGoal.scoreAchieved() - personalScore);
+    private void UpdatePersonalScore(){
+        int score = personalGoal.scoreAchieved(bookshelf.getGrid());
+        if(score > personalScore) {
+            this.increasePersonalScore(score - personalScore);
         }
     }
 
@@ -233,6 +234,7 @@ public class Player {
             insertable = this.bookshelf.getInsertable(col);
         } while (toInsert.length > insertable);
         bookshelf.insert(toInsert, col);
+        UpdatePersonalScore();
     }
 
     public void orderCards(Buffer buffer){

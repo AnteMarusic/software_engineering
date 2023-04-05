@@ -19,7 +19,7 @@ public class Board {
     public void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
-            int[] arr= getCorrectStartandLength(i);
+            int[] arr= getCorrectStartAndLength(i);
             start = arr[0];
             length = arr[1];
             for (int j = 0; j < 9; j++) {
@@ -65,21 +65,21 @@ public class Board {
     public boolean cardCheck() {
         int start , length ;
         Coordinates AUXkey = new Coordinates(0, 0);
-        Coordinates[] Adjacentcoords = new Coordinates[4];
+        Coordinates[] AdjacentCoords = new Coordinates[4];
         for (int i = 0; i < 9; i++) {
-            int[] arr= getCorrectStartandLength(i);
+            int[] arr= getCorrectStartAndLength(i);
             start = arr[0];
             length = arr[1];
             for (int j = 0; j < 9; j++) {
                 if (j >= start && j < start + length) {
                     AUXkey.setXY(i, j);
                     if (board.get(AUXkey) != null) {
-                        Adjacentcoords[0] = new Coordinates(i, j + 1);
-                        Adjacentcoords[1] = new Coordinates(i + 1, j);
-                        Adjacentcoords[2] = new Coordinates(i, j - 1);
-                        Adjacentcoords[3] = new Coordinates(i - 1, j);
+                        AdjacentCoords[0] = new Coordinates(i, j + 1);
+                        AdjacentCoords[1] = new Coordinates(i + 1, j);
+                        AdjacentCoords[2] = new Coordinates(i, j - 1);
+                        AdjacentCoords[3] = new Coordinates(i - 1, j);
                         for (int k = 0; k < 4; k++) {
-                            if (Adjacentcoords[i].CoordsAreValid() && board.get(Adjacentcoords[i]) != null) {
+                            if (AdjacentCoords[i].CoordsAreValid() && board.get(AdjacentCoords[i]) != null) {
                                 return false;
                             }
                         }
@@ -90,9 +90,9 @@ public class Board {
         return true;
     }
 
-    public int[] getCorrectStartandLength(int row) {
+    public int[] getCorrectStartAndLength(int row) {
         int start=-1, length=-1;
-        int[] arrayofint = new int[2];
+        int[] arrayOfInt = new int[2];
         switch (row) {
             case 0 -> {
                 start = 3;
@@ -169,9 +169,9 @@ public class Board {
                 }
             }
         }
-        arrayofint[0]= start;
-        arrayofint[1]= length;
-        return arrayofint;
+        arrayOfInt[0]= start;
+        arrayOfInt[1]= length;
+        return arrayOfInt;
     }
 
     public boolean CornerCases(int i, int j){
