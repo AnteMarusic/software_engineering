@@ -13,10 +13,9 @@ public class Board {
         this.bag = bag;
         this.board = new HashMap<Coordinates, Card>();
         this.fill();
-        this.updatePickablesAtFirst();
     }
 
-    //fills the board with new cards taken from the bag
+    //fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, else to NOT_PICKABLE
     public void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
@@ -27,7 +26,10 @@ public class Board {
                 Coordinates AUXkey = new Coordinates(i, j);
                 if (j >= start && j < start + length) {
                     this.board.put(AUXkey, bag.collectCard());
-                    this.board.get(AUXkey).setState(Card.State.NOT_PICKABLE); // sets each card's state to NOT_PICKABLE by default
+                    if(j==start || j==start+length-1 || CornerCases(i,j))
+                        this.board.get(AUXkey).setState(Card.State.PICKABLE);
+                    else
+                        this.board.get(AUXkey).setState(Card.State.NOT_PICKABLE);
                 }
             }
         }
@@ -45,14 +47,14 @@ public class Board {
     private void removeCardAtCoordinate(Coordinates coor) {
         int x = coor.getX();
         int y = coor.getY();
-        Coordinates[] coords = new Coordinates[4];
-        coords[0] = new Coordinates(x, y + 1);
-        coords[1] = new Coordinates(x + 1, y);
-        coords[2] = new Coordinates(x, y - 1);
-        coords[3] = new Coordinates(x - 1, y);
+        Coordinates[] Adjacentcoords = new Coordinates[4];
+        Adjacentcoords[0] = new Coordinates(x, y + 1);
+        Adjacentcoords[1] = new Coordinates(x + 1, y);
+        Adjacentcoords[2] = new Coordinates(x, y - 1);
+        Adjacentcoords[3] = new Coordinates(x - 1, y);
         for (int i = 0; i < 4; i++) {
-            if (coords[i].CoordsAreValid() && board.get(coords[i]) != null) {
-                board.get(coords[i]).setState(Card.State.PICKABLE);
+            if (Adjacentcoords[i].CoordsAreValid() && board.get(Adjacentcoords[i]) != null) {
+                board.get(Adjacentcoords[i]).setState(Card.State.PICKABLE);
             }
         }
         this.board.remove(coor);
@@ -61,7 +63,7 @@ public class Board {
 
     //checks whether the board needs to be refreshed/refilled
     public boolean cardCheck() {
-        int start = 0, length = 0;
+        int start , length ;
         Coordinates AUXkey = new Coordinates(0, 0);
         Coordinates[] Adjacentcoords = new Coordinates[4];
         for (int i = 0; i < 9; i++) {
@@ -88,180 +90,8 @@ public class Board {
         return true;
     }
 
-    //refreshes the state of the cards once the board gets filled/refilled
-    public void updatePickablesAtFirst() {
-        Coordinates AUXkey = new Coordinates(0, 0);
-        switch (numOfPlayers) {
-            case 2 -> {
-                for (int i = 1; i < 8; i++) {
-                    AUXkey.setX(i);
-                    switch (i) {
-                        case 1 -> {
-                            AUXkey.setY(4);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 2, 6 -> {
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 3 -> {
-                            AUXkey.setY(1);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(2);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(6);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 4 -> {
-                            AUXkey.setY(1);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(7);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 5 -> {
-                            AUXkey.setY(2);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(6);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(7);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 7 -> {
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(4);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                    }
-                }
-            }
-            case 3 -> {
-                for (int i = 0; i < 9; i++) {
-                    AUXkey.setX(i);
-                    switch (i) {
-                        case 0 -> {
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 1 -> {
-                            AUXkey.setY(4);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 2 -> {
-                            AUXkey.setY(2);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(6);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 3 -> {
-                            AUXkey.setY(0);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(1);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(6);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 4 -> {
-                            AUXkey.setY(1);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(7);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 5 -> {
-                            AUXkey.setY(2);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(7);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(8);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 6 -> {
-                            AUXkey.setY(2);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(6);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 7 -> {
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(4);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 8 -> {
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                    }
-                }
-            }
-            case 4 -> {
-                for (int i = 0; i < 9; i++) {
-                    AUXkey.setX(i);
-                    switch (i) {
-                        case 0 -> {
-                            AUXkey.setY(4);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 1, 7 -> {
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(5);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 2, 6 -> {
-                            AUXkey.setY(2);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(6);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 3 -> {
-                            AUXkey.setY(0);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(1);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(7);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 4 -> {
-                            AUXkey.setY(0);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(8);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 5 -> {
-                            AUXkey.setY(1);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(7);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(8);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                        case 8 -> {
-                            AUXkey.setY(3);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                            AUXkey.setY(4);
-                            this.board.get(AUXkey).setState(Card.State.PICKABLE);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public int[] getCorrectStartandLength(int row) {
-        int start=0, length=0;
+        int start=-1, length=-1;
         int[] arrayofint = new int[2];
         switch (row) {
             case 0 -> {
@@ -342,5 +172,20 @@ public class Board {
         arrayofint[0]= start;
         arrayofint[1]= length;
         return arrayofint;
+    }
+
+    public boolean CornerCases(int i, int j){
+        switch(numOfPlayers){
+            case 2 -> {
+                return i==3&&j==6 || i==5&&j==2;
+            }
+            case 3 -> {
+                return i==2&&j==5 || i==3&&j==7 || i==5&&j==1 || i==6&&j==3;
+            }
+            case 4 -> {
+                return i==3&&j==7 || i==5&&j==1;
+            }
+        }
+        return false;//default
     }
 }
