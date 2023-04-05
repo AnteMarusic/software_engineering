@@ -10,18 +10,17 @@ public class SharedGoal9 extends AbstractSharedGoal{
     }
 
     @Override
-    public boolean achieved(Bookshelf bookshelf){
-        Card [][] tmp = bookshelf.getGrid();
+    public boolean achieved(Card[][] tmpGrid){
         int[] colorCount = new int[6];
         int columnCount = 0;
         boolean flag;
-        for(int j=0 ; j<4 ; j++){
+        for(int j=0 ; j<5 ; j++){
             for(int k=0 ; k<6 ; k++){
                 colorCount[k] = 0;
             }
             flag = true;
-            for(int i=0 ; i<5 ; i++){
-                switch (tmp[i][j].getColor()){
+            for(int i=0 ; i<6 ; i++){
+                switch (tmpGrid[i][j].getColor()){
                     case PINK -> colorCount[0]++;
                     case CYAN -> colorCount[1]++;
                     case ORANGE -> colorCount[2]++;
