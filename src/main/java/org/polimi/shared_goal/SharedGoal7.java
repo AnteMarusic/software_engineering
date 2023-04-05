@@ -10,16 +10,33 @@ public class SharedGoal7 extends AbstractSharedGoal{
     }
 
     @Override
-    public boolean achieved(Bookshelf bookshelf){
-        Card [][] tmp = bookshelf.getGrid();
-        if(     (tmp[0][0].getColor() == tmp[1][1].getColor() && tmp[0][0].getColor() == tmp[2][2].getColor() && tmp[0][0].getColor() == tmp[3][3].getColor() && tmp[0][0].getColor() == tmp[4][4].getColor()) ||
-                (tmp[1][0].getColor() == tmp[2][1].getColor() && tmp[1][0].getColor() == tmp[3][2].getColor() && tmp[1][0].getColor() == tmp[4][3].getColor() && tmp[1][0].getColor() == tmp[5][4].getColor()) ||
-                (tmp[0][4].getColor() == tmp[1][3].getColor() && tmp[0][4].getColor() == tmp[2][2].getColor() && tmp[0][4].getColor() == tmp[3][1].getColor() && tmp[0][4].getColor() == tmp[4][0].getColor()) ||
-                (tmp[1][4].getColor() == tmp[2][3].getColor() && tmp[1][4].getColor() == tmp[3][2].getColor() && tmp[0][4].getColor() == tmp[4][1].getColor() && tmp[0][4].getColor() == tmp[5][0].getColor())
-        ){
-          return true;
-        }else{
-            return false;
+    public boolean achieved(Card[][] tmpGrid){
+        boolean pattern1 = true;
+        boolean pattern2 = true;
+        boolean pattern3 = true;
+        boolean pattern4 = true;
+        for(int j=0 ; j<5 ; j++){
+            int i=j;
+            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+                pattern1 = false;
+            }
+            i=j+1;
+            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+                pattern2 = false;
+            }
         }
+
+        for(int j=4 ; j>=0 ; j--){
+            int i = - (j-4);
+            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+                pattern3 = false;
+            }
+            i = (-(j-4))+1;
+            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+                pattern4 = false;
+            }
+        }
+
+        return pattern1 || pattern2 || pattern3 || pattern4;
     }
 }

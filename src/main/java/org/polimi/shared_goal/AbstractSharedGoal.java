@@ -1,7 +1,7 @@
 package org.polimi.shared_goal;
 
 import org.polimi.Bookshelf;
-
+import org.polimi.Card;
 import java.util.Stack;
 
 public abstract class AbstractSharedGoal {
@@ -9,29 +9,22 @@ public abstract class AbstractSharedGoal {
 
     public AbstractSharedGoal(int numOfPlayer){
         pointStack = new Stack<Integer>();
-        switch (numOfPlayer) {
-            case 2 -> {
-                pointStack.push(2);
-                pointStack.push(4);
-            }
-            case 3 -> {
-                pointStack.push(2);
-                pointStack.push(4);
+        if(numOfPlayer >= 2){
+            pointStack.push(2);
+            pointStack.push(4);
+            if(numOfPlayer >=3){
                 pointStack.push(6);
             }
-            case 4 -> {
-                pointStack.push(2);
-                pointStack.push(4);
-                pointStack.push(6);
+            if(numOfPlayer == 4){
                 pointStack.push(8);
             }
         }
     }
 
-    public abstract boolean achieved(Bookshelf bookshelf);
+    public abstract boolean achieved(Card[][] tmpGrid);
 
-    public int calcScore(Bookshelf bookshelf){
-        if(achieved(bookshelf)){
+    public int calcScore(Card[][] tmpGrid){
+        if(achieved(tmpGrid)){
             int x = pointStack.pop();
             return x;
         }else{
