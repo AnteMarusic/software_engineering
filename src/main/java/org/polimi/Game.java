@@ -35,18 +35,24 @@ public class Game {
 
     private void handOutGoalsPG(){
         Random random = new Random();
-        int personalCode[] = new int[3];
+        int personalCode[] = new int[4];
         personalCode[1] = random.nextInt(12);
         do {
             personalCode[2] = random.nextInt(12);
         } while (personalCode[1]==personalCode[2]);
-        do {
-            personalCode[3] = random.nextInt(12);
-        } while (personalCode[2]==personalCode[3] || personalCode[1]==personalCode[3]);
+        if(numOfPlayers > 2) {
+            do {
+                personalCode[3] = random.nextInt(12);
+            } while (personalCode[2] == personalCode[3] || personalCode[1] == personalCode[3]);
+        }
+        if(numOfPlayers > 3) {
+            do {
+                personalCode[4] = random.nextInt(12);
+            } while (personalCode[3]==personalCode[4] || personalCode[2] == personalCode[4] || personalCode[1] == personalCode[4]);
+        }
 
 
         for (int k=0; k<numOfPlayers;k++){
-            int i = random.nextInt(12);
             players.get(k).personalGoal = new PersonalGoal(personalCode[k]); // ho dato al costruttore di personalGoal il numero del personal goal che mi deve dare
         }
         int j=0;
