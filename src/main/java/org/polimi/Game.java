@@ -10,6 +10,7 @@ import java.util.Random;
 public class Game {
     private Board board;
     private int firstPlayer;
+    boolean endGame=false;
     private ArrayList<Player> players = new ArrayList<Player>();
     private int numOfPlayers;
     private BagOfCards bagOfCards;
@@ -32,8 +33,37 @@ public class Game {
     }
 
     public void gameLoop(){
+        int currentPlayer = firstPlayer;
+        do{
+            players.get(currentPlayer).chooseCards(board);
+            //cotrollo se ha raggiunto il primo sharedGoal
+            if(players.get(currentPlayer).getSharedScore1Achieved()==false)
+            {
+                int newPoint;
+                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getBookshelf());
+                players.get(currentPlayer).increaseSharedScore(newPoint);
+                if (newPoint != 0)
+                    players.get(currentPlayer).setSharedGoal1AchievedToTrue();
+            }
+
+            // controllo se ha raggiunto il secondo sharedGoal
+            if(players.get(currentPlayer).getSharedScore2Achieved()==false)
+            {
+                int newPoint;
+                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getBookshelf());
+                players.get(currentPlayer).increaseSharedScore(newPoint);
+                if (newPoint != 0)
+                    players.get(currentPlayer).setSharedGoal2AchievedToTrue();
+            }
+
+            if(board.cardCheck())
+                board.fill();
+            currentPlayer = (currentPlayer+1) % numOfPlayers;
+        }while(endGame==false && currentPlayer==firstPlayer);
+
 
     }
+
 
     private void handOutGoalsPG(){
         Random random = new Random();
@@ -94,10 +124,10 @@ public class Game {
         if(i==6) SharedGoal1 = new SharedGoal7(numOfPlayers);
         if(i==7) SharedGoal1 = new SharedGoal8(numOfPlayers);
         if(i==8) SharedGoal1 = new SharedGoal9(numOfPlayers);
-        // if(i==9) SharedGoal1 = new SharedGoal10(numOfPlayers);
+        if(i==9) SharedGoal1 = new SharedGoal10(numOfPlayers);
         if(i==10) SharedGoal1 = new SharedGoal11(numOfPlayers);
         if(i==11) SharedGoal1 = new SharedGoal12(numOfPlayers);
-        if(i==0) SharedGoal2 = new SharedGoal1(numOfPlayers);
+        if(j==0) SharedGoal2 = new SharedGoal1(numOfPlayers);
         if(i==1) SharedGoal2 = new SharedGoal2(numOfPlayers);
         if(i==2) SharedGoal2 = new SharedGoal3(numOfPlayers);
         if(i==3) SharedGoal2 = new SharedGoal4(numOfPlayers);
@@ -121,5 +151,8 @@ public class Game {
     }
     public int getFirstPlayer(){
         return this.firstPlayer;
+    }
+    public boolean endGame(){
+        this.endGame=true;
     }
 }

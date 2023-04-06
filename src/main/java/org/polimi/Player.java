@@ -236,7 +236,7 @@ public class Player {
         bookshelf.insert(toInsert, col);
         UpdatePersonalScore();
         if(bookshelf.CheckIfFull())
-            game.EndGame();
+            game.endGame();
     }
 
     public void orderCards(Buffer buffer){
@@ -249,5 +249,7 @@ public class Player {
         }
         buffer.order(indexOrder);
     }
+
+    public
 
 }
