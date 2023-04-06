@@ -39,7 +39,7 @@ public class Game {
         Random random = new Random();
         int personalCode[] = new int[4];
         personalCode[1] = random.nextInt(12);
-        do {
+        do {r
             personalCode[2] = random.nextInt(12);
         } while (personalCode[1]==personalCode[2]);
         if(numOfPlayers > 2) {
@@ -122,4 +122,5 @@ public class Game {
     public int getFirstPlayer(){
         return this.firstPlayer;
     }
+    public void EndGame(){};
 }
