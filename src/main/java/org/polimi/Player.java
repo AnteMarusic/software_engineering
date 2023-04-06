@@ -6,6 +6,8 @@ import org.polimi.Card.State;
 import java.util.Scanner;
 
 public class Player {
+
+    boolean bookFull=false;
     final private String name;
     /**
      * score obtained with SharedGoals
@@ -188,7 +190,8 @@ public class Player {
             }
         }
         orderChoosenCards(chosenCards);
-    }*/
+    } */
+
     public void chooseCards(){
         //since the cards have to be picked in a line, each card picked has to have one constant coordinate
         int x, y;
@@ -302,6 +305,8 @@ public class Player {
             orderChoosenCards(chosenCards);
     }
 
+
+
     private void orderChoosenCards (Card[] toInsert) {
         Card[] temp = new Card[toInsert.length];
         Scanner scanner = new Scanner(System.in);
@@ -337,6 +342,7 @@ public class Player {
 
     //player has no access to Board, Game will pass him the cards.
     //here we are already sure that this cards are available to be inserted
+
     private void insertInBookshelf (Card[] toInsert){
         int col , insertable;
         Scanner scanner = new Scanner(System.in);
@@ -349,7 +355,11 @@ public class Player {
         bookshelf.insert(toInsert, col);
         UpdatePersonalScore();
         if(bookshelf.CheckIfFull())
-            game.endGame();
+            bookFull=true;
+    }
+
+    public boolean getBookFull(){
+        return this.bookFull;
     }
 
 

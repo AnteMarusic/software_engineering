@@ -55,6 +55,7 @@ public class Game{
                 if (newPoint != 0)
                     players.get(currentPlayer).setSharedGoal2AchievedToTrue();
             }
+            endGame = players.get(currentPlayer).getBookFull();
 
             if(board.refillCheck())
                 board.fill();
@@ -63,6 +64,8 @@ public class Game{
 
 
     }
+
+
 
 
     private void handOutGoalsPG(){
@@ -151,10 +154,6 @@ public class Game{
     }
     public int getFirstPlayer(){
         return this.firstPlayer;
-    }
-
-    public void endGame(){
-        this.endGame=true;
     }
 
 
