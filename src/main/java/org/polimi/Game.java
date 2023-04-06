@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class Game {
     private Board board;
+    private int firstPlayer;
     private ArrayList<Player> players = new ArrayList<Player>();
     private int numOfPlayers;
     private BagOfCards bagOfCards;
@@ -23,7 +24,7 @@ public class Game {
 
     public void startGame(){
         Random random = new Random();
-        int firstPlayer = random.nextInt(numOfPlayers);
+        firstPlayer = random.nextInt(numOfPlayers);
         board = new Board(numOfPlayers, bagOfCards);
         board.fill();
         handOutGoalsPG();
@@ -31,6 +32,7 @@ public class Game {
     }
 
     public void gameLoop(){
+
     }
 
     private void handOutGoalsPG(){
@@ -55,7 +57,6 @@ public class Game {
         for (int k=0; k<numOfPlayers;k++){
             players.get(k).personalGoal = new PersonalGoal(personalCode[k]); // ho dato al costruttore di personalGoal il numero del personal goal che mi deve dare
         }
-        int j=0;
     }
     private void handOutGoalsSG() {
         Random random = new Random();
@@ -117,5 +118,8 @@ public class Game {
 
     public Board getBoard() {
         return this.board;
+    }
+    public int getFirstPlayer(){
+        return this.firstPlayer;
     }
 }
