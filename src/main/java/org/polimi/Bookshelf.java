@@ -102,7 +102,7 @@ public class Bookshelf {
         return '?';
     }
 
-    private boolean CheckIfFull(){
+    public boolean CheckIfFull(){
         return this.maxInsertable == 0;
     }
 }

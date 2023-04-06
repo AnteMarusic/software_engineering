@@ -235,6 +235,8 @@ public class Player {
         } while (toInsert.length > insertable);
         bookshelf.insert(toInsert, col);
         UpdatePersonalScore();
+        if(bookshelf.CheckIfFull())
+            game.EndGame();
     }
 
     public void orderCards(Buffer buffer){
