@@ -9,13 +9,11 @@ public class Bookshelf {
     final private int[] index; //index to insert, tracks how many cards have been inserted for each column
     private int maxInsertable;
 
-    private boolean isFull;
 
     public Bookshelf() {
         this.grid = new Card[ROW][COL];
         this.maxInsertable = 3;
         this.index = new int[COL];
-        this.isFull = false;
         for (int i = 0; i < COL; i ++) {
             this.index[i] = 0;
         }
@@ -65,8 +63,6 @@ public class Bookshelf {
         }
         this.index[col] = index[col] + cards.length;
         updateMaxInsertable();
-        if(CheckIfFull())
-            this.isFull=true;
 
     }
 
