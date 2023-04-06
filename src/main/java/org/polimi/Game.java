@@ -37,20 +37,20 @@ public class Game{
         do{
             players.get(currentPlayer).chooseCards();
             //cotrollo se ha raggiunto il primo sharedGoal
-            if(players.get(currentPlayer).getSharedScore1Achieved()==false)
+            if(players.get(currentPlayer).getSharedGoal1Achieved()==false)
             {
                 int newPoint;
-                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getBookshelf());
+                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getGrid());
                 players.get(currentPlayer).increaseSharedScore(newPoint);
                 if (newPoint != 0)
                     players.get(currentPlayer).setSharedGoal1AchievedToTrue();
             }
 
             // controllo se ha raggiunto il secondo sharedGoal
-            if(players.get(currentPlayer).getSharedScore2Achieved()==false)
+            if(players.get(currentPlayer).getSharedGoal2Achieved()==false)
             {
                 int newPoint;
-                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getBookshelf());
+                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getGrid());
                 players.get(currentPlayer).increaseSharedScore(newPoint);
                 if (newPoint != 0)
                     players.get(currentPlayer).setSharedGoal2AchievedToTrue();
@@ -59,7 +59,7 @@ public class Game{
             if(board.refillCheck())
                 board.fill();
             currentPlayer = (currentPlayer+1) % numOfPlayers;
-        }while(endGame==false && currentPlayer==firstPlayer);
+        }while(endGame==false || currentPlayer!=firstPlayer);
 
 
     }
@@ -85,7 +85,7 @@ public class Game{
 
 
         for (int k=0; k<numOfPlayers;k++){
-            players.get(k).personalGoal = new PersonalGoal(personalCode[k]); // ho dato al costruttore di personalGoal il numero del personal goal che mi deve dare
+            players.get(k).setPersonalGoal(new PersonalGoal(personalCode[k]));
         }
     }
     private void handOutGoalsSG() {

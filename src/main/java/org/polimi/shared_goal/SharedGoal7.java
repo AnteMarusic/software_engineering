@@ -10,7 +10,7 @@ public class SharedGoal7 extends AbstractSharedGoal{
     }
 
     @Override
-    public boolean achieved(Card[][] tmpGrid){
+    protected boolean achieved(Card[][] tmpGrid){
         boolean pattern1 = true;
         boolean pattern2 = true;
         boolean pattern3 = true;

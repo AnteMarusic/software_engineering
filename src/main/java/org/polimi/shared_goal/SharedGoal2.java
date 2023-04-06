@@ -10,7 +10,7 @@ public class SharedGoal2 extends AbstractSharedGoal{
     }
 
     @Override
-    public boolean achieved(Card[][] tmpGrid) {
+    protected boolean achieved(Card[][] tmpGrid) {
         return (tmpGrid[0][0].getColor() == tmpGrid[5][4].getColor() &&
                 tmpGrid[0][0].getColor() == tmpGrid[0][4].getColor() &&
                 tmpGrid[0][0].getColor() == tmpGrid[5][0].getColor()

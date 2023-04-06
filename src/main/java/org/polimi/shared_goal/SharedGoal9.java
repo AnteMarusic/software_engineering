@@ -10,7 +10,7 @@ public class SharedGoal9 extends AbstractSharedGoal{
     }
 
     @Override
-    public boolean achieved(Card[][] tmpGrid){
+    protected boolean achieved(Card[][] tmpGrid){
         int[] colorCount = new int[6];
         int columnCount = 0;
         boolean flag;

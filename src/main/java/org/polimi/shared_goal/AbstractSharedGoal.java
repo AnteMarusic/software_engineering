@@ -5,7 +5,7 @@ import org.polimi.Card;
 import java.util.Stack;
 
 public abstract class AbstractSharedGoal {
-    Stack<Integer> pointStack;
+    private Stack<Integer> pointStack;
 
     public AbstractSharedGoal(int numOfPlayer){
         pointStack = new Stack<Integer>();
@@ -21,7 +21,7 @@ public abstract class AbstractSharedGoal {
         }
     }
 
-    public abstract boolean achieved(Card[][] tmpGrid);
+    protected abstract boolean achieved(Card[][] tmpGrid);
 
     public int calcScore(Card[][] tmpGrid){
         if(achieved(tmpGrid)){

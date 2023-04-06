@@ -31,10 +31,6 @@ public class Player {
      * each player has its bookshelf
      */
     private Bookshelf bookshelf;
-    /**
-     * player plays in a game
-     */
-    private Game game;
 
 
     /**
@@ -74,14 +70,14 @@ public class Player {
     /**
      * @return boolean that is true if the first shared goal is achieved.
      */
-    public boolean getSharedScore1Achieved(){
+    public boolean getSharedGoal1Achieved(){
         return this.sharedGoal1Achieved;
     }
 
     /**
      * @return boolean that is true if the second shared goal is achieved.
      */
-    public boolean getSharedScore2Achieved(){
+    public boolean getSharedGoal2Achieved(){
         return this.sharedGoal2Achieved;
     }
 
@@ -106,11 +102,16 @@ public class Player {
     public void increaseSharedScore(int newPoints){
         this.sharedScore  += newPoints;
     }
+
+    public void setPersonalGoal(PersonalGoal pg){
+        this.personalGoal = pg;
+    }
     /**
      * increases the personal score counter by the int value newPoints
      * @param newPoints
      */
-    public void increasePersonalScore(int newPoints){
+
+    private void increasePersonalScore(int newPoints){
         this.personalScore  += newPoints;
     }
 

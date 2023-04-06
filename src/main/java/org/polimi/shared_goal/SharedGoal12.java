@@ -9,7 +9,7 @@ public class SharedGoal12 extends AbstractSharedGoal{
     }
 
     @Override
-    public boolean achieved(Card[][] tmpGrid){
+    protected boolean achieved(Card[][] tmpGrid){
         boolean flag=true;
         for(int i=0 ; i<6 ; i++){
             for(int j=0 ; j<5 ; j++){
