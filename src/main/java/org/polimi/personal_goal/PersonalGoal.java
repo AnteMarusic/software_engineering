@@ -12,30 +12,30 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 public class PersonalGoal {
+    private static final String FILENAME = "personal_goal.json";
     private static final int DIM = 6; //number of coordinates that is necessary to describe the personal goal
     private File file;
     private final Coordinates[] coordinates;
     private final Card.Color[] colors;
 
-    public PersonalGoal() {
+    public PersonalGoal(int index) {
         String filePath = new File("").getAbsolutePath();
-        file = new File(filePath.concat("/src/main/java/org/polimi/personal_goal"));
-        System.out.println(file.getName());
-        System.out.println(file.getAbsolutePath());
+        file = new File(filePath.concat("/" + FILENAME));
         coordinates = new Coordinates[DIM];
         colors = new Card.Color[DIM];
-        readFile();
+        readFileAndPickRandomPersonalGoal(index);
     }
     
     
 
-    private void readFile() {
+    private void readFileAndPickRandomPersonalGoal(int index) {
         JSONParser jsonParser = new JSONParser();
-
         Object obj;
-        try (FileReader reader = new FileReader("personal_goal.json")) {
+
+        try (FileReader reader = new FileReader(FILENAME)) {
             //Read JSON file
             obj = jsonParser.parse(reader);
 
@@ -45,20 +45,14 @@ public class PersonalGoal {
             throw new RuntimeException(e);
         }
         JSONArray goalList = (JSONArray) obj;
-        System.out.println(obj);
-        JSONObject goal0 = (JSONObject) goalList.get(0);
-        System.out.println(goal0);
-        JSONObject goal1 = (JSONObject) goalList.get(1);
-        System.out.println(goal1);
-        JSONArray coordinatesAndColorList = (JSONArray) goal1.get("goal1");
-        System.out.println(coordinatesAndColorList);
+        JSONObject goal = (JSONObject) goalList.get(index);
+        JSONArray coordinatesAndColorList = (JSONArray) goal.get("goal");
         JSONObject coordinatesAndColor;
         JSONObject coordinates;
         String color;
         Long x, y;
         for (int i = 0; i < DIM; i ++) {
             coordinatesAndColor = (JSONObject) coordinatesAndColorList.get(i);
-            System.out.println(coordinatesAndColor);
 
             coordinates = (JSONObject) coordinatesAndColor.get("coordinates") ;
             x = (long) coordinates.get("col");
@@ -75,6 +69,7 @@ public class PersonalGoal {
 
     public void print() {
         Arrays.stream(coordinates).forEach(System.out::println);
+        Arrays.stream(colors).forEach(System.out::println);
     }
 
     public int scoreAchieved(Card[][] grid) {

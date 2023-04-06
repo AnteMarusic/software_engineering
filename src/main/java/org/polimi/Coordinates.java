@@ -36,4 +36,11 @@ public class Coordinates {
         return IndexisValid(x)&&IndexisValid(y);
     }
 
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
