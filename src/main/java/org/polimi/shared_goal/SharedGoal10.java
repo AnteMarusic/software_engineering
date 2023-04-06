@@ -3,7 +3,7 @@ package org.polimi.SharedGoal;
 import org.polimi.Bookshelf;
 import org.polimi.Card;
 
-public class SharedGoal10 extends AbstractSharedGoal{
+public class SharedGoal10 extends AbstractSharedGoal {
     public SharedGoal10 (int numOfPlayer) {
         super(numOfPlayer);
     }

@@ -14,7 +14,7 @@ public class Player {
      * score obtained with PersonalGoals
      */
     private int personalScore;
-    private PersonalGoal personalGoal;
+    public PersonalGoal personalGoal;
     /**
      * boolean that is true if the first shared goal is achieved.
      * Is necessary since points from that goal can be collected only once.
