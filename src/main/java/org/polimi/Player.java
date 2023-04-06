@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Player {
 
-    boolean bookFull=false;
+    boolean bookFull=false; //true if bookshlef is full
     final private String name;
     /**
      * score obtained with SharedGoals
@@ -122,6 +122,10 @@ public class Player {
         if(score > personalScore) {
             this.increasePersonalScore(score - personalScore);
         }
+    }
+
+    public Card[][] getGrid () {
+        return bookshelf.getGrid();
     }
 
     /**
