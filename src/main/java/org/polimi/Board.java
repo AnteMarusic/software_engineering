@@ -38,6 +38,8 @@ public class Board {
 
     //returns the card found at the relative coordinates "coor"
     public Card getCardAtCoordinate(Coordinates coor) {
+        if(this.board.get(coor)==null)
+            return null;
         Card tmp = new Card(this.board.get(coor).getColor(), this.board.get(coor).getState());
         this.removeCardAtCoordinate(coor);
         return tmp;
@@ -62,7 +64,7 @@ public class Board {
 
 
     //checks whether the board needs to be refreshed/refilled
-    public boolean cardCheck() {
+    public boolean refillCheck() {
         int start , length ;
         Coordinates AUXkey = new Coordinates(0, 0);
         Coordinates[] AdjacentCoords = new Coordinates[4];
@@ -90,7 +92,7 @@ public class Board {
         return true;
     }
 
-    public int[] getCorrectStartAndLength(int row) {
+    private int[] getCorrectStartAndLength(int row) {
         int start=-1, length=-1;
         int[] arrayOfInt = new int[2];
         switch (row) {
@@ -174,7 +176,7 @@ public class Board {
         return arrayOfInt;
     }
 
-    public boolean CornerCases(int i, int j){
+    private boolean CornerCases(int i, int j){
         switch(numOfPlayers){
             case 2 -> {
                 return i==3&&j==6 || i==5&&j==2;

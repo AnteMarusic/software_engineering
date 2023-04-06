@@ -10,62 +10,72 @@ public class SharedGoal12 extends AbstractSharedGoal{
 
     @Override
     public boolean achieved(Card[][] tmpGrid){
-        boolean pattern1=true;
-        boolean pattern2=true;
-        boolean pattern3=true;
-        boolean pattern4=true;
+        boolean flag=true;
         for(int i=0 ; i<6 ; i++){
             for(int j=0 ; j<5 ; j++){
                 if(i<=j){
                     if(tmpGrid[i][j]==null){
-                        pattern1 = false;
+                        flag = false;
                     }
                 }else{
                     if(tmpGrid[i][j]!=null){
-                        pattern1 = false;
+                        flag = false;
                     }
                 }
             }
         }
+        if(flag){
+            return true;
+        }
+        flag=false;
         for(int i=0 ; i<6 ; i++){
             for(int j=0 ; j<5 ; j++){
                 if(i<=j+1){
                     if(tmpGrid[i][j]==null){
-                        pattern2 = false;
+                        flag = false;
                     }
                 }else{
                     if(tmpGrid[i][j]!=null){
-                        pattern2 = false;
+                        flag = false;
                     }
                 }
             }
+        }
+        if(flag){
+            return true;
         }
         for(int i=0 ; i<6 ; i++){
             for(int j=0 ; j<5 ; j++){
                 if(j<=i){
                     if(tmpGrid[i][j]==null){
-                        pattern3 = false;
+                        flag = false;
                     }
                 }else{
                     if(tmpGrid[i][j]!=null){
-                        pattern3 = false;
+                        flag = false;
                     }
                 }
             }
+        }
+        if(flag){
+            return true;
         }
         for(int i=0 ; i<6 ; i++){
             for(int j=0 ; j<5 ; j++){
                 if(j<=i+1){
                     if(tmpGrid[i][j]==null){
-                        pattern4 = false;
+                        flag = false;
                     }
                 }else{
                     if(tmpGrid[i][j]!=null){
-                        pattern4 = false;
+                        flag = false;
                     }
                 }
             }
         }
-        return pattern1||pattern2||pattern3||pattern4;
+        if(flag){
+            return true;
+        }
+        return false;
     }
 }

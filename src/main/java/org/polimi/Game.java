@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Game {
+public class Game{
     private Board board;
     private int firstPlayer;
     boolean endGame=false;
@@ -35,7 +35,7 @@ public class Game {
     public void gameLoop(){
         int currentPlayer = firstPlayer;
         do{
-            players.get(currentPlayer).chooseCards(board);
+            players.get(currentPlayer).chooseCards();
             //cotrollo se ha raggiunto il primo sharedGoal
             if(players.get(currentPlayer).getSharedScore1Achieved()==false)
             {
@@ -56,7 +56,7 @@ public class Game {
                     players.get(currentPlayer).setSharedGoal2AchievedToTrue();
             }
 
-            if(board.cardCheck())
+            if(board.refillCheck())
                 board.fill();
             currentPlayer = (currentPlayer+1) % numOfPlayers;
         }while(endGame==false && currentPlayer==firstPlayer);
@@ -152,7 +152,10 @@ public class Game {
     public int getFirstPlayer(){
         return this.firstPlayer;
     }
-    public boolean endGame(){
+
+    public void endGame(){
         this.endGame=true;
     }
+
+
 }
