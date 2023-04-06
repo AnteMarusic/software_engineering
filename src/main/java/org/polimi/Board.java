@@ -38,6 +38,8 @@ public class Board {
 
     //returns the card found at the relative coordinates "coor"
     public Card getCardAtCoordinate(Coordinates coor) {
+        if(this.board.get(coor)==null)
+            return null;
         Card tmp = new Card(this.board.get(coor).getColor(), this.board.get(coor).getState());
         this.removeCardAtCoordinate(coor);
         return tmp;
