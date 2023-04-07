@@ -202,7 +202,6 @@ public class Player {
         int PreviousX, PreviousY;
         Card tempCard = null;
         Coordinates coor = new Coordinates(0,0);
-        boolean notPickable=true;
         Scanner scanner = new Scanner(System.in);
         int maxInsertable = bookshelf.getMaxInsertable();
         Card[] chosenCards = new Card[maxInsertable];
@@ -219,10 +218,9 @@ public class Player {
                  if (tempCard == null)
                     System.out.println("There's no card at that position, please choose another...\n");
                 else {
-                    if(tempCard.getState() == State.NOT_PICKABLE)
+                    if(tempCard.getState() != State.PICKABLE)
                         System.out.println("That card cannot be picked, please choose another...\n");
-                    else if(tempCard.getState() == State.PICKABLE){
-                        notPickable=false;
+                    else {
                         chosenCards[counter]=tempCard;
                         counter++;
                         System.out.println("You chose a card in position (" + PreviousX + "," + PreviousY + "\n");
@@ -231,7 +229,7 @@ public class Player {
             }
             else
                 System.out.println("These coordinates are not valid, choose again... \n");
-        }while(!coor.CoordsAreValid() || tempCard == null || notPickable);//first card
+        }while(!coor.CoordsAreValid() || tempCard == null || tempCard.getState() != State.PICKABLE);//first card
         if (counter < maxInsertable-1){
             System.out.println("Do you want to choose another? You can choose another" + (maxInsertable-counter) + "cards\nType 'yes' or 'no'\n");
             //gestire se c'è input diverso da yes o no?
@@ -243,7 +241,7 @@ public class Player {
                     System.out.println("Type col number (0 to ...)\n");
                     y = scanner.nextInt();
                     coor.setXY(x, y);
-                    if (coor.CoordsAreValid() && (x == PreviousX && y != PreviousY || x != PreviousX && y == PreviousY)) {
+                    if (coor.CoordsAreValid() && ((x == PreviousX && (y == PreviousY+1 ||y == PreviousY-1)) || ((x == PreviousX+1 ||x == PreviousX-1) && y == PreviousY))) {
                         tempCard = board.getCardAtCoordinate(coor);
                         if (tempCard == null)
                             System.out.println("There's no card at that position, please choose another...\n");
@@ -254,7 +252,7 @@ public class Player {
                         }
                     } else
                         System.out.println("These coordinates are not valid, choose again... \n");
-                } while (!coor.CoordsAreValid() || (x != PreviousX && y != PreviousY || x == PreviousX && y == PreviousY) || tempCard == null); //eventual second card
+                } while (!coor.CoordsAreValid() || !((x == PreviousX && (y == PreviousY+1 ||y == PreviousY-1)) || ((x == PreviousX+1 ||x == PreviousX-1) && y == PreviousY)) || tempCard == null); //eventual second card
                 if (counter < maxInsertable-1){
                     System.out.println("Do you want to choose another? You can choose another" + (maxInsertable-counter) + "cards\nType 'yes' or 'no'\n");
                     //gestire se c'è input diverso da yes o no?
@@ -267,7 +265,7 @@ public class Player {
                             System.out.println("Type col number (0 to ...)\n");
                             y = scanner.nextInt();
                             coor.setXY(x, y);
-                            if (coor.CoordsAreValid() && x == PreviousX && y!=PreviousY) {
+                            if (coor.CoordsAreValid() && ((x == PreviousX && y==PreviousY-1) || (x == PreviousX && y==PreviousY+1))) {
                                 tempCard = board.getCardAtCoordinate(coor);
                                 if (tempCard == null)
                                     System.out.println("There's no card at that position, please choose another...\n");
@@ -278,7 +276,7 @@ public class Player {
                                 }
                             } else
                                 System.out.println("These coordinates are not valid, choose again... \n");
-                            } while (!coor.CoordsAreValid() || (x != PreviousX) || y== PreviousY || tempCard == null);
+                            } while (!coor.CoordsAreValid() || !((x == PreviousX && y==PreviousY-1) || (x == PreviousX && y==PreviousY+1)) || tempCard == null);
                         }
                         if(y == PreviousY){
                             do {
@@ -288,7 +286,7 @@ public class Player {
                                 System.out.println("Type col number (0 to ...)\n");
                                 y = scanner.nextInt();
                                 coor.setXY(x, y);
-                                if (coor.CoordsAreValid() && y == PreviousY && x!=PreviousX) {
+                                if (coor.CoordsAreValid() && ((y == PreviousY && x==PreviousX-1) || (y == PreviousY && x==PreviousX+1))) {
                                     tempCard = board.getCardAtCoordinate(coor);
                                     if (tempCard == null)
                                         System.out.println("There's no card at that position, please choose another...\n");
@@ -299,7 +297,7 @@ public class Player {
                                     }
                                 } else
                                     System.out.println("These coordinates are not valid, choose again... \n");
-                            } while (!coor.CoordsAreValid() || (x == PreviousX) || y!= PreviousY || tempCard == null);
+                            } while (!coor.CoordsAreValid() || !((y == PreviousY && x==PreviousX-1) || (y == PreviousY && x==PreviousX+1)) || tempCard == null);
                         }
                     }
                 }//eventual third and last card
