@@ -319,13 +319,17 @@ public class Player {
         while (i < toInsert.length) {
             System.out.println("where do you want to put the card in position " + i);
             position = scanner.nextInt();
-            if (position >= 0 && position < toInsert.length) {
-                temp[i] = toInsert[i];
-                i++;
+            if(temp[position]!=null){
+                if (position >= 0 && position < toInsert.length) {
+                    temp[position] = toInsert[i];
+                    i++;
+                }
+                else {
+                    System.out.println(i + "is not in the interval [0, toInsert.length]");
+                }
             }
-            else {
-                System.out.println(i + "is not in the interval [0, toInsert.length]");
-            }
+            else
+                System.out.println("There's already a card in position "+position+", choose another position...");
         }
         printChosenCards(temp);
         insertInBookshelf(temp);
