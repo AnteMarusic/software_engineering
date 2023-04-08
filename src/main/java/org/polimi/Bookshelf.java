@@ -2,14 +2,28 @@ package org.polimi;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class Bookshelf {
     private static final int COL = 5;
     private static final int ROW = 6;
+    /**
+     * data structure representing bookshelf
+     */
     final private Card[][] grid;
-    final private int[] index; //index to insert, tracks how many cards have been inserted for each column
+    /**
+     * index to insert, tracks how many cards have been inserted for each column
+     */
+    final private int[] index;
+    /**
+     * value that can assume values in the interval [0, 3]. It is the maximum number of cards
+     * that can be inserted in bookshelf
+     */
     private int maxInsertable;
 
-
+    /**
+     * creates an empty bookshelf
+     */
     public Bookshelf() {
         this.grid = new Card[ROW][COL];
         this.maxInsertable = 3;
@@ -19,7 +33,13 @@ public class Bookshelf {
         }
     }
 
+    public int getMaxInsertable() {
+        return maxInsertable;
+    }
 
+    /**
+     * @return Card[][] that is a copy of the bookshelf
+     */
     public Card[][] getGrid () {
         Card[][] tempGrid = new Card[ROW][COL];
         for (int i = 0; i < ROW; i ++) {
@@ -28,12 +48,9 @@ public class Bookshelf {
         return tempGrid;
     }
 
-    public int getMaxInsertable() {
-        return this.maxInsertable;
-    }
-
     /*
      * @requires 0 <= col <= COL - 1
+     * @return the number of cards insertable in col
      */
     public int getInsertable (int col) {
         return ROW - this.index[col];
@@ -52,16 +69,16 @@ public class Bookshelf {
 
 
     /*
-     * @requires 0 <= col <= COL - 1 && b != null && getMaxInsertable >= b.length && getInsertable (col) >= b.length
-     *
+     * @requires 0 <= col <= COL - 1 && b != null && getMaxInsertable >= b.length
+     * && getInsertable (col) >= b.length
      */
-    public void insert(@NotNull Card[] cards, int col) {
+    public void insert(@NotNull ArrayList<Card> cards, int col) {
         int j = 0;
-        for (int i = index[col]; i < index[col] + cards.length; i ++) {
-            this.grid[i][col] = cards[j];
+        for (int i = index[col]; i < index[col] + cards.size(); i ++) {
+            this.grid[i][col] = cards.get(j);
             j ++;
         }
-        this.index[col] = index[col] + cards.length;
+        this.index[col] = index[col] + cards.size();
         updateMaxInsertable();
 
     }

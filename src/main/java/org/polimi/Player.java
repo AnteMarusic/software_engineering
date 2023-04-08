@@ -3,11 +3,15 @@ package org.polimi;
 import org.polimi.personal_goal.PersonalGoal;
 import org.polimi.Card.State;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Player {
 
-    boolean bookFull=false; //true if bookshelf is full
+    /**
+     * true if bookshelf is full
+     */
+    boolean IsBookshelfFull = false;
     final private String name;
     /**
      * score obtained with SharedGoals
@@ -17,7 +21,7 @@ public class Player {
      * score obtained with PersonalGoals
      */
     private int personalScore;
-    public PersonalGoal personalGoal;
+    private PersonalGoal personalGoal;
     /**
      * boolean that is true if the first shared goal is achieved.
      * Is necessary since points from that goal can be collected only once.
@@ -37,7 +41,7 @@ public class Player {
 
     /**
      * builds a player without points, with no shared goal achieved and with an empty new bookshelf.
-     * @param playerName
+     * @param playerName is the name to give to the player
      */
     public Player(String playerName) {
         this.name = playerName;
@@ -56,7 +60,7 @@ public class Player {
     }
 
     /**
-     * @return String indicating player's shared score
+     * @return int indicating player's shared score
      */
     public int getSharedScore(){
         return this.sharedScore;
@@ -99,7 +103,7 @@ public class Player {
 
     /**
      * increases the shared score counter by the int value newPoints
-     * @param newPoints
+     * @param newPoints The integer value indicates the number of points that need to be added to the shared score
      */
     public void increaseSharedScore(int newPoints){
         this.sharedScore  += newPoints;
@@ -110,9 +114,8 @@ public class Player {
     }
     /**
      * increases the personal score counter by the int value newPoints
-     * @param newPoints
+     * @param newPoints The integer value indicates the number of points that need to be added to the personal score
      */
-
     private void increasePersonalScore(int newPoints){
         this.personalScore  += newPoints;
     }
@@ -130,198 +133,166 @@ public class Player {
 
     /**
      * gets from std input one to three coordinates
-     * ensures that the array is dim one to three and contains valid coordinates
-     * ensures that the dimension of the array isn't bigger than maxInsertable in bookshelf
+     * ensures that the arrayList containing these coordinates is dim one to three and contains valid coordinates
+     * ensures that the dimension of the arrayList isn't greater than maxInsertable in bookshelf
      * ensures that the cards are picked in a line from the board
-     * missing : would be cleaner if the board notify us if once a card is picked there aren't
-     * any more cards you can pick (because the card is in an isolated position in the board)
      */
-    /*public void chooseCards(){
-        //since the cards have to be picked in a line, each card picked has to have one constant coordinate
-        int firstX = 0, firstY = 0;
-        int coordinateToRemainConstant = 0;
-        boolean flag;
-        int x,y;
-        int i = 0;
-        int max = bookshelf.getMaxInsertable();
-        int exit = 0;
-        Card[] chosenCards = new Card[max];
-        Board board = game.getBoard();
-        Card temp;
-        Scanner scanner = new Scanner(System.in);
-
-        while (i < max && exit == 0){
-            flag = true;
-            System.out.println("Type row number (0 to ...)\n");
-            x = scanner.nextInt();
-            System.out.println("Type col number (0 to ...)\n");
-            y = scanner.nextInt();
-            temp = board.getCardAtCoordinate(new Coordinates(x, y));
-
-            if (temp != null) {
-                if (i == 0) {
-                    firstX = x;
-                    firstY = y;
-                }
-                else {
-                    if(i == 1 && x != firstX && y != firstY) {
-                        flag = false;
-                    }
-                    else {
-                        if (flag && x == firstX) {
-                            coordinateToRemainConstant = 0;
-                        }
-                        else if (flag && y == firstY){
-                            coordinateToRemainConstant = 1;
-                        }
-                    }
-
-                    if (i == 2){
-                        if (coordinateToRemainConstant == 0 && x != coordinateToRemainConstant) {
-                            flag = false;
-                        }
-                        if (coordinateToRemainConstant == 1 && y != coordinateToRemainConstant ) {
-                            flag = false;
-                        }
-                    }
-                }
-                if (flag) {
-                    chosenCards[i] = temp;
-                    System.out.println("0 to pick another card, 1 to confirm\n");
-                    exit = scanner.nextInt();
-                    i++;
-                }
-            }
-        }
-        orderChoosenCards(chosenCards);
-    } */
-
-    public void chooseCards(){
+    public void chooseCards(Board board){
         //since the cards have to be picked in a line, each card picked has to have one constant coordinate
         int x=0, y=0;
-        int PreviousX=0, PreviousY=0;
+        int previousX=0, previousY=0;
         Card tempCard = null;
-        Coordinates coor = new Coordinates(0,0);
+        Coordinates coordinates = new Coordinates(0,0);
         Scanner scanner = new Scanner(System.in);
         int maxInsertable = bookshelf.getMaxInsertable();
-        Card[] chosenCards = new Card[maxInsertable];
+        ArrayList<Card> chosenCards = new ArrayList<>(maxInsertable);
         int counter=0;
-        Board board = game.getBoard();
+
         while(counter < maxInsertable){
-            if(counter>0){
-                System.out.println("Do you want to choose another? You can choose another" + (maxInsertable-counter) + "cards\nType 'yes' or 'no'\n");
-                if(scanner.nextLine().equals("no"))
+            if(counter > 0) {
+                System.out.println("Do you want to choose another? You can choose another" + (maxInsertable - counter) + "cards\nType 'yes' or 'no'");
+                if (scanner.nextLine().equals("no"))
                     break;
             }
+
             switch(counter){
                 case 0 -> {
-                do {
-                    System.out.println("Type row number (0 to ...)\n");
-                    PreviousX = scanner.nextInt();
-                    System.out.println("Type col number (0 to ...)\n");
-                    PreviousY = scanner.nextInt();
-                    coor.setXY(PreviousX,PreviousY);
-                    if(coor.CoordsAreValid()){
-                        tempCard = board.getCardAtCoordinate(coor);
-                        if (tempCard == null)
-                            System.out.println("There's no card at that position, please choose another...\n");
-                        else {
-                            if(tempCard.getState() != State.PICKABLE)
-                                System.out.println("That card cannot be picked, please choose another...\n");
+                    do {
+                        System.out.println("Type row number (0 to 8)");
+                        previousX = scanner.nextInt();
+                        System.out.println("Type col number (0 to 8)");
+                        previousY = scanner.nextInt();
+                        coordinates.setXY(previousX,previousY);
+                        if(coordinates.CoordinatesAreValid()){
+                            tempCard = board.seeCardAtCoordinates(coordinates);
+                            if (tempCard == null)
+                                System.out.println("There's no card at that position, please choose another...");
                             else {
-                                chosenCards[counter]=tempCard;
-                                System.out.println("You chose a card in position (" + PreviousX + "," + PreviousY + "\n");
+                                if(tempCard.getState() == State.NOT_PICKABLE)
+                                    System.out.println("That card cannot be picked, please choose another...");
+                                else if(tempCard.getState() == State.PICKABLE){
+                                    chosenCards.add(board.getCardAtCoordinates(coordinates));
+                                    counter++;
+                                    System.out.println("You chose a card in position (" + previousX + "," + previousY);
+                                }
                             }
                         }
-                    }
-                    else
-                        System.out.println("These coordinates are not valid, choose again... \n");
-                }while(!coor.CoordsAreValid() || tempCard == null || tempCard.getState() != State.PICKABLE);//first card
-            }
+                        else
+                            System.out.println("These coordinates are not valid, choose again...");
+                    }while(!coordinates.CoordinatesAreValid() || tempCard == null || tempCard.getState() != State.PICKABLE);//first card
+                    previousX = x;
+                    previousY = y;
+                }
+
                 case 1 -> {
                     do {
-                    System.out.println("Choose your next Card\n");
-                    System.out.println("Type row number (0 to ...)\n");
-                    x = scanner.nextInt();
-                    System.out.println("Type col number (0 to ...)\n");
-                    y = scanner.nextInt();
-                    coor.setXY(x, y);
-                    if (coor.CoordsAreValid() && ((x == PreviousX && (y == PreviousY+1 ||y == PreviousY-1)) || ((x == PreviousX+1 ||x == PreviousX-1) && y == PreviousY))) {
-                        tempCard = board.getCardAtCoordinate(coor);
-                        if (tempCard == null)
-                            System.out.println("There's no card at that position, please choose another...\n");
-                        else {
-                            chosenCards[counter]=tempCard;
-                            System.out.println("You chose a card in position (" + x + "," + y + "\n");
-                        }
-                    } else
-                        System.out.println("These coordinates are not valid, choose again... \n");
-                } while (!coor.CoordsAreValid() || !((x == PreviousX && (y == PreviousY+1 ||y == PreviousY-1)) || ((x == PreviousX+1 ||x == PreviousX-1) && y == PreviousY)) || tempCard == null); //eventual second card
-                }
-                case 2 -> {
-                    if(x == PreviousX){
-                    do {
-                        System.out.println("Choose your next Card\n");
-                        System.out.println("Type row number (0 to ...)\n");
+                        System.out.println("Choose your next Card");
+                        System.out.println("Type row number (0 to 8)");
                         x = scanner.nextInt();
-                        System.out.println("Type col number (0 to ...)\n");
+                        System.out.println("Type col number (0 to 8)");
                         y = scanner.nextInt();
-                        coor.setXY(x, y);
-                        if (coor.CoordsAreValid() && ((x == PreviousX && y==PreviousY-1) || (x == PreviousX && y==PreviousY+1))) {
-                            tempCard = board.getCardAtCoordinate(coor);
+                        coordinates.setXY(x, y);
+                        if (coordinates.CoordinatesAreValid() && ((x == previousX && (y == previousY+1 ||y == previousY-1)) || ((x == previousX+1 ||x == previousX-1) && y == previousY))) {
+                            tempCard = board.seeCardAtCoordinates(coordinates);
                             if (tempCard == null)
-                                System.out.println("There's no card at that position, please choose another...\n");
+                                System.out.println("There's no card at that position, please choose another...");
                             else {
-                                chosenCards[counter]=tempCard;
-                                System.out.println("You chose a card in position (" + x + "," + y + "\n");
+                                chosenCards.add(board.getCardAtCoordinates(coordinates));
+                                System.out.println("You chose a card in position (" + x + "," + y);
                             }
                         } else
-                            System.out.println("These coordinates are not valid, choose again... \n");
-                    } while (!coor.CoordsAreValid() || !((x == PreviousX && y==PreviousY-1) || (x == PreviousX && y==PreviousY+1)) || tempCard == null);
+                            System.out.println("These coordinates are not valid, choose again...");
+                    } while (!coordinates.CoordinatesAreValid() || !((x == previousX && (y == previousY+1 ||y == previousY-1)) || ((x == previousX+1 ||x == previousX-1) && y == previousY)) || tempCard == null); //eventual second card
+                    previousX = x;
+                    previousY = y;
                 }
-                    if(y == PreviousY){
+                case 2 -> {
+                    if (x == previousX) {
                         do {
-                            System.out.println("Choose your next Card\n");
-                            System.out.println("Type row number (0 to ...)\n");
+                            System.out.println("Choose your next Card");
+                            System.out.println("Type row number (0 to 8)");
                             x = scanner.nextInt();
-                            System.out.println("Type col number (0 to ...)\n");
+                            System.out.println("Type col number (0 to 8)");
                             y = scanner.nextInt();
-                            coor.setXY(x, y);
-                            if (coor.CoordsAreValid() && ((y == PreviousY && x==PreviousX-1) || (y == PreviousY && x==PreviousX+1))) {
-                                tempCard = board.getCardAtCoordinate(coor);
+                            coordinates.setXY(x, y);
+                            if (coordinates.CoordinatesAreValid() && ((x == previousX && y==previousY-1) || (x == previousX && y==previousY+1))) {
+                                tempCard = board.getCardAtCoordinates(coordinates);
                                 if (tempCard == null)
-                                    System.out.println("There's no card at that position, please choose another...\n");
+                                    System.out.println("There's no card at that position, please choose another...");
                                 else {
-                                    chosenCards[counter]=tempCard;
-                                    System.out.println("You chose a card in position (" + x + "," + y + "\n");
+                                    chosenCards.add(board.getCardAtCoordinates(coordinates));
+                                    System.out.println("You chose a card in position (" + x + "," + y);
                                 }
                             } else
-                                System.out.println("These coordinates are not valid, choose again... \n");
-                        } while (!coor.CoordsAreValid() || !((y == PreviousY && x==PreviousX-1) || (y == PreviousY && x==PreviousX+1)) || tempCard == null);
-                    }}
+                                System.out.println("These coordinates are not valid, choose again... ");
+                        } while (!coordinates.CoordinatesAreValid() || !((x == previousX && y==previousY-1) || (x == previousX && y==previousY+1)) || tempCard == null);
+                    }
+                    if (y == previousY) {
+                        do {
+                            System.out.println("Choose your next Card");
+                            System.out.println("Type row number (0 to 8)");
+                            x = scanner.nextInt();
+                            System.out.println("Type col number (0 to 8)");
+                            y = scanner.nextInt();
+                            coordinates.setXY(x, y);
+                            if (coordinates.CoordinatesAreValid() && ((y == previousY && x==previousX-1) || (y == previousY && x==previousX+1))) {
+                                tempCard = board.getCardAtCoordinates(coordinates);
+                                if (tempCard == null)
+                                    System.out.println("There's no card at that position, please choose another...");
+                                else {
+                                    chosenCards.add(board.getCardAtCoordinates(coordinates));
+                                    System.out.println("You chose a card in position (" + x + "," + y);
+                                }
+                            } else
+                                System.out.println("These coordinates are not valid, choose again...");
+                        } while (!coordinates.CoordinatesAreValid() || !((y == previousY && x==previousX-1) || (y == previousY && x==previousX+1)) || tempCard == null);
+                    }
+                }
             }
             counter++;
         }
         if(counter>1)
-            orderChoosenCards(chosenCards);
+            orderChosenCards(chosenCards);
     }
 
+    private void CLIChooseCards (boolean b, int x, int y, int previousX, int previousY, Board board, ArrayList<Card> chosenCards) {
+        Scanner scanner = new Scanner(System.in);
+        Coordinates coordinates;
+        Card tempCard;
 
 
-    private void orderChoosenCards (Card[] toInsert) {
-        Card[] temp = new Card[toInsert.length];
+        System.out.println("Choose your next Card\n");
+        System.out.println("Type row number (0 to 8)\n");
+        x = scanner.nextInt();
+        System.out.println("Type col number (0 to 8)\n");
+        y = scanner.nextInt();
+        coordinates = new Coordinates(x, y);
+        if (b) {
+            tempCard = board.seeCardAtCoordinates(coordinates);
+            if (tempCard == null)
+                System.out.println("There's no card at that position, please choose another...\n");
+            else {
+                chosenCards.add(board.getCardAtCoordinates(coordinates));
+                System.out.println("You chose a card in position (" + x + "," + y + "\n");
+            }
+        } else
+            System.out.println("These coordinates are not valid, choose again... \n");
+    }
+
+    private void orderChosenCards(ArrayList<Card> toInsert) {
+        ArrayList<Card> temp = new ArrayList<>(toInsert.size());
         Scanner scanner = new Scanner(System.in);
         int position;
         int i = 0;
 
         printChosenCards(toInsert);
 
-        while (i < toInsert.length) {
+        while (i < toInsert.size()) {
             System.out.println("Where do you want to put the card in position " + i +"?\n");
             position = scanner.nextInt();
-            if(temp[position]!=null){
-                if (position >= 0 && position < toInsert.length) {
-                    temp[position] = toInsert[i];
+            if (temp.get(position) != null) {
+                if (position >= 0 && position < toInsert.size()) {
+                    temp.add(toInsert.get(i));
                     i++;
                 }
                 else {
@@ -339,34 +310,37 @@ public class Player {
      *
      * @param chosenCards requires that no card inside it is null
      */
-    private void printChosenCards (Card[] chosenCards) {
-        for (int i = 0; i < chosenCards.length; i++) {
-            System.out.println(chosenCards[i]);
-        }
+    private void printChosenCards (ArrayList<Card> chosenCards) {
+        chosenCards.forEach(System.out::println);
     }
 
+    public Card[][] getBookshelfGrid () {
+        return this.bookshelf.getGrid();
+    }
     //player has no access to Board, Game will pass him the cards.
-    //here we are already sure that this cards are available to be inserted
+    //here we are already sure that these cards are available to be inserted
 
-    private void insertInBookshelf (Card[] toInsert){
+    private void insertInBookshelf (ArrayList<Card> toInsert){
         int col , insertable;
         Scanner scanner = new Scanner(System.in);
 
         do {
-            System.out.println("Type in which column (o to 5) you want to insert the cards that you picked\n");
-            col = scanner.nextInt();
+            do {
+                System.out.println("Type in which column (o to 5) you want to insert the cards that you picked");
+                col = scanner.nextInt();
+            }while(0 <= col && 5 >= col);
             insertable = this.bookshelf.getInsertable(col);
-            if(toInsert.length >= insertable)
-                System.out.println("There isn't enough space in that column, please choose another...\n");
-        } while (toInsert.length >= insertable);
+            if(toInsert.size() >= insertable)
+                System.out.println("There isn't enough space in that column, please choose another...");
+        } while (toInsert.size() >= insertable);
         bookshelf.insert(toInsert, col);
         UpdatePersonalScore();
         if(bookshelf.CheckIfFull())
-            bookFull=true;
+            IsBookshelfFull = true;
     }
 
-    public boolean getBookFull(){
-        return this.bookFull;
+    public boolean getIsBookshelfFull(){
+        return this.IsBookshelfFull;
     }
 
 

@@ -5,8 +5,15 @@ import org.polimi.Card;
 import java.util.Stack;
 
 public abstract class AbstractSharedGoal {
-    private Stack<Integer> pointStack;
+    /**
+     * stack of points. The content varies based on the number of player
+     */
+    private Stack <Integer> pointStack;
 
+    /**
+     * creates a stack of points that is different based on the numOfPlayers
+     * @param numOfPlayer belongs to the interval [2,4]
+     */
     public AbstractSharedGoal(int numOfPlayer){
         pointStack = new Stack<Integer>();
         if(numOfPlayer >= 2){
@@ -21,6 +28,11 @@ public abstract class AbstractSharedGoal {
         }
     }
 
+    /**
+     * method to be implemented in the subclasses (strategy pattern)
+     * @param tmpGrid a Card[][] that has the properties of a bookshelf object
+     * @return true
+     */
     protected abstract boolean achieved(Card[][] tmpGrid);
 
     public int calcScore(Card[][] tmpGrid){
