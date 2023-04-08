@@ -65,12 +65,20 @@ public class Game{
 
     }
 
+    public void end(){
+        int totalPoints[] = new int [numOfPlayers];
+        for (int i = 0; i<numOfPlayers; i++){
+            totalPoints[i] = players.get(i).getSharedScore() + players.get(i).getPersonalScore();
+        }
+
+    }
+
 
 
 
     private void handOutGoalsPG(){
         Random random = new Random();
-        int personalCode[] = new int[4];
+        int personalCode[] = new int[numOfPlayers];
         personalCode[1] = random.nextInt(12);
         do {
             personalCode[2] = random.nextInt(12);
