@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Player {
 
-    boolean bookFull=false; //true if bookshlef is full
+    boolean bookFull=false; //true if bookshelf is full
     final private String name;
     /**
      * score obtained with SharedGoals
@@ -317,7 +317,7 @@ public class Player {
         printChosenCards(toInsert);
 
         while (i < toInsert.length) {
-            System.out.println("where do you want to put the card in position " + i);
+            System.out.println("Where do you want to put the card in position " + i +"?\n");
             position = scanner.nextInt();
             if(temp[position]!=null){
                 if (position >= 0 && position < toInsert.length) {
@@ -325,11 +325,11 @@ public class Player {
                     i++;
                 }
                 else {
-                    System.out.println(i + "is not in the interval [0, toInsert.length]");
+                    System.out.println(position + "is not in the interval [0, toInsert.length]...\n Please choose again\n");
                 }
             }
             else
-                System.out.println("There's already a card in position "+position+", choose another position...");
+                System.out.println("There's already a card in position "+position+", choose another...");
         }
         printChosenCards(temp);
         insertInBookshelf(temp);
@@ -353,10 +353,12 @@ public class Player {
         Scanner scanner = new Scanner(System.in);
 
         do {
-            System.out.println("Type column (o to 5) where you want to insert the cards you picked\n");
+            System.out.println("Type in which column (o to 5) you want to insert the cards that you picked\n");
             col = scanner.nextInt();
             insertable = this.bookshelf.getInsertable(col);
-        } while (toInsert.length > insertable);
+            if(toInsert.length >= insertable)
+                System.out.println("There isn't enough space in that column, please choose another...\n");
+        } while (toInsert.length >= insertable);
         bookshelf.insert(toInsert, col);
         UpdatePersonalScore();
         if(bookshelf.CheckIfFull())
