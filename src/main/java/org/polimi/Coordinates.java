@@ -29,11 +29,11 @@ public class Coordinates {
     public void setY(int j){
         this.y = j;
     }
-    public boolean IndexisValid(int k){
+    public boolean indexIsValid(int k){
         return k >= 0 && k <= 8;
     }
-    public boolean CoordsAreValid(){
-        return IndexisValid(x)&&IndexisValid(y);
+    public boolean CoordinatesAreValid(){
+        return indexIsValid(x)&& indexIsValid(y);
     }
 
     @Override

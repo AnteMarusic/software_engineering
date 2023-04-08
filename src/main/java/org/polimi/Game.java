@@ -35,7 +35,7 @@ public class Game{
     public void gameLoop(){
         int currentPlayer = firstPlayer;
         do{
-            players.get(currentPlayer).chooseCards();
+            players.get(currentPlayer).chooseCards(this.board);
             //cotrollo se ha raggiunto il primo sharedGoal
             if(players.get(currentPlayer).getSharedGoal1Achieved()==false)
             {
@@ -55,7 +55,7 @@ public class Game{
                 if (newPoint != 0)
                     players.get(currentPlayer).setSharedGoal2AchievedToTrue();
             }
-            endGame = players.get(currentPlayer).getBookFull();
+            endGame = players.get(currentPlayer).getIsBookshelfFull();
 
             if(board.refillCheck())
                 board.fill();

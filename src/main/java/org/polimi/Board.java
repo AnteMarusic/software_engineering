@@ -36,30 +36,54 @@ public class Board {
     }
 
 
-    //returns the card found at the relative coordinates "coor"
-    public Card getCardAtCoordinate(Coordinates coor) {
-        if(this.board.get(coor)==null)
+    /**
+     * this method allows to get a card from the board
+     * @param coordinates coordinates of the card you want to get
+     * @return null if no card is found at the coordinates provided or those are invalid or the card is NOT_PICKABLE.
+     * The actual card otherwise
+     */
+    public Card getCardAtCoordinates(Coordinates coordinates) {
+        Card temp = this.board.get(coordinates);
+        if(temp == null)
             return null;
-        Card tmp = new Card(this.board.get(coor).getColor(), this.board.get(coor).getState());
-        this.removeCardAtCoordinate(coor);
-        return tmp;
+        else {
+            if (temp.getState() == Card.State.NOT_PICKABLE)
+                return null;
+            Card tmp = new Card(this.board.get(coordinates).getColor(), this.board.get(coordinates).getState());
+            this.removeCardAtCoordinate(coordinates);
+            return tmp;
+        }
+    }
+
+    /**
+     * is an observer method
+     * @param coordinates coordinates of the card you want to see
+     * @return null if no card is found at those coordinates or the coordinates are invalid
+     */
+    public Card seeCardAtCoordinates(Coordinates coordinates) {
+        Card temp = this.board.get(coordinates);
+        if (temp == null)
+            return null;
+        else {
+            return removeCardAtCoordinate(coordinates);
+        }
     }
 
     //removes a card from the board and updates each adjacent card's state to PICKABLE, if present
-    private void removeCardAtCoordinate(Coordinates coor) {
-        int x = coor.getX();
-        int y = coor.getY();
-        Coordinates[] Adjacentcoords = new Coordinates[4];
-        Adjacentcoords[0] = new Coordinates(x, y + 1);
-        Adjacentcoords[1] = new Coordinates(x + 1, y);
-        Adjacentcoords[2] = new Coordinates(x, y - 1);
-        Adjacentcoords[3] = new Coordinates(x - 1, y);
+    private Card removeCardAtCoordinate(Coordinates coordinates) {
+        int x = coordinates.getX();
+        int y = coordinates.getY();
+        Coordinates[] AdjacentCoordinates = new Coordinates[4];
+        AdjacentCoordinates[0] = new Coordinates(x, y + 1);
+        AdjacentCoordinates[1] = new Coordinates(x + 1, y);
+        AdjacentCoordinates[2] = new Coordinates(x, y - 1);
+        AdjacentCoordinates[3] = new Coordinates(x - 1, y);
         for (int i = 0; i < 4; i++) {
-            if (Adjacentcoords[i].CoordsAreValid() && board.get(Adjacentcoords[i]) != null) {
-                board.get(Adjacentcoords[i]).setState(Card.State.PICKABLE);
+            if (AdjacentCoordinates[i].CoordinatesAreValid() && board.get(AdjacentCoordinates[i]) != null) {
+                board.get(AdjacentCoordinates[i]).setState(Card.State.PICKABLE);
             }
         }
-        this.board.remove(coor);
+        return this.board.remove(coordinates);
     }
 
 
@@ -81,7 +105,7 @@ public class Board {
                         AdjacentCoords[2] = new Coordinates(i, j - 1);
                         AdjacentCoords[3] = new Coordinates(i - 1, j);
                         for (int k = 0; k < 4; k++) {
-                            if (AdjacentCoords[i].CoordsAreValid() && board.get(AdjacentCoords[i]) != null) {
+                            if (AdjacentCoords[i].CoordinatesAreValid() && board.get(AdjacentCoords[i]) != null) {
                                 return false;
                             }
                         }
