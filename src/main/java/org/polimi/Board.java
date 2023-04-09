@@ -71,8 +71,8 @@ public class Board {
 
     //removes a card from the board and updates each adjacent card's state to PICKABLE, if present
     private Card removeCardAtCoordinate(Coordinates coordinates) {
-        int x = coordinates.getX();
-        int y = coordinates.getY();
+        int x = coordinates.getRow();
+        int y = coordinates.getCol();
         Coordinates[] AdjacentCoordinates = new Coordinates[4];
         AdjacentCoordinates[0] = new Coordinates(x, y + 1);
         AdjacentCoordinates[1] = new Coordinates(x + 1, y);
@@ -98,7 +98,7 @@ public class Board {
             length = arr[1];
             for (int j = 0; j < 9; j++) {
                 if (j >= start && j < start + length) {
-                    AUXkey.setXY(i, j);
+                    AUXkey.setRowCol(i, j);
                     if (board.get(AUXkey) != null) {
                         AdjacentCoords[0] = new Coordinates(i, j + 1);
                         AdjacentCoords[1] = new Coordinates(i + 1, j);

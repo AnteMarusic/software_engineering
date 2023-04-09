@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 
 public class PersonalGoal {
     private static final String FILENAME = "personal_goal.json";
@@ -76,8 +75,8 @@ public class PersonalGoal {
         int col, row;
         int count = 0;
         for (int i = 0; i < DIM; i ++) {
-            col = coordinates[i].getX();
-            row = coordinates[i].getY();
+            col = coordinates[i].getRow();
+            row = coordinates[i].getCol();
             if (grid[row][col] != null) {
                 if (grid[row][col].getColor() == this.colors[i]) {
                     count ++;

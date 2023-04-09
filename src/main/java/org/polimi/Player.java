@@ -162,7 +162,7 @@ public class Player {
                         previousX = scanner.nextInt();
                         System.out.println("Type col number (0 to 8)");
                         previousY = scanner.nextInt();
-                        coordinates.setXY(previousX,previousY);
+                        coordinates.setRowCol(previousX,previousY);
                         if(coordinates.CoordinatesAreValid()){
                             tempCard = board.seeCardAtCoordinates(coordinates);
                             if (tempCard == null)
@@ -191,7 +191,7 @@ public class Player {
                         x = scanner.nextInt();
                         System.out.println("Type col number (0 to 8)");
                         y = scanner.nextInt();
-                        coordinates.setXY(x, y);
+                        coordinates.setRowCol(x, y);
                         if (coordinates.CoordinatesAreValid() && ((x == previousX && (y == previousY+1 ||y == previousY-1)) || ((x == previousX+1 ||x == previousX-1) && y == previousY))) {
                             tempCard = board.seeCardAtCoordinates(coordinates);
                             if (tempCard == null)
@@ -214,7 +214,7 @@ public class Player {
                             x = scanner.nextInt();
                             System.out.println("Type col number (0 to 8)");
                             y = scanner.nextInt();
-                            coordinates.setXY(x, y);
+                            coordinates.setRowCol(x, y);
                             if (coordinates.CoordinatesAreValid() && ((x == previousX && y==previousY-1) || (x == previousX && y==previousY+1))) {
                                 tempCard = board.getCardAtCoordinates(coordinates);
                                 if (tempCard == null)
@@ -234,7 +234,7 @@ public class Player {
                             x = scanner.nextInt();
                             System.out.println("Type col number (0 to 8)");
                             y = scanner.nextInt();
-                            coordinates.setXY(x, y);
+                            coordinates.setRowCol(x, y);
                             if (coordinates.CoordinatesAreValid() && ((y == previousY && x==previousX-1) || (y == previousY && x==previousX+1))) {
                                 tempCard = board.getCardAtCoordinates(coordinates);
                                 if (tempCard == null)
