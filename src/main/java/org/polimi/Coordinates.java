@@ -1,8 +1,8 @@
 package org.polimi;
 
 public class Coordinates {
-    private int row;//#row
-    private int col;//#column
+    private int row;
+    private int col;
 
     public Coordinates(int row, int col) {
         setRow(row);
@@ -39,8 +39,8 @@ public class Coordinates {
     @Override
     public String toString() {
         return "Coordinates{" +
-                "x=" + row +
-                ", y=" + col +
+                "row=" + row +
+                ", col=" + col +
                 '}';
     }
 }

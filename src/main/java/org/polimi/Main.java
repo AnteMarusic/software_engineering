@@ -4,8 +4,11 @@ import org.polimi.personal_goal.PersonalGoal;
 
 public class Main {
     public static void main(String[] args) {
-        PersonalGoal p = new PersonalGoal(4);
-        p.print();
-        System.out.println("Hello world!");
+        BagOfCards bag = new BagOfCards();
+        Board board = new Board(4, bag);
+        board.print();
+        System.out.println("\n" + board.seeCardAtCoordinates(new Coordinates(3,1)) + "\n");
+        board.getCardAtCoordinates(new Coordinates(3,1));
+        board.print();
     }
 }

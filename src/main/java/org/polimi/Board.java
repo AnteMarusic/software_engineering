@@ -61,12 +61,7 @@ public class Board {
      * @return null if no card is found at those coordinates or the coordinates are invalid
      */
     public Card seeCardAtCoordinates(Coordinates coordinates) {
-        Card temp = this.board.get(coordinates);
-        if (temp == null)
-            return null;
-        else {
-            return removeCardAtCoordinate(coordinates);
-        }
+        return this.board.get(coordinates);
     }
 
     //removes a card from the board and updates each adjacent card's state to PICKABLE, if present
@@ -213,5 +208,9 @@ public class Board {
             }
         }
         return false;//default
+    }
+
+    public void print() {
+        this.board.forEach((key, value) -> System.out.println(key + " " + value));
     }
 }
