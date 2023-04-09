@@ -147,12 +147,18 @@ public class Player {
         int maxInsertable = bookshelf.getMaxInsertable();
         ArrayList<Card> chosenCards = new ArrayList<>(maxInsertable);
         int counter=0;
-
+        String answer;
         while(counter < maxInsertable){
             if(counter > 0) {
                 System.out.println("Do you want to choose another? You can choose another" + (maxInsertable - counter) + "cards\nType 'yes' or 'no'");
-                if (scanner.nextLine().equals("no"))
+                answer=scanner.nextLine().toLowerCase();
+                if(answer.equals("no"))
                     break;
+                else if(!answer.equals("yes")){
+                    System.out.println("Input is not valid, type again...\n");
+                    continue;
+                }
+
             }
 
             switch(counter){
