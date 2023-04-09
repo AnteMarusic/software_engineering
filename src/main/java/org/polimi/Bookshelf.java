@@ -84,39 +84,17 @@ public class Bookshelf {
     }
 
     public void print() {
-        char c;
         for (int i = ROW - 1; i >= 0; i --) {
             for (int j = 0; j < COL; j ++) {
                 if (this.grid[i][j] == null) {
-                    c = 'N';
+                    System.out.print("N");
                 }
                 else {
-                    c = convertColorToChar(this.grid[i][j].getColor());
+                    System.out.print(this.grid[i][j].convertColorToChar());
                 }
-                System.out.print(c);
             }
             System.out.println(" ");
         }
-    }
-
-    private char convertColorToChar (Card.Color c) {
-        if (c.equals(Card.Color.GREEN)) {
-            return 'G';
-        }
-        if (c.equals(Card.Color.CYAN)) {
-            return 'C';
-        }
-        if (c.equals(Card.Color.BLUE)) {
-            return 'B';
-        }
-        if (c.equals(Card.Color.WHITE)) {
-            return 'W';
-        }if (c.equals(Card.Color.ORANGE)) {
-            return 'O';
-        }if (c.equals(Card.Color.PINK)) {
-            return 'P';
-        }
-        return '?';
     }
 
     public boolean CheckIfFull(){

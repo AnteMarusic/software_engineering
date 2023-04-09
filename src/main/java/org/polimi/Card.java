@@ -45,4 +45,26 @@ public class Card {
                 ", color=" + color +
                 '}';
     }
+
+    public char convertColorToChar() {
+        if (this.color.equals(Card.Color.GREEN)) {
+            return 'G';
+        }
+        if (this.color.equals(Card.Color.CYAN)) {
+            return 'C';
+        }
+        if (this.color.equals(Card.Color.BLUE)) {
+            return 'B';
+        }
+        if (this.color.equals(Card.Color.WHITE)) {
+            return 'W';
+        }
+        if (this.color.equals(Card.Color.ORANGE)) {
+            return 'O';
+        }
+        if (this.color.equals(Card.Color.PINK)) {
+            return 'P';
+        }
+        return '?';
+    }
 }

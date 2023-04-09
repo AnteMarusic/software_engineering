@@ -3,6 +3,7 @@ package org.polimi;
 import java.util.HashMap;
 
 public class Board {
+    private final static int ROW = 9;
     private final BagOfCards bag;
     private final HashMap<Coordinates, Card> board;
     private final int numOfPlayers;
@@ -109,6 +110,28 @@ public class Board {
         return true;
     }
 
+    public void printBoard() {
+        int start, length;
+        int[] temp;
+        Card card;
+        for (int row = 0; row < ROW; row ++) {
+            temp = getCorrectStartAndLength(row);
+            start = temp [0];
+            length = temp[1];
+            for (int i = 0; i < start; i ++) {
+                System.out.print(" ");
+            }
+            for (int col = start; col < length + start; col ++) {
+                card = seeCardAtCoordinates(new Coordinates(row, col));
+                if(card == null)
+                    System.out.print("N");
+                else
+                    System.out.print(card.convertColorToChar());
+            }
+            System.out.println(" ");
+        }
+    }
+
     private int[] getCorrectStartAndLength(int row) {
         int start=-1, length=-1;
         int[] arrayOfInt = new int[2];
@@ -208,7 +231,7 @@ public class Board {
         return false;//default
     }
 
-    public void print() {
+    public void printMap() {
         this.board.forEach((key, value) -> System.out.println(key + " " + value));
     }
 }
