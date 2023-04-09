@@ -8,6 +8,7 @@ public class Main {
         Board board = new Board(4, bag);
         board.print();
         System.out.println("\n" + board.seeCardAtCoordinates(new Coordinates(3,1)) + "\n");
+        System.out.println("\n" + board.seeCardAtCoordinates(new Coordinates(1,3)) + "\n");
         board.getCardAtCoordinates(new Coordinates(3,1));
         board.print();
     }

@@ -49,9 +49,7 @@ public class Board {
         else {
             if (temp.getState() == Card.State.NOT_PICKABLE)
                 return null;
-            Card tmp = new Card(this.board.get(coordinates).getColor(), this.board.get(coordinates).getState());
-            this.removeCardAtCoordinate(coordinates);
-            return tmp;
+            return this.removeCardAtCoordinate(coordinates);
         }
     }
 
