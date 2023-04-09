@@ -36,7 +36,7 @@ public class Player {
     /**
      * each player has its bookshelf
      */
-    private Bookshelf bookshelf;
+    private final Bookshelf bookshelf;
 
 
     /**
@@ -255,7 +255,7 @@ public class Player {
             orderChosenCards(chosenCards);
     }
 
-    private void CLIChooseCards (boolean b, int x, int y, int previousX, int previousY, Board board, ArrayList<Card> chosenCards) {
+    private void getCoordinatesFromSTDInput (boolean b, int x, int y, int previousX, int previousY, Board board, ArrayList<Card> chosenCards) {
         Scanner scanner = new Scanner(System.in);
         Coordinates coordinates;
         Card tempCard;
@@ -314,12 +314,6 @@ public class Player {
         chosenCards.forEach(System.out::println);
     }
 
-    public Card[][] getBookshelfGrid () {
-        return this.bookshelf.getGrid();
-    }
-    //player has no access to Board, Game will pass him the cards.
-    //here we are already sure that these cards are available to be inserted
-
     private void insertInBookshelf (ArrayList<Card> toInsert){
         int col , insertable;
         Scanner scanner = new Scanner(System.in);
@@ -342,6 +336,4 @@ public class Player {
     public boolean getIsBookshelfFull(){
         return this.IsBookshelfFull;
     }
-
-
 }
