@@ -6400,76 +6400,6 @@
 							}
 						},
 						{
-							"_type": "UMLGeneralizationView",
-							"_id": "AAAAAAGHZj9tG6BwPJ8=",
-							"_parent": {
-								"$ref": "AAAAAAFF+qBtyKM79qY="
-							},
-							"model": {
-								"$ref": "AAAAAAGHZj9tG6BuBpU="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGHZj9tG6Byjn0=",
-									"_parent": {
-										"$ref": "AAAAAAGHZj9tG6BwPJ8="
-									},
-									"model": {
-										"$ref": "AAAAAAGHZj9tG6BuBpU="
-									},
-									"visible": null,
-									"font": "Arial;13;0",
-									"left": 403,
-									"top": 848,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAGHZj9tG6BwPJ8="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGHZj9tG6BzgR0=",
-									"_parent": {
-										"$ref": "AAAAAAGHZj9tG6BwPJ8="
-									},
-									"model": {
-										"$ref": "AAAAAAGHZj9tG6BuBpU="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 434,
-									"top": 882,
-									"height": 13,
-									"alpha": -1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGHZj9tG6BwPJ8="
-									},
-									"edgePosition": 1
-								}
-							],
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAGG9GsW4RGBJhg="
-							},
-							"tail": {
-								"$ref": "AAAAAAGG8BaH6zhCUrw="
-							},
-							"lineStyle": 1,
-							"points": "336:959;513:796",
-							"showVisibility": true,
-							"stereotypeLabel": {
-								"$ref": "AAAAAAGHZj9tG6Byjn0="
-							},
-							"propertyLabel": {
-								"$ref": "AAAAAAGHZj9tG6BzgR0="
-							}
-						},
-						{
 							"_type": "UMLClassView",
 							"_id": "AAAAAAGHZkdnMZPW9sU=",
 							"_parent": {
@@ -10827,7 +10757,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGHBLINICz9p3E="
 									},
-									"name": "Card[]"
+									"name": "Card[]",
+									"type": ""
 								}
 							]
 						},
