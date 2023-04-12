@@ -1,46 +1,61 @@
 package org.polimi;
 
+import java.util.Objects;
+
 public class Coordinates {
-    private int x;//#row
-    private int y;//#column
+    private int row;
+    private int col;
 
-    public Coordinates(int i, int j) {
-        setX(i);
-        setY(j);
+    public Coordinates(int row, int col) {
+        setRow(row);
+        setCol(col);
     }
 
-    public int getX(){
-        return x;
+    public int getRow(){
+        return row;
     }
 
-    public int getY(){
-        return y;
+    public int getCol(){
+        return col;
     }
 
-    public void setXY(int i, int j){
-            setX(i);
-            setY(j);
+    public void setRowCol(int row, int col){
+            setRow(row);
+            setCol(col);
     }
 
-    public void setX(int i){
-        this.x = i;
+    public void setRow(int i){
+        this.row = i;
     }
 
-    public void setY(int j){
-        this.y = j;
+    public void setCol(int j){
+        this.col = j;
     }
     public boolean indexIsValid(int k){
         return k >= 0 && k <= 8;
     }
     public boolean CoordinatesAreValid(){
-        return indexIsValid(x)&& indexIsValid(y);
+        return indexIsValid(row)&& indexIsValid(col);
     }
 
     @Override
     public String toString() {
         return "Coordinates{" +
-                "x=" + x +
-                ", y=" + y +
+                "row=" + row +
+                ", col=" + col +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinates that = (Coordinates) o;
+        return row == that.row && col == that.col;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, col);
     }
 }
