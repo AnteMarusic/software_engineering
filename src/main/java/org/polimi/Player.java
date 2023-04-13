@@ -158,7 +158,6 @@ public class Player {
                     System.out.println("Input is not valid, type again...\n");
                     continue;
                 }
-
             }
 
             switch(counter){
