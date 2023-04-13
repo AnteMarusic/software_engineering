@@ -3,6 +3,7 @@ package org.polimi;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Bookshelf {
     private static final int COL = 5;
@@ -10,7 +11,7 @@ public class Bookshelf {
     /**
      * data structure representing bookshelf
      */
-    final private Card[][] grid;
+    final private HashMap<BookshelfCoordinates, Card> grid;
     /**
      * index to insert, tracks how many cards have been inserted for each column
      */
@@ -25,7 +26,7 @@ public class Bookshelf {
      * creates an empty bookshelf
      */
     public Bookshelf() {
-        this.grid = new Card[ROW][COL];
+        this.grid = new HashMap<>(COL*ROW);
         this.maxInsertable = 3;
         this.index = new int[COL];
         for (int i = 0; i < COL; i ++) {
@@ -43,7 +44,9 @@ public class Bookshelf {
     public Card[][] getGrid () {
         Card[][] tempGrid = new Card[ROW][COL];
         for (int i = 0; i < ROW; i ++) {
-            System.arraycopy(this.grid[i], 0, tempGrid[i], 0, COL);
+            for (int j = 0; j < COL; j ++) {
+                tempGrid[i][j] = this.grid.get(new BookshelfCoordinates(i, j));
+            }
         }
         return tempGrid;
     }
@@ -75,7 +78,7 @@ public class Bookshelf {
     public void insert(@NotNull ArrayList<Card> cards, int col) {
         int j = 0;
         for (int i = index[col]; i < index[col] + cards.size(); i ++) {
-            this.grid[i][col] = cards.get(j);
+            this.grid.put(new BookshelfCoordinates(i , col), cards.get(j));
             j ++;
         }
         this.index[col] = index[col] + cards.size();
@@ -84,13 +87,14 @@ public class Bookshelf {
     }
 
     public void print() {
+
         for (int i = ROW - 1; i >= 0; i --) {
             for (int j = 0; j < COL; j ++) {
-                if (this.grid[i][j] == null) {
+                if (this.grid.get(new BookshelfCoordinates(i, j)) == null) {
                     System.out.print("N");
                 }
                 else {
-                    System.out.print(this.grid[i][j].convertColorToChar());
+                    System.out.print(this.grid.get(new BookshelfCoordinates(i, j)).convertColorToChar());
                 }
             }
             System.out.println(" ");
