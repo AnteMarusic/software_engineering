@@ -1,4 +1,4 @@
-package org.polimi;
+package org.polimi.server.model;
 
 import java.util.Objects;
 

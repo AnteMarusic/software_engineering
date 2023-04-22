@@ -1,7 +1,7 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
+
 import java.util.Stack;
 
 public abstract class AbstractSharedGoal {

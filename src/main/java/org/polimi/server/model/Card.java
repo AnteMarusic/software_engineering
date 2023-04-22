@@ -1,4 +1,4 @@
-package org.polimi;
+package org.polimi.server.model;
 
 public class Card {
     private State state;

@@ -1,7 +1,6 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
 
 //4th SHARED GOAL, two 2x2 matrices with same colors
 public class SharedGoal4 extends AbstractSharedGoal{

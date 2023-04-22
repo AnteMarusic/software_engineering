@@ -1,4 +1,4 @@
-package org.polimi;
+package org.polimi.server.model;
 
 public class BookshelfCoordinates extends AbstractCoordinates {
     private static final int COL = 5;

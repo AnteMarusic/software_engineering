@@ -1,6 +1,6 @@
-package org.polimi;
+package org.polimi.server.model;
 
-public class BoardCoordinates extends AbstractCoordinates{
+public class BoardCoordinates extends AbstractCoordinates {
     private static int numOfPlayers;
     private static final int MAX_DIM = 9;
     public BoardCoordinates(int row, int col) {

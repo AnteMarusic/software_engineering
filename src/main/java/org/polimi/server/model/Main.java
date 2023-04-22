@@ -1,8 +1,4 @@
-package org.polimi;
-
-import org.polimi.personal_goal.PersonalGoal;
-
-import java.util.ArrayList;
+package org.polimi.server.model;
 
 public class Main {
     public static void main(String[] args) {

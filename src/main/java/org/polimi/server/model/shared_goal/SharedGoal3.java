@@ -1,7 +1,6 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
 
 //3rd SHARED GOAL, AT LEAST 4 COLUMN OF 4 SAME COLOR CARDS
 public class SharedGoal3 extends AbstractSharedGoal{

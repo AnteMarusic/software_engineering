@@ -1,7 +1,6 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
 
 //1st SHARED GOAL, X6 VERTICAL EQUAL COUPLES
 public class SharedGoal1 extends AbstractSharedGoal {
