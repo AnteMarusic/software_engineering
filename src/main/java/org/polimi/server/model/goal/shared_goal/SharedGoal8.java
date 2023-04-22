@@ -1,24 +1,24 @@
-package org.polimi.server.model.shared_goal;
+package org.polimi.server.model.goal.shared_goal;
 
 import org.polimi.server.model.Card;
 
-//9th SHARED GOAL, at least 2 columns with all 6 cards different
-public class SharedGoal9 extends AbstractSharedGoal{
-    public SharedGoal9 (int numOfPlayer) {
+//8th SHARED GOAL,
+public class SharedGoal8 extends AbstractSharedGoal{
+    public SharedGoal8 (int numOfPlayer) {
         super(numOfPlayer);
     }
 
     @Override
     protected boolean achieved(Card[][] tmpGrid){
         int[] colorCount = new int[6];
-        int columnCount = 0;
-        boolean flag;
-        for(int j=0 ; j<5 ; j++){
+        int rowCount = 0;
+        int tmpCount;
+        for(int i=0 ; i<6 ; i++){
             for(int k=0 ; k<6 ; k++){
                 colorCount[k] = 0;
             }
-            flag = true;
-            for(int i=0 ; i<6 ; i++){
+            tmpCount = 0;
+            for(int j=0 ; j<5 ; j++){
                 switch (tmpGrid[i][j].getColor()){
                     case PINK -> colorCount[0]++;
                     case CYAN -> colorCount[1]++;
@@ -29,14 +29,14 @@ public class SharedGoal9 extends AbstractSharedGoal{
                 }
             }
             for(int k=0 ; k<6 ; k++){
-                if(colorCount[k] > 1){
-                    flag = false;
+                if(colorCount[k]>0){
+                    tmpCount++;
                 }
             }
-            if(flag){
-                columnCount++;
+            if(tmpCount<=3){
+                rowCount++;
             }
-            if(columnCount>=2){
+            if(rowCount>=4){
                 return true;
             }
         }

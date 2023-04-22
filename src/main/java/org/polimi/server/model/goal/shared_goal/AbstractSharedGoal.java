@@ -1,10 +1,11 @@
-package org.polimi.server.model.shared_goal;
+package org.polimi.server.model.goal.shared_goal;
 
 import org.polimi.server.model.Card;
+import org.polimi.server.model.goal.Goal;
 
 import java.util.Stack;
 
-public abstract class AbstractSharedGoal {
+public abstract class AbstractSharedGoal implements Goal {
     /**
      * stack of points. The content varies based on the number of player
      */
@@ -35,7 +36,8 @@ public abstract class AbstractSharedGoal {
      */
     protected abstract boolean achieved(Card[][] tmpGrid);
 
-    public int calcScore(Card[][] tmpGrid){
+    @Override
+    public int getScore(Card[][] tmpGrid){
         if(achieved(tmpGrid)){
             int x = pointStack.pop();
             return x;

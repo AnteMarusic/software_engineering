@@ -1,5 +1,7 @@
 package org.polimi.server.model;
 
+import org.polimi.server.model.goal.PersonalGoal;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

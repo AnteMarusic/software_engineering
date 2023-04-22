@@ -1,6 +1,7 @@
 package org.polimi.server.model;
 
-import org.polimi.server.model.shared_goal.*;
+import org.polimi.server.model.goal.*;
+import org.polimi.server.model.goal.shared_goal.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class Game{
             if(players.get(currentPlayer).getSharedGoal1Achieved()==false)
             {
                 int newPoint;
-                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getGrid());
+                newPoint = SharedGoal1.getScore(players.get(currentPlayer).getGrid());
                 players.get(currentPlayer).increaseSharedScore(newPoint);
                 if (newPoint != 0)
                     players.get(currentPlayer).setSharedGoal1AchievedToTrue();
@@ -49,7 +50,7 @@ public class Game{
             if(players.get(currentPlayer).getSharedGoal2Achieved()==false)
             {
                 int newPoint;
-                newPoint = SharedGoal1.calcScore(players.get(currentPlayer).getGrid());
+                newPoint = SharedGoal1.getScore(players.get(currentPlayer).getGrid());
                 players.get(currentPlayer).increaseSharedScore(newPoint);
                 if (newPoint != 0)
                     players.get(currentPlayer).setSharedGoal2AchievedToTrue();
