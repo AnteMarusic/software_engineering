@@ -1,25 +1,24 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
 
-//5th SHARED GOAL, AT LEAST 3 COLUMNS WITH NO MORE THAN 3 COLORS
-public class SharedGoal5 extends AbstractSharedGoal {
-    public SharedGoal5(int numOfPlayer) {
+//8th SHARED GOAL,
+public class SharedGoal8 extends AbstractSharedGoal{
+    public SharedGoal8 (int numOfPlayer) {
         super(numOfPlayer);
     }
 
     @Override
-    protected boolean achieved(Card[][] tmpGrid) {
+    protected boolean achieved(Card[][] tmpGrid){
         int[] colorCount = new int[6];
         int rowCount = 0;
         int tmpCount;
-        for(int j=0 ; j<5 ; j++){
+        for(int i=0 ; i<6 ; i++){
             for(int k=0 ; k<6 ; k++){
                 colorCount[k] = 0;
             }
             tmpCount = 0;
-            for(int i=0 ; i<6 ; i++){
+            for(int j=0 ; j<5 ; j++){
                 switch (tmpGrid[i][j].getColor()){
                     case PINK -> colorCount[0]++;
                     case CYAN -> colorCount[1]++;
@@ -37,7 +36,7 @@ public class SharedGoal5 extends AbstractSharedGoal {
             if(tmpCount<=3){
                 rowCount++;
             }
-            if(rowCount>=3){
+            if(rowCount>=4){
                 return true;
             }
         }

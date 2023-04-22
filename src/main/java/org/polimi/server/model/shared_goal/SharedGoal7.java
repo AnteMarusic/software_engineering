@@ -1,7 +1,6 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
 
 //7th SHARED GOAL, at least 5 cards as a diagonal in every direction
 public class SharedGoal7 extends AbstractSharedGoal{

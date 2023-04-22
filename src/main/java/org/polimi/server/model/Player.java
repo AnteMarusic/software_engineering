@@ -1,7 +1,4 @@
-package org.polimi;
-
-import org.polimi.personal_goal.PersonalGoal;
-import org.polimi.Card.State;
+package org.polimi.server.model;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -173,9 +170,9 @@ public class Player {
                             if (tempCard == null)
                                 System.out.println("There's no card at that position, please choose another...");
                             else {
-                                if(tempCard.getState() == State.NOT_PICKABLE)
+                                if(tempCard.getState() == Card.State.NOT_PICKABLE)
                                     System.out.println("That card cannot be picked, please choose another...");
-                                else if(tempCard.getState() == State.PICKABLE){
+                                else if(tempCard.getState() == Card.State.PICKABLE){
                                     chosenCards.add(board.getCardAtCoordinates(coordinates));
                                     counter++;
                                     System.out.println("You chose a card in position (" + previousX + "," + previousY);
@@ -184,7 +181,7 @@ public class Player {
                         }
                         else
                             System.out.println("These coordinates are not valid, choose again...");
-                    }while(!coordinates.CoordinatesAreValid() || tempCard == null || tempCard.getState() != State.PICKABLE);//first card
+                    }while(!coordinates.CoordinatesAreValid() || tempCard == null || tempCard.getState() != Card.State.PICKABLE);//first card
                     previousX = x;
                     previousY = y;
                 }

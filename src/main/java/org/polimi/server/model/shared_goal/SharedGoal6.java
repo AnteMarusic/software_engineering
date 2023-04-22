@@ -1,7 +1,6 @@
-package org.polimi.shared_goal;
+package org.polimi.server.model.shared_goal;
 
-import org.polimi.Bookshelf;
-import org.polimi.Card;
+import org.polimi.server.model.Card;
 
 //6th SHARED GOAL, at least 8 cards with the same color no matter the position
 public class SharedGoal6 extends AbstractSharedGoal{

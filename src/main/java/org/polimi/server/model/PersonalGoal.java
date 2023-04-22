@@ -1,7 +1,5 @@
-package org.polimi.personal_goal;
+package org.polimi.server.model;
 
-import org.polimi.Card;
-import org.polimi.Coordinates;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

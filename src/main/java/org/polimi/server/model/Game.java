@@ -1,6 +1,8 @@
-package org.polimi;
+package org.polimi.server.model;
 
-import org.polimi.personal_goal.PersonalGoal;
+import org.polimi.model.personal_goal.shared_goal.*;
+import org.polimi.model.shared_goal.*;
+import org.polimi.server.model.shared_goal.*;
 import org.polimi.shared_goal.*;
 
 import java.util.ArrayList;
