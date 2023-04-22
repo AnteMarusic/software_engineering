@@ -7,6 +7,11 @@ import java.util.Stack;
 
 public abstract class AbstractSharedGoal implements Goal {
     /**
+     * const values representing the size of the card[][] Bookshelf
+     */
+    protected static final int ROW = 6;
+    protected static final int COL = 5;
+    /**
      * stack of points. The content varies based on the number of player
      */
     private Stack <Integer> pointStack;
