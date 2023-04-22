@@ -21,9 +21,9 @@ public class ClientHandler implements Runnable{
             //his name.
             this.clientUsername = reader.readLine();
             clientHandlers.add(this);
-            broadcastMessage ("SERVER: " + clientUsername + "has connected to the chat");
+            broadcastMessage ("SERVER: " + clientUsername + " has connected to the chat");
         } catch (IOException IOe) {
-            closeEverything(socket, reader, writer);
+            removeClientHandler();
             System.out.println("exception in clientHandler");
             IOe.printStackTrace();
         }
@@ -35,7 +35,13 @@ public class ClientHandler implements Runnable{
         while (socket.isConnected()) {
             try {
                 messageFromClient = reader.readLine();
-                broadcastMessage (messageFromClient);
+
+                if (messageFromClient != null) {
+                    broadcastMessage (messageFromClient);
+                }
+                else {
+                    removeClientHandler();
+                }
             } catch (IOException IOe) {
                 closeEverything (socket, reader, writer);
                 //break statement is needed otherwise I check socket.isConnected when socket is closed, causing an exception
@@ -58,13 +64,13 @@ public class ClientHandler implements Runnable{
                 }
             } catch (IOException IOe) {
                 System.out.println("exception in broadcastMessage");
-                closeEverything (socket, reader, writer);
+                removeClientHandler();
             }
         }
     }
 
     private void closeEverything (Socket socket, BufferedReader reader, BufferedWriter writer) {
-        removeClientHandler();
+        //removeClientHandler();
         try {
             if (socket != null) {
                 socket.close();
@@ -84,8 +90,8 @@ public class ClientHandler implements Runnable{
     }
 
     public void removeClientHandler () {
-        broadcastMessage("SERVER: " + clientUsername + "has left the chat");
         clientHandlers.remove(this);
+        broadcastMessage(  "SERVER: " + clientUsername + " has left the chat");
         closeEverything(socket, reader, writer);
     }
 
