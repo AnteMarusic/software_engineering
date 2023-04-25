@@ -1,7 +1,7 @@
 package org.polimi;
 
 import org.junit.jupiter.api.Test;
-import org.polimi.server.model.BoardCoordinates;
+import org.polimi.server.model.coordinates.BoardCoordinates;
 
 import static org.junit.jupiter.api.Assertions.*;
 

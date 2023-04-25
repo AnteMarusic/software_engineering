@@ -11,7 +11,7 @@ public class Bookshelf {
     /**
      * data structure representing bookshelf
      */
-    final private HashMap<BookshelfCoordinates, Card> grid;
+    final private HashMap<Coordinates, Card> grid;
     /**
      * index to insert, tracks how many cards have been inserted for each column
      */
@@ -45,7 +45,7 @@ public class Bookshelf {
         Card[][] tempGrid = new Card[ROW][COL];
         for (int i = 0; i < ROW; i ++) {
             for (int j = 0; j < COL; j ++) {
-                tempGrid[i][j] = this.grid.get(new BookshelfCoordinates(i, j));
+                tempGrid[i][j] = this.grid.get(new Coordinates(i, j));
             }
         }
         return tempGrid;
@@ -78,7 +78,7 @@ public class Bookshelf {
     public void insert(@NotNull ArrayList<Card> cards, int col) {
         int j = 0;
         for (int i = index[col]; i < index[col] + cards.size(); i ++) {
-            this.grid.put(new BookshelfCoordinates(i , col), cards.get(j));
+            this.grid.put(new Coordinates(i , col), cards.get(j));
             j ++;
         }
         this.index[col] = index[col] + cards.size();
@@ -90,11 +90,11 @@ public class Bookshelf {
 
         for (int i = ROW - 1; i >= 0; i --) {
             for (int j = 0; j < COL; j ++) {
-                if (this.grid.get(new BookshelfCoordinates(i, j)) == null) {
+                if (this.grid.get(new Coordinates(i, j)) == null) {
                     System.out.print("N");
                 }
                 else {
-                    System.out.print(this.grid.get(new BookshelfCoordinates(i, j)).convertColorToChar());
+                    System.out.print(this.grid.get(new Coordinates(i, j)).convertColorToChar());
                 }
             }
             System.out.println(" ");

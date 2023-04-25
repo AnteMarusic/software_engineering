@@ -14,7 +14,7 @@ public class SharedGoal3 extends AbstractSharedGoal{
     /**
      * in order to achieve the points you must have 4 columns made of
      * 4 cards of the same color
-     * Exhaustive check, complexity o((ROW-3) * COL)
+     * Exhaustive check, complexity O((ROW-3) * COL)
      */
     @Override
     protected boolean achieved(Card[][] tmpGrid) {

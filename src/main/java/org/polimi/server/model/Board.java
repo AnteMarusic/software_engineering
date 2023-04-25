@@ -1,18 +1,20 @@
 package org.polimi.server.model;
 
+import org.polimi.GameRules;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
     private final static int ROW = 9;
     private final BagOfCards bag;
-    private final HashMap<Coordinates, Card> board;
+    private final Map<Coordinates, Card> board;
     private final int numOfPlayers;
 
-    //board constructor
     public Board(int numOfPlayers, BagOfCards bag) {
         this.numOfPlayers = numOfPlayers;
         this.bag = bag;
-        this.board = new HashMap<Coordinates, Card>();
+        this.board = new HashMap<>();
         this.fill();
     }
 
@@ -20,7 +22,7 @@ public class Board {
     public void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
-            int[] arr= getCorrectStartAndLength(i);
+            int[] arr= GameRules.getCorrectStartAndLength(i, numOfPlayers);
             start = arr[0];
             length = arr[1];
             for (int j = 0; j < 9; j++) {
@@ -83,11 +85,11 @@ public class Board {
 
     //checks whether the board needs to be refreshed/refilled
     public boolean refillCheck() {
-        int start , length ;
+        int start, length ;
         Coordinates AUXkey = new Coordinates(0, 0);
         Coordinates[] AdjacentCoords = new Coordinates[4];
         for (int i = 0; i < 9; i++) {
-            int[] arr= getCorrectStartAndLength(i);
+            int[] arr= GameRules.getCorrectStartAndLength(i, numOfPlayers);
             start = arr[0];
             length = arr[1];
             for (int j = 0; j < 9; j++) {
@@ -115,7 +117,7 @@ public class Board {
         int[] temp;
         Card card;
         for (int row = 0; row < ROW; row ++) {
-            temp = getCorrectStartAndLength(row);
+            temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
             start = temp [0];
             length = temp[1];
             for (int i = 0; i < start; i ++) {
@@ -132,89 +134,7 @@ public class Board {
         }
     }
 
-    private int[] getCorrectStartAndLength(int row) {
-        int start=-1, length=-1;
-        int[] arrayOfInt = new int[2];
-        switch (row) {
-            case 0 -> {
-                start = 3;
-                length = 2;
-                if (this.numOfPlayers < 4) {
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        length--;
-                    }
-                }
-            }
-            case 1 -> {
-                start = 3;
-                length = 3;
-                if (this.numOfPlayers < 4) {
-                    length--;
-                }
-            }
-            case 2, 6 -> {
-                start = 2;
-                length = 5;
-                if (this.numOfPlayers < 3) {
-                    start++;
-                    length--;
-                }
-            }
-            case 3 -> {
-                start = 1;
-                length = 8;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        length--;
-                    }
-                }
-            }
-            case 4 -> {
-                start = 0;
-                length = 9;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                }
-            }
-            case 5 -> {
-                start = 0;
-                length = 8;
-                if (this.numOfPlayers < 4) {
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        start++;
-                        length--;
-                    }
-                }
-            }
-            case 7 -> {
-                start = 3;
-                length = 3;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                }
-            }
-            case 8 -> {
-                start = 4;
-                length = 2;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        length--;
-                    }
-                }
-            }
-        }
-        arrayOfInt[0]= start;
-        arrayOfInt[1]= length;
-        return arrayOfInt;
-    }
+
 
     private boolean CornerCases(int i, int j){
         switch(numOfPlayers){
