@@ -5,6 +5,8 @@ import org.polimi.GameRules;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.polimi.GameRules.boardRowColInBound;
+
 public class Board {
     private final static int ROW = 9;
     private final BagOfCards bag;
@@ -16,6 +18,10 @@ public class Board {
         this.bag = bag;
         this.board = new HashMap<>();
         this.fill();
+    }
+
+    public Map<Coordinates, Card> getGrid(){
+        return this.board;
     }
 
     //fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, else to NOT_PICKABLE
@@ -75,7 +81,7 @@ public class Board {
         AdjacentCoordinates[2] = new Coordinates(x, y - 1);
         AdjacentCoordinates[3] = new Coordinates(x - 1, y);
         for (int i = 0; i < 4; i++) {
-            if (AdjacentCoordinates[i].CoordinatesAreValid() && board.get(AdjacentCoordinates[i]) != null) {
+            if (boardRowColInBound(AdjacentCoordinates[i].getRow(), AdjacentCoordinates[i].getCol(), numOfPlayers) && board.get(AdjacentCoordinates[i]) != null) {
                 board.get(AdjacentCoordinates[i]).setState(Card.State.PICKABLE);
             }
         }
@@ -94,14 +100,14 @@ public class Board {
             length = arr[1];
             for (int j = 0; j < 9; j++) {
                 if (j >= start && j < start + length) {
-                    AUXkey.setRowCol(i, j);
+                    AUXkey = new Coordinates(i,j);
                     if (board.get(AUXkey) != null) {
                         AdjacentCoords[0] = new Coordinates(i, j + 1);
                         AdjacentCoords[1] = new Coordinates(i + 1, j);
                         AdjacentCoords[2] = new Coordinates(i, j - 1);
                         AdjacentCoords[3] = new Coordinates(i - 1, j);
                         for (int k = 0; k < 4; k++) {
-                            if (AdjacentCoords[i].CoordinatesAreValid() && board.get(AdjacentCoords[i]) != null) {
+                            if (boardRowColInBound(AdjacentCoords[i].getRow(), AdjacentCoords[i].getCol(), numOfPlayers) && board.get(AdjacentCoords[i]) != null) {
                                 return false;
                             }
                         }
