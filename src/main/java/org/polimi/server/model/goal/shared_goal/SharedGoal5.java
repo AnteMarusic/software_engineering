@@ -30,13 +30,15 @@ public class SharedGoal5 extends AbstractSharedGoal {
             }
             tmpCount = 0;
             for(int i=0 ; i<ROW ; i++){
-                switch (tmpGrid[i][j].getColor()){
-                    case PINK -> colorCount[0]++;
-                    case CYAN -> colorCount[1]++;
-                    case ORANGE -> colorCount[2]++;
-                    case WHITE -> colorCount[3]++;
-                    case GREEN -> colorCount[4]++;
-                    case BLUE -> colorCount[5]++;
+                if(tmpGrid[i][j]!=null) {
+                    switch (tmpGrid[i][j].getColor()) {
+                        case PINK -> colorCount[0]++;
+                        case CYAN -> colorCount[1]++;
+                        case ORANGE -> colorCount[2]++;
+                        case WHITE -> colorCount[3]++;
+                        case GREEN -> colorCount[4]++;
+                        case BLUE -> colorCount[5]++;
+                    }
                 }
             }
             for(int k=0 ; k<NUMOFCOLORS ; k++){

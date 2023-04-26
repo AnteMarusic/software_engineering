@@ -88,7 +88,7 @@ public class GameRules {
         return arrayOfInt;
     }
 
-    public boolean boardRowColInBound(int row, int col, int numOfPlayers) {
+    public static boolean boardRowColInBound(int row, int col, int numOfPlayers) {
         int[] temp;
         if (row >= 9 || row < 0) return false;
         temp = getCorrectStartAndLength(row, numOfPlayers);
@@ -99,7 +99,7 @@ public class GameRules {
       return !(col >= COL || col < 0);
     }
 
-    public boolean areCoordinatesAligned (Coordinates[] coordinates) {
+    //public boolean areCoordinatesAligned (Coordinates[] coordinates) {
 
-    }
+    //}
 }

@@ -22,24 +22,40 @@ public class SharedGoal7 extends AbstractSharedGoal{
         boolean pattern2 = true;
         boolean pattern3 = true;
         boolean pattern4 = true;
-        for(int j=0 ; j<COL ; j++){
+        for(int j=0 ; j<COL-1 ; j++){
             int i=j;
-            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+            if(tmpGrid[i][j]!=null) {
+                if (tmpGrid[i][j].getColor() != tmpGrid[i+1][j+1].getColor()) {
+                    pattern1 = false;
+                }
+            }else{
                 pattern1 = false;
             }
             i=j+1;
-            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
-                pattern2 = false;
+            if(tmpGrid[i][j]!=null && tmpGrid[i+1][j+1]!=null) {
+                if (tmpGrid[i][j].getColor() != tmpGrid[i + 1][j + 1].getColor()) {
+                    pattern2 = false;
+                }
+            }else{
+                pattern1 =  false;
             }
         }
 
-        for(int j=COL-1 ; j>=0 ; j--){
+        for(int j=COL-1 ; j>=1 ; j--){
             int i = - (j-COL-1);
-            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+            if(tmpGrid[i][j]!=null && tmpGrid[i-1][j-1]!=null) {
+                if (tmpGrid[i][j].getColor() != tmpGrid[i-1][j-1].getColor()) {
+                    pattern3 = false;
+                }
+            }else{
                 pattern3 = false;
             }
             i = (-(j-COL-1))+1;
-            if(tmpGrid[i][j].getColor() != tmpGrid[i][j].getColor()){
+            if(tmpGrid[i][j]!=null && tmpGrid[i-1][j-1]!=null) {
+                if (tmpGrid[i][j].getColor() != tmpGrid[i - 1][j - 1].getColor()) {
+                    pattern4 = false;
+                }
+            }else{
                 pattern4 = false;
             }
         }

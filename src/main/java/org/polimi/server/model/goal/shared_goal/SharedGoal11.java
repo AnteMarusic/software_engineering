@@ -17,12 +17,14 @@ public class SharedGoal11 extends AbstractSharedGoal{
     protected boolean achieved(Card[][] tmp){
         for(int i=1 ; i<ROW-1 ; i++){
             for(int j=1 ; j<COL-1 ; j++){
-                if(     (tmp[i][j].getColor() == tmp[i-1][j-1].getColor()) &&
-                        (tmp[i][j].getColor() == tmp[i-1][j+1].getColor()) &&
-                        (tmp[i][j].getColor() == tmp[i+1][j-1].getColor()) &&
-                        (tmp[i][j].getColor() == tmp[i+1][j+1].getColor())
-                ){
-                    return true;
+                if(tmp[i][j]!=null && tmp[i-1][j-1]!=null && tmp[i+1][j-1]!=null && tmp[i-1][j+1]!=null && tmp[i+1][j+1]!=null) {
+                    if ((tmp[i][j].getColor() == tmp[i - 1][j - 1].getColor()) &&
+                            (tmp[i][j].getColor() == tmp[i - 1][j + 1].getColor()) &&
+                            (tmp[i][j].getColor() == tmp[i + 1][j - 1].getColor()) &&
+                            (tmp[i][j].getColor() == tmp[i + 1][j + 1].getColor())
+                    ) {
+                        return true;
+                    }
                 }
             }
         }

@@ -21,11 +21,13 @@ public class SharedGoal4 extends AbstractSharedGoal{
         int count=0;
         for(int i=ROW-1 ; i>0 ; i--){
             for(int j=0 ; j<COL-1 ; j++){
-                if(     tmpGrid[i][j].getColor() == tmpGrid[i-1][j].getColor() &&
-                        tmpGrid[i][j].getColor() == tmpGrid[i-1][j+1].getColor() &&
-                        tmpGrid[i][j].getColor() == tmpGrid[i][j+1].getColor()
-                ){
-                    count++;
+                if(tmpGrid[i][j]!=null && tmpGrid[i-1][j]!=null  && tmpGrid[i-1][j+1]!=null  && tmpGrid[i][j+1]!=null) {
+                    if (tmpGrid[i][j].getColor() == tmpGrid[i - 1][j].getColor() &&
+                            tmpGrid[i][j].getColor() == tmpGrid[i - 1][j + 1].getColor() &&
+                            tmpGrid[i][j].getColor() == tmpGrid[i][j + 1].getColor()
+                    ) {
+                        count++;
+                    }
                 }
             }
             if(count>=2){
