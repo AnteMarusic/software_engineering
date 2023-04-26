@@ -2,23 +2,34 @@ package org.polimi.server.model.goal.shared_goal;
 
 import org.polimi.server.model.Card;
 
-//5th SHARED GOAL, AT LEAST 3 COLUMNS WITH NO MORE THAN 3 COLORS
+/**
+ * concrete object that represents 5th shared goal
+ */
 public class SharedGoal5 extends AbstractSharedGoal {
     public SharedGoal5(int numOfPlayer) {
         super(numOfPlayer);
     }
 
+
+    /**
+     * Every time a column is visited the colorCount array stores which
+     * colors and how many times ...
+     * Then if the number of colors in a single column is less than 3
+     * a variable is incremented, when that variable is greater than 2 (>=3)
+     * the method returns true
+     * Time complexity O(COL*(ROW+(2*numOfColors)))
+     */
     @Override
     protected boolean achieved(Card[][] tmpGrid) {
         int[] colorCount = new int[6];
-        int rowCount = 0;
+        int columnCount = 0;
         int tmpCount;
-        for(int j=0 ; j<5 ; j++){
-            for(int k=0 ; k<6 ; k++){
+        for(int j=0 ; j<COL ; j++){
+            for(int k=0 ; k<NUMOFCOLORS ; k++){
                 colorCount[k] = 0;
             }
             tmpCount = 0;
-            for(int i=0 ; i<6 ; i++){
+            for(int i=0 ; i<ROW ; i++){
                 switch (tmpGrid[i][j].getColor()){
                     case PINK -> colorCount[0]++;
                     case CYAN -> colorCount[1]++;
@@ -28,15 +39,15 @@ public class SharedGoal5 extends AbstractSharedGoal {
                     case BLUE -> colorCount[5]++;
                 }
             }
-            for(int k=0 ; k<6 ; k++){
+            for(int k=0 ; k<NUMOFCOLORS ; k++){
                 if(colorCount[k]>0){
                     tmpCount++;
                 }
             }
             if(tmpCount<=3){
-                rowCount++;
+                columnCount++;
             }
-            if(rowCount>=3){
+            if(columnCount>=3){
                 return true;
             }
         }

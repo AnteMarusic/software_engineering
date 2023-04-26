@@ -2,21 +2,29 @@ package org.polimi.server.model.goal.shared_goal;
 
 import org.polimi.server.model.Card;
 
-//6th SHARED GOAL, at least 8 cards with the same color no matter the position
+/**
+ * concrete object that represents 6th shared goal
+ */
 public class SharedGoal6 extends AbstractSharedGoal{
     public SharedGoal6 (int numOfPlayer) {
         super(numOfPlayer);
     }
 
+    /**
+     * It saves in coloCount how many cards per color
+     * we have in our bookshelf, then it checks
+     * if there is at least a color with 6+ cards
+     * Time complexity O((2*numOfColors) + (ROW*COL))
+     */
     @Override
     protected boolean achieved(Card[][] tmpGrid){
-        int [] colorCount = new int[6];
-        for(int i=0 ; i<6 ; i++){
+        int [] colorCount = new int[NUMOFCOLORS];
+        for(int i=0 ; i<NUMOFCOLORS ; i++){ //6 is num of different colors
             colorCount[i] = 0;
         }
         int count;
-        for(int i=0 ; i<5 ; i++){
-            for(int j=0 ; j<4 ; j++){
+        for(int i=0 ; i<ROW ; i++){
+            for(int j=0 ; j<COL ; j++){
                 switch (tmpGrid[i][j].getColor()){
                     case PINK -> colorCount[0]++;
                     case CYAN -> colorCount[1]++;
@@ -27,7 +35,7 @@ public class SharedGoal6 extends AbstractSharedGoal{
                 }
             }
         }
-        for(int i=0 ; i<6 ; i++){
+        for(int i=0 ; i<NUMOFCOLORS ; i++){
             if(colorCount[i] >= 8){
                 return true;
             }

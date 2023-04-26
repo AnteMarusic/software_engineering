@@ -11,6 +11,7 @@ public abstract class AbstractSharedGoal implements Goal {
      */
     protected static final int ROW = 6;
     protected static final int COL = 5;
+    protected static final int NUMOFCOLORS = 6;
     /**
      * stack of points. The content varies based on the number of player
      */
