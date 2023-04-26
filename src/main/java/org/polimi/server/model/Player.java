@@ -120,7 +120,7 @@ public class Player {
     }
 
     private void UpdatePersonalScore(){
-        int score = personalGoal.scoreAchieved(bookshelf.getGrid());
+        int score = personalGoal.getScore(bookshelf.getGrid());
         if(score > personalScore) {
             this.increasePersonalScore(score - personalScore);
         }
