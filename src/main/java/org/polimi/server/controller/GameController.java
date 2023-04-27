@@ -96,7 +96,7 @@ public class GameController {
         }
         winGame(winner);
 
-        // close socket of the player in game
+
 
     }
 

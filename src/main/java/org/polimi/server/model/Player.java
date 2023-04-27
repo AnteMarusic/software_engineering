@@ -130,7 +130,6 @@ public class Player {
         return bookshelf.getGrid();
     }
 
-    public Card[] chooseCards( Board board){ };
 
     private void getCoordinatesFromSTDInput (boolean b, int x, int y, int previousX, int previousY, Board board, ArrayList<Card> chosenCards) {
         Scanner scanner = new Scanner(System.in);

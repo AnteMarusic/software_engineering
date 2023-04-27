@@ -1,13 +1,6 @@
 package org.polimi.client;
 
-import org.polimi.server.model.Board;
-import org.polimi.server.model.Card;
-import org.polimi.server.model.Coordinates;
-
-import java.util.ArrayList;
-import java.util.Scanner;
-
-public class RuleChecker {}
+public class ClientController {}
 
     /**
      * gets from std input one to three coordinates
