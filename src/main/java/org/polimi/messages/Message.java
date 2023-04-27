@@ -9,7 +9,7 @@ public class Message implements Serializable {
 
     public Message (String username) {
         this.username = username;
-        this.messageType = MessageType.DEFAULT;
+        this.messageType = MessageType.USERNAME;
     }
 
     public Message (String username, MessageType messageType) {

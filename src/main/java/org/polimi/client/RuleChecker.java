@@ -7,7 +7,7 @@ import org.polimi.server.model.Coordinates;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RuleChecker {
+public class RuleChecker {}
 
     /**
      * gets from std input one to three coordinates
@@ -15,7 +15,7 @@ public class RuleChecker {
      * ensures that the dimension of the arrayList isn't greater than maxInsertable in bookshelf
      * ensures that the cards are picked in a line from the board
      */
-    public void chooseCards(Board board){
+   /* public void chooseCards(Board board){
         //since the cards have to be picked in a line, each card picked has to have one constant coordinate
         int x=0, y=0;
         int previousX=0, previousY=0;
@@ -170,7 +170,7 @@ public class RuleChecker {
      *
      * @param chosenCards requires that no card inside it is null
      */
-    private void printChosenCards (ArrayList<Card> chosenCards) {
+   /* private void printChosenCards (ArrayList<Card> chosenCards) {
         chosenCards.forEach(System.out::println);
     }
-}
+}*/
