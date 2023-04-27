@@ -1,26 +1,10 @@
-package org.polimi.server.model;
+package org.polimi;
 
-public class BoardCoordinates extends AbstractCoordinates {
-    private static int numOfPlayers;
-    private static final int MAX_DIM = 9;
-    public BoardCoordinates(int row, int col) {
-        super(row, col);
-    }
+import org.polimi.server.model.Coordinates;
 
-    public static void setNumOfPlayers(int numOfPlayers) {
-        BoardCoordinates.numOfPlayers = numOfPlayers;
-    }
-
-    @Override
-    public boolean isValid() {
-        int[] temp;
-        if (this.getRow() >= 9 || this.getRow() < 0) return false;
-        temp = getCorrectStartAndLength(this.getRow());
-        return this.getCol() >= temp[0] && this.getCol() < temp[0] + temp[1];
-    }
-
-
-    private int[] getCorrectStartAndLength(int row) {
+public class GameRules {
+    private static final int COL = 5;
+    public static int[] getCorrectStartAndLength(int row, int numOfPlayers) {
         int start=-1, length=-1;
         int[] arrayOfInt = new int[2];
         switch (row) {
@@ -103,4 +87,19 @@ public class BoardCoordinates extends AbstractCoordinates {
         arrayOfInt[1]= length;
         return arrayOfInt;
     }
+
+    public static boolean boardRowColInBound(int row, int col, int numOfPlayers) {
+        int[] temp;
+        if (row >= 9 || row < 0) return false;
+        temp = getCorrectStartAndLength(row, numOfPlayers);
+        return col >= temp[0] && col < temp[0] + temp[1];
+    }
+
+    public boolean bookshelfColValid(int col) {
+      return !(col >= COL || col < 0);
+    }
+
+    //public boolean areCoordinatesAligned (Coordinates[] coordinates) {
+
+    //}
 }

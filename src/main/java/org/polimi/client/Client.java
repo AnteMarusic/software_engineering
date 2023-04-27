@@ -1,76 +1,114 @@
 package org.polimi.client;
 
-import java.io.*;
+import org.polimi.messages.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
+    private final String username;
     private Socket socket;
-    private BufferedWriter writer;
-    private BufferedReader reader;
+    private ObjectOutputStream output;
+    private ObjectInputStream input;
 
-    private String username;
-
-    public Client (Socket socket, String username){
+    public Client(String username, Socket socket) {
+        this.username = username;
+        this.socket = socket;
+        this.input = null;
+        this.output = null;
         try {
-            this.socket = socket;
-            this.username = username;
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.output = new ObjectOutputStream(socket.getOutputStream());
+            this.input = new ObjectInputStream(socket.getInputStream());
         } catch (IOException IOe) {
-            closeEverything (socket, writer, reader);
-            System.out.println("exception in client constructor");
+            System.out.println("exception in client constructor method");
+            handleDisconnection();
         }
     }
 
-    public void sendMessage () {
+    public static void main(String[] args) {
+        Socket socket = null;
+        //ask for username and server IP
+        do {
+            try {
+                socket = new Socket("localHost", 2222);
+            } catch (IOException e) {
+                System.out.println("unable to connect");
+            }
+        } while (socket == null);
+
+        Client client = new Client ("tempUsername", socket);
+        client.startListeningToMessages();
+        client.startSendingMessages();
+    }
+
+    public void startSendingMessages() {
         Scanner scanner = new Scanner (System.in);
+        Message message;
+        while(socket != null && socket.isConnected()) {
+            System.out.println("waiting for a new message...");
+            message = new TextMessage(this.username, MessageType.TEXT_MESSAGE, scanner.nextLine());
+            sendMessage(message);
+        }
+        handleDisconnection();
+    }
 
+    public void sendMessage (Message message) {
         try {
-            writer.write(username);
-            writer.newLine();
-            writer.flush();
-
-            while (socket.isConnected()) {
-                writer.write(scanner.nextLine());
-                writer.newLine();
-                writer.flush();
+            if (socket.isConnected()){
+                output.writeObject(message);
+                output.flush();
+                output.reset();
             }
-        } catch (IOException IOe) {
-            closeEverything (socket, writer, reader);
+            else {
+                handleDisconnection();
+            }
+        }catch(IOException IOe) {
             System.out.println("exception in sendMessage");
+            handleDisconnection();
         }
     }
 
-    public void listenMessage () {
-        new Thread (new Runnable(){
-            @Override
-            public void run(){
-                try {
-                    while (socket.isConnected()) {
-                        System.out.println(reader.readLine());
+    public void startListeningToMessages () {
+        new Thread (() -> {
+            Object message;
+            try {
+                while (socket.isConnected()) {
+                    message = input.readObject();
+                    if (!(message instanceof Message)) {
+                        handleProtocolDisruption();
                     }
-                } catch(IOException IOe) {
-                    closeEverything(socket, writer, reader);
-                    System.out.println("exception in listenMessage");
+                    else{
+                        handleMessage((Message)message);
+                    }
                 }
+            } catch(IOException IOe) {
+                System.out.println("exception in listenMessage");
+                handleDisconnection();
+            } catch (ClassNotFoundException e) {
+                handleProtocolDisruption();
             }
-
         }). start();
     }
 
-    private void closeEverything (Socket socket, BufferedWriter writer, BufferedReader reader) {
+    private void closeEverything () {
+        System.out.println("closeEverything");
         try {
             if (socket != null) {
                 socket.close();
+                socket = null;
             }
 
-            if (reader != null) {
-                reader.close();
+            if (input != null) {
+                input.close();
+                input = null;
             }
 
-            if (writer != null) {
-                writer.close();
+            if (output != null) {
+                output.close();
+                output = null;
             }
         } catch (IOException IOe) {
             IOe.printStackTrace();
@@ -78,15 +116,16 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) throws IOException{
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("enter your username");
-        String username = scanner.nextLine();
-        Socket socket = new Socket("localHost", 1234);
-        Client client = new Client (socket,username);
-        client.listenMessage();
-        client.sendMessage();
+    public void handleDisconnection() {
+        closeEverything();
+    }
 
+    public void handleProtocolDisruption() {
+        System.out.println("someone sent something that isn't a message");
+    }
+
+    public void handleMessage(Message message) {
+        System.out.println(message);
     }
 }
 

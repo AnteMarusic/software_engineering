@@ -1,9 +1,12 @@
-package org.polimi.server.model;
+package org.polimi.server.model.goal;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.polimi.server.model.Card;
+import org.polimi.server.model.Coordinates;
+
 import java.lang.*;
 
 import java.io.File;
@@ -11,7 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class PersonalGoal {
+public class PersonalGoal implements Goal{
     private static final String FILENAME = "personal_goal.json";
     private static final int DIM = 6; //number of coordinates that is necessary to describe the personal goal
     private File file;
@@ -69,7 +72,8 @@ public class PersonalGoal {
         Arrays.stream(colors).forEach(System.out::println);
     }
 
-    public int scoreAchieved(Card[][] grid) {
+    @Override
+    public int getScore(Card[][] grid) {
         int col, row;
         int count = 0;
         for (int i = 0; i < DIM; i ++) {
@@ -96,4 +100,5 @@ public class PersonalGoal {
         }
         return -1;
     }
+
 }

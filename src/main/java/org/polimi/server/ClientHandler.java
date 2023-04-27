@@ -1,93 +1,84 @@
 package org.polimi.server;
 
-import java.io.*;
+import org.polimi.messages.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
-    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
-    private BufferedWriter writer;
-    private BufferedReader reader;
-    private String clientUsername;
+    private final ObjectInputStream input;
+    private final ObjectOutputStream output;
 
-    public ClientHandler (Socket socket) {
 
+
+    public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //I expect that when a user wants to connect to the server the first thing that he sends is
-            //his name.
-            this.clientUsername = reader.readLine();
-            clientHandlers.add(this);
-            broadcastMessage ("SERVER: " + clientUsername + "has connected to the chat");
-        } catch (IOException IOe) {
-            closeEverything(socket, reader, writer);
-            System.out.println("exception in clientHandler");
-            IOe.printStackTrace();
+            input = new ObjectInputStream(socket.getInputStream());
+            output = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
     @Override
     public void run() {
-        String messageFromClient;
-        while (socket.isConnected()) {
+        Message messageFromClient;
+        while (socket != null && socket.isConnected()) {
             try {
-                messageFromClient = reader.readLine();
-                broadcastMessage (messageFromClient);
-            } catch (IOException IOe) {
-                closeEverything (socket, reader, writer);
-                //break statement is needed otherwise I check socket.isConnected when socket is closed, causing an exception
-                break;
-            }
-        }
-        System.out.println("exception in run method of Client Handler");
-        //removeClientHandler();
-    }
+                messageFromClient = (Message) input.readObject();
 
-    public void broadcastMessage (String messageToSend) {
-        for (ClientHandler c : clientHandlers) {
-            try {
-                //sends message to everyone connected to the chat besides the client that sent it
-                if (!c.clientUsername.equals(clientUsername)) {
-                    c.writer.write(messageToSend);
-                    //carriage return character marks the end of the message
-                    c.writer.newLine();
-                    c.writer.flush();
+                if(messageFromClient != null){
+                    System.out.println(messageFromClient);
+                    echoMessage(messageFromClient);
                 }
-            } catch (IOException IOe) {
-                System.out.println("exception in broadcastMessage");
-                closeEverything (socket, reader, writer);
+                else {
+                    closeEverything();
+                }
+            } catch (IOException e) {
+                closeEverything();
+                System.out.println("exception IOe in ClientHandler run");
+            } catch (ClassNotFoundException e) {
+                closeEverything();
+                System.out.println("exception class not found in ClientHandler run");
             }
+        }
+        if (socket != null) {
+            closeEverything();
         }
     }
 
-    private void closeEverything (Socket socket, BufferedReader reader, BufferedWriter writer) {
-        removeClientHandler();
+
+    public void echoMessage (Message message) {
+        try{
+            output.writeObject(message);
+        } catch(IOException IOe) {
+            IOe.printStackTrace();
+            closeEverything();
+        }
+    }
+    private void closeEverything() {
+        System.out.println("closeEverything");
         try {
             if (socket != null) {
                 socket.close();
+                socket = null;
             }
 
-            if (reader != null) {
-                reader.close();
+            if (input != null) {
+                input.close();
             }
 
-            if (writer != null) {
-                writer.close();
+            if (output != null) {
+                output.close();
             }
         } catch (IOException IOe) {
             IOe.printStackTrace();
             System.out.println("exception in closeEverything");
         }
     }
-
-    public void removeClientHandler () {
-        broadcastMessage("SERVER: " + clientUsername + "has left the chat");
-        clientHandlers.remove(this);
-        closeEverything(socket, reader, writer);
-    }
-
-
 }
