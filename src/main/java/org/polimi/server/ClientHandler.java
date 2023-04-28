@@ -1,0 +1,84 @@
+package org.polimi.server;
+
+import org.polimi.messages.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+public class ClientHandler implements Runnable{
+    private Socket socket;
+    private final ObjectInputStream input;
+    private final ObjectOutputStream output;
+
+
+
+    public ClientHandler(Socket socket) {
+        try {
+            this.socket = socket;
+            input = new ObjectInputStream(socket.getInputStream());
+            output = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public void run() {
+        Message messageFromClient;
+        while (socket != null && socket.isConnected()) {
+            try {
+                messageFromClient = (Message) input.readObject();
+
+                if(messageFromClient != null){
+                    System.out.println(messageFromClient);
+                    echoMessage(messageFromClient);
+                }
+                else {
+                    closeEverything();
+                }
+            } catch (IOException e) {
+                closeEverything();
+                System.out.println("exception IOe in ClientHandler run");
+            } catch (ClassNotFoundException e) {
+                closeEverything();
+                System.out.println("exception class not found in ClientHandler run");
+            }
+        }
+        if (socket != null) {
+            closeEverything();
+        }
+    }
+
+
+    public void echoMessage (Message message) {
+        try{
+            output.writeObject(message);
+        } catch(IOException IOe) {
+            IOe.printStackTrace();
+            closeEverything();
+        }
+    }
+    private void closeEverything() {
+        System.out.println("closeEverything");
+        try {
+            if (socket != null) {
+                socket.close();
+                socket = null;
+            }
+
+            if (input != null) {
+                input.close();
+            }
+
+            if (output != null) {
+                output.close();
+            }
+        } catch (IOException IOe) {
+            IOe.printStackTrace();
+            System.out.println("exception in closeEverything");
+        }
+    }
+}
