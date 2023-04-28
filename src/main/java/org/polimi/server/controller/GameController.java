@@ -1,7 +1,9 @@
 package org.polimi.server.controller;
 
+import org.polimi.messages.Message;
 import org.polimi.server.model.BagOfCards;
 import org.polimi.server.model.Board;
+import org.polimi.server.model.Game;
 import org.polimi.server.model.Player;
 import org.polimi.server.model.goal.PersonalGoal;
 import org.polimi.server.model.goal.shared_goal.*;
@@ -11,30 +13,27 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class GameController {
-    private int ender;
-    private Board board;
-    private int firstPlayer;
     boolean endGame = false;
     private final ArrayList<Player> players = new ArrayList<Player>();
     private final int numOfPlayers;
-    private final BagOfCards bagOfCards;
-    private AbstractSharedGoal SharedGoal1;
-    private AbstractSharedGoal SharedGoal2;
 
-    public GameController(Player[] players) {
-        numOfPlayers = players.length;
-        this.players.addAll(Arrays.asList(players));
-        this.bagOfCards = new BagOfCards();
+    private Game game;
+
+    public GameController(ArrayList<Player> players) {
+        numOfPlayers = players.size();
+        this.players.addAll(players);
+        this.game = new Game(players);
     }
 
-    public void startGame(){
-        Random random = new Random();
-        firstPlayer = random.nextInt(numOfPlayers);
-        board = new Board(numOfPlayers, bagOfCards);
-        board.fill();
-        handOutGoalsPG();
-        handOutGoalsSG();
+    public void handleMessage(Message receivedMessage) {
+
+        switch (receivedMessage.getMessageType()) {
+            case CHOOSEN_CARDS ->{
+
+            }
+        }
     }
+
 
     public void gameLoop(){
         int currentPlayer = firstPlayer;

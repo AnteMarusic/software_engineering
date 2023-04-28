@@ -1,14 +1,24 @@
 package org.polimi.server;
 
+import org.polimi.server.controller.GameController;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
     private final ServerSocket serverSocket;
-
-    public Server(ServerSocket serverSocket) {
+    private final GameController gameController;
+    private static int port = 0;
+    private final Lobby lobby;
+    private final ArrayList<ClientHandler> list;
+    public Server(ServerSocket serverSocket, int port) {
         this.serverSocket = serverSocket;
+        this.port=port;
+        this.gameController=new GameController();
+        this.list = new ArrayList<>();
+        lobby = new Lobby();
     }
 
     /**
@@ -24,7 +34,7 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 System.out.println("a client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket);
-
+                list.add(clientHandler);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }
@@ -35,8 +45,8 @@ public class Server {
     }
 
     public static void main (String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(2222);
-        Server server = new Server(serverSocket);
+        ServerSocket serverSocket = new ServerSocket(port);
+        Server server = new Server(serverSocket, port);
         server.startServer();
     }
 }
