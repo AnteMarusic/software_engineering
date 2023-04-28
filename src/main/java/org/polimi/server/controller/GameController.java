@@ -39,6 +39,7 @@ public class GameController {
     public void gameLoop(){
         int currentPlayer = firstPlayer;
         do{
+
             players.get(currentPlayer).chooseCards(this.board);
             //cotrollo se ha raggiunto il primo sharedGoal
             if(!players.get(currentPlayer).getSharedGoal1Achieved())
