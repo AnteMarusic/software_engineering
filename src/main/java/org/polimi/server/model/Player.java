@@ -155,7 +155,7 @@ public class Player {
             System.out.println("These coordinates are not valid, choose again... \n");
     }
 
-    private void insertInBookshelf (ArrayList<Card> toInsert){
+    public void insertInBookshelf (ArrayList<Card> toInsert){
         int col , insertable;
         Scanner scanner = new Scanner(System.in);
 

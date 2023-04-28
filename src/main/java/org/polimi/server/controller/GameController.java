@@ -1,5 +1,6 @@
 package org.polimi.server.controller;
 
+import org.polimi.messages.ChoosenCards;
 import org.polimi.messages.Message;
 import org.polimi.server.model.BagOfCards;
 import org.polimi.server.model.Board;
@@ -29,7 +30,7 @@ public class GameController {
 
         switch (receivedMessage.getMessageType()) {
             case CHOOSEN_CARDS ->{
-
+                game.getPlayerByNickname(receivedMessage.getUsername()).insertInBookshelf(((ChoosenCards)receivedMessage).getCards());
             }
         }
     }
@@ -195,6 +196,7 @@ public class GameController {
     public int getFirstPlayer(){
         return this.firstPlayer;
     }
+
 
 
 }

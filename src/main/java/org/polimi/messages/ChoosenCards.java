@@ -12,6 +12,10 @@ public class ChoosenCards extends Message{
         this.cards = cards;
     }
 
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
     @Override
     public String toString() {
         return super.toString() + "choosen cards";

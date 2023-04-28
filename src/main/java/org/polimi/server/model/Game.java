@@ -153,4 +153,11 @@ public class Game{
     public int getFirstPlayer(){
         return this.firstPlayer;
     }
+
+    public Player getPlayerByNickname(String nickname) {
+        return players.stream()
+                .filter(player -> nickname.equals(player.getName()))
+                .findFirst()
+                .orElse(null);
+    }
 }
