@@ -6,5 +6,6 @@ public enum MessageType {
     USERNAME,
     TEXT_MESSAGE,
 
-    CHOOSEN_CARDS,
+    CHOSEN_CARDS,
+    ERROR_MESSAGE
 }

@@ -1,24 +1,22 @@
 package org.polimi.server;
 
-import org.polimi.server.controller.GameController;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Server {
     private final ServerSocket serverSocket;
-    private final GameController gameController;
     private static int port = 0;
     private final Lobby lobby;
-    private final ArrayList<ClientHandler> list;
+    private final GameCodeIssuer gameCodeIssuer;
+    private final UsernameIssuer usernameIssuer;
     public Server(ServerSocket serverSocket, int port) {
         this.serverSocket = serverSocket;
         this.port=port;
-        this.gameController=new GameController();
-        this.list = new ArrayList<>();
         lobby = new Lobby();
+        gameCodeIssuer = new GameCodeIssuer();
+        usernameIssuer = new UsernameIssuer();
+
     }
 
     /**
@@ -34,7 +32,6 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 System.out.println("a client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket);
-                list.add(clientHandler);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }
@@ -42,6 +39,22 @@ public class Server {
             IOe.printStackTrace();
             System.out.println("exception in startServer");
         }
+    }
+
+    //non so se quando chiamo questi metodi il thread che è in ascolto per le nuove connessioni deve
+    //interrompersi
+
+
+    public UsernameIssuer getUsernameIssuer() {
+        return usernameIssuer;
+    }
+
+    public GameCodeIssuer getGameCodeIssuer() {
+        return gameCodeIssuer;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
     }
 
     public static void main (String[] args) throws IOException {

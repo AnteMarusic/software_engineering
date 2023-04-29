@@ -1,6 +1,8 @@
 package org.polimi.server;
 
 import org.polimi.messages.*;
+import org.polimi.server.controller.GameController;
+import org.polimi.server.controller.OldGameController;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,6 +14,10 @@ public class ClientHandler implements Runnable{
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
     private String name;
+    private UsernameIssuer usernameIssuer;
+    private GameCodeIssuer gameCodeIssuer;
+    private LobbyController lobbyController;
+    private GameController gameController;
 
     public ClientHandler(Socket socket) {
         try {
@@ -40,7 +46,43 @@ public class ClientHandler implements Runnable{
 
                 if(messageFromClient != null){
                     System.out.println(messageFromClient);
-                    echoMessage(messageFromClient);
+                    switch (messageFromClient.getMessageType()){
+                        case USERNAME -> {
+                            InternalComunication internalComunication = usernameIssuer.handleMessage(messageFromClient.getUsername());
+                            if(internalComunication == InternalComunication.OK) {
+                                sendMessage(new ChooseGameModeMessage("server", GameMode.DEFAULT ));
+                            }
+                            if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+                                sendMessage(new ErrorMessage("server", ErrorType.ALREADY_TAKEN_USERNAME));
+                            }
+                            if(internalComunication == InternalComunication.RECONNECTION){
+                                int gameId = usernameIssuer.getGameID(messageFromClient.getUsername());
+                                GameController gameController = gameCodeIssuer.getGameController(gameId);
+                                gameController.reconnect(this);
+                            }
+                        }
+                        case CHOOSE_GAME_MODE -> {
+                            ChooseGameModeMessage chooseGameModeMessage = (ChooseGameModeMessage) messageFromClient;
+                            switch (chooseGameModeMessage.getGameMode()) {
+                                case JOIN_RANDOM_GAME_2_PLAYER -> {
+                                    lobbyController.insertPlayerInRandomTwoPlayerGame(this);
+                                }
+                                case JOIN_RANDOM_GAME_3_PLAYER -> {
+                                    lobbyController.insertPlayerInRandomThreePlayerGame(this);
+                                }
+                                case JOIN_RANDOM_GAME_4_PLAYER -> {
+                                    lobbyController.insertPlayerInRandomFourPlayerGame(this);
+                                }
+                            }
+
+                        }
+                        case CHOSEN_CARDS -> {
+                            ChosenCardsMessage chosenCards = (ChosenCardsMessage) messageFromClient;
+                            gameController.removeCards(chosenCards.getCards(), this);
+                            
+                        }
+
+                    }
                 }
                 else {
                     closeEverything();
@@ -59,11 +101,12 @@ public class ClientHandler implements Runnable{
     }
 
 
-    public void echoMessage (Message message) {
+    public void sendMessage (Message message) {
         try{
             output.writeObject(message);
         } catch(IOException IOe) {
             IOe.printStackTrace();
+            closeEverything();
             closeEverything();
         }
     }
@@ -86,5 +129,8 @@ public class ClientHandler implements Runnable{
             IOe.printStackTrace();
             System.out.println("exception in closeEverything");
         }
+    }
+    public void setGameController(GameController gameController){
+        this.gameController = gameController;
     }
 }

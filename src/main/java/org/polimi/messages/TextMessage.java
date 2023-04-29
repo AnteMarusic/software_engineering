@@ -3,8 +3,8 @@ package org.polimi.messages;
 public class TextMessage extends Message{
     private final String text;
 
-    public TextMessage (String username, MessageType messageType, String text) {
-        super (username, messageType);
+    public TextMessage (String username, String text) {
+        super (username, MessageType.TEXT_MESSAGE);
         this.text = text;
     }
 

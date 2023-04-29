@@ -1,8 +1,6 @@
 package org.polimi.server;
 
-import org.polimi.server.controller.GameController;
-import org.polimi.server.model.Game;
-import org.polimi.server.model.Player;
+import org.polimi.server.controller.OldGameController;
 
 import java.util.*;
 
@@ -18,7 +16,7 @@ public class GameCodeIssuer {
     }
 
     public synchronized boolean containsIdCode (int idCode) {return associations.containsKey(idCode);}
-    public synchronized GameController getGameAssociatedWith (int idCode) throws NoSuchElementException {
+    public synchronized GameController getGameController(int idCode) throws NoSuchElementException {
         if (!associations.containsKey(idCode))
             throw new NoSuchElementException();
         else {
