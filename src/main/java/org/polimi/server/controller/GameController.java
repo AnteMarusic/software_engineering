@@ -1,7 +1,9 @@
 package org.polimi.server.controller;
 
+import org.polimi.client.Client;
 import org.polimi.messages.ChoosenCards;
 import org.polimi.messages.Message;
+import org.polimi.server.ClientHandler;
 import org.polimi.server.model.BagOfCards;
 import org.polimi.server.model.Board;
 import org.polimi.server.model.Game;
@@ -15,19 +17,20 @@ import java.util.Random;
 
 public class GameController {
     boolean endGame = false;
-    private final ArrayList<Player> players = new ArrayList<Player>();
+    private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private final int numOfPlayers;
 
     private Game game;
 
-    public GameController(ArrayList<Player> players) {
+    public GameController(ArrayList<ClientHandler> clientHandlers) {
         numOfPlayers = players.size();
         this.players.addAll(players);
+        ArrayList <Player> players = new ArrayList<Player>();
+        clientHandlers.forEach((clientHandler) -> players.add(new Player(clientHandler.getUsername())));
         this.game = new Game(players);
     }
 
     public void handleMessage(Message receivedMessage) {
-
         switch (receivedMessage.getMessageType()) {
             case CHOOSEN_CARDS ->{
                 game.getPlayerByNickname(receivedMessage.getUsername()).insertInBookshelf(((ChoosenCards)receivedMessage).getCards());

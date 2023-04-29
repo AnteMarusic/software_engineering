@@ -11,8 +11,7 @@ public class ClientHandler implements Runnable{
     private Socket socket;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
-
-
+    private String name;
 
     public ClientHandler(Socket socket) {
         try {
@@ -24,6 +23,13 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    public void setUsername(String name){
+        this.name = name;
+    }
+
+    public String getUsername(){
+        return this.name;
+    }
 
     @Override
     public void run() {
