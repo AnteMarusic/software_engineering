@@ -45,6 +45,7 @@ class BoardTest {
         adjacentCard=board.seeCardAtCoordinates(new Coordinates(2,3));
         assertEquals(card, pickedCard);
         assertEquals(PICKABLE, adjacentCard.getState());
+        assertNull(board.seeCardAtCoordinates(new Coordinates(2,2)));
 
     }
 
