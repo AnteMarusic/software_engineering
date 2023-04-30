@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CoordinatesTest {
 
-    Coordinates coordinates;
+    private Coordinates coordinates;
     @BeforeEach
     void setUp() {
         coordinates = new Coordinates(4,7);
@@ -40,13 +40,13 @@ class CoordinatesTest {
     @Test
     void testEquals() {
         Coordinates coordinates1 = new Coordinates(4,7);
-        assertTrue(coordinates.equals(coordinates1));
+        assertEquals(coordinates, coordinates1);
     }
 
     @Test
     void testNotEquals() {
         Coordinates coordinates1 = new Coordinates(3,7);
-        assertFalse(coordinates.equals(coordinates1));
+        assertNotEquals(coordinates, coordinates1);
     }
 
     @Test

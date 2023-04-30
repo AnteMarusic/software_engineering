@@ -45,7 +45,12 @@ public class Card {
                 ", color=" + color +
                 '}';
     }
-
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card that = (Card) o;
+        return state == that.getState() && color == that.getColor();
+    }
     public char convertColorToChar() {
         if (this.color.equals(Card.Color.GREEN)) {
             return 'G';

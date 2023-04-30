@@ -27,8 +27,7 @@ public class Game{
     public void startGame(){
         Random random = new Random();
         firstPlayer = random.nextInt(numOfPlayers);
-        board = new Board(numOfPlayers, bagOfCards);
-        board.fill();
+        board = new Board(numOfPlayers);
         handOutGoalsPG();
         handOutGoalsSG();
     }

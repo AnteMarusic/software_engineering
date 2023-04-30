@@ -3,7 +3,7 @@ package org.polimi.server.model;
 import java.util.*;
 
 public class BagOfCards {
-    private List<Card> bag;
+    private ArrayList<Card> bag;
     private Random random;
 
     public BagOfCards() {
@@ -40,5 +40,8 @@ public class BagOfCards {
             bag.remove(i);
             return c;
         }
+    }
+    public int getSize(){
+        return bag.size();
     }
 }

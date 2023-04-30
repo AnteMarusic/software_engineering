@@ -13,9 +13,9 @@ public class Board {
     private final Map<Coordinates, Card> board;
     private final int numOfPlayers;
 
-    public Board(int numOfPlayers, BagOfCards bag) {
+    public Board(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
-        this.bag = bag;
+        this.bag = new BagOfCards();
         this.board = new HashMap<>();
         this.fill();
     }
@@ -25,7 +25,7 @@ public class Board {
     }
 
     //fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, otherwise to NOT_PICKABLE
-    public void fill() {
+    private void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
             int[] arr= GameRules.getCorrectStartAndLength(i, numOfPlayers);
@@ -46,6 +46,15 @@ public class Board {
 
 
     /**
+     * is an observer method
+     * @param coordinates coordinates of the card you want to see
+     * @return null if no card is found at those coordinates or the coordinates are invalid
+     */
+    public Card seeCardAtCoordinates(Coordinates coordinates) {
+        return this.board.get(coordinates);
+    }
+
+    /**
      * this method allows to get a card from the board
      * @param coordinates coordinates of the card you want to get
      * @return null if no card is found at the coordinates provided or those are invalid or the card is NOT_PICKABLE.
@@ -62,14 +71,7 @@ public class Board {
         }
     }
 
-    /**
-     * is an observer method
-     * @param coordinates coordinates of the card you want to see
-     * @return null if no card is found at those coordinates or the coordinates are invalid
-     */
-    public Card seeCardAtCoordinates(Coordinates coordinates) {
-        return this.board.get(coordinates);
-    }
+
 
     //removes a card from the board and updates each adjacent card's state to PICKABLE, if present
     private Card removeCardAtCoordinate(Coordinates coordinates) {
