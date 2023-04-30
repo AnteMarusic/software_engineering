@@ -1,5 +1,6 @@
 package org.polimi.server;
 
+import org.polimi.server.controller.GameController;
 import org.polimi.server.controller.OldGameController;
 
 import java.util.*;

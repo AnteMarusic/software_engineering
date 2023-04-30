@@ -19,8 +19,8 @@ public class Game{
     private AbstractSharedGoal SharedGoal2;
 
     public Game(ArrayList<Player> players) {
-        numOfPlayers = players.length;
-        this.players.addAll(Arrays.asList(players));
+        numOfPlayers = players.size();
+        this.players.addAll(players);
         this.bagOfCards = new BagOfCards();
     }
 
@@ -37,7 +37,7 @@ public class Game{
         return players.size();
     }
 
-    public void endGame(int ender){
+   /* public void endGame(int ender){
         int winnerpoints;
         int winner = 0;
         int[] totalPoints = new int [numOfPlayers];
@@ -56,7 +56,7 @@ public class Game{
 
 
 
-    }
+    }*/
 
 
 

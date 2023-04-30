@@ -49,7 +49,7 @@ public class Client {
         Message message;
         while(socket != null && socket.isConnected()) {
             System.out.println("waiting for a new message...");
-            message = new TextMessage(this.username, MessageType.TEXT_MESSAGE, scanner.nextLine());
+            message = new TextMessage(this.username, scanner.nextLine());
             sendMessage(message);
         }
         handleDisconnection();

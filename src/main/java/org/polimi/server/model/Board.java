@@ -24,7 +24,7 @@ public class Board {
         return this.board;
     }
 
-    //fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, else to NOT_PICKABLE
+    //fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, otherwise to NOT_PICKABLE
     public void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
@@ -139,8 +139,6 @@ public class Board {
             System.out.println(" ");
         }
     }
-
-
 
     private boolean CornerCases(int i, int j){
         switch(numOfPlayers){

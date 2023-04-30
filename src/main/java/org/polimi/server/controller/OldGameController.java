@@ -2,6 +2,7 @@ package org.polimi.server.controller;
 
 import org.polimi.messages.ChosenCardsMessage;
 import org.polimi.messages.Message;
+import org.polimi.messages.MessageType;
 import org.polimi.server.ClientHandler;
 import org.polimi.server.model.Board;
 import org.polimi.server.model.Game;
@@ -13,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class GameController {
-    boolean endGame = false;
+public class OldGameController {
+   /* boolean endGame = false;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private final int numOfPlayers;
 
@@ -30,14 +31,14 @@ public class GameController {
 
     public void handleMessage(Message receivedMessage) {
         switch (receivedMessage.getMessageType()) {
-            case CHOOSEN_CARDS ->{
+            case MessageType.CHOSEN_CARDS ->{
                 game.getPlayerByNickname(receivedMessage.getUsername()).insertInBookshelf(((ChosenCardsMessage)receivedMessage).getCards());
             }
         }
     }
 
 
-    public void gameLoop(){
+    /*public void gameLoop(){
         int currentPlayer = firstPlayer;
         do{
 
@@ -75,9 +76,9 @@ public class GameController {
         endGame(ender);
 
 
-    }
+    }*/
 
-    public void winGame(int winner){
+    /*public void winGame(int winner){
         brodcastWinMessage(players.get(winner).getName());
     }
 
@@ -185,7 +186,7 @@ public class GameController {
         if(i==10) SharedGoal2 = new SharedGoal11(numOfPlayers);
         if(i==11) SharedGoal2 = new SharedGoal12(numOfPlayers);
 
-        */
+
 
     }
 
@@ -198,6 +199,6 @@ public class GameController {
         return this.firstPlayer;
     }
 
-
+*/
 
 }

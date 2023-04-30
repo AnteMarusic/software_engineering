@@ -7,15 +7,15 @@ import java.net.Socket;
 public class Server {
     private final ServerSocket serverSocket;
     private static int port = 0;
-    private final Lobby lobby;
+    private final LobbyController lobby;
     private final GameCodeIssuer gameCodeIssuer;
     private final UsernameIssuer usernameIssuer;
     public Server(ServerSocket serverSocket, int port) {
         this.serverSocket = serverSocket;
         this.port=port;
-        lobby = new Lobby();
         gameCodeIssuer = new GameCodeIssuer();
         usernameIssuer = new UsernameIssuer();
+        lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
 
     }
 
@@ -53,7 +53,7 @@ public class Server {
         return gameCodeIssuer;
     }
 
-    public Lobby getLobby() {
+    public LobbyController getLobby() {
         return lobby;
     }
 

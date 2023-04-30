@@ -23,7 +23,7 @@ public class UsernameIssuer {
         }
     }
     public synchronized InternalComunication handleMessage(String username){
-        if(!map.containsKey(username){
+        if(!map.containsKey(username)){
             Object[] object = new Object[2];
             object[0]=ConnectionStatus.CONNECTED;
             object[1]=null;

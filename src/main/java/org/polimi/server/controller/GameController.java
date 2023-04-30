@@ -9,7 +9,7 @@ import java.util.List;
 public class GameController {
     boolean endGame = false;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
-    private final int numOfPlayers;
+    //private final int numOfPlayers;
 
     public GameController(List<ClientHandler> list){
 
