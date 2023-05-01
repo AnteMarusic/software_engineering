@@ -35,8 +35,11 @@ public class Board {
                 Coordinates AUXkey = new Coordinates(i, j);
                 if (j >= start && j < start + length) {
                     this.board.put(AUXkey, bag.collectCard());
-                    if(j==start || j==start+length-1 || CornerCases(i,j))
+                    if(j==start || j==start+length-1 || CornerCases(i,j)){
                         this.board.get(AUXkey).setState(Card.State.PICKABLE);
+                        //debug println
+                        System.out.println(i + " " + j);
+                    }
                     else
                         this.board.get(AUXkey).setState(Card.State.NOT_PICKABLE);
                 }
