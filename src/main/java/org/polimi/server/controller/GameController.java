@@ -18,5 +18,7 @@ public class GameController {
         // manda ad ogni clientHandler la lista di coordinate da rimuovere nelle varie board personali, a tutti tranne al sender che se le aggiorna da solo lato client
     }
 
+
+
     public void reconnect (ClientHandler clientHandler){}
 }
