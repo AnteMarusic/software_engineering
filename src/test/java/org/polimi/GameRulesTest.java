@@ -3,12 +3,12 @@ package org.polimi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.polimi.server.model.Coordinates;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.polimi.GameRules.boardRowColInBound;
-import static org.polimi.GameRules.getCorrectStartAndLength;
+import static org.polimi.GameRules.*;
 
 class GameRulesTest {
 
@@ -148,8 +148,19 @@ class GameRulesTest {
         assertTrue(boardRowColInBound(6, 6, 3));
         assertFalse(boardRowColInBound(6, 7, 3));
     }
-
     @Test
-    void bookshelfColValid() {
+    void coordinatesAlignedTest () {
+        assertTrue (areCoordinatesAligned(new Coordinates(0,0), new Coordinates(0, 1)));
+        assertTrue (areCoordinatesAligned(new Coordinates(2,1), new Coordinates(3, 1)));
+        assertFalse (areCoordinatesAligned(new Coordinates(0,0), new Coordinates(1, 1)));
+        assertFalse (areCoordinatesAligned(new Coordinates(3,2), new Coordinates(4, 5)));
+        assertFalse (areCoordinatesAligned(new Coordinates(0,0), new Coordinates(0, 3)));
+
+        assertTrue (areCoordinatesAligned(new Coordinates(0,0), new Coordinates(0,1), new Coordinates(0,2)));
+        assertTrue (areCoordinatesAligned(new Coordinates(2,3), new Coordinates(1,3), new Coordinates(0,3)));
+        assertFalse (areCoordinatesAligned(new Coordinates(0,0), new Coordinates(1,1), new Coordinates(0,2)));
+        assertFalse (areCoordinatesAligned(new Coordinates(3,4), new Coordinates(0,1), new Coordinates(7,2)));
+        assertFalse (areCoordinatesAligned(new Coordinates(0,0), new Coordinates(0,3), new Coordinates(0,2)));
     }
+
 }

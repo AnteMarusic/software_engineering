@@ -48,7 +48,6 @@ public class Game{
             players.get(k).setPersonalGoal(new PersonalGoal(personalCode[k]));
         }
     }
-s
     private void handOutGoalsSG() {
         Random random = new Random();
 

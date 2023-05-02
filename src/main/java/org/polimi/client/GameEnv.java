@@ -47,4 +47,8 @@ public class GameEnv {
     public Card boardSeeCardAtCoordinates (Coordinates coordinates) {
         return clientBoard.seeCardAtCoordinates(coordinates);
     }
+
+    public boolean isCardPickable (Coordinates coordinates) {
+        return clientBoard.seeCardAtCoordinates(coordinates) != null && clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
+    }
 }

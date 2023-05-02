@@ -99,11 +99,27 @@ public class GameRules {
         return col >= temp[0] && col < temp[0] + temp[1];
     }
 
-    public boolean bookshelfColValid(int col) {
-      return !(col >= COL || col < 0);
+    /**
+     * @requires c1 and c2 are different coordinates (at least one amongst row col is different)
+     * @param c1 first coordinate (positive values only)
+     * @param c2 second coordinate (positive values only)
+     * @return true if aligned
+     */
+    public static boolean areCoordinatesAligned (Coordinates c1, Coordinates c2) {
+        return (c2.getRow() == c1.getRow() && (c2.getCol() == c1.getCol() + 1 || c2.getCol() == c1.getCol() - 1)) ||
+                c2.getCol() == c1.getCol() && ((c2.getRow() == c1.getRow() + 1 ||c2.getRow() == c1.getRow() - 1));
     }
 
-    //public boolean areCoordinatesAligned (Coordinates[] coordinates) {
-
-    //}
+    /**
+     * @requires c1, c2 and c3 are different coordinates (at least one amongst row col is different)
+     * @param c1 first coordinate (positive values only)
+     * @param c2 second coordinate (positive values only)
+     * @param c3 third coordinate (positive values only)
+     * @return true if aligned
+     */
+    public static boolean areCoordinatesAligned (Coordinates c1, Coordinates c2, Coordinates c3) {
+        //to fix
+        return ((c2.getRow() == c1.getRow() && ((c2.getCol() == c1.getCol() + 1 && c3.getCol() == c1.getCol() + 2) || (c2.getCol() == c1.getCol() - 1) && c3.getCol() == c1.getCol() - 2)) ||
+                (c2.getCol() == c1.getCol() && ((c2.getRow() == c1.getRow() + 1 && c3.getRow() == c1.getRow() + 2)||c2.getRow() == c1.getRow() - 1 && c3.getRow() == c1.getRow() + 2)));
+    }
 }
