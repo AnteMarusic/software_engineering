@@ -76,11 +76,18 @@ public class ClientHandler implements Runnable{
                             }
 
                         }
-                        case CHOSEN_CARDS -> {
+                        case CHOSEN_CARDS_REPLY -> {
                             ChosenCardsMessage chosenCards = (ChosenCardsMessage) messageFromClient;
-                            gameController.removeCards(chosenCards.getCards(), this);
-                            sendMessage(new Message());
+                            gameController.removeCards(chosenCards.getCards());
+                            sendMessage(new Message("server", MessageType.CHOOSE_COLUMN_REQUEST));
                         }
+                        case CHOSEN_COLUMN_REPLY -> {
+                            ChosenColumnReply chosenColumn = (ChosenColumnReply) messageFromClient;
+                            gameController.insertInBookshelf(chosenColumn.getColumn());
+                            gameController.notifyNextPlayer();
+                        }
+
+
 
                     }
                 }
