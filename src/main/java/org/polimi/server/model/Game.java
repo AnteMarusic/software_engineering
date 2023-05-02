@@ -1,6 +1,7 @@
 package org.polimi.server.model;
 
-import org.polimi.server.model.goal.*;
+import org.polimi.server.model.goal.Goal;
+import org.polimi.server.model.goal.PersonalGoal;
 import org.polimi.server.model.goal.shared_goal.*;
 
 import java.util.ArrayList;
@@ -8,63 +9,21 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Game{
-    private int ender;
-    private Board board;
-    private int firstPlayer;
-    boolean endGame = false;
-    private final ArrayList<Player> players = new ArrayList<Player>();
-    private final int numOfPlayers;
-    private final BagOfCards bagOfCards;
-    private AbstractSharedGoal SharedGoal1;
-    private AbstractSharedGoal SharedGoal2;
+    private final Board board;
+    private final Player[] players;
+    private final Goal[] personalGoal;
+    private final Goal[] sharedGoal;
+    //private final Goal boardGoal;
 
-    public Game(ArrayList<Player> players) {
-        numOfPlayers = players.size();
-        this.players.addAll(players);
-        this.bagOfCards = new BagOfCards();
+    public Game(int numOfPlayer) {
+        this.board = new Board(numOfPlayer);
+        this.players = new Player[numOfPlayer];
+        this.personalGoal = new Goal[numOfPlayer];
+        this.sharedGoal = new Goal[2];
+        //this.boardGoal =;
     }
 
-    public void startGame(){
-        Random random = new Random();
-        firstPlayer = random.nextInt(numOfPlayers);
-        board = new Board(numOfPlayers);
-        handOutGoalsPG();
-        handOutGoalsSG();
-    }
-
-    public int getNumCurrentPlayers() {
-        return players.size();
-    }
-
-   /* public void endGame(int ender){
-        int winnerpoints;
-        int winner = 0;
-        int[] totalPoints = new int [numOfPlayers];
-        for (int i = 0; i<numOfPlayers; i++){
-            totalPoints[i] = players.get(i).getSharedScore() + players.get(i).getPersonalScore();
-            if(i == ender)
-                totalPoints[i]++;
-        }
-        winnerpoints = Arrays.stream(totalPoints).max().getAsInt();
-        for (int i = 0; i<numOfPlayers; i++){
-            if(totalPoints[i]== winnerpoints){
-                winner = i;
-            }
-        }
-        winGame(winner);
-
-
-
-    }*/
-
-
-
-
-    private void handOutGoalsPG(){
-        Random random = new Random();
-        int[] personalCode = new int[numOfPlayers];
-        randomAssignment(random, personalCode, numOfPlayers, players);
-    }
+    public void addPlayer (String username) {}
 
     private static void randomAssignment(Random random, int[] personalCode, int numOfPlayers, ArrayList<Player> players) {
         personalCode[1] = random.nextInt(12);
@@ -97,66 +56,49 @@ public class Game{
             j = random.nextInt(12);
         } while (j == i);
 
-        AbstractSharedGoal[] implementazioni = new AbstractSharedGoal[]{
-                new SharedGoal1(numOfPlayers),
-                new SharedGoal2(numOfPlayers),
-                new SharedGoal3(numOfPlayers),
-                new SharedGoal4(numOfPlayers),
-                new SharedGoal5(numOfPlayers),
-                new SharedGoal6(numOfPlayers),
-                new SharedGoal7(numOfPlayers),
-                new SharedGoal8(numOfPlayers),
-                new SharedGoal9(numOfPlayers),
-                new SharedGoal10(numOfPlayers),
-                new SharedGoal11(numOfPlayers),
-                new SharedGoal12(numOfPlayers),
-        };
-        SharedGoal1 = implementazioni[i];
-        SharedGoal2 = implementazioni[j];
+        AbstractSharedGoal sharedGoal1;
+        AbstractSharedGoal sharedGoal2;
+        int numOfPlayers = players.length;
 
-/*      implementazione brutta che però non li crea tutti può anche essere fatta con lo switch
-        if(i==0) SharedGoal1 = new SharedGoal1(numOfPlayers);
-        if(i==1) SharedGoal1 = new SharedGoal2(numOfPlayers);
-        if(i==2) SharedGoal1 = new SharedGoal3(numOfPlayers);
-        if(i==3) SharedGoal1 = new SharedGoal4(numOfPlayers);
-        if(i==4) SharedGoal1 = new SharedGoal5(numOfPlayers);
-        if(i==5) SharedGoal1 = new SharedGoal6(numOfPlayers);
-        if(i==6) SharedGoal1 = new SharedGoal7(numOfPlayers);
-        if(i==7) SharedGoal1 = new SharedGoal8(numOfPlayers);
-        if(i==8) SharedGoal1 = new SharedGoal9(numOfPlayers);
-        if(i==9) SharedGoal1 = new SharedGoal10(numOfPlayers);
-        if(i==10) SharedGoal1 = new SharedGoal11(numOfPlayers);
-        if(i==11) SharedGoal1 = new SharedGoal12(numOfPlayers);
-        if(j==0) SharedGoal2 = new SharedGoal1(numOfPlayers);
-        if(i==1) SharedGoal2 = new SharedGoal2(numOfPlayers);
-        if(i==2) SharedGoal2 = new SharedGoal3(numOfPlayers);
-        if(i==3) SharedGoal2 = new SharedGoal4(numOfPlayers);
-        if(i==4) SharedGoal2 = new SharedGoal5(numOfPlayers);
-        if(i==5) SharedGoal2 = new SharedGoal6(numOfPlayers);
-        if(i==6) SharedGoal2 = new SharedGoal7(numOfPlayers);
-        if(i==7) SharedGoal2 = new SharedGoal8(numOfPlayers);
-        if(i==8) SharedGoal2 = new SharedGoal9(numOfPlayers);
-        // if(i==9) SharedGoal2 = new SharedGoal10(numOfPlayers);
-        if(i==10) SharedGoal2 = new SharedGoal11(numOfPlayers);
-        if(i==11) SharedGoal2 = new SharedGoal12(numOfPlayers);
-
-        */
-
+        if (i == 0) sharedGoal1 = new SharedGoal1(numOfPlayers);
+        if (i == 1) sharedGoal1 = new SharedGoal2(numOfPlayers);
+        if (i == 2) sharedGoal1 = new SharedGoal3(numOfPlayers);
+        if (i == 3) sharedGoal1 = new SharedGoal4(numOfPlayers);
+        if (i == 4) sharedGoal1 = new SharedGoal5(numOfPlayers);
+        if (i == 5) sharedGoal1 = new SharedGoal6(numOfPlayers);
+        if (i == 6) sharedGoal1 = new SharedGoal7(numOfPlayers);
+        if (i == 7) sharedGoal1 = new SharedGoal8(numOfPlayers);
+        if (i == 8) sharedGoal1 = new SharedGoal9(numOfPlayers);
+        if (i == 9) sharedGoal1 = new SharedGoal10(numOfPlayers);
+        if (i == 10) sharedGoal1 = new SharedGoal11(numOfPlayers);
+        if (i == 11) sharedGoal1 = new SharedGoal12(numOfPlayers);
+        if (j == 0) sharedGoal2 = new SharedGoal1(numOfPlayers);
+        if (i == 1) sharedGoal2 = new SharedGoal2(numOfPlayers);
+        if (j == 2) sharedGoal2 = new SharedGoal3(numOfPlayers);
+        if (i == 3) sharedGoal2 = new SharedGoal4(numOfPlayers);
+        if (i == 4) sharedGoal2 = new SharedGoal5(numOfPlayers);
+        if (i == 5) sharedGoal2 = new SharedGoal6(numOfPlayers);
+        if (i == 6) sharedGoal2 = new SharedGoal7(numOfPlayers);
+        if (i == 7) sharedGoal2 = new SharedGoal8(numOfPlayers);
+        if (i == 8) sharedGoal2 = new SharedGoal9(numOfPlayers);
+        if (i == 9) sharedGoal2 = new SharedGoal10(numOfPlayers);
+        if (i == 10) sharedGoal2 = new SharedGoal11(numOfPlayers);
+        if (j == 11) sharedGoal2 = new SharedGoal12(numOfPlayers);
     }
-
-
 
     public Board getBoard() {
-        return this.board;
-    }
-    public int getFirstPlayer(){
-        return this.firstPlayer;
+        return board;
     }
 
-    public Player getPlayerByNickname(String nickname) {
-        return players.stream()
-                .filter(player -> nickname.equals(player.getName()))
-                .findFirst()
-                .orElse(null);
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public Goal[] getPersonalGoal() {
+        return personalGoal;
+    }
+
+    public Goal[] getSharedGoal() {
+        return sharedGoal;
     }
 }
