@@ -36,7 +36,7 @@ public class BagOfCards {
         }
         else {
             int i = random.nextInt(bag.size());
-            c = bag.get(random.nextInt(bag.size()));
+            c = bag.get(i);
             bag.remove(i);
             return c;
         }

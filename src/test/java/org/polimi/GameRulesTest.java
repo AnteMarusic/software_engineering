@@ -1,10 +1,13 @@
-package org.polimi.server.model;
+package org.polimi;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.polimi.GameRules.boardRowColInBound;
 import static org.polimi.GameRules.getCorrectStartAndLength;
 
 class GameRulesTest {
@@ -139,7 +142,11 @@ class GameRulesTest {
     }
 
     @Test
-    void boardRowColInBound() {
+    void boardRowColInBoundTest() {
+        assertFalse(boardRowColInBound(9, 3, 3));
+        assertFalse(boardRowColInBound(-1, 3, 3));
+        assertTrue(boardRowColInBound(6, 6, 3));
+        assertFalse(boardRowColInBound(6, 7, 3));
     }
 
     @Test

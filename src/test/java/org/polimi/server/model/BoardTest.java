@@ -36,15 +36,24 @@ class BoardTest {
     @Test
     void getCardAtCoordinatesTest() {
         Card card, pickedCard, adjacentCard;
-
+        System.out.println("before test");
+        board.printMap();
         //see a card always in bound
         card = board.seeCardAtCoordinates(new Coordinates(3,4));
+        System.out.println("test");
+        board.printMap();
         //get a card that should not be pickable
         pickedCard = board.getCardAtCoordinates(new Coordinates(3,4));
+        System.out.println("test");
+        board.printMap();
         assertNull(pickedCard);
         assertEquals(card, board.seeCardAtCoordinates(new Coordinates(3, 4)));
+        System.out.println("test");
+        board.printMap();
         //see a card in bound only if numOfPlayers >= 3
         card = board.seeCardAtCoordinates(new Coordinates(2,2));
+        System.out.println("test");
+        board.printMap();
         //see adjacent card (should be not pickable if numOfPlayers == 3)
         adjacentCard=board.seeCardAtCoordinates(new Coordinates(2,3));
         assertNotEquals(PICKABLE, adjacentCard.getState());
@@ -59,13 +68,5 @@ class BoardTest {
 
     @Test
     void refillCheck() {
-    }
-
-    @Test
-    void printBoard() {
-    }
-
-    @Test
-    void printMap() {
     }
 }
