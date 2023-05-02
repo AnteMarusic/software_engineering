@@ -3,11 +3,10 @@ package org.polimi.client;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GameEnv {
-    private ClientBoard board;
+    private ClientBoard clientBoard;
     private ClientBookshelf[] clientBookshelf;
     private int numOfPlayers;
     private final String[] players;
@@ -21,14 +20,12 @@ public class GameEnv {
             clientBookshelf[i] = new ClientBookshelf();
         }
     }
-
-
-    public void setBoard(Map<Coordinates, Card> board){
-        this.board = new ClientBoard(board, this.numOfPlayers);
+    public void setClientBoard(Map<Coordinates, Card> clientBoard){
+        this.clientBoard = new ClientBoard(clientBoard, this.numOfPlayers);
     }
 
     public void printEnv(){
-        this.board.printMap();
+        this.clientBoard.printMap();
         this.clientBookshelf[this.me].printMyBookshelf();
         for(int i=0 ; i<this.numOfPlayers ; i++){
             if(i!=me){
@@ -39,4 +36,15 @@ public class GameEnv {
     }
 
 
+    public int getMaxInsertable() {
+        return clientBookshelf[me].getMaxInsertable();
+    }
+
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
+    public Card boardSeeCardAtCoordinates (Coordinates coordinates) {
+        return clientBoard.seeCardAtCoordinates(coordinates);
+    }
 }

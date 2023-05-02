@@ -59,4 +59,8 @@ public class ClientBookshelf {
             System.out.print("+—+ ");
         }
     }
+
+    public int getMaxInsertable () {
+        return maxInsertable;
+    }
 }

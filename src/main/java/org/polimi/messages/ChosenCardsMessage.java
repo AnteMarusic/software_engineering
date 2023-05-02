@@ -8,7 +8,7 @@ public class ChosenCardsMessage extends Message{
     private ArrayList<Coordinates> coordinates;
 
     public ChosenCardsMessage(String username, ArrayList<Coordinates> coordinates) {
-        super(username, MessageType.CHOSEN_CARDS);
+        super(username, MessageType.CHOSEN_CARDS_REPLY);
         this.coordinates = coordinates;
     }
 

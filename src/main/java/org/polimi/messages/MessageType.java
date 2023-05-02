@@ -15,7 +15,4 @@ public enum MessageType {
     NOTIFY_GAME_END,
 
     ERROR_MESSAGE,
-
-
-
 }

@@ -16,7 +16,7 @@ public class Board {
     public Board(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
         this.bag = new BagOfCards();
-        this.board = new HashMap<>(3);
+        this.board = new HashMap<>(45);
         this.fill();
         this.printMap();
     }

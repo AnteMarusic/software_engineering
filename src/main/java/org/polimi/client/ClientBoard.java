@@ -22,6 +22,10 @@ public class ClientBoard {
         this.board = board;
     }
 
+    public Card seeCardAtCoordinates(Coordinates coordinates) {
+        return this.board.get(coordinates);
+    }
+
     public void printMap() {
         int start, length;
         int[] temp;
@@ -61,9 +65,6 @@ public class ClientBoard {
             }
             System.out.println();
         }
-    }
-    private Card seeCardAtCoordinates(Coordinates coordinates) {
-        return this.board.get(coordinates);
     }
 
 }
