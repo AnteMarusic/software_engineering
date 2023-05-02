@@ -16,6 +16,7 @@ public class GameController {
     }
     public void removeCards (List<Coordinates> coordinates, ClientHandler sender){
         // manda ad ogni clientHandler la lista di coordinate da rimuovere nelle varie board personali, a tutti tranne al sender che se le aggiorna da solo lato client
+        game.remove
     }
 
     public void reconnect (ClientHandler clientHandler){}

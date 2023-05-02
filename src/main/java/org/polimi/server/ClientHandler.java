@@ -79,7 +79,7 @@ public class ClientHandler implements Runnable{
                         case CHOSEN_CARDS -> {
                             ChosenCardsMessage chosenCards = (ChosenCardsMessage) messageFromClient;
                             gameController.removeCards(chosenCards.getCards(), this);
-                            
+                            sendMessage(new Message());
                         }
 
                     }
