@@ -88,6 +88,10 @@ public class GameRules {
         return arrayOfInt;
     }
 
+    public static boolean bookshelfRowColIsInBound(Coordinates coor){
+        return ((coor.getRow()>=0 && coor.getRow()<=5) && (coor.getCol()>=0 && coor.getCol()<=4));
+    }
+
     public static boolean boardRowColInBound(int row, int col, int numOfPlayers) {
         int[] temp;
         if (row >= 9 || row < 0) return false;
