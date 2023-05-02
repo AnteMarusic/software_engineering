@@ -30,7 +30,7 @@ public class GameRules {
                 length = 5;
                 if (numOfPlayers < 3) {
                     start++;
-                    length--;
+                    length -= 2;
                 }
             }
             case 3 -> {
@@ -49,7 +49,7 @@ public class GameRules {
                 length = 9;
                 if (numOfPlayers < 4) {
                     start++;
-                    length--;
+                    length -= 2;
                 }
             }
             case 5 -> {
