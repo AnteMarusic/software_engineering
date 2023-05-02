@@ -30,17 +30,14 @@ public class BagOfCards {
     }
 
     public Card collectCard(){
-        Card c;
         if (bag.size() == 0) {
             return null;
         }
         else {
-            int i = random.nextInt(bag.size());
-            c = bag.get(random.nextInt(bag.size()));
-            bag.remove(i);
-            return c;
+            return bag.remove(random.nextInt(bag.size()));
         }
     }
+
     public int getSize(){
         return bag.size();
     }

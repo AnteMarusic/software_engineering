@@ -1,5 +1,6 @@
 package org.polimi.client;
 
+import org.polimi.GameRules;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
@@ -26,7 +27,7 @@ public class ClientBoard {
         int[] temp;
         Card card;
         for (int row = ROW; row >=0; row --) {
-            temp = getCorrectStartAndLength(row);
+            temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
             start = temp [0];
             length = temp[1];
             //stampa prima riga "+—+"
@@ -60,89 +61,6 @@ public class ClientBoard {
             }
             System.out.println();
         }
-    }
-    private int[] getCorrectStartAndLength(int row) {
-        int start=-1, length=-1;
-        int[] arrayOfInt = new int[2];
-        switch (row) {
-            case 0 -> {
-                start = 3;
-                length = 2;
-                if (this.numOfPlayers < 4) {
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        length--;
-                    }
-                }
-            }
-            case 1 -> {
-                start = 3;
-                length = 3;
-                if (this.numOfPlayers < 4) {
-                    length--;
-                }
-            }
-            case 2, 6 -> {
-                start = 2;
-                length = 5;
-                if (this.numOfPlayers < 3) {
-                    start++;
-                    length--;
-                }
-            }
-            case 3 -> {
-                start = 1;
-                length = 8;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        length--;
-                    }
-                }
-            }
-            case 4 -> {
-                start = 0;
-                length = 9;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                }
-            }
-            case 5 -> {
-                start = 0;
-                length = 8;
-                if (this.numOfPlayers < 4) {
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        start++;
-                        length--;
-                    }
-                }
-            }
-            case 7 -> {
-                start = 3;
-                length = 3;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                }
-            }
-            case 8 -> {
-                start = 4;
-                length = 2;
-                if (this.numOfPlayers < 4) {
-                    start++;
-                    length--;
-                    if (this.numOfPlayers < 3) {
-                        length--;
-                    }
-                }
-            }
-        }
-        arrayOfInt[0]= start;
-        arrayOfInt[1]= length;
-        return arrayOfInt;
     }
     private Card seeCardAtCoordinates(Coordinates coordinates) {
         return this.board.get(coordinates);

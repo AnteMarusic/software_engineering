@@ -30,7 +30,7 @@ public class GameRules {
                 length = 5;
                 if (numOfPlayers < 3) {
                     start++;
-                    length--;
+                    length -= 2;
                 }
             }
             case 3 -> {
@@ -49,7 +49,7 @@ public class GameRules {
                 length = 9;
                 if (numOfPlayers < 4) {
                     start++;
-                    length--;
+                    length -= 2;
                 }
             }
             case 5 -> {
@@ -86,6 +86,10 @@ public class GameRules {
         arrayOfInt[0]= start;
         arrayOfInt[1]= length;
         return arrayOfInt;
+    }
+
+    public static boolean bookshelfRowColIsInBound(Coordinates coor){
+        return ((coor.getRow()>=0 && coor.getRow()<=5) && (coor.getCol()>=0 && coor.getCol()<=4));
     }
 
     public static boolean boardRowColInBound(int row, int col, int numOfPlayers) {

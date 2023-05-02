@@ -16,15 +16,18 @@ public class Board {
     public Board(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
         this.bag = new BagOfCards();
-        this.board = new HashMap<>();
+        this.board = new HashMap<>(3);
         this.fill();
+        this.printMap();
     }
 
     public Map<Coordinates, Card> getGrid(){
         return this.board;
     }
 
-    //fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, otherwise to NOT_PICKABLE
+    /**
+     * fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, otherwise to NOT_PICKABLE
+     */
     private void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
@@ -75,8 +78,9 @@ public class Board {
     }
 
 
-
-    //removes a card from the board and updates each adjacent card's state to PICKABLE, if present
+    /**
+     * removes a card from the board and updates each adjacent card's state to PICKABLE, if present
+     */
     private Card removeCardAtCoordinate(Coordinates coordinates) {
         int x = coordinates.getRow();
         int y = coordinates.getCol();
@@ -94,7 +98,9 @@ public class Board {
     }
 
 
-    //checks whether the board needs to be refreshed/refilled
+    /**
+     * checks whether the board needs to be refilled
+     */
     public boolean refillCheck() {
         int start, length ;
         Coordinates AUXkey = new Coordinates(0, 0);
@@ -145,6 +151,47 @@ public class Board {
         }
     }
 
+    public void print() {
+        int start, length;
+        int[] temp;
+        Card card;
+        for (int row = ROW; row >=0; row --) {
+            temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
+            start = temp [0];
+            length = temp[1];
+            //stampa prima riga "+—+"
+            for (int i = 0; i < start; i++) {
+                System.out.print("    ");
+            }
+            for (int col = start; col < length + start; col ++) {
+                System.out.print("+—+ ");
+            }
+            System.out.println();
+
+            //stampa seconda riga, colori
+            for (int i = 0; i < start; i++) {
+                System.out.print("    ");
+            }
+            for (int col = start; col < length + start; col ++) {
+                card = seeCardAtCoordinates(new Coordinates(row, col));
+                if(card == null)
+                    System.out.print("|N| ");
+                else
+                    System.out.print("|"+card.convertColorToChar()+"| ");
+            }
+            System.out.println();
+
+            //stampa terza riga "+—+"
+            for (int i = 0; i < start; i++) {
+                System.out.print("    ");
+            }
+            for (int col = start; col < length + start; col ++) {
+                System.out.print("+—+ ");
+            }
+            System.out.println();
+        }
+    }
+
     private boolean CornerCases(int i, int j){
         switch(numOfPlayers){
             case 2 -> {
@@ -162,5 +209,9 @@ public class Board {
 
     public void printMap() {
         this.board.forEach((key, value) -> System.out.println(key + " " + value));
+    }
+
+    public static void main(String[] args) {
+        Board b = new Board(3);
     }
 }
