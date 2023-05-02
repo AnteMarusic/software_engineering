@@ -5,6 +5,7 @@ import org.polimi.server.controller.GameController;
 import org.polimi.server.controller.OldGameController;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class LobbyController {
     private ArrayList<ClientHandler> publicListOf2;
@@ -26,11 +27,17 @@ public class LobbyController {
                 if(publicListOf2.size()==2){
                     this.createGame(2);
                 }
+                else{
+                    // comunica al client di essere in attesa di altri giocatori
+                }
             }
             case 3-> {
                 publicListOf3.add(clientHandler);
                 if(publicListOf3.size()==3){
                     this.createGame(3);
+                }
+                else{
+                    // comunica al client di essere in attesa di altri giocatori
                 }
             }
             case 4-> {
@@ -38,11 +45,17 @@ public class LobbyController {
                 if(publicListOf3.size()==4){
                     this.createGame(4);
                 }
+                else{
+                    // comunica al client di essere in attesa di altri giocatori
+                }
             }
         }
     }
 
     private void createGame(int gameMode){
+        Random random = new Random();
+
+        int i = random.nextInt(12);
         switch (gameMode) {
             case 2-> {
                 GameController gameController = new GameController(publicListOf2);
@@ -50,6 +63,9 @@ public class LobbyController {
                 publicListOf2.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 publicListOf2.clear();
+
+                i = random.nextInt(2);
+                gameController.setFirstPlayer(i);
             }
             case 3-> {
                 GameController gameController = new GameController(publicListOf3);
@@ -57,6 +73,8 @@ public class LobbyController {
                 publicListOf3.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf3.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 publicListOf3.clear();
+                i = random.nextInt(2);
+                gameController.setFirstPlayer(i);
             }
             case 4-> {
                 GameController gameController = new GameController(publicListOf4);
@@ -64,6 +82,8 @@ public class LobbyController {
                 publicListOf4.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf4.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 publicListOf4.clear();
+                i = random.nextInt(2);
+                gameController.setFirstPlayer(i);
             }
         }
 

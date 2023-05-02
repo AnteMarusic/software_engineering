@@ -14,13 +14,15 @@ public class Game{
     private final Goal[] personalGoal;
     private final Goal[] sharedGoal;
     //private final Goal boardGoal;
+    private int firstPlayer;
 
-    public Game(int numOfPlayer) {
+    public Game(int numOfPlayer, int firstPlayer) {
         this.board = new Board(numOfPlayer);
         this.players = new Player[numOfPlayer];
         this.personalGoal = new Goal[numOfPlayer];
         this.sharedGoal = new Goal[2];
         //this.boardGoal =;
+        this.firstPlayer = firstPlayer;
     }
 
     public void addPlayer (String username) {}
@@ -46,7 +48,7 @@ public class Game{
             players.get(k).setPersonalGoal(new PersonalGoal(personalCode[k]));
         }
     }
-
+s
     private void handOutGoalsSG() {
         Random random = new Random();
 

@@ -13,6 +13,5 @@ public enum MessageType {
     INFORM_ABOUT_NEXT_TURN,
     NOTIFY_GOAL_COMPLETION,
     NOTIFY_GAME_END,
-
     ERROR_MESSAGE,
 }
