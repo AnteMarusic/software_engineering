@@ -20,6 +20,7 @@ public class Player {
      * score obtained with PersonalGoals
      */
     private int personalScore;
+    private int totalScore;
     private PersonalGoal personalGoal;
     /**
      * boolean that is true if the first shared goal is achieved.
@@ -110,6 +111,15 @@ public class Player {
 
     public void setPersonalGoal(PersonalGoal pg){
         this.personalGoal = pg;
+    }
+    public void setTotalScore(int totalScore){
+        this.totalScore = totalScore;
+    }
+    public void updateTotalscore (int punti){
+        totalScore = totalScore + punti;
+    }
+    public int getTotalScore(){
+        return totalScore;
     }
     /**
      * increases the personal score counter by the int value newPoints

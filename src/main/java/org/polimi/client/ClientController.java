@@ -1,24 +1,28 @@
 package org.polimi.client;
 
 import org.polimi.GameRules;
-import org.polimi.server.model.Card;
+import org.polimi.messages.*;
 import org.polimi.server.model.Coordinates;
-import org.polimi.server.model.Game;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.function.Predicate;
 
 public class ClientController {
     private CLI cli;
     private GameEnv gameEnv;
     private Scanner scanner;
+    private Client client;
+    private String username;
 
     public ClientController(GameEnv gameEnv) {
         this.cli = new CLI();
         Scanner scanner = new Scanner(System.in);
+        this.username = "unknown";
         gameEnv = null;
     }
+    public void setUsername (String username) {this.username = username;}
 
     public void setGameEnv(GameEnv gameEnvironment) {
         this.gameEnv = gameEnvironment;
@@ -39,7 +43,7 @@ public class ClientController {
         int maxInsertable = gameEnv.getMaxInsertable();
         boolean flag;
 
-        ArrayList<Coordinates> chosenCards = new ArrayList<>(maxInsertable);
+        LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
 
         do {
             System.out.println("how many cards do you want to pick?");
@@ -70,7 +74,7 @@ public class ClientController {
                                 System.out.println("the card has already been taken! please choose another one");
                             } else if (gameEnv.isCardPickable(c1)) {
                                 System.out.println("ok");
-                                chosenCards.add(c1);
+                                chosenCoordinates.add(c1);
                                 flag = true;
                             } else {
                                 System.out.println("this card is not pickable yet");
@@ -96,7 +100,7 @@ public class ClientController {
                             } else if (gameEnv.isCardPickable(c2)) {
                                 if (GameRules.areCoordinatesAligned(c1, c2)) {
                                     System.out.println("ok");
-                                    chosenCards.add(c2);
+                                    chosenCoordinates.add(c2);
                                     flag = true;
                                 } else {
                                     System.out.println("this card isn't aligned with the first one");
@@ -125,7 +129,7 @@ public class ClientController {
                             } else if (gameEnv.isCardPickable(c3)) {
                                 if (GameRules.areCoordinatesAligned(c1, c2, c3)) {
                                     System.out.println("ok");
-                                    chosenCards.add(c3);
+                                    chosenCoordinates.add(c3);
                                     flag = true;
                                 } else {
                                     System.out.println("this card isn't aligned with the first one");
@@ -139,9 +143,10 @@ public class ClientController {
                 }
             }
         }
+        client.sendMessage(new ChosenCardsMessage(username, chosenCoordinates));
     }
 
-    public void orderChosenCards(ArrayList<Coordinates> toOrder) {
+    public List<Coordinates> orderChosenCards(List<Coordinates> toOrder) {
         ArrayList<Coordinates> temp = new ArrayList<>(toOrder.size());
         int position;
         int i = 0;
@@ -161,5 +166,101 @@ public class ClientController {
             else
                 System.out.println("There's already a card in position "+position+", choose another...");
         }
+        gameEnv.removeCards(temp);
+        return temp;
     }
+
+    public void chooseGameMode () {
+        ChosenGameModeMessage message = null;
+        int input;
+        do {
+            System.out.println("you can play these game modes, choose one...");
+            System.out.println("(1) play with your friends");
+            System.out.println("(2) play with randoms in a game of two");
+            System.out.println("(3) play with randoms in a game of three");
+            System.out.println("(4) play with randoms in a game of four");
+            System.out.println("type 1, 2, 3 or 4");
+            input = scanner.nextInt();
+            if (input < 1 || input > 4) {
+                System.out.println("invalid input");
+            }
+        } while (input < 1 || input > 4);
+        switch (input) {
+            case 1 -> {
+                do {
+                    System.out.println("(1) to create game");
+                    System.out.println("(2) to join game");
+                    input = scanner.nextInt();
+                    if (input < 1 || input > 2) {
+                        System.out.println("invalid input");
+                    }
+                } while (input < 1 || input > 2);
+                if (input == 1) {
+                    do {
+                        System.out.println("type the code of the game, the friend that created the game should have it");
+                        input = scanner.nextInt();
+                        if (input < 0) {
+                            System.out.println("invalid input");
+                        }
+                    } while (input < 0);
+                    message = new ChosenGameModeMessage(username, GameMode.JOIN_PRIVATE_GAME, input);
+                }
+                else message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, -1);
+            }
+            case 2 -> {
+                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1);
+            }
+            case 3 -> {
+                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1);
+            }
+            case 4 -> {
+                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1);
+            }
+        }
+        client.sendMessage(message);
+    }
+
+    public void chooseUsername () {
+        System.out.println("choose your username. Keep in mind that it has to be unique");
+        System.out.println("in case you are reconnecting you should use the username you used to enter the game you disconnected from");
+        client.sendMessage(new Message(username, MessageType.USERNAME));
+    }
+
+    public void newPlayerJoinedLobby (String newPlayer) {
+        gameEnv.addNewPlayer(newPlayer);
+    }
+
+    public void chooseColumn () {
+        int input;
+        boolean flag = false;
+        do {
+            System.out.println("choose the column where to insert the cards");
+            input = scanner.nextInt();
+            if (!GameRules.bookshelfColInBound(input)) {
+                System.out.println("invalid input");
+            }
+            else {
+                if (gameEnv.getInsertable(input) < gameEnv.getChosenCardsSize()) {
+                    flag = true;
+                    gameEnv.insert(input);
+                }
+                else {
+                    System.out.println("not enough space to store cards in the column you chose");
+                }
+            }
+        } while (!GameRules.bookshelfColInBound(input) && flag);
+        client.sendMessage(new ChosenColumnMessage(username, input));
+    }
+
+    /**
+     * calls the correspondent method of CLI
+     */
+    public void errorMessage () {
+
+    }
+
+    /**
+     * calls the correspondent method of CLI
+     */
+    public void startGameMessage () {}
 }

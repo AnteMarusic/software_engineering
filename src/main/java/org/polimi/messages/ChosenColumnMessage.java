@@ -1,8 +1,8 @@
 package org.polimi.messages;
 
-public class ChosenColumnReply extends Message{
+public class ChosenColumnMessage extends Message{
     private int column;
-    public ChosenColumnReply(String username, int column){
+    public ChosenColumnMessage(String username, int column){
         super(username, MessageType.CHOSEN_COLUMN_REPLY);
         this.column = column;
     }

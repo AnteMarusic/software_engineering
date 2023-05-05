@@ -1,15 +1,19 @@
 package org.polimi.messages;
 
-public class ChooseGameModeMessage extends Message {
+public class ChosenGameModeMessage extends Message {
     private GameMode gameMode;
+    private int code;
 
-    public ChooseGameModeMessage(String username, GameMode gameMode) {
+    public ChosenGameModeMessage(String username, GameMode gameMode, int code) {
         super(username, MessageType.CHOOSE_GAME_MODE);
         this.gameMode = gameMode;
+        this.code = code;
     }
 
     public GameMode getGameMode(){
         return this.gameMode;
+    }
+    public int getCode() {return this.code;
     }
 
     @Override

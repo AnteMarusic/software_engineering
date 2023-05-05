@@ -2,7 +2,6 @@ package org.polimi.server;
 
 import org.polimi.messages.*;
 import org.polimi.server.controller.GameController;
-import org.polimi.server.controller.OldGameController;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -43,6 +42,7 @@ public class ClientHandler implements Runnable{
         while (socket != null && socket.isConnected()) {
             try {
                 messageFromClient = (Message) input.readObject();
+                // posso scartare tutti i messaggi di un client che è gia connesso alla partita se non è il suo turno
 
                 if(messageFromClient != null){
                     System.out.println(messageFromClient);
@@ -50,7 +50,7 @@ public class ClientHandler implements Runnable{
                         case USERNAME -> {
                             InternalComunication internalComunication = usernameIssuer.handleMessage(messageFromClient.getUsername());
                             if(internalComunication == InternalComunication.OK) {
-                                sendMessage(new ChooseGameModeMessage("server", GameMode.DEFAULT ));
+                                sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
                             }
                             if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
                                 sendMessage(new ErrorMessage("server", ErrorType.ALREADY_TAKEN_USERNAME));
@@ -62,8 +62,8 @@ public class ClientHandler implements Runnable{
                             }
                         }
                         case CHOOSE_GAME_MODE -> {
-                            ChooseGameModeMessage chooseGameModeMessage = (ChooseGameModeMessage) messageFromClient;
-                            switch (chooseGameModeMessage.getGameMode()) {
+                            ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) messageFromClient;
+                            switch (chosenGameModeMessage.getGameMode()) {
                                 case JOIN_RANDOM_GAME_2_PLAYER -> {
                                     lobbyController.insertPlayerInRandomTwoPlayerGame(this);
                                 }
@@ -82,7 +82,7 @@ public class ClientHandler implements Runnable{
                             sendMessage(new Message("server", MessageType.CHOOSE_COLUMN_REQUEST));
                         }
                         case CHOSEN_COLUMN_REPLY -> {
-                            ChosenColumnReply chosenColumn = (ChosenColumnReply) messageFromClient;
+                            ChosenColumnMessage chosenColumn = (ChosenColumnMessage) messageFromClient;
                             gameController.insertInBookshelf(chosenColumn.getColumn());
                             gameController.notifyNextPlayer();
                         }

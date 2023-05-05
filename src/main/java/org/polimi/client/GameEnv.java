@@ -5,6 +5,7 @@ import org.polimi.server.model.Bookshelf;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
+import java.util.List;
 import java.util.Map;
 
 public class GameEnv {
@@ -20,8 +21,10 @@ public class GameEnv {
     private ClientBoard clientBoard;
     private ClientBookshelf[] clientBookshelf;
     private int numOfPlayers;
-    private final String[] players;
+    private String[] players;
     private final int me; //my player index
+    private int lastPlayerInserted;
+    private List<Card> chosenCards;
 
     public GameEnv(String[] players, int me, int numOfPlayers){
         this.players = players;
@@ -31,6 +34,19 @@ public class GameEnv {
             clientBookshelf[i] = new ClientBookshelf();
         }
     }
+
+    public void setChosenCards (List<Card> chosenCards) {
+        this.chosenCards = chosenCards;
+    }
+
+    public List<Card> getChosenCards() {
+        return chosenCards;
+    }
+
+    public int getChosenCardsSize() {
+        return this.chosenCards.size();
+    }
+
     public void setClientBoard(Map<Coordinates, Card> clientBoard){
         this.clientBoard = new ClientBoard(clientBoard, this.numOfPlayers);
     }
@@ -55,6 +71,11 @@ public class GameEnv {
         return numOfPlayers;
     }
 
+    public void addNewPlayer (String newPlayer) {
+        this.players[lastPlayerInserted + 1] = newPlayer;
+        lastPlayerInserted ++;
+    }
+
     public Card boardSeeCardAtCoordinates (Coordinates coordinates) {
         return clientBoard.seeCardAtCoordinates(coordinates);
     }
@@ -63,10 +84,30 @@ public class GameEnv {
         return clientBoard.seeCardAtCoordinates(coordinates) != null && clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
     }
 
+<<<<<<< HEAD
     public static void main(String[] args){
         Board board = new Board(2);
         ClientBoard clientBoard = new ClientBoard(board.getGrid() , 2);
         Bookshelf bookshelf = new Bookshelf();
         clientBoard.printMap();
+=======
+    public void insert (int col) {
+        this.clientBookshelf[me].insert(this.chosenCards, col);
+    }
+    public int getInsertable (int col) {
+        return clientBookshelf[me].getInsertable(col);
+    }
+
+    public void removeCards (List<Coordinates> toRemove) {
+        Coordinates temp;
+        Card card;
+        int i = 0;
+        while (toRemove.size() > 0) {
+            temp = toRemove.get(i);
+            card = this.clientBoard.removeCardAtCoordinates(temp);
+            this.chosenCards.add(card);
+            i ++;
+        }
+>>>>>>> 996c191b3626bfb7d11bb722f509afb471c51d80
     }
 }
