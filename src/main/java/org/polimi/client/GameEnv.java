@@ -30,9 +30,17 @@ public class GameEnv {
         this.players = players;
         this.me = me;
         this.numOfPlayers = numOfPlayers;
+        this.clientBookshelf = new ClientBookshelf[numOfPlayers];
         for(int i=0 ; i<numOfPlayers ; i++){
-            clientBookshelf[i] = new ClientBookshelf();
+            this.clientBookshelf[i] = new ClientBookshelf();
         }
+    }
+
+    public void printRoutine(){
+        System.out.println("My username: "+players[me]);
+        this.clientBoard.printMap();
+        this.clientBookshelf[me].printMyBookshelf();
+        this.clientBookshelf[me].print();
     }
 
     public void setChosenCards (List<Card> chosenCards) {
@@ -49,17 +57,6 @@ public class GameEnv {
 
     public void setClientBoard(Map<Coordinates, Card> clientBoard){
         this.clientBoard = new ClientBoard(clientBoard, this.numOfPlayers);
-    }
-
-    public void printEnv(){
-        this.clientBoard.printMap();
-        this.clientBookshelf[this.me].printMyBookshelf();
-        for(int i=0 ; i<this.numOfPlayers ; i++){
-            if(i!=me){
-                System.out.println(this.players[i]);
-                this.clientBookshelf[i].print();
-            }
-        }
     }
 
 
@@ -84,13 +81,6 @@ public class GameEnv {
         return clientBoard.seeCardAtCoordinates(coordinates) != null && clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
     }
 
-<<<<<<< HEAD
-    public static void main(String[] args){
-        Board board = new Board(2);
-        ClientBoard clientBoard = new ClientBoard(board.getGrid() , 2);
-        Bookshelf bookshelf = new Bookshelf();
-        clientBoard.printMap();
-=======
     public void insert (int col) {
         this.clientBookshelf[me].insert(this.chosenCards, col);
     }
@@ -108,6 +98,5 @@ public class GameEnv {
             this.chosenCards.add(card);
             i ++;
         }
->>>>>>> 996c191b3626bfb7d11bb722f509afb471c51d80
     }
 }

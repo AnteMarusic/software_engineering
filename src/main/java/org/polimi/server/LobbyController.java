@@ -1,6 +1,5 @@
 package org.polimi.server;
 
-import org.polimi.messages.ChooseGameModeMessage;
 import org.polimi.server.controller.GameController;
 import org.polimi.server.controller.OldGameController;
 

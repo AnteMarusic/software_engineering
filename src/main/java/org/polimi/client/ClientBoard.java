@@ -41,6 +41,14 @@ public class ClientBoard {
         int start, length;
         int[] temp;
         Card card;
+        for(int i=0; i<ROW ; i++){
+            if(i!=0 && i!=8) {
+                System.out.print(" " + i + "  ");
+            }else{
+                System.out.print("    ");
+            }
+        }
+        System.out.println();
         for (int row = ROW; row >=0; row --) {
             temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
             start = temp [0];
@@ -53,7 +61,7 @@ public class ClientBoard {
             for (int col = start; col < length + start; col ++) {
                 card = seeCardAtCoordinates(new Coordinates(row, col));
                 if(card == null)
-                    System.out.print("|N| ");
+                    System.out.print("| | ");
                 else {
                     switch(card.getColor()) {
                         case WHITE -> {
@@ -89,9 +97,12 @@ public class ClientBoard {
                     }
                 }
             }
-            System.out.println();
+            System.out.print("\n");
 
             //stampa terza riga "+—+"
+            temp = GameRules.getCorrectStartAndLength(row-1, numOfPlayers);
+            start = temp [0];
+            length = temp[1];
             if(row!=1) {
                 for (int i = 0; i < start; i++) {
                     System.out.print("    ");
