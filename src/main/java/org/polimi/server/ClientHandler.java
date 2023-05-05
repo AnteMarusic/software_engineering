@@ -43,6 +43,7 @@ public class ClientHandler implements Runnable{
         while (socket != null && socket.isConnected()) {
             try {
                 messageFromClient = (Message) input.readObject();
+                // posso scartare tutti i messaggi di un client che è gia connesso alla partita se non è il suo turno
 
                 if(messageFromClient != null){
                     System.out.println(messageFromClient);

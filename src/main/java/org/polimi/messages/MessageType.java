@@ -14,4 +14,7 @@ public enum MessageType {
     NOTIFY_GOAL_COMPLETION,
     NOTIFY_GAME_END,
     ERROR_MESSAGE,
+    START_GAME_MESSAGE,
+    RANKING_MESSAGE
+
 }

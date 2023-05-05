@@ -53,9 +53,6 @@ public class LobbyController {
     }
 
     private void createGame(int gameMode){
-        Random random = new Random();
-
-        int i = random.nextInt(12);
         switch (gameMode) {
             case 2-> {
                 GameController gameController = new GameController(publicListOf2);
@@ -63,9 +60,6 @@ public class LobbyController {
                 publicListOf2.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 publicListOf2.clear();
-
-                i = random.nextInt(2);
-                gameController.setFirstPlayer(i);
             }
             case 3-> {
                 GameController gameController = new GameController(publicListOf3);
@@ -73,8 +67,6 @@ public class LobbyController {
                 publicListOf3.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf3.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 publicListOf3.clear();
-                i = random.nextInt(2);
-                gameController.setFirstPlayer(i);
             }
             case 4-> {
                 GameController gameController = new GameController(publicListOf4);
@@ -82,8 +74,6 @@ public class LobbyController {
                 publicListOf4.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf4.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 publicListOf4.clear();
-                i = random.nextInt(2);
-                gameController.setFirstPlayer(i);
             }
         }
 
