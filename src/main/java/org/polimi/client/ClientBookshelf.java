@@ -1,9 +1,12 @@
 package org.polimi.client;
 
+import org.jetbrains.annotations.NotNull;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClientBookshelf {
     private static final int COL = 5;
@@ -62,5 +65,14 @@ public class ClientBookshelf {
 
     public int getMaxInsertable () {
         return maxInsertable;
+    }
+
+    public void insert(List<Card> cards, int col) {
+        int j = 0;
+        for (int i = index[col]; i < index[col] + cards.size(); i ++) {
+            this.grid.put(new Coordinates(i , col), cards.get(j));
+            j ++;
+        }
+        this.index[col] = index[col] + cards.size();
     }
 }

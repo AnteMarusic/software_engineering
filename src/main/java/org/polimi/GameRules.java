@@ -92,6 +92,10 @@ public class GameRules {
         return ((coor.getRow()>=0 && coor.getRow()<=5) && (coor.getCol()>=0 && coor.getCol()<=4));
     }
 
+    public static boolean bookshelfColInBound (int col) {
+        return col >=0 && col<=4;
+    }
+
     public static boolean boardRowColInBound(int row, int col, int numOfPlayers) {
         int[] temp;
         if (row >= 9 || row < 0) return false;
@@ -118,8 +122,10 @@ public class GameRules {
      * @return true if aligned
      */
     public static boolean areCoordinatesAligned (Coordinates c1, Coordinates c2, Coordinates c3) {
-        //to fix
-        return ((c2.getRow() == c1.getRow() && ((c2.getCol() == c1.getCol() + 1 && c3.getCol() == c1.getCol() + 2) || (c2.getCol() == c1.getCol() - 1) && c3.getCol() == c1.getCol() - 2)) ||
-                (c2.getCol() == c1.getCol() && ((c2.getRow() == c1.getRow() + 1 && c3.getRow() == c1.getRow() + 2)||c2.getRow() == c1.getRow() - 1 && c3.getRow() == c1.getRow() + 2)));
+        return ((c2.getRow() == c1.getRow() && c3.getRow() == c2.getRow () &&
+                (c2.getCol() == c1.getCol() + 1 && c3.getCol() == c1.getCol() + 2) || (c2.getCol() == c1.getCol() - 1) && c3.getCol() == c1.getCol() - 2))
+                ||
+                (c2.getCol() == c1.getCol() && c3.getCol() == c2.getCol () &&
+                        ((c2.getRow() == c1.getRow() + 1 && c3.getRow() == c1.getRow() + 2)||c2.getRow() == c1.getRow() - 1 && c3.getRow() == c1.getRow() - 2));
     }
 }

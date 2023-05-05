@@ -17,6 +17,9 @@ public class ClientBoard {
         this.numOfPlayers = numOfPlayers;
     }
 
+    public Card removeCardAtCoordinates (Coordinates coordinates) {
+        return this.board.remove(coordinates);
+    }
 
     public void setMap(Map<Coordinates, Card> board){
         this.board = board;
