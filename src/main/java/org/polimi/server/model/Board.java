@@ -8,6 +8,9 @@ import java.util.Map;
 import static org.polimi.GameRules.boardRowColInBound;
 
 public class Board {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     private final static int ROW = 9;
     private final BagOfCards bag;
     private final Map<Coordinates, Card> board;
@@ -18,7 +21,6 @@ public class Board {
         this.bag = new BagOfCards();
         this.board = new HashMap<>(45);
         this.fill();
-        this.printMap();
     }
 
     public Map<Coordinates, Card> getGrid(){
@@ -211,7 +213,4 @@ public class Board {
         this.board.forEach((key, value) -> System.out.println(key + " " + value));
     }
 
-    public static void main(String[] args) {
-        Board b = new Board(3);
-    }
 }

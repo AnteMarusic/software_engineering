@@ -1,11 +1,22 @@
 package org.polimi.client;
 
+import org.polimi.server.model.Board;
+import org.polimi.server.model.Bookshelf;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
 import java.util.Map;
 
 public class GameEnv {
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_PINK = "\u001B[35m"; //PINK
+    public static final String ANSI_GREEN = "\u001B[32m"; //GREEN
+    public static final String ANSI_WHITE = "\u001B[37m"; //WHITE
+    public static final String ANSI_ORANGE = "\u001B[31m"; //ORANGE
+    public static final String ANSI_CYAN = "\u001B[36m"; //CYAN
+    public static final String ANSI_BLUE = "\u001B[34m"; //BLUE
+
     private ClientBoard clientBoard;
     private ClientBookshelf[] clientBookshelf;
     private int numOfPlayers;
@@ -50,5 +61,12 @@ public class GameEnv {
 
     public boolean isCardPickable (Coordinates coordinates) {
         return clientBoard.seeCardAtCoordinates(coordinates) != null && clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
+    }
+
+    public static void main(String[] args){
+        Board board = new Board(2);
+        ClientBoard clientBoard = new ClientBoard(board.getGrid() , 2);
+        Bookshelf bookshelf = new Bookshelf();
+        clientBoard.printMap();
     }
 }
