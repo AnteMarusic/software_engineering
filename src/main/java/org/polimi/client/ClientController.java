@@ -23,14 +23,65 @@ public class ClientController {
     }
     public void setUsername (String username) {this.username = username;}
 
+    public Message handleMessage (Message message) {
+        switch (message.getMessageType()) {
+            case USERNAME -> {
+                return chooseUsername();
+            }
+            case MODEL_STATUS_ALL -> {
+                //in case of status all message the client doesn't have to send any message
+                modelAllMessage();
+                return null;
+            }
+            case MODEL_STATUS_UPDATE -> {
+                //in case of update message the client doesn't have to send any message
+                modelUpdateMessage();
+                return null;
+            }
+            case CHOOSE_GAME_MODE -> {
+                return chooseGameMode();
+            }
+            case TEXT_MESSAGE -> {
+                //chat not yet developed
+            }
+            case NEW_PLAYER_JOINED -> {
+                //in case of update message the client doesn't have to send any message
+                NewPlayerJoinedMessage m = (NewPlayerJoinedMessage) message;
+                newPlayerJoinedLobby(m.getNewPlayer());
+                return null;
+            }
+            case CHOOSE_CARDS_REQUEST -> {
+                return chooseCards();
+            }
+            case CHOOSE_COLUMN_REQUEST -> {
+                return chooseColumn();
+            }
+            case INFORM_ABOUT_NEXT_TURN -> {
+            }
+            case NOTIFY_GOAL_COMPLETION -> {
+            }
+            case NOTIFY_GAME_END -> {
+            }
+            case ERROR_MESSAGE -> {
+            }
+            case START_GAME_MESSAGE -> {
+            }
+            case RANKING_MESSAGE -> {
+            }
+            case PING -> {
+            }
+        }
+        return null;
+    }
+
     /**
      * asks to type in stdin the username and sends a message of type username to the server.
      */
-    public void chooseUsername () {
+    public Message chooseUsername () {
         System.out.println("choose your username. Keep in mind that it has to be unique");
         System.out.println("in case you are reconnecting you should use the username you used to enter the game you disconnected from");
         setUsername(scanner.nextLine());
-        client.sendMessage(new Message(username, MessageType.USERNAME));
+        return new Message(username, MessageType.USERNAME);
     }
 
     /**
@@ -47,7 +98,7 @@ public class ClientController {
      * ensures that the dimension of the arrayList isn't greater than maxInsertable in bookshelf
      * ensures that the cards are picked in a line from the board
      */
-    public void chooseCards() {
+    public Message chooseCards() {
         //since the cards have to be picked in a line, each card picked has to have one constant coordinate
         int counter = 0;
         Coordinates c1 = null, c2 = null, c3 = null;
@@ -156,7 +207,7 @@ public class ClientController {
                 }
             }
         }
-        client.sendMessage(new ChosenCardsMessage(username, chosenCoordinates));
+        return new ChosenCardsMessage(username, chosenCoordinates);
     }
 
     public List<Coordinates> orderChosenCards(List<Coordinates> toOrder) {
@@ -183,7 +234,7 @@ public class ClientController {
         return temp;
     }
 
-    public void chooseGameMode () {
+    public Message chooseGameMode () {
         ChosenGameModeMessage message = null;
         int input;
         do {
@@ -230,14 +281,14 @@ public class ClientController {
                 message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1);
             }
         }
-        client.sendMessage(message);
+        return message;
     }
 
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
     }
 
-    public void chooseColumn () {
+    public Message chooseColumn () {
         int input;
         boolean flag = false;
         do {
@@ -256,7 +307,7 @@ public class ClientController {
                 }
             }
         } while (!GameRules.bookshelfColInBound(input) && flag);
-        client.sendMessage(new ChosenColumnMessage(username, input));
+        return new ChosenColumnMessage(username, input);
     }
 
     /**
