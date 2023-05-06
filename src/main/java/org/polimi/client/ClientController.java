@@ -11,22 +11,16 @@ import java.util.Scanner;
 
 public class ClientController {
     private CLI cli;
-    private GameEnv gameEnv;
     private Scanner scanner;
     private Client client;
     private String username;
 
-    public ClientController(GameEnv gameEnv) {
-        this.cli = new CLI();
+    public ClientController(CLI cli) {
         Scanner scanner = new Scanner(System.in);
         this.username = "unknown";
-        gameEnv = null;
+        cli = null;
     }
     public void setUsername (String username) {this.username = username;}
-
-    public void setGameEnv(GameEnv gameEnvironment) {
-        this.gameEnv = gameEnvironment;
-    }
 
     /**
      * gets from std input one to three coordinates
@@ -40,7 +34,7 @@ public class ClientController {
         Coordinates c1 = null, c2 = null, c3 = null;
         int row, col;
         int numberToPick;
-        int maxInsertable = gameEnv.getMaxInsertable();
+        int maxInsertable = cli.getMaxInsertable();
         boolean flag;
 
         LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
@@ -66,13 +60,13 @@ public class ClientController {
                         row = scanner.nextInt();
                         System.out.println("Type col number (0 to 8)");
                         col = scanner.nextInt();
-                        if (!GameRules.boardRowColInBound(row, col, gameEnv.getNumOfPlayers())) {
+                        if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
                             System.out.println("coordinates not in bound");
                         } else {
                             c1 = new Coordinates(row, col);
-                            if (gameEnv.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
+                            if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
                                 System.out.println("the card has already been taken! please choose another one");
-                            } else if (gameEnv.isCardPickable(c1)) {
+                            } else if (cli.isCardPickable(c1)) {
                                 System.out.println("ok");
                                 chosenCoordinates.add(c1);
                                 flag = true;
@@ -91,13 +85,13 @@ public class ClientController {
                         row = scanner.nextInt();
                         System.out.println("Type col number (0 to 8)");
                         col = scanner.nextInt();
-                        if (!GameRules.boardRowColInBound(row, col, gameEnv.getNumOfPlayers())) {
+                        if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
                             System.out.println("coordinates not in bound");
                         } else {
                             c2 = new Coordinates(row, col);
-                            if (gameEnv.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
+                            if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
                                 System.out.println("the card has already been taken! please choose another one");
-                            } else if (gameEnv.isCardPickable(c2)) {
+                            } else if (cli.isCardPickable(c2)) {
                                 if (GameRules.areCoordinatesAligned(c1, c2)) {
                                     System.out.println("ok");
                                     chosenCoordinates.add(c2);
@@ -120,13 +114,13 @@ public class ClientController {
                         row = scanner.nextInt();
                         System.out.println("Type col number (0 to 8)");
                         col = scanner.nextInt();
-                        if (!GameRules.boardRowColInBound(row, col, gameEnv.getNumOfPlayers())) {
+                        if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
                             System.out.println("coordinates not in bound");
                         } else {
                             c3 = new Coordinates(row, col);
-                            if (gameEnv.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
+                            if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
                                 System.out.println("the card has already been taken! please choose another one");
-                            } else if (gameEnv.isCardPickable(c3)) {
+                            } else if (cli.isCardPickable(c3)) {
                                 if (GameRules.areCoordinatesAligned(c1, c2, c3)) {
                                     System.out.println("ok");
                                     chosenCoordinates.add(c3);
@@ -166,7 +160,7 @@ public class ClientController {
             else
                 System.out.println("There's already a card in position "+position+", choose another...");
         }
-        gameEnv.removeCards(temp);
+        cli.removeCards(temp);
         return temp;
     }
 
@@ -227,7 +221,7 @@ public class ClientController {
     }
 
     public void newPlayerJoinedLobby (String newPlayer) {
-        gameEnv.addNewPlayer(newPlayer);
+        cli.addNewPlayer(newPlayer);
     }
 
     public void chooseColumn () {
@@ -240,9 +234,9 @@ public class ClientController {
                 System.out.println("invalid input");
             }
             else {
-                if (gameEnv.getInsertable(input) < gameEnv.getChosenCardsSize()) {
+                if (cli.getInsertable(input) < cli.getChosenCardsSize()) {
                     flag = true;
-                    gameEnv.insert(input);
+                    cli.insert(input);
                 }
                 else {
                     System.out.println("not enough space to store cards in the column you chose");
