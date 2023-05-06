@@ -12,15 +12,34 @@ import java.util.Scanner;
 public class ClientController {
     private CLI cli;
     private Scanner scanner;
-    private Client client;
+    private final Client client;
     private String username;
 
-    public ClientController(CLI cli) {
+    public ClientController(CLI cli, Client client) {
         Scanner scanner = new Scanner(System.in);
         this.username = "unknown";
         cli = null;
+        this.client = client;
     }
     public void setUsername (String username) {this.username = username;}
+
+    /**
+     * asks to type in stdin the username and sends a message of type username to the server.
+     */
+    public void chooseUsername () {
+        System.out.println("choose your username. Keep in mind that it has to be unique");
+        System.out.println("in case you are reconnecting you should use the username you used to enter the game you disconnected from");
+        setUsername(scanner.nextLine());
+        client.sendMessage(new Message(username, MessageType.USERNAME));
+    }
+
+    /**
+     * writes an informative message that the username is already in use and calls chooseUsername method
+     */
+    public void alreadyTakenUsername () {
+        System.out.println("the username you choose is not available at the moment, choose another one");
+        chooseUsername();
+    }
 
     /**
      * gets from std input one to three coordinates
@@ -214,12 +233,6 @@ public class ClientController {
         client.sendMessage(message);
     }
 
-    public void chooseUsername () {
-        System.out.println("choose your username. Keep in mind that it has to be unique");
-        System.out.println("in case you are reconnecting you should use the username you used to enter the game you disconnected from");
-        client.sendMessage(new Message(username, MessageType.USERNAME));
-    }
-
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
     }
@@ -257,4 +270,17 @@ public class ClientController {
      * calls the correspondent method of CLI
      */
     public void startGameMessage () {}
+
+    /**
+     * handles the message modelStatusMessage
+     */
+    public void modelUpdateMessage () {
+    }
+
+    /**
+     * handles ModelStatusAllMessage
+     */
+    public void modelAllMessage () {
+
+    }
 }

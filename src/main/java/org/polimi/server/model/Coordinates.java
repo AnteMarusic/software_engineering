@@ -1,8 +1,9 @@
 package org.polimi.server.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Coordinates {
+public class Coordinates implements Serializable {
     private int row;
     private int col;
 

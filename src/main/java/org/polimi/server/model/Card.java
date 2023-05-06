@@ -1,6 +1,8 @@
 package org.polimi.server.model;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private State state;
     private final Color color;
 
