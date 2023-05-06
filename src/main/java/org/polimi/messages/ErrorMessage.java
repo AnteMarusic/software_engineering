@@ -1,6 +1,8 @@
 package org.polimi.messages;
 
-public class ErrorMessage extends Message {
+import java.io.Serializable;
+
+public class ErrorMessage extends Message implements Serializable {
     private ErrorType errorType;
     public ErrorMessage(String username, ErrorType errorType){
         super(username, MessageType.ERROR_MESSAGE);

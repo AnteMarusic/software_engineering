@@ -1,9 +1,10 @@
 package org.polimi.messages;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class RankingMessage extends Message{
+public class RankingMessage extends Message implements Serializable {
     private HashMap<String,Integer> gameRanking;
     public RankingMessage(String username, HashMap<String,Integer> ranking){
         super(username, MessageType.RANKING_MESSAGE );

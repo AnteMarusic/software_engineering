@@ -1,6 +1,8 @@
 package org.polimi.messages;
 
-public class ChosenColumnMessage extends Message{
+import java.io.Serializable;
+
+public class ChosenColumnMessage extends Message implements Serializable {
     private int column;
     public ChosenColumnMessage(String username, int column){
         super(username, MessageType.CHOSEN_COLUMN_REPLY);

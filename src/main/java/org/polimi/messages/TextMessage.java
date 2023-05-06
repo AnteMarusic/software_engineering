@@ -1,6 +1,8 @@
 package org.polimi.messages;
 
-public class TextMessage extends Message{
+import java.io.Serializable;
+
+public class TextMessage extends Message implements Serializable {
     private final String text;
 
     public TextMessage (String username, String text) {

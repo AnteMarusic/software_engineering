@@ -1,6 +1,8 @@
 package org.polimi.messages;
 
-public class ChosenGameModeMessage extends Message {
+import java.io.Serializable;
+
+public class ChosenGameModeMessage extends Message implements Serializable {
     private GameMode gameMode;
     private int code;
 

@@ -1,8 +1,9 @@
 package org.polimi.messages;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class StartGameMessage extends Message{
+public class StartGameMessage extends Message implements Serializable {
     private String[] players;
 
     public StartGameMessage(String username, String[] players){

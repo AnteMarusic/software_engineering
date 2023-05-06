@@ -2,10 +2,11 @@ package org.polimi.messages;
 
 import org.polimi.server.model.Coordinates;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChosenCardsMessage extends Message{
+public class ChosenCardsMessage extends Message implements Serializable {
     private List<Coordinates> coordinates;
 
     public ChosenCardsMessage(String username, List<Coordinates> coordinates) {
