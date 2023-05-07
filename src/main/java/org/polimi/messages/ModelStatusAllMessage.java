@@ -25,11 +25,11 @@ public class ModelStatusAllMessage extends Message implements Serializable {
         this.usernames = usernames;
     }
 
-    public HashMap<Coordinates, Card> getBoard() {
+    public Map<Coordinates, Card> getBoard() {
         return board;
     }
 
-    public HashMap<Coordinates, Card> getBookshelf() {
+    public Map<Coordinates, Card> getBookshelf() {
         return bookshelf;
     }
 
