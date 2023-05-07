@@ -33,7 +33,14 @@ public class CLI {
             this.clientBookshelf[i] = new ClientBookshelf();
         }
     }
-
+    public CLI() {
+        clientBoard = null;
+        clientBookshelf = null;
+        players = null;
+        lastPlayerInserted = 0;
+        me = 0;
+        chosenCards = null;
+    }
     public void printRoutine(){
         System.out.println("My username: "+players[me]);
         this.clientBoard.printMap();

@@ -1,4 +1,4 @@
-package org.polimi.server;
+package org.polimi.server.controller;
 
 import org.polimi.server.controller.GameController;
 import org.polimi.server.controller.OldGameController;

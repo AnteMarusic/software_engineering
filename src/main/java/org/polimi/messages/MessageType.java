@@ -20,5 +20,6 @@ public enum MessageType {
     RANKING_MESSAGE,
 
     PING,
+    WAITING_IN_LOBBY
 
 }

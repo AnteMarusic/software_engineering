@@ -20,6 +20,7 @@ public class PersonalGoal implements Goal{
     private File file;
     private final Coordinates[] coordinates;
     private final Card.Color[] colors;
+    private int index;
 
     public PersonalGoal(int index) {
         String filePath = new File("").getAbsolutePath();
@@ -27,6 +28,7 @@ public class PersonalGoal implements Goal{
         coordinates = new Coordinates[DIM];
         colors = new Card.Color[DIM];
         readFileAndPickRandomPersonalGoal(index);
+        this.index=index;
     }
     
     
@@ -99,6 +101,10 @@ public class PersonalGoal implements Goal{
             case 6 -> {return 12;}
         }
         return -1;
+    }
+
+    public int getIndex(){
+        return index;
     }
 
 }

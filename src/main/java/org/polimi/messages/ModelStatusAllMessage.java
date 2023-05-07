@@ -5,16 +5,17 @@ import org.polimi.server.model.Coordinates;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ModelStatusAllMessage extends Message implements Serializable {
-    private final HashMap<Coordinates, Card> board;
-    private final HashMap<Coordinates, Card> bookshelf;
+    private final Map<Coordinates, Card> board;
+    private final Map<Coordinates, Card> bookshelf;
     private final int sharedGoal1;
     private final int sharedGoal2;
     private final int personalGoal;
     private final String[] usernames;
 
-    public ModelStatusAllMessage(String username, HashMap<Coordinates, Card> board, HashMap<Coordinates, Card> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+    public ModelStatusAllMessage(String username, Map<Coordinates, Card> board, Map<Coordinates, Card> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
         super(username, MessageType.MODEL_STATUS_ALL);
         this.board = board;
         this.bookshelf = bookshelf;

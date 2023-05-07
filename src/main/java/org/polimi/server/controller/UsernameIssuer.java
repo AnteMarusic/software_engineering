@@ -1,8 +1,10 @@
-package org.polimi.server;
+package org.polimi.server.controller;
 
 import org.polimi.messages.ErrorMessage;
 import org.polimi.messages.ErrorType;
 import org.polimi.messages.Message;
+import org.polimi.server.ConnectionStatus;
+import org.polimi.server.InternalComunication;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.lang.reflect.Array;
@@ -25,7 +27,7 @@ public class UsernameIssuer {
     public synchronized InternalComunication handleMessage(String username){
         if(!map.containsKey(username)){
             Object[] object = new Object[2];
-            object[0]=ConnectionStatus.CONNECTED;
+            object[0]= ConnectionStatus.CONNECTED;
             object[1]=null;
             map.put(username,object);
             return InternalComunication.OK;
