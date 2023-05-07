@@ -27,8 +27,8 @@ public class ClientController {
             case MODEL_STATUS_ALL -> {
                 //in case of status all message the client doesn't have to send any message
                 ModelStatusAllMessage m = (ModelStatusAllMessage) message;
-                HashMap<Coordinates, Card> board = m.getBoard();
-                HashMap<Coordinates, Card> bookshelf = m.getBookshelf();
+                Map<Coordinates, Card> board = m.getBoard();
+                Map<Coordinates, Card> bookshelf = m.getBookshelf();
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
                 int personalGoal = m.getPersonalGoal();

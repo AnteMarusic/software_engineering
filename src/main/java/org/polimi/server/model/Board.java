@@ -2,7 +2,9 @@ package org.polimi.server.model;
 
 import org.polimi.GameRules;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.polimi.GameRules.boardRowColInBound;
@@ -15,6 +17,7 @@ public class Board {
     private final BagOfCards bag;
     private final Map<Coordinates, Card> board;
     private final int numOfPlayers;
+
 
     public Board(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;

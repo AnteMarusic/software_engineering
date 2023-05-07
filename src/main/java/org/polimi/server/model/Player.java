@@ -164,7 +164,7 @@ public class Player {
             System.out.println("These coordinates are not valid, choose again... \n");
     }
 
-    public void insertInBookshelf (ArrayList<Card> toInsert){
+    /*public void insertInBookshelf (ArrayList<Card> toInsert){
         int col , insertable;
         Scanner scanner = new Scanner(System.in);
 
@@ -183,6 +183,8 @@ public class Player {
             IsBookshelfFull = true;
     }
 
+     */
+
     public boolean getIsBookshelfFull(){
         return this.IsBookshelfFull;
     }
@@ -191,5 +193,12 @@ public class Player {
     }
     public int getPersonalGoalIndex () {
         return personalGoal.getIndex();
+    }
+
+    public void insertInBookshelf (ArrayList<Card> toInsert, int column){
+        bookshelf.insert(toInsert, column);       // va corretto insert
+    }
+    public boolean checkIfBookshelfIsFull(){
+        return bookshelf.CheckIfFull();
     }
 }
