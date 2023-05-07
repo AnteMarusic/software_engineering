@@ -1,12 +1,16 @@
 package org.polimi.server;
 
+import org.polimi.server.controller.GameCodeIssuer;
+import org.polimi.server.controller.LobbyController;
+import org.polimi.server.controller.UsernameIssuer;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
     private final ServerSocket serverSocket;
-    private static int port = 0;
+    private static int port = 8181;
     private final LobbyController lobby;
     private final GameCodeIssuer gameCodeIssuer;
     private final UsernameIssuer usernameIssuer;
@@ -31,7 +35,7 @@ public class Server {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 System.out.println("a client has connected");
-                ClientHandler clientHandler = new ClientHandler(socket);
+                ClientHandler clientHandler = new ClientHandler(socket, usernameIssuer, gameCodeIssuer, lobby);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }

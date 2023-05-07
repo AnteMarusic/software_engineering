@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Bookshelf {
     private static final int COL = 5;
@@ -41,6 +42,10 @@ public class Bookshelf {
     /**
      * @return Card[][] that is a copy of the bookshelf
      */
+
+    public Map<Coordinates, Card> getBookshelf(){
+        return this.grid;
+    }
     public Card[][] getGrid () {
         Card[][] tempGrid = new Card[ROW][COL];
         for (int i = 0; i < ROW; i ++) {

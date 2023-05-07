@@ -9,13 +9,13 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    private final String username;
+    private static final int port = 8181;
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
+    private ClientController clientController;
 
-    public Client(String username, Socket socket) {
-        this.username = username;
+    public Client(Socket socket) {
         this.socket = socket;
         this.input = null;
         this.output = null;
@@ -26,6 +26,13 @@ public class Client {
             System.out.println("exception in client constructor method");
             handleDisconnection();
         }
+        createController();
+        startListeningToMessages();
+        sendMessage(clientController.chooseUsername());
+    }
+
+    private void createController() {
+        this.clientController = new ClientController(new CLI(), this);
     }
 
     public static void main(String[] args) {
@@ -33,67 +40,57 @@ public class Client {
         //ask for username and server IP
         do {
             try {
-                socket = new Socket("localHost", 2222);
+                socket = new Socket("localHost", port);
             } catch (IOException e) {
                 System.out.println("unable to connect");
             }
         } while (socket == null);
 
-        Client client = new Client ("tempUsername", socket);
-        client.startListeningToMessages();
-        client.startSendingMessages();
+        Client client = new Client(socket);
+
     }
 
-    public void startSendingMessages() {
-        Scanner scanner = new Scanner (System.in);
-        Message message;
-        while(socket != null && socket.isConnected()) {
-            System.out.println("waiting for a new message...");
-            message = new TextMessage(this.username, scanner.nextLine());
-            sendMessage(message);
-        }
-        handleDisconnection();
-    }
-
-    public void sendMessage (Message message) {
+    public void sendMessage(Message message) {
         try {
-            if (socket.isConnected()){
+            if (socket.isConnected()) {
                 output.writeObject(message);
                 output.flush();
                 output.reset();
-            }
-            else {
+            } else {
                 handleDisconnection();
             }
-        }catch(IOException IOe) {
+        } catch (IOException IOe) {
             System.out.println("exception in sendMessage");
             handleDisconnection();
         }
     }
 
-    public void startListeningToMessages () {
-        new Thread (() -> {
+    public void startListeningToMessages() {
+        new Thread(() -> {
             Object message;
+            Message toSend;
             try {
                 while (socket.isConnected()) {
                     message = input.readObject();
                     if (!(message instanceof Message)) {
                         handleProtocolDisruption();
-                    }
-                    else{
-                        handleMessage((Message)message);
+                    } else {
+                        toSend = clientController.handleMessage((Message) message);
+                        if (toSend != null) {
+                            sendMessage(toSend);
+                        }
                     }
                 }
-            } catch(IOException IOe) {
+            } catch (IOException IOe) {
                 System.out.println("exception in listenMessage");
                 handleDisconnection();
             } catch (ClassNotFoundException e) {
                 handleProtocolDisruption();
             }
-        }). start();
+        }).start();
     }
 
-    private void closeEverything () {
+    private void closeEverything() {
         System.out.println("closeEverything");
         try {
             if (socket != null) {
@@ -122,10 +119,6 @@ public class Client {
 
     public void handleProtocolDisruption() {
         System.out.println("someone sent something that isn't a message");
-    }
-
-    public void handleMessage(Message message) {
-        System.out.println(message);
     }
 }
 

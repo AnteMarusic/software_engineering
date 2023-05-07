@@ -3,6 +3,7 @@ package org.polimi.server.model;
 import org.polimi.server.model.goal.PersonalGoal;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Player {
@@ -136,9 +137,7 @@ public class Player {
         }
     }
 
-    public Card[][] getGrid () {
-        return bookshelf.getGrid();
-    }
+
 
 
     private void getCoordinatesFromSTDInput (boolean b, int x, int y, int previousX, int previousY, Board board, ArrayList<Card> chosenCards) {
@@ -186,5 +185,11 @@ public class Player {
 
     public boolean getIsBookshelfFull(){
         return this.IsBookshelfFull;
+    }
+    public Map<Coordinates, Card> getBookshelf () {
+        return bookshelf.getBookshelf();
+    }
+    public int getPersonalGoalIndex () {
+        return personalGoal.getIndex();
     }
 }

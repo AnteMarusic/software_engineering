@@ -1,7 +1,10 @@
 package org.polimi.server;
 
 import org.polimi.messages.*;
+import org.polimi.server.controller.GameCodeIssuer;
 import org.polimi.server.controller.GameController;
+import org.polimi.server.controller.LobbyController;
+import org.polimi.server.controller.UsernameIssuer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,8 +21,11 @@ public class ClientHandler implements Runnable{
     private LobbyController lobbyController;
     private GameController gameController;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         try {
+            this.usernameIssuer = usernameIssuer;
+            this.gameCodeIssuer = gameCodeIssuer;
+            this.lobbyController = lobbyController;
             this.socket = socket;
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());

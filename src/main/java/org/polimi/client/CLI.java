@@ -101,8 +101,18 @@ public class CLI {
         }
     }
 
+
     public void setClientBookshelf (Map<Coordinates, Card> bookshelf) {
         clientBookshelf[me].setGrid(bookshelf);
+    }
+
+    public CLI() {
+        clientBoard = null;
+        clientBookshelf = null;
+        players = null;
+        lastPlayerInserted = 0;
+        me = 0;
+        chosenCards = null;
     }
 
     public void setChosenCards (List<Card> chosenCards) {

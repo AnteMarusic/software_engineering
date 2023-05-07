@@ -15,7 +15,7 @@ public class ClientController {
     private String username;
 
     public ClientController(CLI cli, Client client) {
-        Scanner scanner = new Scanner(System.in);
+        this.scanner = new Scanner(System.in);
         this.username = "unknown";
         cli = null;
         this.client = client;
@@ -24,9 +24,6 @@ public class ClientController {
 
     public Message handleMessage (Message message) {
         switch (message.getMessageType()) {
-            case USERNAME -> {
-                return chooseUsername();
-            }
             case MODEL_STATUS_ALL -> {
                 //in case of status all message the client doesn't have to send any message
                 ModelStatusAllMessage m = (ModelStatusAllMessage) message;
@@ -51,10 +48,9 @@ public class ClientController {
             case TEXT_MESSAGE -> {
                 //chat not yet developed
             }
-            case NEW_PLAYER_JOINED -> {
+            case WAITING_IN_LOBBY -> {
                 //in case of update message the client doesn't have to send any message
-                NewPlayerJoinedMessage m = (NewPlayerJoinedMessage) message;
-                newPlayerJoinedLobby(m.getNewPlayer());
+                System.out.println("waiting in lobby...");
                 return null;
             }
             case CHOOSE_CARDS_REQUEST -> {
@@ -70,6 +66,13 @@ public class ClientController {
             case NOTIFY_GAME_END -> {
             }
             case ERROR_MESSAGE -> {
+                ErrorMessage errorMessage = (ErrorMessage) message;
+                switch (errorMessage.getErrorType()){
+                    case ALREADY_TAKEN_USERNAME -> {
+                        System.out.println("already taken username, choose another");
+                        return chooseUsername();
+                    }
+                }
             }
             case START_GAME_MESSAGE -> {
             }

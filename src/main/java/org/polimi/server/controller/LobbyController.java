@@ -1,12 +1,16 @@
-package org.polimi.server;
+package org.polimi.server.controller;
 
-import org.polimi.server.controller.GameController;
-import org.polimi.server.controller.OldGameController;
+import org.polimi.messages.Message;
+import org.polimi.messages.MessageType;
+import org.polimi.messages.NewPlayerJoinedMessage;
+import org.polimi.messages.StartGameMessage;
+import org.polimi.server.ClientHandler;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class LobbyController {
+
+    //to synchronize and add update message
     private ArrayList<ClientHandler> publicListOf2;
     private ArrayList<ClientHandler> publicListOf3;
     private ArrayList<ClientHandler> publicListOf4;
@@ -17,6 +21,9 @@ public class LobbyController {
     public LobbyController(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer){
         this.gameCodeIssuer = gameCodeIssuer;
         this.usernameIssuer = usernameIssuer;
+        this.publicListOf2 = new ArrayList<>(2);
+        this.publicListOf3 = new ArrayList<>(3);
+        this.publicListOf4 = new ArrayList<>(4);
     }
 
     public synchronized void insertPlayer(ClientHandler clientHandler, int gameMode){
@@ -26,8 +33,8 @@ public class LobbyController {
                 if(publicListOf2.size()==2){
                     this.createGame(2);
                 }
-                else{
-                    // comunica al client di essere in attesa di altri giocatori
+                else {
+                    clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
                 }
             }
             case 3-> {
@@ -36,7 +43,7 @@ public class LobbyController {
                     this.createGame(3);
                 }
                 else{
-                    // comunica al client di essere in attesa di altri giocatori
+                    clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
                 }
             }
             case 4-> {
@@ -45,7 +52,7 @@ public class LobbyController {
                     this.createGame(4);
                 }
                 else{
-                    // comunica al client di essere in attesa di altri giocatori
+                    clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
                 }
             }
         }
