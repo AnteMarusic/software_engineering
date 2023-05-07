@@ -2,12 +2,11 @@ package org.polimi.client;
 
 import org.polimi.GameRules;
 import org.polimi.messages.*;
+import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.CancellationException;
 
 public class ClientController {
     private CLI cli;
@@ -30,7 +29,15 @@ public class ClientController {
             }
             case MODEL_STATUS_ALL -> {
                 //in case of status all message the client doesn't have to send any message
-                modelAllMessage();
+                ModelStatusAllMessage m = (ModelStatusAllMessage) message;
+                HashMap<Coordinates, Card> board = m.getBoard();
+                HashMap<Coordinates, Card> bookshelf = m.getBookshelf();
+                int sharedGoal1 = m.getSharedGoal1();
+                int sharedGoal2 = m.getSharedGoal2();
+                int personalGoal = m.getPersonalGoal();
+                String[] usernames = m.getUsernames();
+                modelAllMessage(board, bookshelf, sharedGoal1, sharedGoal2, personalGoal, usernames);
+                cli.printRoutine();
                 return null;
             }
             case MODEL_STATUS_UPDATE -> {
@@ -331,7 +338,12 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
-    public void modelAllMessage () {
-
+    public void modelAllMessage (Map<Coordinates, Card> board, Map<Coordinates, Card> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+        cli.setClientBoard(board);
+        cli.setClientBookshelf(bookshelf);
+        cli.setPersonalGoal(personalGoal);
+        cli.setSharedGoal1(sharedGoal1);
+        cli.setSharedGoal2(sharedGoal2);
+        cli.setPlayers(usernames);
     }
 }

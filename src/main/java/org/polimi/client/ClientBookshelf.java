@@ -7,6 +7,7 @@ import org.polimi.server.model.Coordinates;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClientBookshelf {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -19,8 +20,8 @@ public class ClientBookshelf {
     public static final String ANSI_BLUE = "\u001B[34m"; //BLUE
     private static final int COL = 5;
     private static final int ROW = 6;
-    final private HashMap<Coordinates, Card> grid;
-    final private int[] index;
+    private Map<Coordinates, Card> grid;
+    private int[] index;
     private int maxInsertable;
 
     public ClientBookshelf() {
@@ -34,6 +35,31 @@ public class ClientBookshelf {
 
     public int getInsertable (int col) {
         return ROW - this.index[col];
+    }
+
+    public int getMaxInsertable () {
+        return maxInsertable;
+    }
+
+    public void insert(List<Card> cards, int col) {
+        int j = 0;
+        for (int i = index[col]; i < index[col] + cards.size(); i ++) {
+            this.grid.put(new Coordinates(i , col), cards.get(j));
+            j ++;
+        }
+        this.index[col] = index[col] + cards.size();
+    }
+
+    public void setGrid(Map<Coordinates, Card> grid) {
+        this.grid = grid;
+    }
+
+    public void setIndex(int[] index) {
+        this.index = index;
+    }
+
+    public void setMaxInsertable (int maxInsertable) {
+        this.maxInsertable = maxInsertable;
     }
 
     public void print() {
@@ -122,18 +148,5 @@ public class ClientBookshelf {
         System.out.println();
         System.out.println();
         System.out.println();
-    }
-
-    public int getMaxInsertable () {
-        return maxInsertable;
-    }
-
-    public void insert(List<Card> cards, int col) {
-        int j = 0;
-        for (int i = index[col]; i < index[col] + cards.size(); i ++) {
-            this.grid.put(new Coordinates(i , col), cards.get(j));
-            j ++;
-        }
-        this.index[col] = index[col] + cards.size();
     }
 }

@@ -7,5 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardGoalTest {
     @Test
     void name() {
+
     }
 }
