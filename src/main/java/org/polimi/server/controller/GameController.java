@@ -43,22 +43,27 @@ public class GameController {
     }
     private void startGameTurn(){
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
-        // comunica al primo giocatore di iniziare scegliendo le carte da rimuovere dalla board
+        // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
     }
     public void removeCards (List<Coordinates> coordinates){
-
-        //manda ad ogni clientHandler la lista di coordinate da rimuovere nelle varie board personali, a tutti tranne al currentPlayer che se le aggiorna da solo lato client
+        //manda a ogni clientHandler la lista di coordinate da rimuovere nelle varie board personali, a tutti tranne al currentPlayer che se le aggiorna da solo lato client
+        for(ClientHandler c : players) {
+            if (c != players.get(currentPlayer)) {    // a tutti i giocatori tranne quello corrente
+                c.sendMessage(new CardToRemove("server", coordinates));
+            }
+        }
         game.remove(coordinates);
     }
     public void insertInBookshelf (int column){
         int currentPoints = game.insertInBookshelf(column, currentPlayer);
         // manda al giocatore corrente il punteggio attuale
+        players.get(currentPoints).sendMessage(new CurrentScore("server", currentPoints));
     }
     public void notifyNextPlayer(){
         // se Game.endGame è true e il prossimo giocatore è il firstPlayer
-        // chiama il metodo endGame (passandogli l'indice del primo a completare la bookshelf) ed esce da questo metodo
+        // chiama il metodo endGame ed esce da questo metodo
 
-        if( game.getEndGame() && currentPlayer==((firstPlayer-1)%numOfPlayers)){
+        if(game.getEndGame() && currentPlayer==((firstPlayer-1)%numOfPlayers)){
             endGame();
             return;
         }
@@ -67,10 +72,15 @@ public class GameController {
         // manda un messaggio di richiesta carte al giocatore successivo
         else{
             nextPlayer();
+            for(ClientHandler c : players) {
+                    //c.sendMessage(); // messaggio in cui dice chi sarà il prossimo giocatore));
+                }
+            }
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
-        }
-
     }
+
+
+
 
     private void endGame(){
         HashMap<String,Integer> gameRanking = game.endGame();

@@ -17,6 +17,7 @@ public class Game{
     //private final Goal boardGoal;
     private final int firstPlayer;
     private int ender;
+    private ArrayList<Card> readyToInsert;
 
     public Game(int numOfPlayer, int firstPlayer, String[] playerName) {
         this.board = new Board(numOfPlayer);
@@ -99,16 +100,22 @@ public class Game{
     }
 
     public void remove(List<Coordinates> coordinates){
-        //board.removeCardAtCoordinate(coordinates); // biosgna riscrivere il metodo remove in Board siccome ora deve solamente rimuovere senza fare alcun controllo
+        // salvo le carte e le rimuovo, metto la prima che mi manda in posizione 0
+        for(int i=0; i<coordinates.size(); i++){
+            readyToInsert.add(board.getCardAtCoordinates(coordinates.get(i)));   // va corretta getCardAtCoordinates siccome fa controlli inutili
+        }
     }
     public int insertInBookshelf( int column, int currentPlayer){
-        // devo capire dove sono le carte che voglio inserire
-        // if(bookshelf is full && endGame==false){
-        //      endGame=true;
-        //      setto il giocatore corrente come ender
+        players[currentPlayer].insertInBookshelf(readyToInsert, column);
+        if(players[currentPlayer].checkIfBookshelfIsFull() && !endGame){
+            endGame = true;
+            ender = currentPlayer;
+        }
         // aggiorna il punteggio del player controllando i vari obbiettivi
         // players[i].setTotalScore(players[i].getSharedScore() + players[i].getPersonalScore());
         // e lo ritorna
+
+        //updateScore();
         return players[currentPlayer].getTotalScore();
     }
     public HashMap<String,Integer> endGame(){
