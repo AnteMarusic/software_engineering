@@ -1,4 +1,4 @@
-package org.polimi.GoalTest;
+package org.polimi.server.model.goal.GoalTest;
 
 import org.junit.jupiter.api.Test;
 import org.polimi.server.model.Card;
