@@ -20,34 +20,45 @@ public class SharedGoal10 extends AbstractSharedGoal {
         int rowCount = 0;
         boolean flag;
         for(int i=0 ; i<ROW ; i++){
-            for(int k=0 ; k<NUMOFCOLORS ; k++){
+            for (int k = 0; k < NUMOFCOLORS; k++) {
                 colorCount[k] = 0;
             }
             flag = true;
-            for(int j=0 ; j<COL ; j++){
-                if(tmpGrid[i][j]!=null) {
-                    switch (tmpGrid[i][j].getColor()) {
-                        case PINK -> colorCount[0]++;
-                        case CYAN -> colorCount[1]++;
-                        case ORANGE -> colorCount[2]++;
-                        case WHITE -> colorCount[3]++;
-                        case GREEN -> colorCount[4]++;
-                        case BLUE -> colorCount[5]++;
+            if(rowIsFull(tmpGrid, i)) {
+                for (int j = 0; j < COL; j++) {
+                    if (tmpGrid[i][j] != null) {
+                        switch (tmpGrid[i][j].getColor()) {
+                            case PINK -> colorCount[0]++;
+                            case CYAN -> colorCount[1]++;
+                            case ORANGE -> colorCount[2]++;
+                            case WHITE -> colorCount[3]++;
+                            case GREEN -> colorCount[4]++;
+                            case BLUE -> colorCount[5]++;
+                        }
                     }
                 }
-            }
-            for(int k=0 ; k<NUMOFCOLORS ; k++){
-                if(colorCount[k] > 1){
-                    flag = false;
+                for (int k = 0; k < NUMOFCOLORS; k++) {
+                    if (colorCount[k] >= 2) {
+                        flag = false;
+                    }
                 }
-            }
-            if(flag){
-                rowCount++;
-            }
-            if(rowCount>=2){
-                return true;
+                if (flag) {
+                    rowCount++;
+                }
+                if (rowCount >= 2) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    private boolean rowIsFull(Card[][] tmpGrid, int row){
+        for(int i=0 ; i<COL ; i++){
+            if(tmpGrid[row][i]==null){
+                return false;
+            }
+        }
+        return true;
     }
 }
