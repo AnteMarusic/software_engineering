@@ -30,8 +30,35 @@ public class CLI {
     //to modify (has to print a mini bookshelf)
     private String personalGoal1;
 
-    
+    public CLI(String[] players, int me, int numOfPlayers){
+        this.players = players;
+        this.me = me;
+        this.numOfPlayers = numOfPlayers;
+        this.clientBookshelf = new ClientBookshelf[numOfPlayers];
+        for(int i=0 ; i<numOfPlayers ; i++){
+            this.clientBookshelf[i] = new ClientBookshelf();
+        }
+    }
 
+    public CLI() {
+        clientBoard = null;
+        clientBookshelf = null;
+        players = null;
+        lastPlayerInserted = 0;
+        me = 0;
+        chosenCards = null;
+    }
+    public void setClientBookshelf (Card[][] bookshelf) {
+        clientBookshelf[me].setGrid(bookshelf);
+    }
+    public int getInsertable (int col) {
+        return clientBookshelf[me].getInsertable(col);
+    }
+
+    public void setPlayers(String[] players) {
+        this.players = players;
+        this.numOfPlayers = players.length;
+    }
     public void setSharedGoal1(int i) {
         switch (i) {
             case 0 -> {sharedGoal1 = "shared goal 1";}
@@ -86,35 +113,6 @@ public class CLI {
         }
     }
 
-    public void setPlayers(String[] players) {
-        this.players = players;
-        this.numOfPlayers = players.length;
-    }
-
-    public CLI(String[] players, int me, int numOfPlayers){
-        this.players = players;
-        this.me = me;
-        this.numOfPlayers = numOfPlayers;
-        this.clientBookshelf = new ClientBookshelf[numOfPlayers];
-        for(int i=0 ; i<numOfPlayers ; i++){
-            this.clientBookshelf[i] = new ClientBookshelf();
-        }
-    }
-
-
-    public void setClientBookshelf (Card[][] bookshelf) {
-        clientBookshelf[me].setGrid(bookshelf);
-    }
-
-    public CLI() {
-        clientBoard = null;
-        clientBookshelf = null;
-        players = null;
-        lastPlayerInserted = 0;
-        me = 0;
-        chosenCards = null;
-    }
-
     public void setChosenCards (List<Card> chosenCards) {
         this.chosenCards = chosenCards;
     }
@@ -150,7 +148,8 @@ public class CLI {
     }
 
     public boolean isCardPickable (Coordinates coordinates) {
-        return clientBoard.seeCardAtCoordinates(coordinates) != null && clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
+        return clientBoard.seeCardAtCoordinates(coordinates) != null &&
+                clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
     }
 
     public void printRoutine(){
@@ -165,9 +164,6 @@ public class CLI {
 
     public void insert (int col) {
         this.clientBookshelf[me].insert(this.chosenCards, col);
-    }
-    public int getInsertable (int col) {
-        return clientBookshelf[me].getInsertable(col);
     }
 
     public void removeCards (List<Coordinates> toRemove) {

@@ -4,7 +4,6 @@ import org.polimi.server.model.goal.PersonalGoal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Player {
@@ -176,7 +175,7 @@ public class Player {
         bookshelf.insert(toInsert, column);       // va corretto insert
     }
     public boolean checkIfBookshelfIsFull(){
-        return bookshelf.CheckIfFull();
+        return bookshelf.checkIfFull();
     }
 
     public Card[][] getGrid () {

@@ -2,10 +2,7 @@ package org.polimi.server.model;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Bookshelf {
     private static final int COL = 5;
@@ -53,14 +50,22 @@ public class Bookshelf {
      * @return the number of cards insertable in col
      */
     public int getInsertable (int col) {
-        return this.index[col];
+        return this.index[col] + 1;
+    }
+    public boolean checkIfFull(){
+        return this.maxInsertable == 0;
     }
 
     private void updateMaxInsertable () {
         int max = 0;
+        int insertable;
         for (int i = 0; i < COL; i ++) {
-            if (getInsertable(i) > max) {
-                max = getInsertable(i);
+            insertable = getInsertable(i);
+            if (insertable > 3) {
+                insertable = 3;
+            }
+            if (insertable > max) {
+                max = insertable;
             }
         }
         this.maxInsertable = max;
@@ -74,18 +79,26 @@ public class Bookshelf {
      */
     public void insert(@NotNull List<Card> cards, int col) {
         int j = 0;
-        for (int i = index[col]; i < index[col] - cards.size(); i --) {
+        if (col < 0 || col > 4) {
+            throw new IndexOutOfBoundsException("column is not in bound");
+        }
+        if (cards.size() > 3 || cards.isEmpty()) {
+            throw new IllegalArgumentException("the list of card provided is too long or too short");
+        }
+        if (cards.size() > maxInsertable || getInsertable(col) < cards.size()) {
+            throw new IndexOutOfBoundsException("you tried to insert to many cards");
+        }
+        for (int i = index[col]; i > index[col] - cards.size(); i --) {
             this.grid[i][col] = cards.get(j);
             j ++;
         }
-        this.index[col] = index[col] + cards.size();
+        this.index[col] = index[col] - cards.size();
         updateMaxInsertable();
-
     }
 
     public void print() {
 
-        for (int i = ROW - 1; i >= 0; i --) {
+        for (int i = 0; i < ROW; i ++) {
             for (int j = 0; j < COL; j ++) {
                 if (this.grid[i][j] == null) {
                     System.out.print("N");
@@ -96,9 +109,5 @@ public class Bookshelf {
             }
             System.out.println(" ");
         }
-    }
-
-    public boolean CheckIfFull(){
-        return this.maxInsertable == 0;
     }
 }
