@@ -40,20 +40,20 @@ public class SharedGoal1Test {
         grid[5][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[4][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
-        grid[4][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[4][3] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[4][1] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
+        grid[5][1] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
+
+        grid[4][3] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
+        grid[5][3] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
 
         grid[2][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[3][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
-        grid[2][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[2][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-
-        grid[0][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[0][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-
         grid[1][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[1][3] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
+        grid[2][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+
+        grid[0][3] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[0][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
         SharedGoal1 goal = new SharedGoal1(2);
 

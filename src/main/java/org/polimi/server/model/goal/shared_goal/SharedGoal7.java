@@ -18,48 +18,30 @@ public class SharedGoal7 extends AbstractSharedGoal{
      */
     @Override
     protected boolean achieved(Card[][] tmpGrid){
-        boolean pattern1 = true;
-        boolean pattern2 = true;
-        boolean pattern3 = true;
-        boolean pattern4 = true;
-        for(int j=0 ; j<COL-1 ; j++){
-            int i=j;
-            if(tmpGrid[i][j]!=null) {
-                if (tmpGrid[i][j].getColor() != tmpGrid[i+1][j+1].getColor()) {
-                    pattern1 = false;
-                }
-            }else{
-                pattern1 = false;
-            }
-            i=j+1;
-            if(tmpGrid[i][j]!=null && tmpGrid[i+1][j+1]!=null) {
-                if (tmpGrid[i][j].getColor() != tmpGrid[i + 1][j + 1].getColor()) {
-                    pattern2 = false;
-                }
-            }else{
-                pattern1 =  false;
-            }
+        if(tmpGrid[0][0]!=null && tmpGrid[1][1]!=null && tmpGrid[2][2]!=null && tmpGrid[3][3]!=null && tmpGrid[4][4]!=null &&
+                (tmpGrid[0][0].getColor() == tmpGrid[1][1].getColor() && tmpGrid[0][0].getColor() == tmpGrid[2][2].getColor()
+                        && tmpGrid[0][0].getColor() == tmpGrid[3][3].getColor() && tmpGrid[0][0].getColor() == tmpGrid[4][4].getColor())){
+            return true;
         }
 
-        for(int j=COL-1 ; j>=1 ; j--){
-            int i = - (j-COL-1);
-            if(tmpGrid[i][j]!=null && tmpGrid[i-1][j-1]!=null) {
-                if (tmpGrid[i][j].getColor() != tmpGrid[i-1][j-1].getColor()) {
-                    pattern3 = false;
-                }
-            }else{
-                pattern3 = false;
-            }
-            i = (-(j-COL-1))+1;
-            if(tmpGrid[i][j]!=null && tmpGrid[i-1][j-1]!=null) {
-                if (tmpGrid[i][j].getColor() != tmpGrid[i - 1][j - 1].getColor()) {
-                    pattern4 = false;
-                }
-            }else{
-                pattern4 = false;
-            }
+        if(tmpGrid[1][0]!=null && tmpGrid[2][1]!=null && tmpGrid[3][2]!=null && tmpGrid[4][3]!=null && tmpGrid[5][4]!=null &&
+                (tmpGrid[1][0].getColor() == tmpGrid[2][1].getColor() && tmpGrid[1][0].getColor() == tmpGrid[3][2].getColor()
+                        && tmpGrid[1][0].getColor() == tmpGrid[4][3].getColor() && tmpGrid[1][0].getColor() == tmpGrid[5][4].getColor())){
+            return true;
         }
 
-        return pattern1 || pattern2 || pattern3 || pattern4;
+        if(tmpGrid[5][0]!=null && tmpGrid[4][1]!=null && tmpGrid[3][2]!=null && tmpGrid[2][3]!=null && tmpGrid[1][4]!=null &&
+                (tmpGrid[5][0].getColor() == tmpGrid[4][1].getColor() && tmpGrid[5][0].getColor() == tmpGrid[3][2].getColor()
+                        && tmpGrid[5][0].getColor() == tmpGrid[2][3].getColor() && tmpGrid[5][0].getColor() == tmpGrid[1][4].getColor())){
+            return true;
+        }
+
+        if(tmpGrid[4][0]!=null && tmpGrid[3][1]!=null && tmpGrid[2][2]!=null && tmpGrid[1][3]!=null && tmpGrid[0][4]!=null &&
+                (tmpGrid[4][0].getColor() == tmpGrid[3][1].getColor() && tmpGrid[4][0].getColor() == tmpGrid[2][2].getColor()
+                        && tmpGrid[4][0].getColor() == tmpGrid[1][3].getColor() && tmpGrid[4][0].getColor() == tmpGrid[0][4].getColor())){
+            return true;
+        }
+
+        return false;
     }
 }
