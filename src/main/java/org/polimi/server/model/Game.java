@@ -1,5 +1,6 @@
 package org.polimi.server.model;
 
+import org.polimi.server.model.goal.BoardGoal;
 import org.polimi.server.model.goal.Goal;
 import org.polimi.server.model.goal.PersonalGoal;
 import org.polimi.server.model.goal.shared_goal.*;
@@ -11,6 +12,7 @@ public class Game{
     private final Board board;
     private final Player[] players;
     private final Goal[] sharedGoal;
+    private final Goal boardGoal;
     private int[] chosenSharedGoal;
     //private final Goal boardGoal;
     private final int firstPlayer;
@@ -27,6 +29,7 @@ public class Game{
         sharedGoal = new Goal[2];
         handOutGoalsSG(numOfPlayer);
         this.firstPlayer = firstPlayer;
+        this.boardGoal = new BoardGoal();
     }
 
 

@@ -12,7 +12,7 @@ public class Bookshelf {
     /**
      * data structure representing bookshelf
      */
-    final private HashMap<Coordinates, Card> grid;
+    final private Map<Coordinates, Card> grid;
     /**
      * index to insert, tracks how many cards have been inserted for each column
      */

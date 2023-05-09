@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class PersonalGoal implements Goal{
-    private static final String FILENAME = "personal_goal.json";
+    private static final String FILENAME = "/src/main/resources/personal_goal.json";
     private static final int DIM = 6; //number of coordinates that is necessary to describe the personal goal
     private File file;
     private final Coordinates[] coordinates;
@@ -24,20 +24,34 @@ public class PersonalGoal implements Goal{
 
     public PersonalGoal(int index) {
         String filePath = new File("").getAbsolutePath();
-        file = new File(filePath.concat("/" + FILENAME));
+        file = new File(filePath.concat(FILENAME));
         coordinates = new Coordinates[DIM];
         colors = new Card.Color[DIM];
         readFileAndPickRandomPersonalGoal(index);
         this.index=index;
     }
-    
-    
+
+    /**
+     * for testing purposes
+     * @return the array of coordinates
+     */
+    public Coordinates[] getCoordinates() {
+        return coordinates;
+    }
+
+    /**
+     * for testing purposes
+     * @return the array of colors
+     */
+    public Card.Color[] getColors() {
+        return colors;
+    }
 
     private void readFileAndPickRandomPersonalGoal(int index) {
         JSONParser jsonParser = new JSONParser();
         Object obj;
 
-        try (FileReader reader = new FileReader(FILENAME)) {
+        try (FileReader reader = new FileReader(this.file)) {
             //Read JSON file
             obj = jsonParser.parse(reader);
 
