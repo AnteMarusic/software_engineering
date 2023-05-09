@@ -3,6 +3,7 @@ package org.polimi.server.model;
 import org.polimi.server.model.goal.PersonalGoal;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -164,26 +165,6 @@ public class Player {
             System.out.println("These coordinates are not valid, choose again... \n");
     }
 
-    /*public void insertInBookshelf (ArrayList<Card> toInsert){
-        int col , insertable;
-        Scanner scanner = new Scanner(System.in);
-
-        do {
-            do {
-                System.out.println("Type in which column (o to 5) you want to insert the cards that you picked");
-                col = scanner.nextInt();
-            }while(0 <= col && 5 >= col);
-            insertable = this.bookshelf.getInsertable(col);
-            if(toInsert.size() >= insertable)
-                System.out.println("There isn't enough space in that column, please choose another...");
-        } while (toInsert.size() >= insertable);
-        bookshelf.insert(toInsert, col);
-        UpdatePersonalScore();
-        if(bookshelf.CheckIfFull())
-            IsBookshelfFull = true;
-    }
-
-     */
 
     public boolean getIsBookshelfFull(){
         return this.IsBookshelfFull;
@@ -195,7 +176,7 @@ public class Player {
         return personalGoal.getIndex();
     }
 
-    public void insertInBookshelf (ArrayList<Card> toInsert, int column){
+    public void insertInBookshelf (List<Card> toInsert, int column){
         bookshelf.insert(toInsert, column);       // va corretto insert
     }
     public boolean checkIfBookshelfIsFull(){

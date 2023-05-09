@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Bookshelf {
@@ -80,7 +81,7 @@ public class Bookshelf {
      * @requires 0 <= col <= COL - 1 && b != null && getMaxInsertable >= b.length
      * && getInsertable (col) >= b.length
      */
-    public void insert(@NotNull ArrayList<Card> cards, int col) {
+    public void insert(@NotNull List<Card> cards, int col) {
         int j = 0;
         for (int i = index[col]; i < index[col] + cards.size(); i ++) {
             this.grid.put(new Coordinates(i , col), cards.get(j));

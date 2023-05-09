@@ -45,14 +45,18 @@ public class GameController {
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
     }
+
+    /**
+     * removes the card from the board, stores them in game for bookshelf insertion.
+     * sends a message to all the players containing the coordinates of the cards to remove and the coordinates
+     * of the card to update to pickable
+     * @param coordinates coordinates to remove (sent by the client)
+     */
     public void removeCards (List<Coordinates> coordinates){
-        //manda a ogni clientHandler la lista di coordinate da rimuovere nelle varie board personali, a tutti tranne al currentPlayer che se le aggiorna da solo lato client
-        for(ClientHandler c : players) {
-            if (c != players.get(currentPlayer)) {    // a tutti i giocatori tranne quello corrente
-                c.sendMessage(new CardToRemove("server", coordinates));
-            }
-        }
         game.remove(coordinates);
+        for(ClientHandler c : players) {
+            c.sendMessage(new CardToRemove("server", coordinates, game.geToUpdateToPickable()));
+        }
     }
     public void insertInBookshelf (int column){
         int currentPoints = game.insertInBookshelf(column, currentPlayer);

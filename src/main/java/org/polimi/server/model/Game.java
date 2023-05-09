@@ -17,11 +17,12 @@ public class Game{
     //private final Goal boardGoal;
     private final int firstPlayer;
     private int ender;
-    private ArrayList<Card> readyToInsert;
+    private List<Card> readyToInsert;
 
     public Game(int numOfPlayer, int firstPlayer, String[] playerName) {
         this.board = new Board(numOfPlayer);
         this.players = new Player[numOfPlayer];
+        this.readyToInsert = new LinkedList<>();
         for (int j=0; j<numOfPlayer; j++){
             players[j] = new Player(playerName[j]);
         }
@@ -105,6 +106,17 @@ public class Game{
             readyToInsert.add(board.getCardAtCoordinates(coordinates.get(i)));   // va corretta getCardAtCoordinates siccome fa controlli inutili
         }
     }
+
+    public List<Coordinates> geToUpdateToPickable () {
+        return board.getToUpdateToPickable();
+    }
+
+    /**
+     *
+     * @param column
+     * @param currentPlayer
+     * @return
+     */
     public int insertInBookshelf( int column, int currentPlayer){
         players[currentPlayer].insertInBookshelf(readyToInsert, column);
         if(players[currentPlayer].checkIfBookshelfIsFull() && !endGame){
@@ -171,4 +183,24 @@ public class Game{
         return endGame;
     }
 
+    /*public void insertInBookshelf (ArrayList<Card> toInsert){
+        int col , insertable;
+        Scanner scanner = new Scanner(System.in);
+
+        do {
+            do {
+                System.out.println("Type in which column (o to 5) you want to insert the cards that you picked");
+                col = scanner.nextInt();
+            }while(0 <= col && 5 >= col);
+            insertable = this.bookshelf.getInsertable(col);
+            if(toInsert.size() >= insertable)
+                System.out.println("There isn't enough space in that column, please choose another...");
+        } while (toInsert.size() >= insertable);
+        bookshelf.insert(toInsert, col);
+        UpdatePersonalScore();
+        if(bookshelf.CheckIfFull())
+            IsBookshelfFull = true;
+    }
+
+     */
 }

@@ -2,10 +2,7 @@ package org.polimi.server.model;
 
 import org.polimi.GameRules;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.polimi.GameRules.boardRowColInBound;
 
@@ -17,13 +14,19 @@ public class Board {
     private final BagOfCards bag;
     private final Map<Coordinates, Card> board;
     private final int numOfPlayers;
+    private List<Coordinates> toUpdateToPickable;
 
 
     public Board(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
         this.bag = new BagOfCards();
         this.board = new HashMap<>(45);
+        this.toUpdateToPickable = new LinkedList<>();
         this.fill();
+    }
+
+    public List<Coordinates> getToUpdateToPickable() {
+        return toUpdateToPickable;
     }
 
     public Map<Coordinates, Card> getGrid(){
@@ -67,6 +70,8 @@ public class Board {
 
     /**
      * this method allows to get a card from the board
+     * @requires that the coordinates passed as a parameter are in bound, aligned, and the card
+     * at those coordinates are not null, and pickable.
      * @param coordinates coordinates of the card you want to get
      * @return null if no card is found at the coordinates provided or those are invalid or the card is NOT_PICKABLE.
      * The actual card otherwise
@@ -74,10 +79,10 @@ public class Board {
     public Card getCardAtCoordinates(Coordinates coordinates) {
         Card temp = this.board.get(coordinates);
         if(temp == null)
-            return null;
+            throw new NullPointerException("tried to remove a null card");
         else {
             if (temp.getState() == Card.State.NOT_PICKABLE)
-                return null;
+                throw new RuntimeException("tried to pick a not pickable card");
             return this.removeCardAtCoordinate(coordinates);
         }
     }
@@ -96,6 +101,8 @@ public class Board {
         AdjacentCoordinates[3] = new Coordinates(x - 1, y);
         for (int i = 0; i < 4; i++) {
             if (boardRowColInBound(AdjacentCoordinates[i].getRow(), AdjacentCoordinates[i].getCol(), numOfPlayers) && board.get(AdjacentCoordinates[i]) != null) {
+                //does it change the state of card inside the board?
+                toUpdateToPickable.add(AdjacentCoordinates[i]);
                 board.get(AdjacentCoordinates[i]).setState(Card.State.PICKABLE);
             }
         }
