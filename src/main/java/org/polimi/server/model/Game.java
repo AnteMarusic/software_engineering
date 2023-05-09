@@ -154,8 +154,8 @@ public class Game{
     public Map<Coordinates, Card> getBoardMap(){
         return board.getGrid();
     }
-    public Map<Coordinates, Card> getBookshelfMap(int position){
-        return players[position].getBookshelf();
+    public Card[][] getBookshelfGrid(int position) {
+        return players[position].getGrid();
     }
     public int getIndexSharedGoal1(){
         return chosenSharedGoal[0];

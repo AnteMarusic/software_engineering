@@ -16,7 +16,7 @@ public class SharedGoal1 extends AbstractSharedGoal {
     }
 
     /**
-     * in order to achieve the points you must have 6 times a vertical
+     * in order to achieve the points you must have 6 times a
      * couple made of cards of the same color.
      * Exhaustive check, complexity o((ROW/2) * COL)
      */

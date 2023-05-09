@@ -20,17 +20,29 @@ public class ClientBookshelf {
     public static final String ANSI_BLUE = "\u001B[34m"; //BLUE
     private static final int COL = 5;
     private static final int ROW = 6;
-    private Map<Coordinates, Card> grid;
+    private Card[][] grid;
     private int[] index;
     private int maxInsertable;
 
     public ClientBookshelf() {
-        this.grid = new HashMap<>(COL*ROW);
+        this.grid = new Card[ROW][COL];
         this.maxInsertable = 3;
         this.index = new int[COL];
         for (int i = 0; i < COL; i ++) {
             this.index[i] = 0;
         }
+    }
+
+    public void setGrid(Card[][] grid) {
+        this.grid = grid;
+    }
+
+    public void setIndex(int[] index) {
+        this.index = index;
+    }
+
+    public void setMaxInsertable (int maxInsertable) {
+        this.maxInsertable = maxInsertable;
     }
 
     public int getInsertable (int col) {
@@ -44,32 +56,20 @@ public class ClientBookshelf {
     public void insert(List<Card> cards, int col) {
         int j = 0;
         for (int i = index[col]; i < index[col] + cards.size(); i ++) {
-            this.grid.put(new Coordinates(i , col), cards.get(j));
+            this.grid[i][col] = cards.get(j);
             j ++;
         }
         this.index[col] = index[col] + cards.size();
     }
 
-    public void setGrid(Map<Coordinates, Card> grid) {
-        this.grid = grid;
-    }
-
-    public void setIndex(int[] index) {
-        this.index = index;
-    }
-
-    public void setMaxInsertable (int maxInsertable) {
-        this.maxInsertable = maxInsertable;
-    }
-
     public void print() {
         for (int i = ROW - 1; i >= 0; i --) {
             for (int j = 0; j < COL; j ++) {
-                if (this.grid.get(new Coordinates(i, j)) == null) {
+                if (this.grid[i][j] == null) {
                     System.out.print("N ");
                 }
                 else {
-                    switch(this.grid.get(new Coordinates(i, j)).getColor()) {
+                    switch(this.grid[i][j].getColor()) {
                         case WHITE -> {
                             System.out.print(ANSI_WHITE+ "□ "+ANSI_RESET);
                         }
@@ -102,11 +102,11 @@ public class ClientBookshelf {
             }
             System.out.println();
             for (int j = 0; j < COL; j ++) {
-                if (this.grid.get(new Coordinates(i, j)) == null) {
+                if (this.grid[i][j] == null) {
                     System.out.print("| | ");
                 }
                 else {
-                    switch(this.grid.get(new Coordinates(i, j)).getColor()) {
+                    switch(this.grid[i][j].getColor()) {
                         case WHITE -> {
                             System.out.print("|");
                             System.out.print(ANSI_WHITE+ "□"+ANSI_RESET);

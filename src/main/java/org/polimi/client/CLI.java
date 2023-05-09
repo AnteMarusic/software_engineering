@@ -102,7 +102,7 @@ public class CLI {
     }
 
 
-    public void setClientBookshelf (Map<Coordinates, Card> bookshelf) {
+    public void setClientBookshelf (Card[][] bookshelf) {
         clientBookshelf[me].setGrid(bookshelf);
     }
 

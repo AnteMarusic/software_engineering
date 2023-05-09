@@ -168,9 +168,6 @@ public class Player {
     public boolean getIsBookshelfFull(){
         return this.IsBookshelfFull;
     }
-    public Map<Coordinates, Card> getBookshelf () {
-        return bookshelf.getBookshelf();
-    }
     public int getPersonalGoalIndex () {
         return personalGoal.getIndex();
     }

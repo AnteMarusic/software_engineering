@@ -28,7 +28,7 @@ public class ClientController {
                 //in case of status all message the client doesn't have to send any message
                 ModelStatusAllMessage m = (ModelStatusAllMessage) message;
                 Map<Coordinates, Card> board = m.getBoard();
-                Map<Coordinates, Card> bookshelf = m.getBookshelf();
+                Card[][] bookshelf = m.getBookshelf();
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
                 int personalGoal = m.getPersonalGoal();
@@ -59,7 +59,7 @@ public class ClientController {
             case CHOOSE_COLUMN_REQUEST -> {
                 return chooseColumn();
             }
-            case INFORM_ABOUT_NEXT_TURN -> {
+            case NOTIFY_NEXT_PLAYER -> {
             }
             case NOTIFY_GOAL_COMPLETION -> {
             }
@@ -341,7 +341,7 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
-    public void modelAllMessage (Map<Coordinates, Card> board, Map<Coordinates, Card> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+    public void modelAllMessage (Map<Coordinates, Card> board, Card[][] bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
         cli.setClientBoard(board);
         cli.setClientBookshelf(bookshelf);
         cli.setPersonalGoal(personalGoal);

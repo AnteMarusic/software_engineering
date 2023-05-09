@@ -33,7 +33,7 @@ public class GameController {
         usernames = getPlayersUsername();
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage("server", usernames));
-            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), game.getBookshelfMap(i), game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames));
+            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), game.getBookshelfGrid(i), game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames));
         }
 
     }

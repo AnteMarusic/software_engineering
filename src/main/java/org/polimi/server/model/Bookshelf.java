@@ -53,7 +53,7 @@ public class Bookshelf {
      * @return the number of cards insertable in col
      */
     public int getInsertable (int col) {
-        return ROW - this.index[col];
+        return this.index[col];
     }
 
     private void updateMaxInsertable () {
@@ -74,8 +74,8 @@ public class Bookshelf {
      */
     public void insert(@NotNull List<Card> cards, int col) {
         int j = 0;
-        for (int i = index[col]; i < index[col] + cards.size(); i ++) {
-            this.grid.put(new Coordinates(i , col), cards.get(j));
+        for (int i = index[col]; i < index[col] - cards.size(); i --) {
+            this.grid[i][col] = cards.get(j);
             j ++;
         }
         this.index[col] = index[col] + cards.size();
@@ -87,11 +87,11 @@ public class Bookshelf {
 
         for (int i = ROW - 1; i >= 0; i --) {
             for (int j = 0; j < COL; j ++) {
-                if (this.grid.get(new Coordinates(i, j)) == null) {
+                if (this.grid[i][j] == null) {
                     System.out.print("N");
                 }
                 else {
-                    System.out.print(this.grid.get(new Coordinates(i, j)).convertColorToChar());
+                    System.out.print(this.grid[i][j].convertColorToChar());
                 }
             }
             System.out.println(" ");
