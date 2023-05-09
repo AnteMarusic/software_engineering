@@ -104,6 +104,7 @@ public class Board {
                 //does it change the state of card inside the board?
                 toUpdateToPickable.add(AdjacentCoordinates[i]);
                 board.get(AdjacentCoordinates[i]).setState(Card.State.PICKABLE);
+
             }
         }
         return this.board.remove(coordinates);

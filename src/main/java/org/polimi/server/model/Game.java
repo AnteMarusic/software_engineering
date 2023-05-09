@@ -127,11 +127,11 @@ public class Game{
         // players[i].setTotalScore(players[i].getSharedScore() + players[i].getPersonalScore());
         // e lo ritorna
 
-        //updateScore();
+        updateScore(currentPlayer);
         return players[currentPlayer].getTotalScore();
     }
-    public HashMap<String,Integer> endGame(){
-        players[ender].updateTotalscore(1);
+    public Map<String,Integer> endGame(){
+        players[ender].setWinPoint();
 
         // ordino l'array di player in base ha quanti punti hanno fatto, tanto non mi interessano più le posizioni
         Arrays.sort(players, new Comparator<Player>(){       // non so cosa accada se due giocatori hanno gli stessi punti
@@ -183,24 +183,29 @@ public class Game{
         return endGame;
     }
 
-    /*public void insertInBookshelf (ArrayList<Card> toInsert){
-        int col , insertable;
-        Scanner scanner = new Scanner(System.in);
-
-        do {
-            do {
-                System.out.println("Type in which column (o to 5) you want to insert the cards that you picked");
-                col = scanner.nextInt();
-            }while(0 <= col && 5 >= col);
-            insertable = this.bookshelf.getInsertable(col);
-            if(toInsert.size() >= insertable)
-                System.out.println("There isn't enough space in that column, please choose another...");
-        } while (toInsert.size() >= insertable);
-        bookshelf.insert(toInsert, col);
-        UpdatePersonalScore();
-        if(bookshelf.CheckIfFull())
-            IsBookshelfFull = true;
-    }
-
+    /**
+     * updates personal and shared score
+     * @param currentPlayer is the player that inserted in bookshelf
      */
+    private void updateScore(int currentPlayer){
+        players[currentPlayer].updatePersonalScore();
+        if(!players[currentPlayer].getSharedGoal1Achieved())
+        {
+            int newPoint;
+            newPoint = sharedGoal[0].getScore(players[currentPlayer].getGrid());
+            players[currentPlayer].increaseSharedScore(newPoint);
+            if (newPoint != 0)
+                players[currentPlayer].setSharedGoal1AchievedToTrue();
+        }
+
+        // controllo se ha raggiunto il secondo sharedGoal
+        if(!players[currentPlayer].getSharedGoal2Achieved())
+        {
+            int newPoint;
+            newPoint = sharedGoal[1].getScore(players[currentPlayer].getGrid());
+            players[currentPlayer].increaseSharedScore(newPoint);
+            if (newPoint != 0)
+                players[currentPlayer].setSharedGoal2AchievedToTrue();
+        }
+    }
 }

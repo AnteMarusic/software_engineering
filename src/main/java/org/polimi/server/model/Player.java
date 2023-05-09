@@ -22,7 +22,7 @@ public class Player {
      * score obtained with PersonalGoals
      */
     private int personalScore;
-    private int totalScore;
+    private int winPoint;
     private PersonalGoal personalGoal;
     /**
      * boolean that is true if the first shared goal is achieved.
@@ -49,6 +49,7 @@ public class Player {
         this.name = playerName;
         this.sharedScore = 0;
         this.personalScore= 0;
+        this.winPoint = 0;
         this.sharedGoal1Achieved = false;
         this.sharedGoal2Achieved = false;
         this.bookshelf = new Bookshelf();
@@ -114,14 +115,12 @@ public class Player {
     public void setPersonalGoal(PersonalGoal pg){
         this.personalGoal = pg;
     }
-    public void setTotalScore(int totalScore){
-        this.totalScore = totalScore;
-    }
-    public void updateTotalscore (int punti){
-        totalScore = totalScore + punti;
-    }
     public int getTotalScore(){
-        return totalScore;
+        return personalScore + sharedScore + winPoint;
+    }
+
+    public void setWinPoint () {
+        this.winPoint = 1;
     }
     /**
      * increases the personal score counter by the int value newPoints
@@ -131,7 +130,7 @@ public class Player {
         this.personalScore  += newPoints;
     }
 
-    private void UpdatePersonalScore(){
+    public void updatePersonalScore(){
         int score = personalGoal.getScore(bookshelf.getGrid());
         if(score > personalScore) {
             this.increasePersonalScore(score - personalScore);
@@ -181,5 +180,9 @@ public class Player {
     }
     public boolean checkIfBookshelfIsFull(){
         return bookshelf.CheckIfFull();
+    }
+
+    public Card[][] getGrid () {
+        return bookshelf.getGrid();
     }
 }

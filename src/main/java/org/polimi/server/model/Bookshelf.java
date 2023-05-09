@@ -13,7 +13,7 @@ public class Bookshelf {
     /**
      * data structure representing bookshelf
      */
-    final private Map<Coordinates, Card> grid;
+    final private Card[][] grid;
     /**
      * index to insert, tracks how many cards have been inserted for each column
      */
@@ -28,7 +28,7 @@ public class Bookshelf {
      * creates an empty bookshelf
      */
     public Bookshelf() {
-        this.grid = new HashMap<>(COL*ROW);
+        this.grid = new Card[ROW][COL];
         this.maxInsertable = 3;
         this.index = new int[COL];
         for (int i = 0; i < COL; i ++) {
@@ -44,9 +44,6 @@ public class Bookshelf {
      * @return Card[][] that is a copy of the bookshelf
      */
 
-    public Map<Coordinates, Card> getBookshelf(){
-        return this.grid;
-    }
     public Card[][] getGrid () {
         Card[][] tempGrid = new Card[ROW][COL];
         for (int i = 0; i < ROW; i ++) {

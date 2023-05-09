@@ -5,10 +5,7 @@ import org.polimi.server.ClientHandler;
 import org.polimi.server.model.Coordinates;
 import org.polimi.server.model.Game;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GameController {
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
@@ -18,30 +15,30 @@ public class GameController {
     private final Game game;
 
 
-
-
-    public GameController(ArrayList<ClientHandler> list){
+    public GameController(ArrayList<ClientHandler> list) {
         numOfPlayers = list.size();
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
-        currentPlayer=firstPlayer;
-        game = new Game(numOfPlayers, firstPlayer,getPlayersUsername());
+        currentPlayer = firstPlayer;
+        game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
         initGameEnv();
         startGameTurn();
 
     }
-    private void initGameEnv(){
+
+    private void initGameEnv() {
         // manda a tutti clienhandler un messaggio in cui dice che il gioco sta iniziando e con chi sta giocando
         // manda a tutti la bord gli shared goal e a ogni client il proprio private goal
         String[] usernames = new String[numOfPlayers];
         usernames = getPlayersUsername();
-        for(int i=0; i<players.size();i++){
+        for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage("server", usernames));
-            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), game.getBookshelfMap(i), game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames ));
+            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), game.getBookshelfMap(i), game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames));
         }
 
     }
-    private void startGameTurn(){
+
+    private void startGameTurn() {
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
     }
@@ -50,47 +47,59 @@ public class GameController {
      * removes the card from the board, stores them in game for bookshelf insertion.
      * sends a message to all the players containing the coordinates of the cards to remove and the coordinates
      * of the card to update to pickable
+     *
      * @param coordinates coordinates to remove (sent by the client)
      */
-    public void removeCards (List<Coordinates> coordinates){
+    public void removeCards(List<Coordinates> coordinates) {
         game.remove(coordinates);
-        for(ClientHandler c : players) {
+        for (ClientHandler c : players) {
             c.sendMessage(new CardToRemove("server", coordinates, game.geToUpdateToPickable()));
         }
     }
-    public void insertInBookshelf (int column){
+
+    public void insertInBookshelf(int column) {
         int currentPoints = game.insertInBookshelf(column, currentPlayer);
         // manda al giocatore corrente il punteggio attuale
         players.get(currentPoints).sendMessage(new CurrentScore("server", currentPoints));
     }
-    public void notifyNextPlayer(){
+
+
+    /**
+     *if endGame is true and next player is the first one calls endGameMethod. Otherwise updates the
+     * currentPlayer, sends choose_card_message to the new current player and update_next_player_message
+     * to the other players.
+     */
+    public void notifyNextPlayer() {
         // se Game.endGame è true e il prossimo giocatore è il firstPlayer
         // chiama il metodo endGame ed esce da questo metodo
 
-        if(game.getEndGame() && currentPlayer==((firstPlayer-1)%numOfPlayers)){
+        if (game.getEndGame() && (currentPlayer + 1) % numOfPlayers == firstPlayer) {
             endGame();
-            return;
         }
         // In caso non esca
         // manda un messaggio a tutti dicendo chi è il giocatore successivo
         // manda un messaggio di richiesta carte al giocatore successivo
-        else{
+        else {
             nextPlayer();
-            for(ClientHandler c : players) {
-                    //c.sendMessage(); // messaggio in cui dice chi sarà il prossimo giocatore));
-                }
+            for (ClientHandler c : players) {
+                if (c != players.get(currentPlayer))
+                    c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+
             }
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+        }
     }
+
+
 
 
 
 
     private void endGame(){
-        HashMap<String,Integer> gameRanking = game.endGame();
+        Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
     }
-    private void gameAwarding (HashMap<String,Integer> ranking){
+    private void gameAwarding (Map<String,Integer> ranking){
         // mando a tutti un messaggio contenente la classifica
         for(ClientHandler player : players ){
             player.sendMessage(new RankingMessage("server", ranking));
@@ -100,7 +109,7 @@ public class GameController {
 
 
     private void nextPlayer(){
-        currentPlayer = (currentPlayer+1) % players.size();
+        currentPlayer = (currentPlayer+1) % numOfPlayers;
     }
 
     public void reconnect (ClientHandler clientHandler){}
