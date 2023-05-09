@@ -4,21 +4,21 @@ import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ModelStatusAllMessage extends Message implements Serializable {
     private final Map<Coordinates, Card> board;
-    private final Card[][] bookshelf;
+    private final List<Card[][]> bookshelves;
     private final int sharedGoal1;
     private final int sharedGoal2;
     private final int personalGoal;
     private final String[] usernames;
 
-    public ModelStatusAllMessage(String username, Map<Coordinates, Card> board, Card[][] bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+    public ModelStatusAllMessage(String username, Map<Coordinates, Card> board, List<Card[][]> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
         super(username, MessageType.MODEL_STATUS_ALL);
         this.board = board;
-        this.bookshelf = bookshelf;
+        this.bookshelves = bookshelf;
         this.sharedGoal1 = sharedGoal1;
         this.sharedGoal2 = sharedGoal2;
         this.personalGoal = personalGoal;
@@ -29,8 +29,8 @@ public class ModelStatusAllMessage extends Message implements Serializable {
         return board;
     }
 
-    public Card[][] getBookshelf() {
-        return bookshelf;
+    public List<Card[][]> getBookshelves() {
+        return bookshelves;
     }
 
     public int getSharedGoal1() {

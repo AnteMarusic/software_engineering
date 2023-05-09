@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
     private static final int port = 8181;
@@ -26,13 +25,13 @@ public class Client {
             System.out.println("exception in client constructor method");
             handleDisconnection();
         }
-        createController();
+        createClientController();
         startListeningToMessages();
         sendMessage(clientController.chooseUsername());
     }
 
-    private void createController() {
-        this.clientController = new ClientController(new CLI(), this);
+    private void createClientController() {
+        this.clientController = new ClientController(this);
     }
 
     public static void main(String[] args) {
@@ -65,6 +64,11 @@ public class Client {
         }
     }
 
+    /**
+     * create a new Thread that listen to incoming messages. When a message arrives
+     * it forwards it to the client controller with the method handleMessage(Message)
+     * that returns a message or null. If a message is returned the method sends it to the server.
+     */
     public void startListeningToMessages() {
         new Thread(() -> {
             Object message;
@@ -115,6 +119,7 @@ public class Client {
 
     public void handleDisconnection() {
         closeEverything();
+        clientController.handleDisconnection();
     }
 
     public void handleProtocolDisruption() {

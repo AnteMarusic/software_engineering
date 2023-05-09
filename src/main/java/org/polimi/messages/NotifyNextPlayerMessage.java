@@ -8,4 +8,8 @@ public class NotifyNextPlayerMessage extends Message implements Serializable {
         super (username, MessageType.NOTIFY_NEXT_PLAYER);
         this.nextPlayer = nextPlayer;
     }
+
+    public String getNextPlayer() {
+        return nextPlayer;
+    }
 }

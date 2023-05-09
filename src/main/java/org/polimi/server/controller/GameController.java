@@ -2,6 +2,7 @@ package org.polimi.server.controller;
 
 import org.polimi.messages.*;
 import org.polimi.server.ClientHandler;
+import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 import org.polimi.server.model.Game;
 
@@ -27,13 +28,18 @@ public class GameController {
     }
 
     private void initGameEnv() {
-        // manda a tutti clienhandler un messaggio in cui dice che il gioco sta iniziando e con chi sta giocando
+        // manda a tutti clientHandler un messaggio in cui dice che il gioco sta iniziando e con chi sta giocando
         // manda a tutti la bord gli shared goal e a ogni client il proprio private goal
         String[] usernames = new String[numOfPlayers];
+        int i;
+        List<Card[][]> bookshelves = new LinkedList<>();
         usernames = getPlayersUsername();
-        for (int i = 0; i < players.size(); i++) {
+        for (i = 0; i < players.size(); i ++) {
+            bookshelves.add(game.getBookshelfGrid(i));
+        }
+        for (i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage("server", usernames));
-            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), game.getBookshelfGrid(i), game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames));
+            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames));
         }
 
     }

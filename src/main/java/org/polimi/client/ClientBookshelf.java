@@ -33,6 +33,19 @@ public class ClientBookshelf {
         }
     }
 
+    public ClientBookshelf(Card[][] grid) {
+        this.grid = grid;
+        this.maxInsertable = 3;
+        this.index = new int[COL];
+        for (int i = 0; i < COL; i ++) {
+            for (int j = ROW - 1; j > 0; j --) {
+                if (grid[j][i] == null) {
+                    this.index[i] = j;
+                }
+            }
+        }
+    }
+
     public void setGrid(Card[][] grid) {
         this.grid = grid;
     }

@@ -3,11 +3,11 @@ package org.polimi.client;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
-import java.net.CookieStore;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class CLI {
+public class Cli {
     public static final String ANSI_RESET = "\u001B[0m";
 
     public static final String ANSI_PINK = "\u001B[35m"; //PINK
@@ -18,7 +18,7 @@ public class CLI {
     public static final String ANSI_BLUE = "\u001B[34m"; //BLUE
 
     private ClientBoard clientBoard;
-    private ClientBookshelf[] clientBookshelf;
+    private List<ClientBookshelf> bookshelves;
     private int numOfPlayers;
     private String[] players;
     private final int me; //my player index
@@ -30,29 +30,20 @@ public class CLI {
     //to modify (has to print a mini bookshelf)
     private String personalGoal1;
 
-    public CLI(String[] players, int me, int numOfPlayers){
-        this.players = players;
-        this.me = me;
-        this.numOfPlayers = numOfPlayers;
-        this.clientBookshelf = new ClientBookshelf[numOfPlayers];
-        for(int i=0 ; i<numOfPlayers ; i++){
-            this.clientBookshelf[i] = new ClientBookshelf();
-        }
-    }
-
-    public CLI() {
+    public Cli() {
         clientBoard = null;
-        clientBookshelf = null;
+        bookshelves = new LinkedList<>();
         players = null;
         lastPlayerInserted = 0;
         me = 0;
         chosenCards = null;
     }
-    public void setClientBookshelf (Card[][] bookshelf) {
-        clientBookshelf[me].setGrid(bookshelf);
+    public void setBookshelves(List<Card[][]> bookshelves) {
+        for (int i = 0; i < bookshelves.size(); i ++)
+            this.bookshelves.add(new ClientBookshelf(bookshelves.get(i)));
     }
     public int getInsertable (int col) {
-        return clientBookshelf[me].getInsertable(col);
+        return bookshelves.get(me).getInsertable(col);
     }
 
     public void setPlayers(String[] players) {
@@ -131,7 +122,7 @@ public class CLI {
 
 
     public int getMaxInsertable() {
-        return clientBookshelf[me].getMaxInsertable();
+        return bookshelves.get(me).getMaxInsertable();
     }
 
     public int getNumOfPlayers() {
@@ -155,15 +146,15 @@ public class CLI {
     public void printRoutine(){
         System.out.println("My username: "+players[me]);
         this.clientBoard.printMap();
-        this.clientBookshelf[me].printMyBookshelf();
-        this.clientBookshelf[me].print();
+        this.bookshelves.get(me).printMyBookshelf();
+        this.bookshelves.get(me).print();
         System.out.println("personal goal: " + this.personalGoal1);
         System.out.println("shared goal 1: " + this.sharedGoal1);
         System.out.println("shared goal 2: " + this.sharedGoal2);
     }
 
     public void insert (int col) {
-        this.clientBookshelf[me].insert(this.chosenCards, col);
+        this.bookshelves.get(me).insert(this.chosenCards, col);
     }
 
     public void removeCards (List<Coordinates> toRemove) {
