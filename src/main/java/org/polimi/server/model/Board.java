@@ -97,6 +97,7 @@ public class Board {
         for (int i = 0; i < 4; i++) {
             if (boardRowColInBound(AdjacentCoordinates[i].getRow(), AdjacentCoordinates[i].getCol(), numOfPlayers) && board.get(AdjacentCoordinates[i]) != null) {
                 board.get(AdjacentCoordinates[i]).setState(Card.State.PICKABLE);
+
             }
         }
         return this.board.remove(coordinates);

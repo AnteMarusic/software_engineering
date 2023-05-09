@@ -112,7 +112,7 @@ public class Game{
         // players[i].setTotalScore(players[i].getSharedScore() + players[i].getPersonalScore());
         // e lo ritorna
 
-        //updateScore();
+        updateScore(currentPlayer);
         return players[currentPlayer].getTotalScore();
     }
     public HashMap<String,Integer> endGame(){
@@ -166,6 +166,27 @@ public class Game{
     }
     public boolean getEndGame(){
         return endGame;
+    }
+
+    public void updateScore(int currentPlayer){
+        if(!players[currentPlayer].getSharedGoal1Achieved())
+        {
+            int newPoint;
+            newPoint = sharedGoal[0].getScore(players[currentPlayer].getGrid());
+            players.get(currentPlayer).increaseSharedScore(newPoint);
+            if (newPoint != 0)
+                players.get(currentPlayer).setSharedGoal1AchievedToTrue();
+        }
+
+        // controllo se ha raggiunto il secondo sharedGoal
+        if(!players.get(currentPlayer).getSharedGoal2Achieved())
+        {
+            int newPoint;
+            newPoint = SharedGoal2.getScore(players.get(currentPlayer).getGrid());
+            players.get(currentPlayer).increaseSharedScore(newPoint);
+            if (newPoint != 0)
+                players.get(currentPlayer).setSharedGoal2AchievedToTrue();
+        }
     }
 
 }
