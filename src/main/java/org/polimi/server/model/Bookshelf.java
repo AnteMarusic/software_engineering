@@ -32,7 +32,7 @@ public class Bookshelf {
         this.maxInsertable = 3;
         this.index = new int[COL];
         for (int i = 0; i < COL; i ++) {
-            this.index[i] = 0;
+            this.index[i] = ROW - 1;
         }
     }
 
@@ -45,13 +45,7 @@ public class Bookshelf {
      */
 
     public Card[][] getGrid () {
-        Card[][] tempGrid = new Card[ROW][COL];
-        for (int i = 0; i < ROW; i ++) {
-            for (int j = 0; j < COL; j ++) {
-                tempGrid[i][j] = this.grid.get(new Coordinates(i, j));
-            }
-        }
-        return tempGrid;
+        return grid;
     }
 
     /*
