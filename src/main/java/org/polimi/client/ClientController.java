@@ -6,15 +6,14 @@ import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
 import java.util.*;
-import java.util.concurrent.CancellationException;
 
 public class ClientController {
-    private CLI cli;
+    private Cli cli;
     private Scanner scanner;
     private final Client client;
     private String username;
 
-    public ClientController(CLI cli, Client client) {
+    public ClientController(Client client) {
         this.scanner = new Scanner(System.in);
         this.username = "unknown";
         cli = null;
@@ -24,47 +23,6 @@ public class ClientController {
 
     public Message handleMessage (Message message) {
         switch (message.getMessageType()) {
-            case MODEL_STATUS_ALL -> {
-                //in case of status all message the client doesn't have to send any message
-                ModelStatusAllMessage m = (ModelStatusAllMessage) message;
-                Map<Coordinates, Card> board = m.getBoard();
-                Map<Coordinates, Card> bookshelf = m.getBookshelf();
-                int sharedGoal1 = m.getSharedGoal1();
-                int sharedGoal2 = m.getSharedGoal2();
-                int personalGoal = m.getPersonalGoal();
-                String[] usernames = m.getUsernames();
-                modelAllMessage(board, bookshelf, sharedGoal1, sharedGoal2, personalGoal, usernames);
-                cli.printRoutine();
-                return null;
-            }
-            case MODEL_STATUS_UPDATE -> {
-                //in case of update message the client doesn't have to send any message
-                modelUpdateMessage();
-                return null;
-            }
-            case CHOOSE_GAME_MODE -> {
-                return chooseGameMode();
-            }
-            case TEXT_MESSAGE -> {
-                //chat not yet developed
-            }
-            case WAITING_IN_LOBBY -> {
-                //in case of update message the client doesn't have to send any message
-                System.out.println("waiting in lobby...");
-                return null;
-            }
-            case CHOOSE_CARDS_REQUEST -> {
-                return chooseCards();
-            }
-            case CHOOSE_COLUMN_REQUEST -> {
-                return chooseColumn();
-            }
-            case INFORM_ABOUT_NEXT_TURN -> {
-            }
-            case NOTIFY_GOAL_COMPLETION -> {
-            }
-            case NOTIFY_GAME_END -> {
-            }
             case ERROR_MESSAGE -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
                 switch (errorMessage.getErrorType()){
@@ -74,11 +32,65 @@ public class ClientController {
                     }
                 }
             }
+
+            //this is the message sent if the username was not taken by anybody
+            //if you are reconnecting you should expect a Model_status_all message
+            case CHOOSE_GAME_MODE -> {
+                return chooseGameMode();
+            }
+
+            case WAITING_IN_LOBBY -> {
+                //in case of update message the client doesn't have to send any message
+                System.out.println("waiting in lobby...");
+                return null;
+            }
             case START_GAME_MESSAGE -> {
             }
-            case RANKING_MESSAGE -> {
+
+            //this message is sent
+            //if the server recognises that this client is reconnecting, so it has to send the whole model status,
+            //otherwise, it is sent at the beginning of the match
+            case MODEL_STATUS_ALL -> {
+                //in case of status all message the client doesn't have to send any message
+                ModelStatusAllMessage m = (ModelStatusAllMessage) message;
+                Map<Coordinates, Card> board = m.getBoard();
+                List<Card[][]> bookshelves = m.getBookshelves();
+                int sharedGoal1 = m.getSharedGoal1();
+                int sharedGoal2 = m.getSharedGoal2();
+                int personalGoal = m.getPersonalGoal();
+                String[] usernames = m.getUsernames();
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, usernames);
+                cli.printRoutine();
+                return null;
             }
-            case PING -> {
+
+            //this message is sent during the match to notify changes that happened to the model
+            case MODEL_STATUS_UPDATE -> {
+                //in case of update message the client doesn't have to send any message
+                modelUpdateMessage();
+                return null;
+            }
+
+            //first message that is sent when is your turn
+            case CHOOSE_CARDS_REQUEST -> {
+                return chooseCards();
+            }
+
+            //message that should be received subsequently to the choice and the sorting of the cards.
+            case CHOOSE_COLUMN_REQUEST -> {
+                return chooseColumn();
+            }
+
+            //message received when is not your turn and the server notifies you of the next client playing
+            case NOTIFY_NEXT_PLAYER -> {
+                NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
+                System.out.println(m.getNextPlayer() + " is now playing");
+            }
+            case NOTIFY_GOAL_COMPLETION -> {
+            }
+            case NOTIFY_GAME_END -> {
+            }
+            case RANKING_MESSAGE -> {
             }
         }
         return null;
@@ -100,6 +112,57 @@ public class ClientController {
     public void alreadyTakenUsername () {
         System.out.println("the username you choose is not available at the moment, choose another one");
         chooseUsername();
+    }
+
+
+    public Message chooseGameMode () {
+        ChosenGameModeMessage message = null;
+        int input;
+        do {
+            System.out.println("you can play these game modes, choose one...");
+            System.out.println("(1) play with your friends");
+            System.out.println("(2) play with randoms in a game of two");
+            System.out.println("(3) play with randoms in a game of three");
+            System.out.println("(4) play with randoms in a game of four");
+            System.out.println("type 1, 2, 3 or 4");
+            input = scanner.nextInt();
+            if (input < 1 || input > 4) {
+                System.out.println("invalid input");
+            }
+        } while (input < 1 || input > 4);
+        switch (input) {
+            case 1 -> {
+                do {
+                    System.out.println("(1) to create game");
+                    System.out.println("(2) to join game");
+                    input = scanner.nextInt();
+                    if (input < 1 || input > 2) {
+                        System.out.println("invalid input");
+                    }
+                } while (input < 1 || input > 2);
+                if (input == 1) {
+                    do {
+                        System.out.println("type the code of the game, the friend that created the game should have it");
+                        input = scanner.nextInt();
+                        if (input < 0) {
+                            System.out.println("invalid input");
+                        }
+                    } while (input < 0);
+                    message = new ChosenGameModeMessage(username, GameMode.JOIN_PRIVATE_GAME, input);
+                }
+                else message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, -1);
+            }
+            case 2 -> {
+                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1);
+            }
+            case 3 -> {
+                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1);
+            }
+            case 4 -> {
+                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1);
+            }
+        }
+        return message;
     }
 
     /**
@@ -217,10 +280,12 @@ public class ClientController {
                 }
             }
         }
+        orderChosenCards(chosenCoordinates);
         return new ChosenCardsMessage(username, chosenCoordinates);
     }
 
-    public List<Coordinates> orderChosenCards(List<Coordinates> toOrder) {
+    //the array contains coordinates, so CLI has to show the changes during this procedure
+    private List<Coordinates> orderChosenCards(List<Coordinates> toOrder) {
         ArrayList<Coordinates> temp = new ArrayList<>(toOrder.size());
         int position;
         int i = 0;
@@ -243,57 +308,6 @@ public class ClientController {
         cli.removeCards(temp);
         return temp;
     }
-
-    public Message chooseGameMode () {
-        ChosenGameModeMessage message = null;
-        int input;
-        do {
-            System.out.println("you can play these game modes, choose one...");
-            System.out.println("(1) play with your friends");
-            System.out.println("(2) play with randoms in a game of two");
-            System.out.println("(3) play with randoms in a game of three");
-            System.out.println("(4) play with randoms in a game of four");
-            System.out.println("type 1, 2, 3 or 4");
-            input = scanner.nextInt();
-            if (input < 1 || input > 4) {
-                System.out.println("invalid input");
-            }
-        } while (input < 1 || input > 4);
-        switch (input) {
-            case 1 -> {
-                do {
-                    System.out.println("(1) to create game");
-                    System.out.println("(2) to join game");
-                    input = scanner.nextInt();
-                    if (input < 1 || input > 2) {
-                        System.out.println("invalid input");
-                    }
-                } while (input < 1 || input > 2);
-                if (input == 1) {
-                    do {
-                        System.out.println("type the code of the game, the friend that created the game should have it");
-                        input = scanner.nextInt();
-                        if (input < 0) {
-                            System.out.println("invalid input");
-                        }
-                    } while (input < 0);
-                    message = new ChosenGameModeMessage(username, GameMode.JOIN_PRIVATE_GAME, input);
-                }
-                else message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, -1);
-            }
-            case 2 -> {
-                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1);
-            }
-            case 3 -> {
-                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1);
-            }
-            case 4 -> {
-                message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1);
-            }
-        }
-        return message;
-    }
-
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
     }
@@ -341,12 +355,18 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
-    public void modelAllMessage (Map<Coordinates, Card> board, Map<Coordinates, Card> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+        if (this.cli == null)
+            this.cli = new Cli();
+        cli.setPlayers(usernames);
         cli.setClientBoard(board);
-        cli.setClientBookshelf(bookshelf);
+        cli.setBookshelves(bookshelves);
         cli.setPersonalGoal(personalGoal);
         cli.setSharedGoal1(sharedGoal1);
         cli.setSharedGoal2(sharedGoal2);
-        cli.setPlayers(usernames);
+    }
+
+    public void handleDisconnection() {
+        System.out.println("an error occurred, you disconnected from the server");
     }
 }
