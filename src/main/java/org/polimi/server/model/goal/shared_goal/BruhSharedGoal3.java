@@ -1,9 +1,6 @@
 package org.polimi.server.model.goal.shared_goal;
 
 import org.polimi.server.model.Card;
-import org.polimi.server.model.Coordinates;
-
-import java.util.ArrayList;
 
 /**
  * concrete object that represents 3rd shared goal
@@ -22,11 +19,8 @@ public class SharedGoal3 extends AbstractSharedGoal{
     @Override
     protected boolean achieved(Card[][] tmpGrid) {
         int count=0;
-        ArrayList<Coordinates> bannedCoordinates = new ArrayList<Coordinates>(21);
-        for(int i=0 ; i<ROW ; i++){
+        for(int i=ROW-1 ; i>2 ; i--){
             for(int j=0 ; j<COL ; j++){
-                if(!validCoordinates(i,j))
-                    continue;
                 if(tmpGrid[i][j]!=null && tmpGrid[i-1][j]!=null && tmpGrid[i-2][j]!=null && tmpGrid[i-3][j]!=null) {
                     if (tmpGrid[i][j].getColor() == tmpGrid[i-1][j].getColor() &&
                             tmpGrid[i][j].getColor() == tmpGrid[i-2][j].getColor() &&
@@ -42,9 +36,5 @@ public class SharedGoal3 extends AbstractSharedGoal{
         }
         return false;
     }
-    private boolean validCoordinates(int i, int j){
-        return i >= 0 && i <= 2 || j >= 0 && j <= 1;
-    }
-
 }
 
