@@ -35,20 +35,20 @@ public class SharedGoal1 extends AbstractSharedGoal {
                     continue;
                 if(i==5){
                     righthandCard = tmpGrid[5][j+1];
-                    if(righthandCard != null && checkBottomhandCard(tmpCard, righthandCard))
+                    if(righthandCard != null && checkAdjacentCard(tmpCard, righthandCard))
                         count++;
                 }
                 else if(j==4){
                     bottomhandCard=tmpGrid[i+1][4];
-                    if(bottomhandCard != null && checkBottomhandCard(tmpCard, bottomhandCard))
+                    if(bottomhandCard != null && checkAdjacentCard(tmpCard, bottomhandCard))
                         count++;
                 }
                 else{
                     righthandCard = tmpGrid[i][j+1];
                     bottomhandCard=tmpGrid[i+1][j];
-                    if(righthandCard != null && checkBottomhandCard(tmpCard, righthandCard))
+                    if(righthandCard != null && checkAdjacentCard(tmpCard, righthandCard))
                         count++;
-                    else if(bottomhandCard != null && checkBottomhandCard(tmpCard, bottomhandCard))
+                    else if(bottomhandCard != null && checkAdjacentCard(tmpCard, bottomhandCard))
                         count++;
                 }
 
@@ -59,22 +59,9 @@ public class SharedGoal1 extends AbstractSharedGoal {
         }
         return false;
     }
-
-    private boolean checkAdjacentCards (Card startingCard, Card righthandCard, Card bottomhandCard){
-        Card.Color color= startingCard.getColor();
-        if(color==righthandCard.getColor() || color==bottomhandCard.getColor())
-            return true;
-        return false;
-    }
-    private boolean checkBottomhandCard (Card startingCard, Card bottomhandCard){
+    private boolean checkAdjacentCard (Card startingCard, Card bottomhandCard){
         Card.Color color= startingCard.getColor();
         if(color==bottomhandCard.getColor())
-            return true;
-        return false;
-    }
-    private boolean checkRighthandCard (Card startingCard, Card righthandCard){
-        Card.Color color= startingCard.getColor();
-        if(color==righthandCard.getColor())
             return true;
         return false;
     }
