@@ -16,7 +16,7 @@ public class SharedGoal2Test {
         grid[5][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[5][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         Goal goal = new SharedGoal2(2);
-        assertEquals(goal.getScore(grid), 4);
+        assertEquals(4, goal.getScore(grid));
     }
 
     @Test
@@ -27,6 +27,6 @@ public class SharedGoal2Test {
         grid[5][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[5][4] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
         Goal goal = new SharedGoal2(2);
-        assertEquals(goal.getScore(grid), 0);
+        assertEquals(0, goal.getScore(grid));
     }
 }

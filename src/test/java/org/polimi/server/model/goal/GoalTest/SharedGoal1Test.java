@@ -46,17 +46,9 @@ public class SharedGoal1Test {
         grid[4][3] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
         grid[5][3] = new Card(Card.Color.BLUE, Card.State.PICKABLE);
 
-        grid[2][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[3][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-
-        grid[1][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[2][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-
-        grid[0][3] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        grid[0][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
         SharedGoal1 goal = new SharedGoal1(2);
 
-        assertEquals(goal.getScore(grid), 0);
+        assertEquals(0, goal.getScore(grid));
     }
 }
