@@ -23,5 +23,7 @@ public enum MessageType {
     WAITING_IN_LOBBY,
     CARD_TO_REMOVE,
     CURRENT_SCORE,
+    RECONNECTION_MESSAGE,
+    WAITING_FOR_YOUR_TURN,
 
 }

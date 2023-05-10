@@ -65,6 +65,7 @@ public class ClientHandler implements Runnable{
                                 int gameId = usernameIssuer.getGameID(messageFromClient.getUsername());
                                 GameController gameController = gameCodeIssuer.getGameController(gameId);
                                 gameController.reconnect(this);
+                                usernameIssuer.setConnect(this.getUsername());
                             }
                         }
                         case CHOOSE_GAME_MODE -> {
@@ -146,4 +147,5 @@ public class ClientHandler implements Runnable{
     public void setGameController(GameController gameController){
         this.gameController = gameController;
     }
+
 }

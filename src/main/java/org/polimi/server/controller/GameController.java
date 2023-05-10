@@ -82,7 +82,7 @@ public class GameController {
         else {
             nextPlayer();
             for (ClientHandler c : players) {
-                if (c != players.get(currentPlayer))
+                if (c != players.get(currentPlayer) && c!=null)
                     c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
 
             }
@@ -90,29 +90,52 @@ public class GameController {
         }
     }
 
-
-
-
-
-
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
     }
+
     private void gameAwarding (Map<String,Integer> ranking){
         // mando a tutti un messaggio contenente la classifica
         for(ClientHandler player : players ){
             player.sendMessage(new RankingMessage("server", ranking));
         }
     }
-
-
-
-    private void nextPlayer(){
-        currentPlayer = (currentPlayer+1) % numOfPlayers;
+    private void nextPlayer() {
+        do {
+            currentPlayer = (currentPlayer + 1) % numOfPlayers;
+        }while (players.get(currentPlayer)==null);
     }
 
-    public void reconnect (ClientHandler clientHandler){}
+    public void reconnect (ClientHandler clientHandler){
+        // riinserisco il clienthandler nella lista di clienthanler del gameController
+        int position = game.getPosition(clientHandler.getUsername());
+        players.add(position, clientHandler);
+        for(ClientHandler c : players ) {
+            if(c != clientHandler)
+            c.sendMessage(new ReconnectionMessage("server", clientHandler.getUsername()));
+        }
+        clientHandler.sendMessage(new Message("server", MessageType.WAITING_FOR_YOUR_TURN));
+    }
+    public void disconnection(ClientHandler clientHandler){
+        if(clientHandler == players.get(currentPlayer)){
+            nextPlayer();
+            //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
+            // ...
+            // comunico ai giocatori chi è il giocatore successivi
+            for (ClientHandler c : players) {
+                if (c != players.get(currentPlayer) && c!=null)
+                    c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+
+            }
+            // comunico al giocatore successivo di giocare
+            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+
+        }
+        // setto nella lista di clientHandler il client che è uscito a null
+        players.set(players.indexOf(clientHandler), null);
+
+    }
 
     private int setFirstPlayer(int numOfPlayer){
         Random random = new Random();
@@ -125,7 +148,6 @@ public class GameController {
         }
         return playersUsername;
     }
-
 
 
 }

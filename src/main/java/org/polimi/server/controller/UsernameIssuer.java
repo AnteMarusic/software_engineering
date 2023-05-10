@@ -52,12 +52,10 @@ public class UsernameIssuer {
 
 
     public synchronized void mapUsernameToGameCode(String username, int gameCode){
-        Object [] value = new Object[2];
-        value[0] = new int[1];
-        value[0] = gameCode;
-        value[1] = new boolean[1];
-        value[1] = true;
-        this.map.put(username, value);
+        // assegno nella mappa a ogni username il suo gamecode
+        Object[] object = map.get(username);
+        object[1] = gameCode;                // non so se vada bene fatto così
+        map.put(username, object);
     }
 
     public synchronized boolean containsUsername (String username) throws NullPointerException{
@@ -67,5 +65,10 @@ public class UsernameIssuer {
         else {
             throw new NullPointerException();
         }
+    }
+    public void setConnect(String username){
+        Object[] object = map.get(username);
+        object[0]=ConnectionStatus.CONNECTED;
+        map.put(username, object);
     }
 }

@@ -208,4 +208,11 @@ public class Game{
                 players[currentPlayer].setSharedGoal2AchievedToTrue();
         }
     }
+    public int getPosition(String username){
+        for(int i=0; i<players.length; i++){
+            if(username == players[i].getName()){
+                return i;
+            }
+        }
+    }
 }
