@@ -29,7 +29,7 @@ public class SharedGoal1 extends AbstractSharedGoal {
             for(int j=0 ; j<COL  ; j++){
                 coor = new Coordinates(i,j);
                 tmpCard = tmpGrid[i][j];
-                if(i==4 && j==5)
+                if(i==5 && j==4)
                     break;
                 if(tmpCard == null)
                     continue;
@@ -51,17 +51,17 @@ public class SharedGoal1 extends AbstractSharedGoal {
                     else if(bottomhandCard != null && checkAdjacentCard(tmpCard, bottomhandCard))
                         count++;
                 }
-
+                if(count>=6){
+                    return true;
             }
-            if(count>=6){
-                return true;
+
             }
         }
         return false;
     }
-    private boolean checkAdjacentCard (Card startingCard, Card bottomhandCard){
+    private boolean checkAdjacentCard (Card startingCard, Card adjacentCard){
         Card.Color color= startingCard.getColor();
-        if(color==bottomhandCard.getColor())
+        if(color==adjacentCard.getColor())
             return true;
         return false;
     }

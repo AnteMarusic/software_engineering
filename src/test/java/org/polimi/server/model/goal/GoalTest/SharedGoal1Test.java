@@ -31,7 +31,7 @@ public class SharedGoal1Test {
 
         SharedGoal1 goal = new SharedGoal1(2);
 
-        assertEquals(goal.getScore(grid), 4);
+        assertEquals(4, goal.getScore(grid));
     }
 
     @Test
