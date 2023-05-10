@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class LobbyController {
 
+
+
     //to synchronize and add update message
     private ArrayList<ClientHandler> publicListOf2;
     private ArrayList<ClientHandler> publicListOf3;

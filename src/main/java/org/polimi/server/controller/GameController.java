@@ -9,6 +9,8 @@ import org.polimi.server.model.Game;
 import java.util.*;
 
 public class GameController {
+
+
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private final int numOfPlayers;
     private int currentPlayer;
@@ -119,7 +121,7 @@ public class GameController {
         players.add(position, clientHandler);
         for(ClientHandler c : players ) {
             if(c != clientHandler)
-            c.sendMessage(new ReconnectionMessage("server", clientHandler.getUsername()));
+                c.sendMessage(new ReconnectionMessage("server", clientHandler.getUsername()));
         }
         clientHandler.sendMessage(new Message("server", MessageType.WAITING_FOR_YOUR_TURN));
     }
@@ -154,6 +156,5 @@ public class GameController {
         }
         return playersUsername;
     }
-
 
 }
