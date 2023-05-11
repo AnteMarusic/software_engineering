@@ -214,5 +214,6 @@ public class Game{
                 return i;
             }
         }
+        return -1;
     }
 }
