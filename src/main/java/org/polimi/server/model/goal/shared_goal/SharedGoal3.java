@@ -27,7 +27,7 @@ public class SharedGoal3 extends AbstractSharedGoal{
         for(int i=0 ; i<ROW ; i++){
             for(int j=0 ; j<COL ; j++) {
                 coor = new Coordinates(i,j);
-                if (!validCoordinates(i, j) || bannedCoordinates.contains(coor))
+                if (tmpGrid[i][j]==null || !validCoordinates(i, j) || bannedCoordinates.contains(coor))
                     continue;
                 if(i <= 2 && j <= 1){
                     if(checkFourinaRow(tmpGrid, coor, "row")){
@@ -66,7 +66,7 @@ public class SharedGoal3 extends AbstractSharedGoal{
         for(int i=0 ; i<ROW ; i++){
             for(int j=COL-1 ; j>=0 ; j--) {
                 coor = new Coordinates(i,j);
-                if (!validCoordinates2(i, j) || bannedCoordinates.contains(coor))
+                if (tmpGrid[i][j]==null || !validCoordinates2(i, j) || bannedCoordinates.contains(coor))
                     continue;
                 if(i <= 2 && j >= 3){
                     if(checkRowRightToLeft(tmpGrid, coor)){
