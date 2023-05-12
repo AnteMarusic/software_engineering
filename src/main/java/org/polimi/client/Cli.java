@@ -3,9 +3,9 @@ package org.polimi.client;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.polimi.GameRules.boardRowColInBound;
 
 public class Cli {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -17,11 +17,12 @@ public class Cli {
     public static final String ANSI_CYAN = "\u001B[36m"; //CYAN
     public static final String ANSI_BLUE = "\u001B[34m"; //BLUE
 
-    private ClientBoard clientBoard;
-    private List<ClientBookshelf> bookshelves;
+    private ClientBoard board;
     private int numOfPlayers;
-    private String[] players;
-    private final int me; //my player index
+    private ArrayList<String> players;
+
+    private Map<String, ClientBookshelf> bookshelvesMap;
+    private int me; //my player index
     private int lastPlayerInserted;
     private List<Card> chosenCards;
     
@@ -31,24 +32,28 @@ public class Cli {
     private String personalGoal1;
 
     public Cli() {
-        clientBoard = null;
-        bookshelves = new LinkedList<>();
-        players = null;
+        board = null;
+        bookshelvesMap = new HashMap<String, ClientBookshelf>();
+        players = new ArrayList<String>();
         lastPlayerInserted = 0;
         me = 0;
         chosenCards = null;
     }
-    public void setBookshelves(List<Card[][]> bookshelves) {
-        for (int i = 0; i < bookshelves.size(); i ++)
-            this.bookshelves.add(new ClientBookshelf(bookshelves.get(i)));
-    }
+
     public int getInsertable (int col) {
-        return bookshelves.get(me).getInsertable(col);
+        return bookshelvesMap.get(players.get(me)).getInsertable(col);
     }
 
-    public void setPlayers(String[] players) {
+    public void setPlayers(ArrayList<String> players) {
         this.players = players;
-        this.numOfPlayers = players.length;
+        this.numOfPlayers = players.size();
+        for(int i=0 ; i<players.size() ; i++){
+            this.bookshelvesMap.put(players.get(i) , new ClientBookshelf());
+        }
+    }
+
+    public void setBookshelves(List<Card[][]> bookshelves){
+        // chiedere ad Anto problema di ordinamento/legare string a propria bookshelf
     }
     public void setSharedGoal1(int i) {
         switch (i) {
@@ -116,13 +121,13 @@ public class Cli {
         return this.chosenCards.size();
     }
 
-    public void setClientBoard(Map<Coordinates, Card> clientBoard){
-        this.clientBoard = new ClientBoard(clientBoard, this.numOfPlayers);
+    public void setBoard(Map<Coordinates, Card> board){
+        this.board = new ClientBoard(board, this.numOfPlayers);
     }
 
 
     public int getMaxInsertable() {
-        return bookshelves.get(me).getMaxInsertable();
+        return bookshelvesMap.get(me).getMaxInsertable();
     }
 
     public int getNumOfPlayers() {
@@ -130,42 +135,52 @@ public class Cli {
     }
     
     public void addNewPlayer (String newPlayer) {
-        this.players[lastPlayerInserted + 1] = newPlayer;
+        this.players.set(lastPlayerInserted+1, newPlayer);
         lastPlayerInserted ++;
     }
 
     public Card boardSeeCardAtCoordinates (Coordinates coordinates) {
-        return clientBoard.seeCardAtCoordinates(coordinates);
+        return board.seeCardAtCoordinates(coordinates);
     }
 
     public boolean isCardPickable (Coordinates coordinates) {
-        return clientBoard.seeCardAtCoordinates(coordinates) != null &&
-                clientBoard.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
+        return board.seeCardAtCoordinates(coordinates) != null &&
+                board.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
     }
 
     public void printRoutine(){
-        System.out.println("My username: "+players[me]);
-        this.clientBoard.printMap();
-        this.bookshelves.get(me).printMyBookshelf();
-        this.bookshelves.get(me).print();
+        System.out.println("My username: "+players.get(me));
+        this.board.printMap();
+        this.bookshelvesMap.get(me).printMyBookshelf();
+        this.bookshelvesMap.get(me).print();
         System.out.println("personal goal: " + this.personalGoal1);
         System.out.println("shared goal 1: " + this.sharedGoal1);
         System.out.println("shared goal 2: " + this.sharedGoal2);
     }
 
     public void insert (int col) {
-        this.bookshelves.get(me).insert(this.chosenCards, col);
+        this.bookshelvesMap.get(me).insert(this.chosenCards, col);
     }
 
-    public void removeCards (List<Coordinates> toRemove) {
+    public void removeCards (List<Coordinates> toRemove){
         Coordinates temp;
         Card card;
+        Coordinates[] AdjacentCoordinates = new Coordinates[4];
         int i = 0;
         while (toRemove.size() > 0) {
             temp = toRemove.get(i);
-            card = this.clientBoard.removeCardAtCoordinates(temp);
+            card = this.board.removeCardAtCoordinates(temp);
             this.chosenCards.add(card);
-            i ++;
+            AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
+            AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
+            AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);
+            AdjacentCoordinates[3] = new Coordinates(temp.getRow() - 1, temp.getCol());
+            for (int j = 0; j < 4; j++) {
+                if (boardRowColInBound(AdjacentCoordinates[j].getRow(), AdjacentCoordinates[j].getCol(), numOfPlayers) && board.seeCardAtCoordinates(AdjacentCoordinates[i]) != null) {
+                    this.board.setToPickable(AdjacentCoordinates[j]);
+                }
+            }
+            i++;
         }
     }
 }
