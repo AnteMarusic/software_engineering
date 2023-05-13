@@ -280,7 +280,9 @@ public class ClientController {
                 }
             }
         }
-        orderChosenCards(chosenCoordinates);
+        if (chosenCoordinates.size() > 1) {
+            orderChosenCards(chosenCoordinates);
+        }
         return new ChosenCardsMessage(username, chosenCoordinates);
     }
 
@@ -291,8 +293,15 @@ public class ClientController {
         int i = 0;
 
         while (i < toOrder.size()) {
-            System.out.println("Where do you want to put the card in position " + i +" ?\n");
-            position = scanner.nextInt();
+
+            do {
+                System.out.println("Where do you want to put the card in position " + i + " ?\n");
+                position = scanner.nextInt();
+                if (position > toOrder.size() - 1 || position < 0) {
+                    System.out.println("position not in bound, choose again");
+                }
+            }while (position > toOrder.size() - 1 || position < 0);
+
             if (temp.get(position) != null) {
                 if (position >= 0 && position < toOrder.size()) {
                     temp.add(toOrder.get(i));
