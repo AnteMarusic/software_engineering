@@ -41,7 +41,9 @@ class SharedGoal3Test {
         grid[4][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
         grid[5][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        SharedGoal3 goal = new SharedGoal3(2);
+        grid[0][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[5][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        SharedGoal3new goal = new SharedGoal3new(2);
 
         assertEquals(4, goal.getScore(grid));
     }
@@ -69,7 +71,7 @@ class SharedGoal3Test {
         grid[4][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
         grid[5][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        SharedGoal3 goal = new SharedGoal3(2);
+        SharedGoal3new goal = new SharedGoal3new(2);
 
         assertEquals(4, goal.getScore(grid));
     }
@@ -99,14 +101,14 @@ class SharedGoal3Test {
         grid[3][3] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[3][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
-        SharedGoal3 goal = new SharedGoal3(2);
+        SharedGoal3new goal = new SharedGoal3new(2);
 
         assertEquals(4, goal.getScore(grid));
     }
     @Test
     void achievedFalse() {
         Card[][] grid = new Card[6][5];;
-        SharedGoal3 goal = new SharedGoal3(2);
+        SharedGoal3new goal = new SharedGoal3new(2);
         assertEquals(0, goal.getScore(grid));
     }
     @Test
@@ -132,7 +134,7 @@ class SharedGoal3Test {
         grid[4][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
         grid[5][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
-        SharedGoal3 goal = new SharedGoal3(2);
+        SharedGoal3new goal = new SharedGoal3new(2);
         assertEquals(0, goal.getScore(grid));
     }
 }
