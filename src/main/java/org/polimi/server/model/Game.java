@@ -76,7 +76,7 @@ public class Game{
 
         if (i == 0) sharedGoal[0] = new SharedGoal1(numOfPlayers);
         if (i == 1) sharedGoal[0] = new SharedGoal2(numOfPlayers);
-        if (i == 2) sharedGoal[0] = new SharedGoal3Kala(numOfPlayers);
+        if (i == 2) sharedGoal[0] = new SharedGoal3(numOfPlayers);
         if (i == 3) sharedGoal[0] = new SharedGoal4(numOfPlayers);
         if (i == 4) sharedGoal[0] = new SharedGoal5(numOfPlayers);
         if (i == 5) sharedGoal[0] = new SharedGoal6(numOfPlayers);
@@ -88,7 +88,7 @@ public class Game{
         if (i == 11) sharedGoal[0] = new SharedGoal12(numOfPlayers);
         if (j == 0) sharedGoal[1] = new SharedGoal1(numOfPlayers);
         if (j == 1) sharedGoal[1] = new SharedGoal2(numOfPlayers);
-        if (j == 2) sharedGoal[1] = new SharedGoal3Kala(numOfPlayers);
+        if (j == 2) sharedGoal[1] = new SharedGoal3(numOfPlayers);
         if (j == 3) sharedGoal[1] = new SharedGoal4(numOfPlayers);
         if (j == 4) sharedGoal[1] = new SharedGoal5(numOfPlayers);
         if (j == 5) sharedGoal[1] = new SharedGoal6(numOfPlayers);
