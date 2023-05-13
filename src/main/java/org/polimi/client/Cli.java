@@ -57,6 +57,12 @@ public class Cli {
         }
     }
 
+    public void createBookshelf(String name, Card[][] grid){
+        ClientBookshelf bookshelf = new ClientBookshelf();
+        bookshelf.setGrid(grid);
+        this.bookshelvesMap.put(name, bookshelf);
+    }
+
     public void setBookshelves(List<Card[][]> bookshelves){
         // chiedere ad Anto problema di ordinamento/legare string a propria bookshelf
     }
@@ -223,22 +229,64 @@ public class Cli {
         }
     }
 
-    public String askForUsername(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("INSERIRE USERNAME");
-        return scanner.nextLine();
+    public void askForUsername(){
+        System.out.println("choose your username. Keep in mind that it has to be unique");
+        System.out.println("in case you are reconnecting you should use the username you used to enter the game you disconnected from");
     }
 
-    public void usernameValid(){
-        System.out.println("USERNAME VALIDO");
+    public void alreadyTakenUsername(){
+        System.out.println("the username you choose is not available at the moment, choose another one");
     }
 
-    public int getGameMode(){
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
+    public void chooseGameMode(){
+        System.out.println("you can play these game modes, choose one...");
+        System.out.println("(1) play with your friends");
+        System.out.println("(2) play with randoms in a game of two");
+        System.out.println("(3) play with randoms in a game of three");
+        System.out.println("(4) play with randoms in a game of four");
+        System.out.println("type 1, 2, 3 or 4");
     }
 
+    public void joinOrCreateGame(){
+        System.out.println("(1) to create game");
+        System.out.println("(2) to join game");
+    }
 
+    public void invalid(){
+        System.out.println("Invalid input");
+    }
+
+    public void insertGameCode(){
+        System.out.println("type the code of the game, the friend that created the game should have it");
+    }
+
+    public void numberOfCards(){
+        System.out.println("how many cards do you want to pick?");
+    }
+
+    public void moreThan3Cards(){
+        System.out.println("you can pick at most three cards");
+    }
+
+    public void lessThan1Card(){
+        System.out.println("you have to pick at least one card");
+    }
+
+    public void typeRow(){
+        System.out.println("Type row number (0 to 8)");
+    }
+
+    public void typeCol(){
+        System.out.println("Type col number (0 to 8)");
+    }
+
+    public void notInBoundError(){
+        System.out.println("coordinates not in bound");
+    }
+
+    public void notValidCard(){
+        System.out.println("the card has already been taken! please choose another one");
+    }
 
 
 }

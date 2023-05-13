@@ -16,7 +16,7 @@ public class ClientController {
     public ClientController(Client client) {
         this.scanner = new Scanner(System.in);
         this.username = "unknown";
-        cli = null;
+        cli = new Cli();
         this.client = client;
     }
     public void setUsername (String username) {this.username = username;}
@@ -60,6 +60,9 @@ public class ClientController {
                 int personalGoal = m.getPersonalGoal();
                 String[] usernames = m.getUsernames();
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, Arrays.stream(usernames).toList());
+                for(int i=0 ; i<usernames.length ; i++){
+                    cli.createBookshelf(usernames[i] , bookshelves.get(i));
+                }
                 cli.printRoutine();
                 return null;
             }
@@ -100,8 +103,7 @@ public class ClientController {
      * asks to type in stdin the username and sends a message of type username to the server.
      */
     public Message chooseUsername () {
-        System.out.println("choose your username. Keep in mind that it has to be unique");
-        System.out.println("in case you are reconnecting you should use the username you used to enter the game you disconnected from");
+        cli.askForUsername();
         setUsername(scanner.nextLine());
         return new Message(username, MessageType.USERNAME);
     }
@@ -110,7 +112,7 @@ public class ClientController {
      * writes an informative message that the username is already in use and calls chooseUsername method
      */
     public void alreadyTakenUsername () {
-        System.out.println("the username you choose is not available at the moment, choose another one");
+        cli.alreadyTakenUsername();
         chooseUsername();
     }
 
@@ -119,33 +121,26 @@ public class ClientController {
         ChosenGameModeMessage message = null;
         int input;
         do {
-            System.out.println("you can play these game modes, choose one...");
-            System.out.println("(1) play with your friends");
-            System.out.println("(2) play with randoms in a game of two");
-            System.out.println("(3) play with randoms in a game of three");
-            System.out.println("(4) play with randoms in a game of four");
-            System.out.println("type 1, 2, 3 or 4");
+            cli.chooseGameMode();
             input = scanner.nextInt();
             if (input < 1 || input > 4) {
-                System.out.println("invalid input");
+                cli.invalid();
             }
         } while (input < 1 || input > 4);
         switch (input) {
             case 1 -> {
                 do {
-                    System.out.println("(1) to create game");
-                    System.out.println("(2) to join game");
+                    cli.joinOrCreateGame();
                     input = scanner.nextInt();
                     if (input < 1 || input > 2) {
-                        System.out.println("invalid input");
+                        cli.invalid();
                     }
                 } while (input < 1 || input > 2);
                 if (input == 1) {
                     do {
-                        System.out.println("type the code of the game, the friend that created the game should have it");
                         input = scanner.nextInt();
                         if (input < 0) {
-                            System.out.println("invalid input");
+                            cli.invalid();
                         }
                     } while (input < 0);
                     message = new ChosenGameModeMessage(username, GameMode.JOIN_PRIVATE_GAME, input);
@@ -183,13 +178,13 @@ public class ClientController {
         LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
 
         do {
-            System.out.println("how many cards do you want to pick?");
+            cli.numberOfCards();
             numberToPick = scanner.nextInt();
             if (numberToPick >= 3) {
-                System.out.println("you can pick at most three cards");
+                cli.moreThan3Cards();
             }
             if (numberToPick < 0) {
-                System.out.println("you have to pick at least one card");
+                cli.lessThan1Card();
             }
         } while (numberToPick >= 3 || numberToPick < 0);
 
@@ -199,16 +194,16 @@ public class ClientController {
                     do {
                         flag = false;
 
-                        System.out.println("Type row number (0 to 8)");
+                        cli.typeRow();
                         row = scanner.nextInt();
-                        System.out.println("Type col number (0 to 8)");
+                        cli.typeCol();
                         col = scanner.nextInt();
                         if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
-                            System.out.println("coordinates not in bound");
+                            cli.notInBoundError();
                         } else {
                             c1 = new Coordinates(row, col);
                             if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
-                                System.out.println("the card has already been taken! please choose another one");
+                                cli.notValidCard();
                             } else if (cli.isCardPickable(c1)) {
                                 System.out.println("ok");
                                 chosenCoordinates.add(c1);
