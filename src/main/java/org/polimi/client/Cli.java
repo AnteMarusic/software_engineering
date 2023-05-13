@@ -20,6 +20,7 @@ public class Cli {
     private ClientBoard board;
     private int numOfPlayers;
     private ArrayList<String> players;
+    private String myUsername;
 
     private Map<String, ClientBookshelf> bookshelvesMap;
     private int me; //my player index
@@ -29,7 +30,7 @@ public class Cli {
     private String sharedGoal1;
     private String sharedGoal2;
     //to modify (has to print a mini bookshelf)
-    private String personalGoal1;
+    private String personalGoal;
 
     public Cli() {
         board = null;
@@ -38,6 +39,10 @@ public class Cli {
         lastPlayerInserted = 0;
         me = 0;
         chosenCards = null;
+    }
+
+    public void setMyUsername(String myUsername) {
+        this.myUsername = myUsername;
     }
 
     public int getInsertable (int col) {
@@ -57,55 +62,68 @@ public class Cli {
     }
     public void setSharedGoal1(int i) {
         switch (i) {
-            case 0 -> {sharedGoal1 = "shared goal 1";}
-            case 1 -> {sharedGoal1 = "shared goal 2";}
-            case 2 -> {sharedGoal1 = "shared goal 3";}
-            case 3 -> {sharedGoal1 = "shared goal 4";}
-            case 4 -> {sharedGoal1 = "shared goal 5";}
-            case 5 -> {sharedGoal1 = "shared goal 6";}
-            case 6 -> {sharedGoal1 = "shared goal 7";}
-            case 7 -> {sharedGoal1 = "shared goal 8";}
-            case 8 -> {sharedGoal1 = "shared goal 9";}
-            case 9 -> {sharedGoal1 = "shared goal 10";}
-            case 10 -> {sharedGoal1 = "shared goal 11";}
-            case 11 -> {sharedGoal1 = "shared goal 12";}
+            case 0 -> {sharedGoal1 = "Six groups each containing at least 2 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";}
+            case 1 -> {sharedGoal1 = "Four groups each containing at least 4 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";}
+            case 2 -> {sharedGoal1 = "Four tiles of the same type in the four corners of the bookshelf. ";}
+            case 3 -> {sharedGoal1 = "Two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.";}
+            case 4 -> {sharedGoal1 = "Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column.";}
+            case 5 -> {sharedGoal1 = "Eight tiles of the same type. There’s no restriction about the position of these tiles.";}
+            case 6 -> {sharedGoal1 = "Five tiles of the same type forming a diagonal. ";}
+            case 7 -> {sharedGoal1 = "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or a different combination of another line.";}
+            case 8 -> {sharedGoal1 = "Two columns each formed by 6 different types of tiles.";}
+            case 9 -> {sharedGoal1 = "Two lines each formed by 5 different types of tiles. One line can show the same or a different combination of the other line.";}
+            case 10 -> {sharedGoal1 = "Five tiles of the same type forming an X.";}
+            case 11 -> {sharedGoal1 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal1 = "error";}
         }
     }
 
     public void setSharedGoal2(int i) {
         switch (i) {
-            case 0 -> {sharedGoal2 = "shared goal 1";}
-            case 1 -> {sharedGoal2 = "shared goal 2";}
-            case 2 -> {sharedGoal2 = "shared goal 3";}
-            case 3 -> {sharedGoal2 = "shared goal 4";}
-            case 4 -> {sharedGoal2 = "shared goal 5";}
-            case 5 -> {sharedGoal2 = "shared goal 6";}
-            case 6 -> {sharedGoal2 = "shared goal 7";}
-            case 7 -> {sharedGoal2 = "shared goal 8";}
-            case 8 -> {sharedGoal2 = "shared goal 9";}
-            case 9 -> {sharedGoal2 = "shared goal 10";}
-            case 10 -> {sharedGoal2 = "shared goal 11";}
-            case 11 -> {sharedGoal2 = "shared goal 12";}
+            case 0 -> {sharedGoal2 = "Six groups each containing at least 2 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";}
+            case 1 -> {sharedGoal2 = "Four groups each containing at least 4 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";}
+            case 2 -> {sharedGoal2 = "Four tiles of the same type in the four corners of the bookshelf. ";}
+            case 3 -> {sharedGoal2 = "Two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.";}
+            case 4 -> {sharedGoal2 = "Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column.";}
+            case 5 -> {sharedGoal2 = "Eight tiles of the same type. There’s no restriction about the position of these tiles.";}
+            case 6 -> {sharedGoal2 = "Five tiles of the same type forming a diagonal. ";}
+            case 7 -> {sharedGoal2 = "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or a different combination of another line.";}
+            case 8 -> {sharedGoal2 = "Two columns each formed by 6 different types of tiles.";}
+            case 9 -> {sharedGoal2 = "Two lines each formed by 5 different types of tiles. One line can show the same or a different combination of the other line.";}
+            case 10 -> {sharedGoal2 = "Five tiles of the same type forming an X.";}
+            case 11 -> {sharedGoal2 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal2 = "error";}
         }
     }
 
     public void setPersonalGoal(int i) {
         switch (i) {
-            case 0 -> {personalGoal1 = "shared goal 1";}
-            case 1 -> {personalGoal1 = "shared goal 2";}
-            case 2 -> {personalGoal1 = "shared goal 3";}
-            case 3 -> {personalGoal1 = "shared goal 4";}
-            case 4 -> {personalGoal1 = "shared goal 5";}
-            case 5 -> {personalGoal1 = "shared goal 6";}
-            case 6 -> {personalGoal1 = "shared goal 7";}
-            case 7 -> {personalGoal1 = "shared goal 8";}
-            case 8 -> {personalGoal1 = "shared goal 9";}
-            case 9 -> {personalGoal1 = "shared goal 10";}
-            case 10 -> {personalGoal1 = "shared goal 11";}
-            case 11 -> {personalGoal1 = "shared goal 12";}
-            default -> {personalGoal1 = "error";}
+            case 0 -> {
+                personalGoal = "shared goal 1";}
+            case 1 -> {
+                personalGoal = "shared goal 2";}
+            case 2 -> {
+                personalGoal = "shared goal 3";}
+            case 3 -> {
+                personalGoal = "shared goal 4";}
+            case 4 -> {
+                personalGoal = "shared goal 5";}
+            case 5 -> {
+                personalGoal = "shared goal 6";}
+            case 6 -> {
+                personalGoal = "shared goal 7";}
+            case 7 -> {
+                personalGoal = "shared goal 8";}
+            case 8 -> {
+                personalGoal = "shared goal 9";}
+            case 9 -> {
+                personalGoal = "shared goal 10";}
+            case 10 -> {
+                personalGoal = "shared goal 11";}
+            case 11 -> {
+                personalGoal = "shared goal 12";}
+            default -> {
+                personalGoal = "error";}
         }
     }
 
@@ -148,16 +166,6 @@ public class Cli {
                 board.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
     }
 
-    public void printRoutine(){
-        System.out.println("My username: "+players.get(me));
-        this.board.printMap();
-        this.bookshelvesMap.get(me).printMyBookshelf();
-        this.bookshelvesMap.get(me).print();
-        System.out.println("personal goal: " + this.personalGoal1);
-        System.out.println("shared goal 1: " + this.sharedGoal1);
-        System.out.println("shared goal 2: " + this.sharedGoal2);
-    }
-
     public void insert (int col) {
         this.bookshelvesMap.get(me).insert(this.chosenCards, col);
     }
@@ -183,4 +191,54 @@ public class Cli {
             i++;
         }
     }
+
+    public void printRoutine(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.println("My username: "+players.get(me));
+        this.board.printMap();
+        this.bookshelvesMap.get(me).printMyBookshelf();
+        for(int i=0 ; i<players.size() ; i++){
+            if(i!=me){
+                System.out.println(players.get(i)+ "'s bookshelf");
+                this.bookshelvesMap.get(players.get(i)).print();
+                for(int j=0 ; j<2 ; j++){
+                    System.out.println();
+                }
+            }
+        }
+        System.out.println("personal goal: " + this.personalGoal);
+        System.out.println("shared goal 1: " + this.sharedGoal1);
+        System.out.println("shared goal 2: " + this.sharedGoal2);
+    }
+
+    public void printLobby(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.println("PLAYERS CONNECTED: ");
+        for(int i=0 ; i<players.size() ; i++){
+            if(players.get(i)!=myUsername){
+                System.out.println(i+": "+players.get(i));
+            }
+        }
+    }
+
+    public String askForUsername(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("INSERIRE USERNAME");
+        return scanner.nextLine();
+    }
+
+    public void usernameValid(){
+        System.out.println("USERNAME VALIDO");
+    }
+
+    public int getGameMode(){
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+
+
+
 }
