@@ -52,9 +52,6 @@ public class Cli {
     public void setPlayers(List<String> players) {
         this.players = players;
         this.numOfPlayers = players.size();
-        for(int i=0 ; i<players.size() ; i++){
-            this.bookshelvesMap.put(players.get(i) , new ClientBookshelf());
-        }
     }
 
     public void createBookshelf(String name, Card[][] grid){
@@ -63,9 +60,6 @@ public class Cli {
         this.bookshelvesMap.put(name, bookshelf);
     }
 
-    public void setBookshelves(List<Card[][]> bookshelves){
-        // chiedere ad Anto problema di ordinamento/legare string a propria bookshelf
-    }
     public void setSharedGoal1(int i) {
         switch (i) {
             case 0 -> {sharedGoal1 = "Six groups each containing at least 2 tiles of the same type (not necessarily in the depicted shape). The tiles of one group can be different from those of another group.";}

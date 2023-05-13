@@ -60,9 +60,6 @@ public class ClientController {
                 int personalGoal = m.getPersonalGoal();
                 String[] usernames = m.getUsernames();
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, Arrays.stream(usernames).toList());
-                for(int i=0 ; i<usernames.length ; i++){
-                    cli.createBookshelf(usernames[i] , bookshelves.get(i));
-                }
                 cli.printRoutine();
                 return null;
             }
@@ -362,9 +359,11 @@ public class ClientController {
     public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, List<String> usernames) {
         if (this.cli == null)
             this.cli = new Cli();
-        cli.setPlayers(usernames);
+        for(int i=0 ; i<usernames.size() ; i++){
+            cli.setPlayers(usernames);
+            cli.createBookshelf(usernames.get(i) , bookshelves.get(i));
+        }
         cli.setBoard(board);
-        cli.setBookshelves(bookshelves); // come faccio a sapere di chi é la bookshelf???
         cli.setPersonalGoal(personalGoal);
         cli.setSharedGoal1(sharedGoal1);
         cli.setSharedGoal2(sharedGoal2);
