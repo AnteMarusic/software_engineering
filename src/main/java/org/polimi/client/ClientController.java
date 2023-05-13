@@ -364,12 +364,12 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, String[] usernames) {
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, ArrayList<String> usernames) {
         if (this.cli == null)
             this.cli = new Cli();
         cli.setPlayers(usernames);
-        cli.setClientBoard(board);
-        cli.setBookshelves(bookshelves);
+        cli.setBoard(board);
+        cli.setBookshelves(bookshelves); // come faccio a sapere di chi é la bookshelf???
         cli.setPersonalGoal(personalGoal);
         cli.setSharedGoal1(sharedGoal1);
         cli.setSharedGoal2(sharedGoal2);
