@@ -2,9 +2,6 @@ package org.polimi.server.controller;
 
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
-import org.polimi.messages.NewPlayerJoinedMessage;
-import org.polimi.messages.StartGameMessage;
-import org.polimi.server.ClientHandler;
 
 import java.util.ArrayList;
 
@@ -13,9 +10,9 @@ public class LobbyController {
 
 
     //to synchronize and add update message
-    private ArrayList<ClientHandler> publicListOf2;
-    private ArrayList<ClientHandler> publicListOf3;
-    private ArrayList<ClientHandler> publicListOf4;
+    private final ArrayList<ClientHandler> publicListOf2;
+    private final ArrayList<ClientHandler> publicListOf3;
+    private final ArrayList<ClientHandler> publicListOf4;
 
     GameCodeIssuer gameCodeIssuer;
     UsernameIssuer usernameIssuer;
@@ -28,33 +25,67 @@ public class LobbyController {
         this.publicListOf4 = new ArrayList<>(4);
     }
 
-    public synchronized void insertPlayer(ClientHandler clientHandler, int gameMode){
+    private void printLobby (int gameMode) {
+        switch (gameMode) {
+            case 2 -> {
+                System.out.println("lobby of two: ");
+                System.out.println(publicListOf2.size());
+                for (ClientHandler c : publicListOf2) {
+                    System.out.println(c.getUsername());
+                }
+             }
+            case 3 -> {
+                System.out.println("lobby of three: ");
+                System.out.println(publicListOf3.size());
+                for (ClientHandler c : publicListOf3) {
+                    System.out.println(c.getUsername());
+                }
+            }
+            case 4 -> {
+                System.out.println("lobby of four: ");
+                System.out.println(publicListOf4.size());
+                for (ClientHandler c : publicListOf4) {
+                    System.out.println(c.getUsername());
+                }
+            }
+        }
+    }
+    public void insertPlayer(ClientHandler clientHandler, int gameMode){
         switch(gameMode){
             case 2-> {
-                publicListOf2.add(clientHandler);
-                if(publicListOf2.size()==2){
-                    this.createGame(2);
-                }
-                else {
-                    clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                synchronized (publicListOf2) {
+                    publicListOf2.add(clientHandler);
+                    printLobby(gameMode);
+                    if(publicListOf2.size()==2){
+                        this.createGame(2);
+                    }
+                    else {
+                        clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                    }
                 }
             }
             case 3-> {
-                publicListOf3.add(clientHandler);
-                if(publicListOf3.size()==3){
-                    this.createGame(3);
-                }
-                else{
-                    clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                synchronized (publicListOf3) {
+                    publicListOf3.add(clientHandler);
+                    printLobby(gameMode);
+                    if(publicListOf3.size()==3){
+                        this.createGame(3);
+                    }
+                    else{
+                        clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                    }
                 }
             }
             case 4-> {
-                publicListOf4.add(clientHandler);
-                if(publicListOf3.size()==4){
-                    this.createGame(4);
-                }
-                else{
-                    clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                synchronized (publicListOf4) {
+                    publicListOf4.add(clientHandler);
+                    printLobby(gameMode);
+                    if(publicListOf3.size()==4){
+                        this.createGame(4);
+                    }
+                    else{
+                        clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                    }
                 }
             }
         }
@@ -86,32 +117,5 @@ public class LobbyController {
         }
 
 
-    }
-
-    public void insertPlayerInRandomTwoPlayerGame(ClientHandler clientHandler) {
-        synchronized (publicListOf2) {
-            publicListOf2.add(clientHandler);
-            if(publicListOf2.size()==2){
-                this.createGame(2);
-            }
-        }
-    }
-
-    public void insertPlayerInRandomThreePlayerGame(ClientHandler clientHandler) {
-        synchronized (publicListOf3) {
-            publicListOf3.add(clientHandler);
-            if(publicListOf3.size()==3){
-                this.createGame(3);
-            }
-        }
-    }
-
-    public void insertPlayerInRandomFourPlayerGame(ClientHandler clientHandler) {
-        synchronized (publicListOf4) {
-            publicListOf4.add(clientHandler);
-            if(publicListOf4.size()==4){
-                this.createGame(4);
-            }
-        }
     }
 }

@@ -1,10 +1,6 @@
-package org.polimi.server;
+package org.polimi.server.controller;
 
 import org.polimi.messages.*;
-import org.polimi.server.controller.GameCodeIssuer;
-import org.polimi.server.controller.GameController;
-import org.polimi.server.controller.LobbyController;
-import org.polimi.server.controller.UsernameIssuer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +11,7 @@ public class ClientHandler implements Runnable{
     private Socket socket;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
-    private String name;
+    private String username;
     private UsernameIssuer usernameIssuer;
     private GameCodeIssuer gameCodeIssuer;
     private LobbyController lobbyController;
@@ -35,19 +31,18 @@ public class ClientHandler implements Runnable{
     }
 
     public void setUsername(String name){
-        this.name = name;
+        this.username = name;
     }
 
     public String getUsername(){
-        return this.name;
+        return this.username;
     }
 
     @Override
     public void run() {
         Message messageFromClient;
         while (socket != null && socket.isConnected()) {
-            try {
-                messageFromClient = (Message) input.readObject();
+            try {messageFromClient = (Message) input.readObject();
                 // posso scartare tutti i messaggi di un client che è gia connesso alla partita se non è il suo turno
 
                 if(messageFromClient != null){
@@ -56,30 +51,34 @@ public class ClientHandler implements Runnable{
                         case USERNAME -> {
                             InternalComunication internalComunication = usernameIssuer.handleMessage(messageFromClient.getUsername());
                             if(internalComunication == InternalComunication.OK) {
+                                this.username = messageFromClient.getUsername();
                                 sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
                             }
                             if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
                                 sendMessage(new ErrorMessage("server", ErrorType.ALREADY_TAKEN_USERNAME));
                             }
+                            //to test
                             if(internalComunication == InternalComunication.RECONNECTION){
+                                this.username = messageFromClient.getUsername();
                                 int gameId = usernameIssuer.getGameID(messageFromClient.getUsername());
                                 GameController gameController = gameCodeIssuer.getGameController(gameId);
-                                gameController.reconnect(this);
                                 usernameIssuer.setConnect(this.getUsername());
+                                gameController.reconnect(this);
                             }
                         }
                         case CHOOSE_GAME_MODE -> {
                             ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) messageFromClient;
                             switch (chosenGameModeMessage.getGameMode()) {
                                 case JOIN_RANDOM_GAME_2_PLAYER -> {
-                                    lobbyController.insertPlayerInRandomTwoPlayerGame(this);
+                                    lobbyController.insertPlayer(this, 2);
                                 }
                                 case JOIN_RANDOM_GAME_3_PLAYER -> {
-                                    lobbyController.insertPlayerInRandomThreePlayerGame(this);
+                                    lobbyController.insertPlayer(this, 3);
                                 }
                                 case JOIN_RANDOM_GAME_4_PLAYER -> {
-                                    lobbyController.insertPlayerInRandomFourPlayerGame(this);
+                                    lobbyController.insertPlayer(this , 4);
                                 }
+                                //to do: private game
                             }
 
                         }

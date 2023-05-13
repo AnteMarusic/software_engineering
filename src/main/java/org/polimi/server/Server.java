@@ -1,5 +1,6 @@
 package org.polimi.server;
 
+import org.polimi.server.controller.ClientHandler;
 import org.polimi.server.controller.GameCodeIssuer;
 import org.polimi.server.controller.LobbyController;
 import org.polimi.server.controller.UsernameIssuer;

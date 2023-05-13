@@ -1,7 +1,6 @@
 package org.polimi.server.controller;
 
 import org.polimi.messages.*;
-import org.polimi.server.ClientHandler;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 import org.polimi.server.model.Game;

@@ -1,19 +1,5 @@
 package org.polimi.server.controller;
 
-import org.polimi.messages.ChosenCardsMessage;
-import org.polimi.messages.Message;
-import org.polimi.messages.MessageType;
-import org.polimi.server.ClientHandler;
-import org.polimi.server.model.Board;
-import org.polimi.server.model.Game;
-import org.polimi.server.model.Player;
-import org.polimi.server.model.goal.PersonalGoal;
-import org.polimi.server.model.goal.shared_goal.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 public class OldGameController {
    /* boolean endGame = false;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
