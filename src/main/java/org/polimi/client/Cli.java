@@ -19,7 +19,7 @@ public class Cli {
 
     private ClientBoard board;
     private int numOfPlayers;
-    private ArrayList<String> players;
+    private List<String> players;
     private String myUsername;
 
     private Map<String, ClientBookshelf> bookshelvesMap;
@@ -49,7 +49,7 @@ public class Cli {
         return bookshelvesMap.get(players.get(me)).getInsertable(col);
     }
 
-    public void setPlayers(ArrayList<String> players) {
+    public void setPlayers(List<String> players) {
         this.players = players;
         this.numOfPlayers = players.size();
         for(int i=0 ; i<players.size() ; i++){

@@ -59,7 +59,7 @@ public class ClientController {
                 int sharedGoal2 = m.getSharedGoal2();
                 int personalGoal = m.getPersonalGoal();
                 String[] usernames = m.getUsernames();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, usernames);
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, Arrays.stream(usernames).toList());
                 cli.printRoutine();
                 return null;
             }
@@ -364,7 +364,7 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, ArrayList<String> usernames) {
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, List<String> usernames) {
         if (this.cli == null)
             this.cli = new Cli();
         cli.setPlayers(usernames);

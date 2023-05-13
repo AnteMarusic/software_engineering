@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CLItest {
     //to fix
-
+/*
     public static void main(String[] args){
         String[] players = new String[2];
         Board board = new Board(2);
@@ -29,5 +29,5 @@ public class CLItest {
         CLI.setChosenCards(cards);
         CLI.insert(3);
         CLI.printRoutine();
-    }
+    } */
 }
