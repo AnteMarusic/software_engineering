@@ -31,7 +31,7 @@ public class Cli {
     private String sharedGoal1;
     private String sharedGoal2;
     //to modify (has to print a mini bookshelf)
-    private String personalGoal;
+    private Card[][] personalGoal;
 
     public Cli() {
         board = null;
@@ -105,35 +105,8 @@ public class Cli {
         }
     }
 
-    public void setPersonalGoal(int i) {
-        switch (i) {
-            case 0 -> {
-                personalGoal = "shared goal 1";}
-            case 1 -> {
-                personalGoal = "shared goal 2";}
-            case 2 -> {
-                personalGoal = "shared goal 3";}
-            case 3 -> {
-                personalGoal = "shared goal 4";}
-            case 4 -> {
-                personalGoal = "shared goal 5";}
-            case 5 -> {
-                personalGoal = "shared goal 6";}
-            case 6 -> {
-                personalGoal = "shared goal 7";}
-            case 7 -> {
-                personalGoal = "shared goal 8";}
-            case 8 -> {
-                personalGoal = "shared goal 9";}
-            case 9 -> {
-                personalGoal = "shared goal 10";}
-            case 10 -> {
-                personalGoal = "shared goal 11";}
-            case 11 -> {
-                personalGoal = "shared goal 12";}
-            default -> {
-                personalGoal = "error";}
-        }
+    public void setPersonalGoal(Card[][] grid) {
+        this.personalGoal = grid;
     }
 
     public void setChosenCards (List<Card> chosenCards) {
