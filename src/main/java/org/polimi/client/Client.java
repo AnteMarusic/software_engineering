@@ -76,6 +76,7 @@ public class Client {
             try {
                 while (socket.isConnected()) {
                     message = input.readObject();
+                    System.out.println(message);
                     if (!(message instanceof Message)) {
                         handleProtocolDisruption();
                     } else {

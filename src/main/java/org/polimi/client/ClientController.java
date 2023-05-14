@@ -36,6 +36,7 @@ public class ClientController {
             //this is the message sent if the username was not taken by anybody
             //if you are reconnecting you should expect a Model_status_all message
             case CHOOSE_GAME_MODE -> {
+                cli.setMyUsername(username);
                 return chooseGameMode();
             }
 
@@ -58,17 +59,14 @@ public class ClientController {
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
                 int personalGoal = m.getPersonalGoal();
-                String[] usernames = m.getUsernames();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, Arrays.stream(usernames).toList());
+                List <String> usernames = m.getUsernames();
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, usernames);
                 cli.printRoutine();
                 return null;
             }
 
-            //this message is sent during the match to notify changes that happened to the model
-            case MODEL_STATUS_UPDATE -> {
-                //in case of update message the client doesn't have to send any message
-                modelUpdateMessage();
-                return null;
+            case CARD_TO_REMOVE -> {
+                //to do
             }
 
             //first message that is sent when is your turn
@@ -272,17 +270,22 @@ public class ClientController {
                 }
             }
         }
+        cli.removeCards(chosenCoordinates);
         if (chosenCoordinates.size() > 1) {
-            orderChosenCards(chosenCoordinates);
+            orderChosenCards();
         }
         return new ChosenCardsMessage(username, chosenCoordinates);
     }
 
     //the array contains coordinates, so CLI has to show the changes during this procedure
-    private List<Coordinates> orderChosenCards(List<Coordinates> toOrder) {
-        ArrayList<Coordinates> temp = new ArrayList<>(toOrder.size());
+    private void orderChosenCards() {
         int position;
         int i = 0;
+        List<Card> toOrder = cli.getChosenCards();
+        List<Card> ordered = new ArrayList<Card>(toOrder.size());
+        for (int j = 0; j < toOrder.size(); j++) {
+            ordered.add(null);
+        }
 
         while (i < toOrder.size()) {
 
@@ -292,22 +295,19 @@ public class ClientController {
                 if (position > toOrder.size() - 1 || position < 0) {
                     System.out.println("position not in bound, choose again");
                 }
-            }while (position > toOrder.size() - 1 || position < 0);
+                if (ordered.get(position) != null) {
+                    System.out.println("There's already a card in position " + position + ", choose another...");
+                }
+            } while (position > toOrder.size() - 1 || position < 0 || ordered.get(position) != null);
 
-            if (temp.get(position) != null) {
-                if (position >= 0 && position < toOrder.size()) {
-                    temp.add(toOrder.get(i));
-                    i++;
-                }
-                else {
-                    System.out.println(position + "is not in the interval [0, toInsert.length]...\n Please choose again\n");
-                }
-            }
-            else
-                System.out.println("There's already a card in position "+position+", choose another...");
+            ordered.add(position, toOrder.get(i));
+            toOrder.set(i, null);
+
+            cli.setOrderedChosenCards(ordered);
+            cli.setChosenCards(toOrder);
+            cli.printRoutine();
         }
-        cli.removeCards(temp);
-        return temp;
+        cli.setChosenCards(ordered);
     }
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
@@ -323,7 +323,7 @@ public class ClientController {
                 System.out.println("invalid input");
             }
             else {
-                if (cli.getInsertable(input) < cli.getChosenCardsSize()) {
+                if (cli.getInsertable(input) >=  cli.getChosenCardsSize()) {
                     flag = true;
                     cli.insert(input);
                 }
@@ -331,7 +331,7 @@ public class ClientController {
                     System.out.println("not enough space to store cards in the column you chose");
                 }
             }
-        } while (!GameRules.bookshelfColInBound(input) && flag);
+        } while (!GameRules.bookshelfColInBound(input) || !flag);
         return new ChosenColumnMessage(username, input);
     }
 
@@ -357,12 +357,14 @@ public class ClientController {
      * handles ModelStatusAllMessage
      */
     public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, List<String> usernames) {
+        List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         if (this.cli == null)
-            this.cli = new Cli();
-        for(int i=0 ; i<usernames.size() ; i++){
-            cli.setPlayers(usernames);
-            cli.createBookshelf(usernames.get(i) , bookshelves.get(i));
+            throw new NullPointerException();
+        for(int i=0 ; i<usernames.size() ; i++) {
+            l.add (new ClientBookshelf(bookshelves.get(i)));
         }
+        cli.setPlayers(usernames);
+        cli.setBookshelves(l);
         cli.setBoard(board);
         cli.setPersonalGoal(personalGoal);
         cli.setSharedGoal1(sharedGoal1);

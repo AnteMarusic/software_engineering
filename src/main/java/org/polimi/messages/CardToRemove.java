@@ -7,10 +7,8 @@ import java.util.List;
 
 public class CardToRemove extends Message{
     List<Coordinates> coordinates;
-    List<Coordinates> toUpdateToPickable;
-    public CardToRemove(String username, List<Coordinates> coordinates, List<Coordinates> toUpdateToPickable){
+    public CardToRemove(String username, List<Coordinates> coordinates){
         super(username, MessageType.CARD_TO_REMOVE);
-        this.toUpdateToPickable = toUpdateToPickable;
         this.coordinates = coordinates;
     }
 }
