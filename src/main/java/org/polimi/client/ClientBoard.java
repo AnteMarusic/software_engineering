@@ -27,8 +27,11 @@ public class ClientBoard {
 
     public Card removeCardAtCoordinates (Coordinates coordinates) {
         return this.board.remove(coordinates);
-    }
 
+    }
+    public void setToPickable(Coordinates coordinates){
+        this.board.get(coordinates).setState(Card.State.PICKABLE);
+    }
     public void setMap(Map<Coordinates, Card> board){
         this.board = board;
     }

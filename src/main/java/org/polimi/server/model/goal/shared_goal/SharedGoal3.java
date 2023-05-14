@@ -3,170 +3,92 @@ package org.polimi.server.model.goal.shared_goal;
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-/**
- * concrete object that represents 3rd shared goal
- */
 public class SharedGoal3 extends AbstractSharedGoal{
-
     public SharedGoal3(int numOfPlayer) {
         super(numOfPlayer);
     }
 
-    /**
-     * in order to achieve the points you must have 4 columns made of
-     * 4 cards of the same color
-     * Exhaustive check, complexity O((ROW-3) * COL)
-     */
     @Override
     protected boolean achieved(Card[][] tmpGrid) {
-        int count=0;
-        ArrayList<Coordinates> bannedCoordinates = new ArrayList<Coordinates>(21);
-        Coordinates coor;
+        LinkedList<Coordinates[]> matchList = new LinkedList<Coordinates[]>();
+        Coordinates[] tmpArray;
         for(int i=0 ; i<ROW ; i++){
-            for(int j=0 ; j<COL ; j++) {
-                coor = new Coordinates(i,j);
-                if (tmpGrid[i][j]==null || !validCoordinates(i, j) || bannedCoordinates.contains(coor))
-                    continue;
-                if(i <= 2 && j <= 1){
-                    if(checkFourinaRow(tmpGrid, coor, "row")){
-                        banCoordinates(bannedCoordinates, coor, "row");
-                        count++;
-                        System.out.println(coor+" row");
-                    }
-                    else if(checkFourinaRow(tmpGrid, coor, "column")){
-                        banCoordinates(bannedCoordinates, coor, "column");
-                        count++;
-                        System.out.println(coor + " column");
-                    }
-                }
-                else if(i <= 2){
-                    if(checkFourinaRow(tmpGrid, coor, "column")){
-                        banCoordinates(bannedCoordinates, coor, "column");
-                        count++;
-                        System.out.println(coor + " column");
+            for(int j=0 ; j<2 ; j++){
+                if(tmpGrid[i][j]!=null){
+                    if(tmpGrid[i][j+1]!=null && tmpGrid[i][j+2]!=null && tmpGrid[i][j+3]!=null){
+                        if(     tmpGrid[i][j].getColor() == tmpGrid[i][j+1].getColor() &&
+                                tmpGrid[i][j].getColor() == tmpGrid[i][j+2].getColor() &&
+                                tmpGrid[i][j].getColor() == tmpGrid[i][j+3].getColor()){
+                            tmpArray = new Coordinates[4];
+                            tmpArray[0] = new Coordinates(i,j);
+                            tmpArray[1] = new Coordinates(i,j+1);
+                            tmpArray[2] = new Coordinates(i,j+2);
+                            tmpArray[3] = new Coordinates(i,j+3);
+                            matchList.add(tmpArray);
+                        }
                     }
                 }
-                else if(j <= 1){
-                    if(checkFourinaRow(tmpGrid, coor, "row")){
-                        banCoordinates(bannedCoordinates, coor, "row");
-                        count++;
-                        System.out.println(coor+" row");
+            }
+        }
+        for(int j=0 ; j<COL ; j++){
+            for(int i=0 ; i<3 ; i++){
+                if(tmpGrid[i][j]!=null){
+                    if(tmpGrid[i+1][j]!=null && tmpGrid[i+2][j]!=null && tmpGrid[i+3][j]!=null){
+                        if(     tmpGrid[i][j].getColor() == tmpGrid[i+1][j].getColor() &&
+                                tmpGrid[i][j].getColor() == tmpGrid[i+2][j].getColor() &&
+                                tmpGrid[i][j].getColor() == tmpGrid[i+3][j].getColor()){
+                            tmpArray = new Coordinates[4];
+                            tmpArray[0] = new Coordinates(i,j);
+                            tmpArray[1] = new Coordinates(i+1,j);
+                            tmpArray[2] = new Coordinates(i+2,j);
+                            tmpArray[3] = new Coordinates(i+3,j);
+                            matchList.add(tmpArray);
+                        }
                     }
                 }
-                if(count >= 4)
+            }
+        }
+        for(int i=0 ; i<matchList.size() ; i++){
+            System.out.print(matchList.get(i)[0]+ " ");
+            System.out.print(matchList.get(i)[1]+ " ");
+            System.out.print(matchList.get(i)[2]+ " ");
+            System.out.print(matchList.get(i)[3]);
+            System.out.println();
+        }
+
+        for(int i=0 ; i < matchList.size() ; i++){
+            for(int j=0 ; j < matchList.size() ; j++){
+                for(int k=0 ; k < matchList.size() ; k++){
+                    for(int s=0 ; s < matchList.size() ; s++){
+                        if(i!=j && i!=k && i!=s && j!=k && j!=s && k!=s){
+                            if(     !doesOverlap(matchList.get(i), matchList.get(j)) &&
+                                    !doesOverlap(matchList.get(i), matchList.get(k)) &&
+                                    !doesOverlap(matchList.get(i), matchList.get(s)) &&
+                                    !doesOverlap(matchList.get(j), matchList.get(k)) &&
+                                    !doesOverlap(matchList.get(j), matchList.get(s)) &&
+                                    !doesOverlap(matchList.get(k), matchList.get(s))
+                            ){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    return false;
+    }
+
+
+    private boolean doesOverlap(Coordinates[] firstBlock, Coordinates[] newBlock){
+        for(int i=0 ; i<firstBlock.length ; i++){
+            for(int j=0 ; j<newBlock.length ; j++){
+                if(firstBlock[i].equals(newBlock[j])){
                     return true;
-            }
-        }
-
-        //second iteration, reading now rows from right to left
-        bannedCoordinates = new ArrayList<Coordinates>(21);
-        count = 0;
-        for(int i=0 ; i<ROW ; i++){
-            for(int j=COL-1 ; j>=0 ; j--) {
-                coor = new Coordinates(i,j);
-                if (tmpGrid[i][j]==null || !validCoordinates2(i, j) || bannedCoordinates.contains(coor))
-                    continue;
-                if(i <= 2 && j >= 3){
-                    if(checkRowRightToLeft(tmpGrid, coor)){
-                        banCoordinatesRowRightToLeft(bannedCoordinates, coor);
-                        count++;
-                        System.out.println(coor+" row 2");
-                    }
-                    else if(checkFourinaRow(tmpGrid, coor, "column")){
-                        banCoordinates(bannedCoordinates, coor, "column");
-                        count++;
-                        System.out.println(coor + " column 2");
-                    }
                 }
-                else if(i <= 2){
-                    if(checkFourinaRow(tmpGrid, coor, "column")){
-                        banCoordinates(bannedCoordinates, coor, "column");
-                        count++;
-                        System.out.println(coor + " column 2");
-                    }
-                }
-                else if(j <= 1){
-                    if(checkRowRightToLeft(tmpGrid, coor)){
-                        banCoordinatesRowRightToLeft(bannedCoordinates, coor);
-                        count++;
-                        System.out.println(coor+" row 2");
-                    }
-                }
-                if(count >= 4)
-                    return true;
             }
         }
         return false;
     }
-    private boolean validCoordinates(int i, int j){
-        return i >= 0 && i <= 2 || j >= 0 && j <= 1;
-    }
-    private boolean checkFourinaRow(Card[][] array, Coordinates startingCoords, String constantIndex){
-        int row=startingCoords.getRow(), col= startingCoords.getCol();
-        if(constantIndex.equals("row")){
-            if(array[row][col]!=null && array[row][col+1]!=null && array[row][col+2]!=null && array[row][col+3]!=null){
-                return array[row][col].getColor() == array[row][col+1].getColor() &&
-                        array[row][col].getColor() == array[row][col+2].getColor() &&
-                        array[row][col].getColor() == array[row][col+3].getColor();
-            }
-        }
-        else if(constantIndex.equals("column")){
-            if(array[row][col]!=null && array[row+1][col]!=null && array[row+2][col]!=null && array[row+3][col]!=null){
-                return array[row][col].getColor() == array[row+1][col].getColor() &&
-                        array[row][col].getColor() == array[row+2][col].getColor() &&
-                        array[row][col].getColor() == array[row+3][col].getColor();
-            }
-        }
-        return false;
-    }
-    private boolean checkRowRightToLeft(Card[][] array, Coordinates startingCoords){
-        int row=startingCoords.getRow(), col= startingCoords.getCol();
-        if(array[row][col]!=null && array[row][col-1]!=null && array[row][col-2]!=null && array[row][col-3]!=null){
-            return array[row][col].getColor() == array[row][col-1].getColor() &&
-                    array[row][col].getColor() == array[row][col-2].getColor() &&
-                    array[row][col].getColor() == array[row][col-3].getColor();
-            }
-
-        return false;
-    }
-    private boolean validCoordinates2(int i, int j){
-        return i >= 0 && i <= 2 || j >= 3 && j <= 4;
-    }
-    private void banCoordinates(ArrayList<Coordinates> bannedCoordinates, Coordinates startingCoords, String constantIndex){
-        int row = startingCoords.getRow(), col= startingCoords.getCol();
-        Coordinates coor1, coor2, coor3;
-        if(constantIndex.equals("row")){
-            coor1= new Coordinates(row, col+1);
-            coor2= new Coordinates(row, col+2);
-            coor3= new Coordinates(row, col+3);
-            bannedCoordinates.add(startingCoords);
-            bannedCoordinates.add(coor1);
-            bannedCoordinates.add(coor2);
-            bannedCoordinates.add(coor3);
-        }
-        else if(constantIndex.equals("column")){
-            coor1= new Coordinates(row+1, col);
-            coor2= new Coordinates(row+2, col);
-            coor3= new Coordinates(row+3, col);
-            bannedCoordinates.add(startingCoords);
-            bannedCoordinates.add(coor1);
-            bannedCoordinates.add(coor2);
-            bannedCoordinates.add(coor3);
-        }
-    }
-    private void banCoordinatesRowRightToLeft(ArrayList<Coordinates> bannedCoordinates, Coordinates startingCoords){
-        int row = startingCoords.getRow(), col= startingCoords.getCol();
-        Coordinates coor1, coor2, coor3;
-            coor1= new Coordinates(row, col-1);
-            coor2= new Coordinates(row, col-2);
-            coor3= new Coordinates(row, col-3);
-            bannedCoordinates.add(startingCoords);
-            bannedCoordinates.add(coor1);
-            bannedCoordinates.add(coor2);
-            bannedCoordinates.add(coor3);
-    }
-
 }
-

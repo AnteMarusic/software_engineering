@@ -8,7 +8,7 @@ import org.polimi.server.model.Card;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SharedGoal3Test {
-
+    private Card[][] grid = new Card[6][5];
     @BeforeEach
     void setUp() {
     }
@@ -19,7 +19,6 @@ class SharedGoal3Test {
 
     @Test
     void achievedTrue() {
-        Card[][] grid = new Card[6][5];
         grid[0][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[0][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[0][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
@@ -41,13 +40,29 @@ class SharedGoal3Test {
         grid[4][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
 
         grid[5][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[0][4] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[5][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         SharedGoal3 goal = new SharedGoal3(2);
+        print();
 
         assertEquals(4, goal.getScore(grid));
     }
+
+    private void print () {
+        for (int i = 0; i < 6; i ++) {
+            for (int j = 0; j < 5; j ++) {
+                if (this.grid[i][j] == null) {
+                    System.out.print("N");
+                }
+                else {
+                    System.out.print(this.grid[i][j].convertColorToChar());
+                }
+            }
+            System.out.println(" ");
+        }
+    }
     @Test
     void achievedTru2() {
-        Card[][] grid = new Card[6][5];
         grid[0][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[0][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         grid[0][2] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
@@ -70,6 +85,7 @@ class SharedGoal3Test {
 
         grid[5][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
         SharedGoal3 goal = new SharedGoal3(2);
+
 
         assertEquals(4, goal.getScore(grid));
     }
