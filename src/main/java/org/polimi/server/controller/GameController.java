@@ -142,6 +142,8 @@ public class GameController {
         }
         // setto nella lista di clientHandler il client che è uscito a null
         players.set(players.indexOf(clientHandler), null);
+        // devo settare in usernameIssuer lo username con lo stato disconnected
+
 
     }
 

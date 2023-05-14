@@ -84,8 +84,6 @@ public class LobbyController {
                 publicListOf4.clear();
             }
         }
-
-
     }
 
     public void insertPlayerInRandomTwoPlayerGame(ClientHandler clientHandler) {
