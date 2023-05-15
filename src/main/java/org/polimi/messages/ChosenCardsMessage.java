@@ -14,7 +14,7 @@ public class ChosenCardsMessage extends Message implements Serializable {
         this.coordinates = coordinates;
     }
 
-    public List<Coordinates> getCards() {
+    public List<Coordinates> getCoordinates() {
         return coordinates;
     }
 

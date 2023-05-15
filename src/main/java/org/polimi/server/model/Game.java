@@ -19,12 +19,12 @@ public class Game{
     private int ender;
     private List<Card> readyToInsert;
 
-    public Game(int numOfPlayer, int firstPlayer, String[] playerName) {
+    public Game(int numOfPlayer, int firstPlayer, List<String> playerName) {
         this.board = new Board(numOfPlayer);
         this.players = new Player[numOfPlayer];
         this.readyToInsert = new LinkedList<>();
         for (int j=0; j<numOfPlayer; j++){
-            players[j] = new Player(playerName[j]);
+            players[j] = new Player(playerName.get(j));
         }
         handOutGoalsPG(numOfPlayer);
         sharedGoal = new Goal[2];
@@ -102,7 +102,7 @@ public class Game{
 
     public void remove(List<Coordinates> coordinates){
         // salvo le carte e le rimuovo, metto la prima che mi manda in posizione 0
-        for(int i=0; i<coordinates.size(); i++){
+        for (int i=0; i<coordinates.size(); i++) {
             readyToInsert.add(board.getCardAtCoordinates(coordinates.get(i)));   // va corretta getCardAtCoordinates siccome fa controlli inutili
         }
     }

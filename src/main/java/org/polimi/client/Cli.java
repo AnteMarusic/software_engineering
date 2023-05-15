@@ -22,23 +22,28 @@ public class Cli {
     private List<String> players;
     private String myUsername;
 
-    private Map<String, ClientBookshelf> bookshelvesMap;
+    private List<ClientBookshelf> bookshelves;
     private int me; //my player index
     private int lastPlayerInserted;
     private List<Card> chosenCards;
+    private List<Card> orderedChosenCards;
     
     private String sharedGoal1;
     private String sharedGoal2;
     //to modify (has to print a mini bookshelf)
-    private String personalGoal;
+    private Card[][] personalGoal;
 
     public Cli() {
         board = null;
-        bookshelvesMap = new HashMap<String, ClientBookshelf>();
+        bookshelves = new ArrayList<ClientBookshelf>();
         players = new ArrayList<String>();
         lastPlayerInserted = 0;
         me = 0;
-        chosenCards = null;
+        chosenCards = new ArrayList<>();
+        orderedChosenCards = new ArrayList<>();
+    }
+    public void setOrderedChosenCards(List<Card> orderedChosenCards) {
+        this.orderedChosenCards = orderedChosenCards;
     }
 
     public void setMyUsername(String myUsername) {
@@ -46,18 +51,22 @@ public class Cli {
     }
 
     public int getInsertable (int col) {
-        return bookshelvesMap.get(players.get(me)).getInsertable(col);
+        return bookshelves.get(me).getInsertable(col);
     }
 
     public void setPlayers(List<String> players) {
         this.players = players;
         this.numOfPlayers = players.size();
+        this.me = this.players.indexOf(myUsername);
     }
 
     public void createBookshelf(String name, Card[][] grid){
         ClientBookshelf bookshelf = new ClientBookshelf();
         bookshelf.setGrid(grid);
-        this.bookshelvesMap.put(name, bookshelf);
+    }
+
+    public void setBookshelves (List<ClientBookshelf> bookshelves) {
+        this.bookshelves = bookshelves;
     }
 
     public void setSharedGoal1(int i) {
@@ -96,35 +105,8 @@ public class Cli {
         }
     }
 
-    public void setPersonalGoal(int i) {
-        switch (i) {
-            case 0 -> {
-                personalGoal = "shared goal 1";}
-            case 1 -> {
-                personalGoal = "shared goal 2";}
-            case 2 -> {
-                personalGoal = "shared goal 3";}
-            case 3 -> {
-                personalGoal = "shared goal 4";}
-            case 4 -> {
-                personalGoal = "shared goal 5";}
-            case 5 -> {
-                personalGoal = "shared goal 6";}
-            case 6 -> {
-                personalGoal = "shared goal 7";}
-            case 7 -> {
-                personalGoal = "shared goal 8";}
-            case 8 -> {
-                personalGoal = "shared goal 9";}
-            case 9 -> {
-                personalGoal = "shared goal 10";}
-            case 10 -> {
-                personalGoal = "shared goal 11";}
-            case 11 -> {
-                personalGoal = "shared goal 12";}
-            default -> {
-                personalGoal = "error";}
-        }
+    public void setPersonalGoal(Card[][] grid) {
+        this.personalGoal = grid;
     }
 
     public void setChosenCards (List<Card> chosenCards) {
@@ -145,7 +127,7 @@ public class Cli {
 
 
     public int getMaxInsertable() {
-        return bookshelvesMap.get(me).getMaxInsertable();
+        return bookshelves.get(me).getMaxInsertable();
     }
 
     public int getNumOfPlayers() {
@@ -167,7 +149,7 @@ public class Cli {
     }
 
     public void insert (int col) {
-        this.bookshelvesMap.get(me).insert(this.chosenCards, col);
+        this.bookshelves.get(me).insert(this.chosenCards, col);
     }
 
     public void removeCards (List<Coordinates> toRemove){
@@ -193,15 +175,16 @@ public class Cli {
     }
 
     public void printRoutine(){
+        //delete all?
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        System.out.println("My username: "+players.get(me));
+        System.out.println("My username: "+ players.get(me));
         this.board.printMap();
-        this.bookshelvesMap.get(me).printMyBookshelf();
+        this.bookshelves.get(me).printMyBookshelf();
         for(int i=0 ; i<players.size() ; i++){
             if(i!=me){
                 System.out.println(players.get(i)+ "'s bookshelf");
-                this.bookshelvesMap.get(players.get(i)).print();
+                this.bookshelves.get(i).print();
                 for(int j=0 ; j<2 ; j++){
                     System.out.println();
                 }
@@ -217,7 +200,7 @@ public class Cli {
         System.out.flush();
         System.out.println("PLAYERS CONNECTED: ");
         for(int i=0 ; i<players.size() ; i++){
-            if(players.get(i)!=myUsername){
+            if(!Objects.equals(players.get(i), myUsername)){
                 System.out.println(i+": "+players.get(i));
             }
         }

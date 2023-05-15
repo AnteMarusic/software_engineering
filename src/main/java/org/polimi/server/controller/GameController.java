@@ -31,7 +31,7 @@ public class GameController {
     private void initGameEnv() {
         // manda a tutti clientHandler un messaggio in cui dice che il gioco sta iniziando e con chi sta giocando
         // manda a tutti la bord gli shared goal e a ogni client il proprio private goal
-        String[] usernames = new String[numOfPlayers];
+        List<String> usernames;
         int i;
         List<Card[][]> bookshelves = new LinkedList<>();
         usernames = getPlayersUsername();
@@ -61,7 +61,9 @@ public class GameController {
     public void removeCards(List<Coordinates> coordinates) {
         game.remove(coordinates);
         for (ClientHandler c : players) {
-            c.sendMessage(new CardToRemove("server", coordinates, game.geToUpdateToPickable()));
+            if (!c.equals(players.get(currentPlayer))) {
+                c.sendMessage(new CardToRemove("server", coordinates));
+            }
         }
     }
 
@@ -151,10 +153,10 @@ public class GameController {
         Random random = new Random();
         return random.nextInt(numOfPlayer);
     }
-    private String[] getPlayersUsername(){
-        String[] playersUsername = new String[numOfPlayers];
+    private List<String> getPlayersUsername(){
+        List<String> playersUsername = new ArrayList<>(numOfPlayers);
         for(int i=0; i<players.size(); i++){
-            playersUsername[i]=players.get(i).getUsername();
+            playersUsername.add(i,players.get(i).getUsername());
         }
         return playersUsername;
     }
