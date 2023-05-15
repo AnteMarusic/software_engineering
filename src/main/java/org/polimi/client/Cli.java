@@ -211,6 +211,7 @@ public class Cli {
         System.out.flush();
         System.out.println("My username: "+ players.get(me));
         this.board.printBoard();
+        System.out.println("My bookshelf:");
         this.bookshelves.get(me).printMyBookshelf();
         for(int i=0 ; i<players.size() ; i++){
             if(i!=me){
@@ -225,6 +226,7 @@ public class Cli {
         System.out.println("orderedChosenCards = " + orderedChosenCards);
         System.out.println("shared goal 1: " + this.sharedGoal1);
         System.out.println("shared goal 2: " + this.sharedGoal2);
+        System.out.println("my personal goal:");
         personalGoal.print();
     }
 

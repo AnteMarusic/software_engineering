@@ -43,6 +43,7 @@ public class ClientBoard {
         int start, length;
         int[] temp;
         Card card;
+        System.out.print("    ");
         for(int i = 0; i< DIM; i++){
             System.out.print(" " + i + "  ");
         }
@@ -53,17 +54,20 @@ public class ClientBoard {
             temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
             start = temp [0];
             length = temp[1];
-
             if(row==0){
+                System.out.print("   ");
                 for (int i = 0; i < start; i++) {
                     System.out.print("    ");
                 }
+                System.out.print(" ");
                 for (int i=start; i< start + length; i++) {
                     System.out.print("+—+ ");
                 }
                 System.out.println();
             }
             //stampa seconda riga, colori
+            System.out.print(row);
+            System.out.print("   ");
             for (int i = 0; i < start; i++) {
                 System.out.print("    ");
             }
@@ -112,10 +116,11 @@ public class ClientBoard {
             temp = GameRules.getCorrectStartAndLength(row+1, numOfPlayers);
             start = temp [0];
             length = temp[1];
-
+            System.out.print("   ");
             for (int i = 0; i < start; i++) {
                 System.out.print("    ");
             }
+            System.out.print(" ");
             for (int col = start; col < length + start; col++) {
                 System.out.print("+—+ ");
             }
