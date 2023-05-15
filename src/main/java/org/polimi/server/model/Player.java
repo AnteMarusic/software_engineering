@@ -136,6 +136,21 @@ public class Player {
         }
     }
 
+    /**
+     * for testing purposes
+     * @return the array of coordinates
+     */
+    public Coordinates[] getPersonalGoalCoordinates() {
+        return personalGoal.getCoordinates();
+    }
+
+    /**
+     * for testing purposes
+     * @return the array of colors
+     */
+    public Card.Color[] getPersonalGoalColors() {
+        return personalGoal.getColors();
+    }
 
 
 

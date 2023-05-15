@@ -20,6 +20,6 @@ public class ChosenCardsMessage extends Message implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "choosen cards";
+        return super.toString() + "chosen cards" + coordinates + "chosenCards size" + coordinates.size();
     }
 }

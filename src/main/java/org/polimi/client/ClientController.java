@@ -46,6 +46,7 @@ public class ClientController {
                 return null;
             }
             case START_GAME_MESSAGE -> {
+                System.out.println("game started");
             }
 
             //this message is sent
@@ -58,9 +59,10 @@ public class ClientController {
                 List<Card[][]> bookshelves = m.getBookshelves();
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
-                int personalGoal = m.getPersonalGoal();
+                Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
+                Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoal, usernames);
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames);
                 cli.printRoutine();
                 return null;
             }
@@ -175,13 +177,13 @@ public class ClientController {
         do {
             cli.numberOfCards();
             numberToPick = scanner.nextInt();
-            if (numberToPick >= 3) {
+            if (numberToPick >= maxInsertable) {
                 cli.moreThan3Cards();
             }
             if (numberToPick < 0) {
                 cli.lessThan1Card();
             }
-        } while (numberToPick >= 3 || numberToPick < 0);
+        } while (numberToPick >= maxInsertable || numberToPick < 0);
 
         while (counter < numberToPick) {
             switch (counter) {
@@ -270,8 +272,10 @@ public class ClientController {
                 }
             }
         }
+        System.out.println(chosenCoordinates);
         cli.removeCards(chosenCoordinates);
         if (chosenCoordinates.size() > 1) {
+            System.out.println("order");
             orderChosenCards();
         }
         return new ChosenCardsMessage(username, chosenCoordinates);
@@ -286,6 +290,9 @@ public class ClientController {
         for (int j = 0; j < toOrder.size(); j++) {
             ordered.add(null);
         }
+        cli.setOrderedChosenCards(ordered);
+        cli.setChosenCards(toOrder);
+        System.out.println("initialization of ordered " + ordered);
 
         while (i < toOrder.size()) {
 
@@ -300,12 +307,11 @@ public class ClientController {
                 }
             } while (position > toOrder.size() - 1 || position < 0 || ordered.get(position) != null);
 
-            ordered.add(position, toOrder.get(i));
+            ordered.set(position, toOrder.get(i));
             toOrder.set(i, null);
 
-            cli.setOrderedChosenCards(ordered);
-            cli.setChosenCards(toOrder);
             cli.printRoutine();
+            i++;
         }
         cli.setChosenCards(ordered);
     }
@@ -356,7 +362,7 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, int personalGoal, List<String> usernames) {
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         if (this.cli == null)
             throw new NullPointerException();
@@ -366,7 +372,7 @@ public class ClientController {
         cli.setPlayers(usernames);
         cli.setBookshelves(l);
         cli.setBoard(board);
-        cli.setPersonalGoal(personalGoal);
+        cli.setPersonalGoal(personalGoalCoordinates, personalGoalColors);
         cli.setSharedGoal1(sharedGoal1);
         cli.setSharedGoal2(sharedGoal2);
     }

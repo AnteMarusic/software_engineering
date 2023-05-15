@@ -2,6 +2,7 @@ package org.polimi.client;
 
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
+import org.polimi.server.model.goal.PersonalGoal;
 
 import java.util.*;
 
@@ -31,7 +32,7 @@ public class Cli {
     private String sharedGoal1;
     private String sharedGoal2;
     //to modify (has to print a mini bookshelf)
-    private Card[][] personalGoal;
+    private ClientPersonalGoal personalGoal;
 
     public Cli() {
         board = null;
@@ -40,7 +41,11 @@ public class Cli {
         lastPlayerInserted = 0;
         me = 0;
         chosenCards = new ArrayList<>();
-        orderedChosenCards = new ArrayList<>();
+        orderedChosenCards = new LinkedList<>();
+    }
+
+    public void setPersonalGoal (Coordinates[] coordinates, Card.Color[] colors) {
+        this.personalGoal = new ClientPersonalGoal(coordinates, colors);
     }
     public void setOrderedChosenCards(List<Card> orderedChosenCards) {
         this.orderedChosenCards = orderedChosenCards;
@@ -105,10 +110,6 @@ public class Cli {
         }
     }
 
-    public void setPersonalGoal(Card[][] grid) {
-        this.personalGoal = grid;
-    }
-
     public void setChosenCards (List<Card> chosenCards) {
         this.chosenCards = chosenCards;
     }
@@ -156,21 +157,21 @@ public class Cli {
         Coordinates temp;
         Card card;
         Coordinates[] AdjacentCoordinates = new Coordinates[4];
-        int i = 0;
-        while (toRemove.size() > 0) {
-            temp = toRemove.get(i);
+        int j = 0;
+        while (j < toRemove.size()) {
+            temp = toRemove.get(j);
             card = this.board.removeCardAtCoordinates(temp);
             this.chosenCards.add(card);
             AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
             AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
             AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);
             AdjacentCoordinates[3] = new Coordinates(temp.getRow() - 1, temp.getCol());
-            for (int j = 0; j < 4; j++) {
-                if (boardRowColInBound(AdjacentCoordinates[j].getRow(), AdjacentCoordinates[j].getCol(), numOfPlayers) && board.seeCardAtCoordinates(AdjacentCoordinates[i]) != null) {
-                    this.board.setToPickable(AdjacentCoordinates[j]);
+            for (int i = 0; i < 4; i++) {
+                if (boardRowColInBound(AdjacentCoordinates[i].getRow(), AdjacentCoordinates[i].getCol(), numOfPlayers) && board.seeCardAtCoordinates(AdjacentCoordinates[i]) != null) {
+                    this.board.setToPickable(AdjacentCoordinates[i]);
                 }
             }
-            i++;
+            j ++;
         }
     }
 
@@ -190,9 +191,11 @@ public class Cli {
                 }
             }
         }
-        System.out.println("personal goal: " + this.personalGoal);
+        System.out.println("chosenCards = " + chosenCards);
+        System.out.println("orderedChosenCards = " + orderedChosenCards);
         System.out.println("shared goal 1: " + this.sharedGoal1);
         System.out.println("shared goal 2: " + this.sharedGoal2);
+        personalGoal.print();
     }
 
     public void printLobby(){

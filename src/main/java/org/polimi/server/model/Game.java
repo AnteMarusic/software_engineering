@@ -33,6 +33,22 @@ public class Game{
         this.boardGoal = new BoardGoal();
     }
 
+    /**
+     * for testing purposes
+     * @return the array of coordinates
+     */
+    public Coordinates[] getPersonalGoalCoordinates(int i) {
+        return players[i].getPersonalGoalCoordinates();
+    }
+
+    /**
+     * for testing purposes
+     * @return the array of colors
+     */
+    public Card.Color[] getPersonalGoalColors(int i) {
+        return players[i].getPersonalGoalColors();
+    }
+
 
 
     private void handOutGoalsPG(int numOfPlayers){

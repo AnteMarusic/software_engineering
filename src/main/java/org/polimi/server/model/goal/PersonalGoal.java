@@ -31,6 +31,7 @@ public class PersonalGoal implements Goal{
         this.index=index;
     }
 
+
     /**
      * for testing purposes
      * @return the array of coordinates
