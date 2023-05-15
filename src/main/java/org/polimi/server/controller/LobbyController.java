@@ -80,7 +80,7 @@ public class LobbyController {
                 synchronized (publicListOf4) {
                     publicListOf4.add(clientHandler);
                     printLobby(gameMode);
-                    if(publicListOf3.size()==4){
+                    if(publicListOf4.size()==4){
                         this.createGame(4);
                     }
                     else{
