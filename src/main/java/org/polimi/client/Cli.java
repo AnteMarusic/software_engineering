@@ -24,8 +24,10 @@ public class Cli {
 
     private List<ClientBookshelf> bookshelves;
     private int me; //my player index
+    private int currentPlayer;
     private int lastPlayerInserted;
     private List<Card> chosenCards;
+    private List<Card> otherPlayerChosenCards;
     private List<Card> orderedChosenCards;
     
     private String sharedGoal1;
@@ -40,6 +42,7 @@ public class Cli {
         lastPlayerInserted = 0;
         me = 0;
         chosenCards = new ArrayList<>();
+        otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
     }
 
@@ -133,6 +136,9 @@ public class Cli {
     public int getNumOfPlayers() {
         return numOfPlayers;
     }
+    public void setCurrentPlayer(String currentPlayer){
+        this.currentPlayer = players.indexOf(currentPlayer);
+    }
     
     public void addNewPlayer (String newPlayer) {
         this.players.set(lastPlayerInserted+1, newPlayer);
@@ -151,6 +157,9 @@ public class Cli {
     public void insertInBookshelf (int col) {
         this.bookshelves.get(me).insert(this.chosenCards, col);
     }
+    public void insertInOtherPlayerBookshelf (int col){
+        this.bookshelves.get(currentPlayer).insert(this.otherPlayerChosenCards, col);
+    }
 
     public void removeCards (List<Coordinates> toRemove){
         Coordinates temp;
@@ -161,6 +170,28 @@ public class Cli {
             temp = toRemove.get(j);
             card = this.board.removeCardAtCoordinates(temp);
             this.chosenCards.add(card);
+            AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
+            AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
+            AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);
+            AdjacentCoordinates[3] = new Coordinates(temp.getRow() - 1, temp.getCol());
+            for (int i = 0; i < 4; i++) {
+                if (boardRowColInBound(AdjacentCoordinates[i].getRow(), AdjacentCoordinates[i].getCol(), numOfPlayers) && board.seeCardAtCoordinates(AdjacentCoordinates[i]) != null) {
+                    this.board.setToPickable(AdjacentCoordinates[i]);
+                }
+            }
+            j ++;
+        }
+    }
+
+    public void removeOtherPlayerCards(List<Coordinates> toRemove){
+        Coordinates temp;
+        Card card;
+        Coordinates[] AdjacentCoordinates = new Coordinates[4];
+        int j = 0;
+        while (j < toRemove.size()) {
+            temp = toRemove.get(j);
+            card = this.board.removeCardAtCoordinates(temp);
+            this.otherPlayerChosenCards.add(card);
             AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
             AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
             AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);

@@ -48,7 +48,12 @@ public class GameController {
     private void startGameTurn() {
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
-        //
+        // mando a tutti gli altri chi è il currentPlayer
+        for (ClientHandler c : players) {
+            if (c != players.get(currentPlayer) && c!=null)
+                c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername()));
+
+        }
     }
 
     /**
@@ -62,7 +67,7 @@ public class GameController {
         game.remove(coordinates);
         for (ClientHandler c : players) {
             if (!c.equals(players.get(currentPlayer))) {
-                c.sendMessage(new CardToRemove("server", coordinates));
+                c.sendMessage(new CardToRemoveMessage("server", coordinates));
             }
         }
     }
@@ -70,7 +75,12 @@ public class GameController {
     public void insertInBookshelf(int column) {
         int currentPoints = game.insertInBookshelf(column, currentPlayer);
         // manda al giocatore corrente il punteggio attuale
-        players.get(currentPoints).sendMessage(new CurrentScore("server", currentPoints));
+        players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
+        for (ClientHandler c : players) {
+            if (!c.equals(players.get(currentPlayer))) {
+                c.sendMessage(new ChosenColumnMessage("server", column));
+            }
+        }
     }
 
 

@@ -47,12 +47,22 @@ public class ClientBoard {
             System.out.print(" " + i + "  ");
         }
         System.out.println();
+
         // da sistemare
         for (int row = 0; row < DIM; row ++) {
             temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
             start = temp [0];
             length = temp[1];
 
+            if(row==0){
+                for (int i = 0; i < start; i++) {
+                    System.out.print("    ");
+                }
+                for (int i=start; i< start + length; i++) {
+                    System.out.print("+—+ ");
+                }
+                System.out.println();
+            }
             //stampa seconda riga, colori
             for (int i = 0; i < start; i++) {
                 System.out.print("    ");
@@ -99,18 +109,18 @@ public class ClientBoard {
             System.out.print("\n");
 
             //stampa terza riga "+—+"
-            temp = GameRules.getCorrectStartAndLength(row-1, numOfPlayers);
+            temp = GameRules.getCorrectStartAndLength(row+1, numOfPlayers);
             start = temp [0];
             length = temp[1];
-            if(row!=1) {
-                for (int i = 0; i < start; i++) {
-                    System.out.print("    ");
-                }
-                for (int col = start; col < length + start; col++) {
-                    System.out.print("+—+ ");
-                }
-                System.out.println();
+
+            for (int i = 0; i < start; i++) {
+                System.out.print("    ");
             }
+            for (int col = start; col < length + start; col++) {
+                System.out.print("+—+ ");
+            }
+            System.out.println();
+
         }
     }
 

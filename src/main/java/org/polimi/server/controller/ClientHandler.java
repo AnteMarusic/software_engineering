@@ -101,14 +101,20 @@ public class ClientHandler implements Runnable{
                     closeEverything();
                 }
             } catch (IOException e) {
+                gameController.disconnection(this);
+                // usernameIssuer setta a disconnected l'username che si è scollegato
                 closeEverything();
                 System.out.println("exception IOe in ClientHandler run");
             } catch (ClassNotFoundException e) {
+                gameController.disconnection(this);
+                // usernameIssuer setta a disconnected l'username che si è scollegato
                 closeEverything();
                 System.out.println("exception class not found in ClientHandler run");
             }
         }
         if (socket != null) {
+            gameController.disconnection(this);
+            // usernameIssuer setta a disconnected l'username che si è scollegato
             closeEverything();
         }
     }

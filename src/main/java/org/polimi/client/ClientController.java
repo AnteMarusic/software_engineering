@@ -68,7 +68,16 @@ public class ClientController {
             }
 
             case CARD_TO_REMOVE -> {
-                //to do
+                CardToRemoveMessage m = (CardToRemoveMessage) message;
+                cli.removeOtherPlayerCards(m.getCoordinates());
+                cli.printRoutine();
+                return null;
+            }
+            case CHOSEN_COLUMN_REPLY -> {
+                ChosenColumnMessage m = (ChosenColumnMessage) message;
+                cli.insertInOtherPlayerBookshelf(m.getColumn());
+                cli.printRoutine();
+                return null;
             }
 
             //first message that is sent when is your turn
@@ -85,6 +94,8 @@ public class ClientController {
             case NOTIFY_NEXT_PLAYER -> {
                 NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
                 System.out.println(m.getNextPlayer() + " is now playing");
+                cli.setCurrentPlayer(m.getNextPlayer());
+                return null;
             }
             case NOTIFY_GOAL_COMPLETION -> {
             }
