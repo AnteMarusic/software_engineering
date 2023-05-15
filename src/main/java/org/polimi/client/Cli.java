@@ -2,7 +2,6 @@ package org.polimi.client;
 
 import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
-import org.polimi.server.model.goal.PersonalGoal;
 
 import java.util.*;
 
@@ -149,7 +148,7 @@ public class Cli {
                 board.seeCardAtCoordinates(coordinates).getState() == Card.State.PICKABLE;
     }
 
-    public void insert (int col) {
+    public void insertInBookshelf (int col) {
         this.bookshelves.get(me).insert(this.chosenCards, col);
     }
 
@@ -180,7 +179,7 @@ public class Cli {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.out.println("My username: "+ players.get(me));
-        this.board.printMap();
+        this.board.printBoard();
         this.bookshelves.get(me).printMyBookshelf();
         for(int i=0 ; i<players.size() ; i++){
             if(i!=me){

@@ -94,8 +94,8 @@ public class PersonalGoal implements Goal{
         int col, row;
         int count = 0;
         for (int i = 0; i < DIM; i ++) {
-            col = coordinates[i].getRow();
-            row = coordinates[i].getCol();
+            row = coordinates[i].getRow();
+            col = coordinates[i].getCol();
             if (grid[row][col] != null) {
                 if (grid[row][col].getColor() == this.colors[i]) {
                     count ++;

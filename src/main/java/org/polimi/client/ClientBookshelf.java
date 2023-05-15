@@ -29,21 +29,27 @@ public class ClientBookshelf {
         this.maxInsertable = 3;
         this.index = new int[COL];
         for (int i = 0; i < COL; i ++) {
-            this.index[i] = 0;
+            this.index[i] = ROW-1;
         }
     }
 
     public ClientBookshelf(Card[][] grid) {
         this.grid = grid;
-        this.maxInsertable = 3;
+        this.maxInsertable = 0;
         this.index = new int[COL];
+        System.out.println("print index:");
         for (int i = 0; i < COL; i ++) {
             for (int j = ROW - 1; j > 0; j --) {
                 if (grid[j][i] == null) {
                     this.index[i] = j;
+                    System.out.print(index[i]);
+                    break;
                 }
             }
         }
+        System.out.println(" ");
+
+        updateMaxInsertable();
     }
 
     public void setGrid(Card[][] grid) {
@@ -59,7 +65,7 @@ public class ClientBookshelf {
     }
 
     public int getInsertable (int col) {
-        return ROW - this.index[col];
+        return this.index[col]+1;
     }
 
     public int getMaxInsertable () {
@@ -68,15 +74,15 @@ public class ClientBookshelf {
 
     public void insert(List<Card> cards, int col) {
         int j = 0;
-        for (int i = index[col]; i < index[col] + cards.size(); i ++) {
+        for (int i = index[col]; i > index[col] - cards.size(); i--) {
             this.grid[i][col] = cards.get(j);
             j ++;
         }
-        this.index[col] = index[col] + cards.size();
+        this.index[col] = index[col] - cards.size();
     }
 
     public void print() {
-        for (int i = ROW - 1; i >= 0; i --) {
+        for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j ++) {
                 if (this.grid[i][j] == null) {
                     System.out.print("N ");
@@ -109,7 +115,7 @@ public class ClientBookshelf {
     }
 
     public void printMyBookshelf(){
-        for (int i = ROW - 1; i >= 0; i --) {
+        for (int i = 0; i < ROW; i++) {
             for(int k=0 ; k<COL ; k++) {
                 System.out.print("+—+ ");
             }
@@ -161,5 +167,20 @@ public class ClientBookshelf {
         System.out.println();
         System.out.println();
         System.out.println();
+    }
+
+    private void updateMaxInsertable () {
+        int max = 0;
+        int insertable;
+        for (int i = 0; i < COL; i ++) {
+            insertable = getInsertable(i);
+            if (insertable > 3) {
+                insertable = 3;
+            }
+            if (insertable > max) {
+                max = insertable;
+            }
+        }
+        this.maxInsertable = max;
     }
 }

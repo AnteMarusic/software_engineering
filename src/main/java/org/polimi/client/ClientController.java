@@ -177,13 +177,13 @@ public class ClientController {
         do {
             cli.numberOfCards();
             numberToPick = scanner.nextInt();
-            if (numberToPick >= maxInsertable) {
+            if (numberToPick > maxInsertable) {
                 cli.moreThan3Cards();
             }
             if (numberToPick < 0) {
                 cli.lessThan1Card();
             }
-        } while (numberToPick >= maxInsertable || numberToPick < 0);
+        } while (numberToPick > maxInsertable || numberToPick < 0);
 
         while (counter < numberToPick) {
             switch (counter) {
@@ -330,15 +330,18 @@ public class ClientController {
             }
             else {
                 if (cli.getInsertable(input) >=  cli.getChosenCardsSize()) {
+                    System.out.println("insert in Bookshelf");
                     flag = true;
-                    cli.insert(input);
+                    cli.insertInBookshelf(input);
                 }
                 else {
                     System.out.println("not enough space to store cards in the column you chose");
                 }
             }
         } while (!GameRules.bookshelfColInBound(input) || !flag);
+        cli.printRoutine();
         return new ChosenColumnMessage(username, input);
+
     }
 
     /**

@@ -5,7 +5,6 @@ import org.polimi.server.model.Card;
 import org.polimi.server.model.Coordinates;
 
 import java.util.Map;
-import org.polimi.server.model.*;
 
 public class ClientBoard {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -16,7 +15,7 @@ public class ClientBoard {
     public static final String ANSI_ORANGE = "\u001B[31m"; //ORANGE
     public static final String ANSI_CYAN = "\u001B[36m"; //CYAN
     public static final String ANSI_BLUE = "\u001B[34m"; //BLUE
-    private final static int ROW = 9;
+    private final static int DIM = 9;
     private Map <Coordinates, Card> board;
     private final int numOfPlayers;
 
@@ -40,19 +39,16 @@ public class ClientBoard {
         return this.board.get(coordinates);
     }
 
-    public void printMap() {
+    public void printBoard() {
         int start, length;
         int[] temp;
         Card card;
-        for(int i=0; i<ROW ; i++){
-            if(i!=0 && i!=8) {
-                System.out.print(" " + i + "  ");
-            }else{
-                System.out.print("    ");
-            }
+        for(int i = 0; i< DIM; i++){
+            System.out.print(" " + i + "  ");
         }
         System.out.println();
-        for (int row = ROW; row >=0; row --) {
+        // da sistemare
+        for (int row = 0; row < DIM; row ++) {
             temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
             start = temp [0];
             length = temp[1];
