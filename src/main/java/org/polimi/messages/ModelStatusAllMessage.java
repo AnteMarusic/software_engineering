@@ -12,16 +12,18 @@ public class ModelStatusAllMessage extends Message implements Serializable {
     private final List<Card[][]> bookshelves;
     private final int sharedGoal1;
     private final int sharedGoal2;
-    private final int personalGoal;
+    private final Coordinates[] personalGoalCoordinates;
+    private final Card.Color[] personalGoalColors;
     private final List<String> usernames;
 
-    public ModelStatusAllMessage(String username, Map<Coordinates, Card> board, List<Card[][]> bookshelf, int sharedGoal1, int sharedGoal2, int personalGoal, List<String> usernames) {
+    public ModelStatusAllMessage(String username, Map<Coordinates, Card> board, List<Card[][]> bookshelf, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames) {
         super(username, MessageType.MODEL_STATUS_ALL);
         this.board = board;
         this.bookshelves = bookshelf;
         this.sharedGoal1 = sharedGoal1;
         this.sharedGoal2 = sharedGoal2;
-        this.personalGoal = personalGoal;
+        this.personalGoalColors = personalGoalColors;
+        this.personalGoalCoordinates = personalGoalCoordinates;
         this.usernames = usernames;
     }
 
@@ -41,8 +43,11 @@ public class ModelStatusAllMessage extends Message implements Serializable {
         return sharedGoal2;
     }
 
-    public int getPersonalGoal() {
-        return personalGoal;
+    public Coordinates[] getPersonalGoalCoordinates() {
+        return personalGoalCoordinates;
+    }
+    public Card.Color[] getPersonalGoalColors() {
+        return personalGoalColors;
     }
 
     public List<String> getUsernames() {

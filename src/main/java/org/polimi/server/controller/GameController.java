@@ -40,7 +40,7 @@ public class GameController {
         }
         for (i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage("server", usernames));
-            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalIndex(i), usernames));
+            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), usernames));
         }
 
     }
