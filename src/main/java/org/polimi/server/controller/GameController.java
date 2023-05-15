@@ -46,8 +46,9 @@ public class GameController {
     }
 
     private void startGameTurn() {
-        players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
+        players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+        //
     }
 
     /**
