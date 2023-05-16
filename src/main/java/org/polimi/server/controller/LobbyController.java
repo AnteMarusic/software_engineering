@@ -6,9 +6,6 @@ import org.polimi.messages.MessageType;
 import java.util.ArrayList;
 
 public class LobbyController {
-
-
-
     //to synchronize and add update message
     private final ArrayList<ClientHandler> publicListOf2;
     private final ArrayList<ClientHandler> publicListOf3;
@@ -28,25 +25,28 @@ public class LobbyController {
     private void printLobby (int gameMode) {
         switch (gameMode) {
             case 2 -> {
-                System.out.println("lobby of two: ");
-                System.out.println(publicListOf2.size());
+                System.out.print("lobby of two: ");
+                System.out.print("size: " + publicListOf2.size() + "contains: ");
                 for (ClientHandler c : publicListOf2) {
-                    System.out.println(c.getUsername());
+                    System.out.print(c.getUsername());
                 }
+                System.out.println();
              }
             case 3 -> {
-                System.out.println("lobby of three: ");
-                System.out.println(publicListOf3.size());
+                System.out.print("lobby of three: ");
+                System.out.print("size: " + publicListOf3.size() + "contains: ");
                 for (ClientHandler c : publicListOf3) {
-                    System.out.println(c.getUsername());
+                    System.out.print(c.getUsername());
                 }
+                System.out.println();
             }
             case 4 -> {
-                System.out.println("lobby of four: ");
-                System.out.println(publicListOf4.size());
+                System.out.print("lobby of four: ");
+                System.out.print("size: " + publicListOf4.size() + "contains: ");
                 for (ClientHandler c : publicListOf4) {
-                    System.out.println(c.getUsername());
+                    System.out.print(c.getUsername());
                 }
+                System.out.println();
             }
         }
     }
@@ -115,5 +115,45 @@ public class LobbyController {
                 publicListOf4.clear();
             }
         }
+    }
+
+    public void disconnect(ClientHandler clientHandler) {
+        boolean flag = false;
+        // find client handler in one of the lobbies
+        // and delete
+        for (ClientHandler c : publicListOf2) {
+            //clientHandler and c refer to the same object.
+            if (c == clientHandler) {
+                publicListOf2.remove(c);
+                flag = true;
+            }
+        }
+
+        if (!flag) {
+            for (ClientHandler c : publicListOf3) {
+                //clientHandler and c refer to the same object.
+                if (c == clientHandler) {
+                    publicListOf3.remove(c);
+                    flag = true;
+                }
+            }
+        }
+
+        if (!flag) {
+            for (ClientHandler c : publicListOf4) {
+                //clientHandler and c refer to the same object.
+                if (c == clientHandler) {
+                    publicListOf4.remove(c);
+                    flag = true;
+                }
+            }
+        }
+        if (flag) {
+            System.out.println ("removed client: " + clientHandler.getUsername() + "from lobby");
+        }
+        else {
+            System.out.println("client: " + clientHandler.getUsername() + "wasn't in lobby");
+        }
+
     }
 }

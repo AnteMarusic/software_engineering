@@ -175,6 +175,15 @@ public class ClientController {
      * ensures that the cards are picked in a line from the board
      */
     public Message chooseCards() {
+
+
+
+        // to do: se mi metto in un caso in cui non posso più scegliere carte allora non po
+
+
+
+
+
         //since the cards have to be picked in a line, each card picked has to have one constant coordinate
         int counter = 0;
         Coordinates c1 = null, c2 = null, c3 = null;
@@ -270,7 +279,7 @@ public class ClientController {
                     do {
                         //I read the \n character
                         scanner.nextLine();
-                        System.out.println("type /'undo/' to undo previous card selection or type /'ok/' to choose another or /'esc/' to terminate choice");
+                        System.out.println("type 'undo' to undo previous card selection or type 'ok' to choose another or 'esc' to terminate choice");
                         esc = scanner.nextLine();
                         if (esc.equalsIgnoreCase("esc")) {
                             escFlag = true;
