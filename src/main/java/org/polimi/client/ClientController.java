@@ -179,29 +179,18 @@ public class ClientController {
         int counter = 0;
         Coordinates c1 = null, c2 = null, c3 = null;
         int row, col;
-        int numberToPick;
         int maxInsertable = cli.getMaxInsertable();
         boolean flag;
+        boolean escFlag;
+        String esc;
 
         LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
-
-        do {
-            cli.numberOfCards();
-            numberToPick = scanner.nextInt();
-            if (numberToPick > maxInsertable) {
-                cli.moreThan3Cards();
-            }
-            if (numberToPick < 0) {
-                cli.lessThan1Card();
-            }
-        } while (numberToPick > maxInsertable || numberToPick < 0);
-
-        while (counter < numberToPick) {
+        while (counter < maxInsertable) {
             switch (counter) {
+                //you necessarily have to chose at least a card
                 case 0 -> {
                     do {
                         flag = false;
-
                         cli.typeRow();
                         row = scanner.nextInt();
                         cli.typeCol();
@@ -225,61 +214,104 @@ public class ClientController {
                 }
                 case 1 -> {
                     flag = false;
+                    escFlag = false;
                     do {
-                        System.out.println("Choose your next Card");
-                        System.out.println("Type row number (0 to 8)");
-                        row = scanner.nextInt();
-                        System.out.println("Type col number (0 to 8)");
-                        col = scanner.nextInt();
-                        if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
-                            System.out.println("coordinates not in bound");
-                        } else {
-                            c2 = new Coordinates(row, col);
-                            if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
-                                System.out.println("the card has already been taken! please choose another one");
-                            } else if (cli.isCardPickable(c2)) {
-                                if (GameRules.areCoordinatesAligned(c1, c2)) {
-                                    System.out.println("ok");
-                                    chosenCoordinates.add(c2);
-                                    flag = true;
-                                } else {
-                                    System.out.println("this card isn't aligned with the first one");
-                                }
-                            } else {
-                                System.out.println("this card is not pickable yet");
-                            }
+                        //I read the \n character
+                        scanner.nextLine();
+                        System.out.println("type 'undo' to undo previous card selection or type 'ok' to choose another or 'esc' to terminate choice");
+                        esc = scanner.nextLine();
+                        if (esc.equalsIgnoreCase("esc")) {
+                            escFlag = true;
+                            counter = maxInsertable;
                         }
-                    } while (!flag);
-                    counter++;
+
+                        else if (esc.equalsIgnoreCase("undo")) {
+                            escFlag = true;
+                            chosenCoordinates.removeLast();
+                            counter --;
+                        }
+                        else if (esc.equalsIgnoreCase("ok")) {
+                            escFlag = true;
+                            do {
+                                System.out.println("Choose your next Card");
+                                System.out.println("Type row number (0 to 8)");
+                                row = scanner.nextInt();
+                                System.out.println("Type col number (0 to 8)");
+                                col = scanner.nextInt();
+                                if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
+                                    System.out.println("coordinates not in bound");
+                                } else {
+                                    c2 = new Coordinates(row, col);
+                                    if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
+                                        System.out.println("the card has already been taken! please choose another one");
+                                    } else if (cli.isCardPickable(c2)) {
+                                        if (GameRules.areCoordinatesAligned(c1, c2)) {
+                                            System.out.println("ok");
+                                            chosenCoordinates.add(c2);
+                                            flag = true;
+                                        } else {
+                                            System.out.println("this card isn't aligned with the first one");
+                                        }
+                                    } else {
+                                        System.out.println("this card is not pickable yet");
+                                    }
+                                }
+                            } while (!flag);
+                            counter++;
+                        }
+                    } while (!escFlag);
+
+
                 }
                 case 2 -> {
                     flag = false;
+                    escFlag = false;
+
                     do {
-                        System.out.println("Choose your next Card");
-                        System.out.println("Type row number (0 to 8)");
-                        row = scanner.nextInt();
-                        System.out.println("Type col number (0 to 8)");
-                        col = scanner.nextInt();
-                        if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
-                            System.out.println("coordinates not in bound");
-                        } else {
-                            c3 = new Coordinates(row, col);
-                            if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
-                                System.out.println("the card has already been taken! please choose another one");
-                            } else if (cli.isCardPickable(c3)) {
-                                if (GameRules.areCoordinatesAligned(c1, c2, c3)) {
-                                    System.out.println("ok");
-                                    chosenCoordinates.add(c3);
-                                    flag = true;
-                                } else {
-                                    System.out.println("this card isn't aligned with the first one");
-                                }
-                            } else {
-                                System.out.println("this card is not pickable yet");
-                            }
+                        //I read the \n character
+                        scanner.nextLine();
+                        System.out.println("type /'undo/' to undo previous card selection or type /'ok/' to choose another or /'esc/' to terminate choice");
+                        esc = scanner.nextLine();
+                        if (esc.equalsIgnoreCase("esc")) {
+                            escFlag = true;
+                            counter = maxInsertable;
                         }
-                    } while (!flag);
-                    counter++;
+                        else if (esc.equalsIgnoreCase("undo")) {
+                            escFlag = true;
+                            chosenCoordinates.removeLast();
+                            counter --;
+                        }
+                        else if (esc.equalsIgnoreCase("ok")) {
+                            escFlag = true;
+                            do {
+                                System.out.println("Choose your next Card");
+                                System.out.println("Type row number (0 to 8)");
+                                row = scanner.nextInt();
+                                System.out.println("Type col number (0 to 8)");
+                                col = scanner.nextInt();
+                                if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
+                                    System.out.println("coordinates not in bound");
+                                } else {
+                                    c3 = new Coordinates(row, col);
+                                    if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
+                                        System.out.println("the card has already been taken! please choose another one");
+                                    } else if (cli.isCardPickable(c3)) {
+                                        if (GameRules.areCoordinatesAligned(c1, c2, c3)) {
+                                            System.out.println("ok");
+                                            chosenCoordinates.add(c3);
+                                            flag = true;
+                                        } else {
+                                            System.out.println("this card isn't aligned with the first one");
+                                        }
+                                    } else {
+                                        System.out.println("this card is not pickable yet");
+                                    }
+                                }
+                            } while (!flag);
+                            counter++;
+                        }
+
+                    }while (!escFlag);
                 }
             }
         }
