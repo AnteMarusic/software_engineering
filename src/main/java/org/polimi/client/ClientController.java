@@ -331,6 +331,9 @@ public class ClientController {
         int position;
         int i = 0;
         LinkedList<Coordinates>  orderedCoordinates = new LinkedList<Coordinates>();
+        for(int k=0; k<chosenCoordinates.size(); k++){
+            orderedCoordinates.add(null);
+        }
         List<Card> toOrder = cli.getChosenCards();
         List<Card> ordered = new ArrayList<Card>(toOrder.size());
         for (int j = 0; j < toOrder.size(); j++) {
@@ -348,10 +351,10 @@ public class ClientController {
                 if (position > toOrder.size() - 1 || position < 0) {
                     System.out.println("position not in bound, choose again");
                 }
-                if (ordered.get(position) != null) {
+                else if (ordered.get(position) != null) {
                     System.out.println("There's already a card in position " + position + ", choose another...");
                 }
-            } while (position > toOrder.size() - 1 || position < 0 || ordered.get(position) != null);
+            } while (position > toOrder.size() - 1 || position < 0 || (position < toOrder.size() - 1 && position > 0 && ordered.get(position) != null));
 
             orderedCoordinates.set(position, chosenCoordinates.get(i));
             ordered.set(position, toOrder.get(i));
