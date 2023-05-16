@@ -98,24 +98,23 @@ public class ClientHandler implements Runnable{
                     }
                 }
                 else {
-                    closeEverything();
+                    //message == null. we suppose that this happens because you disconnected
+                    System.out.println("received a null message from client " + username);
+                    disconnect();
                 }
             } catch (IOException e) {
-                gameController.disconnection(this);
-                // usernameIssuer setta a disconnected l'username che si è scollegato
+                System.out.println("client " + username + "disconnected");
                 closeEverything();
-                System.out.println("exception IOe in ClientHandler run");
+
             } catch (ClassNotFoundException e) {
-                gameController.disconnection(this);
-                // usernameIssuer setta a disconnected l'username che si è scollegato
-                closeEverything();
-                System.out.println("exception class not found in ClientHandler run");
+                System.out.println("exception class not found in ClientHandler run, " +
+                        "we disconnected the client " + username + "that sent the message");
+                disconnect();
             }
         }
         if (socket != null) {
-            gameController.disconnection(this);
-            // usernameIssuer setta a disconnected l'username che si è scollegato
-            closeEverything();
+            System.out.println("client " + username + "disconnected");
+            disconnect();
         }
     }
 
@@ -129,6 +128,25 @@ public class ClientHandler implements Runnable{
             closeEverything();
         }
     }
+
+    private void disconnect () {
+        if (lobbyController == null) {
+            throw new NullPointerException();
+        }
+
+        //if game controller is null you are either in a lobby or waiting to get in one
+        //so, you should disconnect from it
+        if (gameController == null) {
+            lobbyController.disconnect(this);
+        }
+        //if you are in a game you have to be disconnected from it
+        if (gameController != null) {
+            gameController.disconnection(this);
+        }
+        //closes the socket and the I/O streams
+        closeEverything();
+    }
+
     private void closeEverything() {
         System.out.println("closeEverything");
         try {
