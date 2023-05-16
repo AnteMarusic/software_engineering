@@ -287,15 +287,18 @@ public class ClientController {
         cli.removeCards(chosenCoordinates);
         if (chosenCoordinates.size() > 1) {
             System.out.println("order");
-            orderChosenCards();
+            chosenCoordinates = orderChosenCards(chosenCoordinates);
         }
+
         return new ChosenCardsMessage(username, chosenCoordinates);
+
     }
 
     //the array contains coordinates, so CLI has to show the changes during this procedure
-    private void orderChosenCards() {
+    private LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         int position;
         int i = 0;
+        LinkedList<Coordinates>  orderedCoordinates = new LinkedList<Coordinates>();
         List<Card> toOrder = cli.getChosenCards();
         List<Card> ordered = new ArrayList<Card>(toOrder.size());
         for (int j = 0; j < toOrder.size(); j++) {
@@ -318,6 +321,7 @@ public class ClientController {
                 }
             } while (position > toOrder.size() - 1 || position < 0 || ordered.get(position) != null);
 
+            orderedCoordinates.set(position, chosenCoordinates.get(i));
             ordered.set(position, toOrder.get(i));
             toOrder.set(i, null);
 
@@ -325,6 +329,7 @@ public class ClientController {
             i++;
         }
         cli.setChosenCards(ordered);
+        return orderedCoordinates;
     }
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
@@ -351,6 +356,7 @@ public class ClientController {
             }
         } while (!GameRules.bookshelfColInBound(input) || !flag);
         cli.printRoutine();
+        cli.clearChosenCard();
         return new ChosenColumnMessage(username, input);
 
     }
@@ -394,4 +400,6 @@ public class ClientController {
     public void handleDisconnection() {
         System.out.println("an error occurred, you disconnected from the server");
     }
+
+
 }

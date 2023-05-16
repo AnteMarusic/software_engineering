@@ -118,6 +118,7 @@ public class Game{
 
     public void remove(List<Coordinates> coordinates){
         // salvo le carte e le rimuovo, metto la prima che mi manda in posizione 0
+        readyToInsert.clear();
         for (int i=0; i<coordinates.size(); i++) {
             readyToInsert.add(board.getCardAtCoordinates(coordinates.get(i)));   // va corretta getCardAtCoordinates siccome fa controlli inutili
         }
@@ -146,6 +147,7 @@ public class Game{
         updateScore(currentPlayer);
         return players[currentPlayer].getTotalScore();
     }
+
     public Map<String,Integer> endGame(){
         players[ender].setWinPoint();
 

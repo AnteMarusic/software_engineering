@@ -100,11 +100,12 @@ public class GameController {
         // manda un messaggio a tutti dicendo chi è il giocatore successivo
         // manda un messaggio di richiesta carte al giocatore successivo
         else {
+            System.out.println("current player is: " + currentPlayer);
             nextPlayer();
+            System.out.println("next player is: " + currentPlayer);
             for (ClientHandler c : players) {
                 if (c != players.get(currentPlayer) && c!=null)
                     c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
-
             }
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         }
