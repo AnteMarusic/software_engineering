@@ -159,6 +159,7 @@ public class Cli {
     }
     public void insertInOtherPlayerBookshelf (int col){
         this.bookshelves.get(currentPlayer).insert(this.otherPlayerChosenCards, col);
+        otherPlayerChosenCards.clear();
     }
 
     public void removeCards (List<Coordinates> toRemove){
