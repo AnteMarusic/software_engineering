@@ -328,15 +328,21 @@ public class ClientController {
         cli.removeCards(chosenCoordinates);
         if (chosenCoordinates.size() > 1) {
             System.out.println("order");
-            orderChosenCards();
+            chosenCoordinates = orderChosenCards(chosenCoordinates);
         }
+
         return new ChosenCardsMessage(username, chosenCoordinates);
+
     }
 
     //the array contains coordinates, so CLI has to show the changes during this procedure
-    private void orderChosenCards() {
+    private LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         int position;
         int i = 0;
+        LinkedList<Coordinates>  orderedCoordinates = new LinkedList<Coordinates>();
+        for(int k=0; k<chosenCoordinates.size(); k++){
+            orderedCoordinates.add(null);
+        }
         List<Card> toOrder = cli.getChosenCards();
         List<Card> ordered = new ArrayList<Card>(toOrder.size());
         for (int j = 0; j < toOrder.size(); j++) {
@@ -354,11 +360,12 @@ public class ClientController {
                 if (position > toOrder.size() - 1 || position < 0) {
                     System.out.println("position not in bound, choose again");
                 }
-                if (ordered.get(position) != null) {
+                else if (ordered.get(position) != null) {
                     System.out.println("There's already a card in position " + position + ", choose another...");
                 }
-            } while (position > toOrder.size() - 1 || position < 0 || ordered.get(position) != null);
+            } while (position > toOrder.size() - 1 || position < 0 || (position < toOrder.size() - 1 && position > 0 && ordered.get(position) != null));
 
+            orderedCoordinates.set(position, chosenCoordinates.get(i));
             ordered.set(position, toOrder.get(i));
             toOrder.set(i, null);
 
@@ -366,6 +373,7 @@ public class ClientController {
             i++;
         }
         cli.setChosenCards(ordered);
+        return orderedCoordinates;
     }
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
@@ -392,6 +400,7 @@ public class ClientController {
             }
         } while (!GameRules.bookshelfColInBound(input) || !flag);
         cli.printRoutine();
+        cli.clearChosenCard();
         return new ChosenColumnMessage(username, input);
 
     }
@@ -435,4 +444,6 @@ public class ClientController {
     public void handleDisconnection() {
         System.out.println("an error occurred, you disconnected from the server");
     }
+
+
 }

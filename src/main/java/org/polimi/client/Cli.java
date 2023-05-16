@@ -300,5 +300,10 @@ public class Cli {
         System.out.println("the card has already been taken! please choose another one");
     }
 
+    public void clearChosenCard(){
+        chosenCards.clear();
+    }
+
+
 
 }
