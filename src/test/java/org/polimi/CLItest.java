@@ -1,11 +1,5 @@
 package org.polimi;
 
-import org.polimi.server.model.Board;
-import org.polimi.server.model.Card;
-import org.polimi.client.Cli;
-
-import java.util.ArrayList;
-
 public class CLItest {
     //to fix
 /*

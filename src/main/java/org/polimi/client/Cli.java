@@ -1,7 +1,7 @@
 package org.polimi.client;
 
-import org.polimi.server.model.Card;
-import org.polimi.server.model.Coordinates;
+import org.polimi.servernetwork.model.Card;
+import org.polimi.servernetwork.model.Coordinates;
 
 import java.util.*;
 
@@ -210,6 +210,7 @@ public class Cli {
         //delete all?
         System.out.print("\033[H\033[2J");
         System.out.flush();
+        //me++;
         System.out.println("My username: "+ players.get(me));
         this.board.printBoard();
         System.out.println("My bookshelf:");

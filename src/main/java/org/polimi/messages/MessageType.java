@@ -25,5 +25,6 @@ public enum MessageType {
     CURRENT_SCORE,
     RECONNECTION_MESSAGE,
     WAITING_FOR_YOUR_TURN,
+    USERNAME_AND_GAMEMODE;
 
 }

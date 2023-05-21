@@ -1,13 +1,8 @@
 package org.polimi.client;
 
-import org.jetbrains.annotations.NotNull;
-import org.polimi.server.model.Card;
-import org.polimi.server.model.Coordinates;
+import org.polimi.servernetwork.model.Card;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ClientBookshelf {
     public static final String ANSI_RESET = "\u001B[0m";
