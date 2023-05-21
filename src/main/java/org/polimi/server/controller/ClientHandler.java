@@ -78,6 +78,9 @@ public class ClientHandler implements Runnable{
                                 case JOIN_RANDOM_GAME_4_PLAYER -> {
                                     lobbyController.insertPlayer(this , 4);
                                 }
+                                case CREATE_PRIVATE_GAME -> {
+
+                                }
                                 //to do: private game
                             }
 
