@@ -1,7 +1,7 @@
 package org.polimi.client;
 
-import org.polimi.server.model.Card;
-import org.polimi.server.model.Coordinates;
+import org.polimi.servernetwork.model.Card;
+import org.polimi.servernetwork.model.Coordinates;
 
 public class ClientPersonalGoal {
     public static final String ANSI_RESET = "\u001B[0m";

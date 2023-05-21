@@ -1,6 +1,6 @@
 package org.polimi.messages;
 
-import org.polimi.server.model.Coordinates;
+import org.polimi.servernetwork.model.Coordinates;
 
 import java.util.List;
 

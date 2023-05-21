@@ -1,6 +1,6 @@
 package org.polimi;
 
-import org.polimi.server.model.Coordinates;
+import org.polimi.servernetwork.model.Coordinates;
 
 public class GameRules {
     private static final int COL = 5;
