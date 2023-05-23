@@ -129,6 +129,7 @@ public class ClientHandler implements Runnable{
                 }
 
             }
+            /*
             case USERNAME_AND_GAMEMODE -> {
                 InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
                 if(internalComunication == InternalComunication.OK) {
@@ -161,6 +162,8 @@ public class ClientHandler implements Runnable{
                 }
 
             }
+
+             */
             case CHOSEN_CARDS_REPLY -> {
                 ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
                 gameController.removeCards(chosenCards.getCoordinates());

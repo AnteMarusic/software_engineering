@@ -2,6 +2,7 @@ package org.polimi.servernetwork.server;
 
 import org.polimi.messages.Message;
 import org.polimi.messages.RMIAvailability;
+import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.controller.*;
 
 import java.rmi.RemoteException;
@@ -16,15 +17,26 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.usernameIssuer = usernameIssuer;
         this.lobbyController = lobbyController;
     }
+    /*
     public void login(Message usernameandGameModeMessage) throws RemoteException{
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         clienthandler.onMessage(usernameandGameModeMessage);
+    }
+
+     */
+    public void login(Message usernameMessage) throws RemoteException{
+        ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+        clienthandler.onMessage(usernameMessage);
+
     }
 
 //perchè ci sono due metodi con nomi uguali, uno qua e uno in client handler?
     public void onMessage(Message message) throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
+    }
+    public void reconnection() throws RemoteException{
+
     }
     public void disconnect() throws RemoteException{
 
@@ -48,13 +60,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         }
 
     }
-    public boolean usernameAlreadyTaken(String username) throws RemoteException{
+    public UsernameStatus usernameAlreadyTaken(String username) throws RemoteException {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
-        if(clientHandler == null)
-            return false;
-        else
-            return true;
-    }
+        if (clientHandler == null)
+            return UsernameStatus.NEVER_USED;
+        else {
+            if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.CONNECTED)
+                return UsernameStatus.USED;
+            else if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.DISCONNECTED) {
+                return UsernameStatus.DISCONNECTED;
+            }
+            else
+                throw new RuntimeException("problemi in usernameAlreadyTaken");
 
+        }
+    }
 }
 

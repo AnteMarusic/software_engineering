@@ -106,4 +106,10 @@ public class UsernameIssuer {
         object[0]=ConnectionStatus.CONNECTED;
         map.put(username, object);
     }
+    public ConnectionStatus getConnectionStatus(String username){
+        Object [] object;
+        object = map.get(username);
+        return (ConnectionStatus)object[0];
+    }
 }
+

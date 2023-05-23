@@ -34,7 +34,8 @@ public class RMIClient extends Client{
         else return false;
     }
     public void login() throws RemoteException {
-        UsernameAndGameModeMessage message = new UsernameAndGameModeMessage(this.username, this.gamemode, -1);
+        //UsernameAndGameModeMessage message = new UsernameAndGameModeMessage(this.username, this.gamemode, -1);
+        Message message = new Message(this.username, MessageType.USERNAME);
         server.login(message);
     }
     public void sendMessage(Message message) throws RemoteException {
@@ -48,9 +49,11 @@ public class RMIClient extends Client{
         Message message = clientController.chooseUsername();
         this.username = message.getUsername();
     }
-    public void chooseGameMode(){
+    /*public void chooseGameMode(){
         this.gamemode= ((ChosenGameModeMessage)clientController.chooseGameMode()).getGameMode();
     }
+    
+     */
     public boolean ifConnected(){
         return connected;
     }
@@ -63,7 +66,7 @@ public class RMIClient extends Client{
 
     public static void main (String[] args) throws IOException, NotBoundException, InterruptedException {
         boolean bool;
-        boolean alreadyTaken = false;
+        UsernameStatus alreadyTaken=null;
         Message message, messagefromserver;
         RMIClient rmiClient= new RMIClient(port);
         do{
@@ -72,24 +75,16 @@ public class RMIClient extends Client{
         do {
             rmiClient.chooseUsername();//comunicazione solo client e clientcontroller
             alreadyTaken = rmiClient.server.usernameAlreadyTaken(rmiClient.username);
-            if(alreadyTaken){
+            if (alreadyTaken == UsernameStatus.USED) {
                 System.out.println("Already taken username, choose another");
             }
-            // va gestito il caso in cui si tratti di una riconnessione
-            // devo quindi aggiungere un metodo che controlli lo stato dell'user (già presente)
-            // nel caso in cui alreadytaken sia true
-            // siccome se in UsernameIssuer c'è già quel nome ma il suo stato è disconnesso
-            // in realtà accetto quello username e semplicemente faccio la reconnection
-        }while(alreadyTaken);
-        rmiClient.chooseGameMode();
-        rmiClient.login();
-        /*
-            dato che prima chiediamo il nome poi il gamecode e solo dopo inviamo il messaggio se
-            dopo aver messo il nome ma prima di aver messo il gameMode qualcuno con Socket sceglie
-            lo stesso username il server non sapeva che il client con RMI aveva scelto anche lui quell'user
-            siccome il client non gliel'ha ancora comunicato con un messaggio
-            Si va così in un errore
-         */
+        }while(alreadyTaken == UsernameStatus.USED);
+        if(alreadyTaken == UsernameStatus.DISCONNECTED){  // mi devo occupare della riconnessione
+            rmiClient.server.reconnection();
+        }
+        else if(alreadyTaken == UsernameStatus.NEVER_USED){
+            rmiClient.login();
+        }
         while(rmiClient.ifConnected()){
             Thread.sleep(1000);
             RMIAvailability status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
