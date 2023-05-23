@@ -3,7 +3,7 @@ package org.polimi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.polimi.server.model.Coordinates;
+import org.polimi.servernetwork.model.Coordinates;
 
 import java.util.Objects;
 
