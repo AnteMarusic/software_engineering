@@ -1,10 +1,10 @@
 package org.polimi.servernetwork.controller;
 
+import org.polimi.client.Cli;
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class LobbyController {
@@ -12,6 +12,7 @@ public class LobbyController {
     private final ArrayList<ClientHandler> publicListOf2;
     private final ArrayList<ClientHandler> publicListOf3;
     private final ArrayList<ClientHandler> publicListOf4;
+    private final Map<Integer, List<ClientHandler>> privateGame;
 
     GameCodeIssuer gameCodeIssuer;
     UsernameIssuer usernameIssuer;
@@ -22,6 +23,7 @@ public class LobbyController {
         this.publicListOf2 = new ArrayList<>(2);
         this.publicListOf3 = new ArrayList<>(3);
         this.publicListOf4 = new ArrayList<>(4);
+        this.privateGame = new HashMap<Integer, List<ClientHandler>>();
     }
 
     private void printLobby (int gameMode) {
@@ -92,6 +94,13 @@ public class LobbyController {
             }
         }
     }
+
+    public void addPrivateGameCode(int gameCode, ClientHandler clientHandler ){
+        List<ClientHandler> list = new ArrayList<ClientHandler>();
+        list.add(clientHandler);
+        privateGame.put(gameCode, list);
+    }
+
 
     private void createGame(int gameMode){
         switch (gameMode) {

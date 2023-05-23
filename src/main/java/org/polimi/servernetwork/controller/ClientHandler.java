@@ -84,8 +84,9 @@ public class ClientHandler implements Runnable{
     public void onMessage(Message message){
         switch (message.getMessageType()){
             case USERNAME -> {
-                InternalComunication internalComunication = usernameIssuer.handleMessage(message.getUsername());
+                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
                 if(internalComunication == InternalComunication.OK) {
+                    usernameIssuer.setClientHandler(this, message.getUsername());
                     this.username = message.getUsername();
                     sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
                 }
@@ -113,17 +114,42 @@ public class ClientHandler implements Runnable{
                     case JOIN_RANDOM_GAME_4_PLAYER -> {
                         lobbyController.insertPlayer(this , 4);
                     }
-                    //to do: private game
+                    case JOIN_PRIVATE_GAME -> {
+
+                    }
+                    case CREATE_PRIVATE_GAME -> {
+                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode())){
+                            sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
+                            return;
+                        }
+                        else{
+                            lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this);
+                        }
+                    }
                 }
 
             }
             case USERNAME_AND_GAMEMODE -> {
-                InternalComunication internalComunication = usernameIssuer.handleMessage(message.getUsername());
+                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
                 if(internalComunication == InternalComunication.OK) {
+                    usernameIssuer.setClientHandler(this, message.getUsername());
                     this.username = message.getUsername();
+                    UsernameAndGameModeMessage chosenGameModeMessage = (UsernameAndGameModeMessage) message;
+                    switch (chosenGameModeMessage.getGameMode()) {
+                        case JOIN_RANDOM_GAME_2_PLAYER -> {
+                            lobbyController.insertPlayer(this, 2);
+                        }
+                        case JOIN_RANDOM_GAME_3_PLAYER -> {
+                            lobbyController.insertPlayer(this, 3);
+                        }
+                        case JOIN_RANDOM_GAME_4_PLAYER -> {
+                            lobbyController.insertPlayer(this , 4);
+                        }
+                        //to do: private game
+                    }
                 }
                 if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                    sendMessage(new ErrorMessage("server", ErrorType.ALREADY_TAKEN_USERNAME));
+                    System.out.println("somebody tried to use an already taken username");
                 }
                 //to test
                 if(internalComunication == InternalComunication.RECONNECTION){
@@ -133,19 +159,7 @@ public class ClientHandler implements Runnable{
                     usernameIssuer.setConnect(this.getUsername());
                     gameController.reconnect(this);
                 }
-                UsernameAndGameModeMessage chosenGameModeMessage = (UsernameAndGameModeMessage) message;
-                switch (chosenGameModeMessage.getGameMode()) {
-                    case JOIN_RANDOM_GAME_2_PLAYER -> {
-                        lobbyController.insertPlayer(this, 2);
-                    }
-                    case JOIN_RANDOM_GAME_3_PLAYER -> {
-                        lobbyController.insertPlayer(this, 3);
-                    }
-                    case JOIN_RANDOM_GAME_4_PLAYER -> {
-                        lobbyController.insertPlayer(this , 4);
-                    }
-                    //to do: private game
-                }
+
             }
             case CHOSEN_CARDS_REPLY -> {
                 ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;

@@ -8,6 +8,14 @@ public class UsernameIssuer {
     public UsernameIssuer () {
         map = new HashMap<String, Object[]>();
     }
+    public void setClientHandler(ClientHandler clientHandler, String username){
+        Object[] object = map.get(username);
+        if(object == null){
+            throw new RuntimeException("you tried to set a clienthandler to a non registered username");
+        }
+        object[2] = clientHandler;
+        map.put(username, object);
+    }
 
     public synchronized void removeUsername (String username) throws NoSuchElementException {
         if (username != null && map.containsKey(username))
@@ -31,11 +39,11 @@ public class UsernameIssuer {
      * @param username username of the player that is connecting
      * @return return an InternalComunication that explains what to do
      */
-    public synchronized InternalComunication handleMessage(String username){
-        System.out.println("handle message before");
+    public synchronized InternalComunication login(String username){
+        System.out.println("currently in login method of usernameIssuer");
         printMap();
         if(!map.containsKey(username)){
-            Object[] object = new Object[2];
+            Object[] object = new Object[3];
             object[0]= ConnectionStatus.CONNECTED;
             object[1]=null;
             map.put(username,object);
@@ -54,6 +62,19 @@ public class UsernameIssuer {
             else{
                 return InternalComunication.RECONNECTION;
             }
+        }
+    }
+
+    public ClientHandler getClientHandler(String username){
+        Object[] object = map.get(username);
+        if(object == null){
+            return null;
+        }
+        else{
+            if(object[2]==null){
+                throw new RuntimeException("for some reason the clientHandler associated to the username provided is null");
+            }
+            return (ClientHandler)object[2];
         }
     }
 

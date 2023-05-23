@@ -13,11 +13,11 @@ public class SocketServer implements Runnable{
     private final GameCodeIssuer gameCodeIssuer;
     private final UsernameIssuer usernameIssuer;
 
-    public SocketServer(Server server, int port) {
+    public SocketServer(int port, GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobby) {
         this.port = port;
-        this.lobby=server.getLobby();
-        this.gameCodeIssuer=server.getGameCodeIssuer();
-        this.usernameIssuer=server.getUsernameIssuer();
+        this.lobby=lobby;
+        this.gameCodeIssuer=gameCodeIssuer;
+        this.usernameIssuer=usernameIssuer;
     }
     public void startServer ()  {
         try {
