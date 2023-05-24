@@ -305,6 +305,12 @@ public class Cli {
     public void clearChosenCard(){
         chosenCards.clear();
     }
+    public void chooseNumberOfPlayer(){
+        System.out.println("how many players do you want in your game");
+    }
+    public void chooseGameCode(){
+        System.out.println("choose game code, tha number must be bigger then 1000 and smaller then 2000");
+    }
 
 
 

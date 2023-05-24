@@ -128,6 +128,7 @@ public class ClientController {
     public Message chooseGameMode () {
         ChosenGameModeMessage message = null;
         int input;
+        int gameCode;
         do {
             cli.chooseGameMode();
             input = scanner.nextInt();
@@ -146,14 +147,23 @@ public class ClientController {
                 } while (input < 1 || input > 2);
                 if (input == 1) {
                     do {
+                        cli.chooseNumberOfPlayer();
                         input = scanner.nextInt();
                         if (input < 0) {
                             cli.invalid();
                         }
-                    } while (input < 0);
+                    } while (input < 2 || input >4);
+                    do{
+                        cli.chooseGameCode();
+                        gameCode = scanner.nextInt();
+                    }while(gameCode<1000 || gameCode>1999);
+                    message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, gameCode, input);
+                }
+                else {
+                    cli.insertGameCode();
+                    input = scanner.nextInt();
                     message = new ChosenGameModeMessage(username, GameMode.JOIN_PRIVATE_GAME, input);
                 }
-                else message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, -1);
             }
             case 2 -> {
                 message = new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1);

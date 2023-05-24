@@ -52,7 +52,7 @@ public class RMIClient extends Client{
     /*public void chooseGameMode(){
         this.gamemode= ((ChosenGameModeMessage)clientController.chooseGameMode()).getGameMode();
     }
-    
+
      */
     public boolean ifConnected(){
         return connected;
@@ -88,7 +88,7 @@ public class RMIClient extends Client{
         while(rmiClient.ifConnected()){
             Thread.sleep(1000);
             RMIAvailability status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
-            System.out.println(status);
+            //System.out.println(status);
             if(status == RMIAvailability.AVAILABLE){
                 messagefromserver=rmiClient.getServer().getMessage(rmiClient.getUsername());
                 System.out.println("questo dal server "+messagefromserver);

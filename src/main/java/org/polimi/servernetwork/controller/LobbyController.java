@@ -12,7 +12,9 @@ public class LobbyController {
     private final ArrayList<ClientHandler> publicListOf2;
     private final ArrayList<ClientHandler> publicListOf3;
     private final ArrayList<ClientHandler> publicListOf4;
-    private final Map<Integer, List<ClientHandler>> privateGame;
+    private final Map<Integer, ArrayList<ClientHandler>> privateGameOf2;
+    private final Map<Integer, ArrayList<ClientHandler>> privateGameOf3;
+    private final Map<Integer, ArrayList<ClientHandler>> privateGameOf4;
 
     GameCodeIssuer gameCodeIssuer;
     UsernameIssuer usernameIssuer;
@@ -23,7 +25,9 @@ public class LobbyController {
         this.publicListOf2 = new ArrayList<>(2);
         this.publicListOf3 = new ArrayList<>(3);
         this.publicListOf4 = new ArrayList<>(4);
-        this.privateGame = new HashMap<Integer, List<ClientHandler>>();
+        this.privateGameOf2 = new HashMap<Integer, ArrayList<ClientHandler>>();
+        this.privateGameOf3 = new HashMap<Integer, ArrayList<ClientHandler>>();
+        this.privateGameOf4 = new HashMap<Integer, ArrayList<ClientHandler>>();
     }
 
     private void printLobby (int gameMode) {
@@ -95,13 +99,6 @@ public class LobbyController {
         }
     }
 
-    public void addPrivateGameCode(int gameCode, ClientHandler clientHandler ){
-        List<ClientHandler> list = new ArrayList<ClientHandler>();
-        list.add(clientHandler);
-        privateGame.put(gameCode, list);
-    }
-
-
     private void createGame(int gameMode){
         switch (gameMode) {
             case 2-> {
@@ -166,6 +163,64 @@ public class LobbyController {
             System.out.println("client: " + clientHandler.getUsername() + "wasn't in lobby");
         }
 
+    }
+    public void addPrivateGameCode(int gameCode, ClientHandler clientHandler, int numOfPlayer ){
+        ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
+        list.add(clientHandler);
+        if(numOfPlayer == 2){
+            privateGameOf2.put(gameCode, list);
+        }
+        if(numOfPlayer == 3){
+            privateGameOf3.put(gameCode, list);
+        }
+        if(numOfPlayer == 4){
+            privateGameOf4.put(gameCode, list);
+        }
+    }
+    public void addInAPrivateGame(int gameCode, ClientHandler clientHandler){
+        if(privateGameOf2.containsKey(gameCode)){
+            ArrayList<ClientHandler> list = privateGameOf2.get(gameCode);
+            list.add(clientHandler);
+            privateGameOf2.put(gameCode, list);
+            if(list.size()==2){
+                createPrivateGame(list, gameCode, 2);
+            }
+        }
+        else if(privateGameOf3.containsKey(gameCode)){
+            ArrayList<ClientHandler> list = privateGameOf3.get(gameCode);
+            list.add(clientHandler);
+            privateGameOf3.put(gameCode, list);
+            if(list.size()==3){
+                createPrivateGame(list, gameCode, 3);
+            }
+        }
+        else if (privateGameOf4.containsKey(gameCode)){
+            ArrayList<ClientHandler> list = privateGameOf4.get(gameCode);
+            list.add(clientHandler);
+            privateGameOf4.put(gameCode, list);
+            if(list.size()==4){
+                createPrivateGame(list, gameCode, 4);
+            }
+        }
+        else{
+            // il game code non va bene
+            clientHandler.sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
+        }
+    }
+    public void createPrivateGame(ArrayList<ClientHandler> list, int gameCode, int numOfPlayer){
+        GameController gameController = new GameController(list);
+        gameCodeIssuer.associatePrivateCodeTo(gameController, gameCode);
+        list.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), gameCode)));
+        list.forEach(clientHandler -> clientHandler.setGameController(gameController));
+        if(numOfPlayer == 2){  // devo rimuovere la lista dalla hashMap nella lobby
+            privateGameOf2.remove(gameCode);
+        }
+        if(numOfPlayer == 3){  // devo rimuovere la lista dalla hashMap nella lobby
+            privateGameOf3.remove(gameCode);
+        }
+        if(numOfPlayer == 4){  // devo rimuovere la lista dalla hashMap nella lobby
+            privateGameOf4.remove(gameCode);
+        }
     }
 
     public ClientHandler getClienthandlerfromLobby(String name){

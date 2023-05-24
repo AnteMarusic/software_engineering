@@ -4,7 +4,6 @@ import java.util.*;
 
 public class GameCodeIssuer {
     private final Map<Integer, GameController> associations;
-    private List<Integer> readyToUsePrivateCode;
     private final List<Integer> freedIdCodes;
     private int currentHighestCode;
 
@@ -32,14 +31,17 @@ public class GameCodeIssuer {
                 return temp;
             }
             else {
-                /*do
-                currentHighestCode ++;
-                while(alreadyExistGameCode(currentHighestCode));       // controllo non esista già un private game con lo stesso codice
-                 */
                 currentHighestCode ++;
                 associations.put(currentHighestCode, gameController);
                 return currentHighestCode;
             }
+        }
+    }
+    public synchronized void associatePrivateCodeTo (GameController gameController, int gameCode) throws NullPointerException{
+        if (gameController == null)
+            throw new NullPointerException();
+        else {
+            associations.put(gameCode, gameController);
         }
     }
     public synchronized void freeCodeAssociatedWith (GameController gameController) throws NullPointerException, NoSuchElementException{
@@ -60,8 +62,7 @@ public class GameCodeIssuer {
     }
     */
     public boolean alreadyExistGameCode(int gameCode){  // metodo che controlla se esiste già un privateGAME con lo stesso gameCode
-        if(associations.get(gameCode).equals(null) && !readyToUsePrivateCode.contains(gameCode)){   // perchè la prima è sempre falsa?
-            readyToUsePrivateCode.add(gameCode);
+        if(associations.get(gameCode) == null){
             return false;
         }
         else
