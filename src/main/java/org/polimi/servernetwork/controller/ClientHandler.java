@@ -118,8 +118,8 @@ public class ClientHandler implements Runnable{
                         lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
                     }
                     case CREATE_PRIVATE_GAME -> {
-                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode())){
-                            // mando un messaggio che esiste già un gioco privato con questo codice
+                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
+                            sendMessage(new Message("server", MessageType.ALREADYTAKENGAMECODEMESSAGE ));
                             sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
                         }
                         else{

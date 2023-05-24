@@ -12,7 +12,6 @@ import java.rmi.registry.Registry;
 public class RMIClient extends Client{
     private static final int port = 1099;
     private ClientController clientController;
-    private GameMode gamemode;
     private transient RMIinterface server;
     private boolean connected;
 

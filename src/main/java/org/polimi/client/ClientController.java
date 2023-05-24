@@ -97,6 +97,10 @@ public class ClientController {
                 cli.setCurrentPlayer(m.getNextPlayer());
                 return null;
             }
+            case ALREADYTAKENGAMECODEMESSAGE -> {
+                cli.alreadyTakenGameCode();
+                return null;
+            }
             case NOTIFY_GOAL_COMPLETION -> {
             }
             case NOTIFY_GAME_END -> {
@@ -123,8 +127,6 @@ public class ClientController {
         cli.alreadyTakenUsername();
         chooseUsername();
     }
-
-
     public Message chooseGameMode () {
         ChosenGameModeMessage message = null;
         int input;
@@ -158,11 +160,13 @@ public class ClientController {
                         gameCode = scanner.nextInt();
                     }while(gameCode<1000 || gameCode>1999);
                     message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, gameCode, input);
+                    cli.waitForTheOtherPlayer();
                 }
                 else {
                     cli.insertGameCode();
                     input = scanner.nextInt();
                     message = new ChosenGameModeMessage(username, GameMode.JOIN_PRIVATE_GAME, input);
+
                 }
             }
             case 2 -> {

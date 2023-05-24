@@ -311,6 +311,13 @@ public class Cli {
     public void chooseGameCode(){
         System.out.println("choose game code, tha number must be bigger then 1000 and smaller then 2000");
     }
+    public void waitForTheOtherPlayer(){
+        System.out.println("you are wating for the other player");
+    }
+    public void alreadyTakenGameCode(){
+        System.out.println("this game code is already user in another game");
+    }
+
 
 
 

@@ -15,6 +15,7 @@ public class LobbyController {
     private final Map<Integer, ArrayList<ClientHandler>> privateGameOf2;
     private final Map<Integer, ArrayList<ClientHandler>> privateGameOf3;
     private final Map<Integer, ArrayList<ClientHandler>> privateGameOf4;
+    private ArrayList<Integer> readyToStartGame;
 
     GameCodeIssuer gameCodeIssuer;
     UsernameIssuer usernameIssuer;
@@ -28,6 +29,7 @@ public class LobbyController {
         this.privateGameOf2 = new HashMap<Integer, ArrayList<ClientHandler>>();
         this.privateGameOf3 = new HashMap<Integer, ArrayList<ClientHandler>>();
         this.privateGameOf4 = new HashMap<Integer, ArrayList<ClientHandler>>();
+        this.readyToStartGame = new ArrayList<Integer>();
     }
 
     private void printLobby (int gameMode) {
@@ -128,6 +130,7 @@ public class LobbyController {
 
     public void addPrivateGameCode(int gameCode, ClientHandler clientHandler, int numOfPlayer ){
         ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
+        readyToStartGame.add(gameCode);
         list.add(clientHandler);
         if(numOfPlayer == 2){
             privateGameOf2.put(gameCode, list);
@@ -230,5 +233,12 @@ public class LobbyController {
                 .filter(clientHandler -> clientHandler.getUsername().equals(name))
                  .findFirst();
         return clienthandler.orElse(null);
+    }
+    public boolean readyToCreatePrivateGame(int gameCode){
+        if(readyToStartGame.contains(gameCode))
+            return true;
+
+        else
+            return false;
     }
 }
