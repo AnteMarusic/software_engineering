@@ -125,45 +125,7 @@ public class LobbyController {
         }
     }
 
-    public void disconnect(ClientHandler clientHandler) {
-        boolean flag = false;
-        // find client handler in one of the lobbies
-        // and delete
-        for (ClientHandler c : publicListOf2) {
-            //clientHandler and c refer to the same object.
-            if (c == clientHandler) {
-                publicListOf2.remove(c);
-                flag = true;
-            }
-        }
 
-        if (!flag) {
-            for (ClientHandler c : publicListOf3) {
-                //clientHandler and c refer to the same object.
-                if (c == clientHandler) {
-                    publicListOf3.remove(c);
-                    flag = true;
-                }
-            }
-        }
-
-        if (!flag) {
-            for (ClientHandler c : publicListOf4) {
-                //clientHandler and c refer to the same object.
-                if (c == clientHandler) {
-                    publicListOf4.remove(c);
-                    flag = true;
-                }
-            }
-        }
-        if (flag) {
-            System.out.println ("removed client: " + clientHandler.getUsername() + "from lobby");
-        }
-        else {
-            System.out.println("client: " + clientHandler.getUsername() + "wasn't in lobby");
-        }
-
-    }
     public void addPrivateGameCode(int gameCode, ClientHandler clientHandler, int numOfPlayer ){
         ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
         list.add(clientHandler);
@@ -223,6 +185,45 @@ public class LobbyController {
         }
     }
 
+    public void disconnect(ClientHandler clientHandler) {
+        boolean flag = false;
+        // find client handler in one of the lobbies
+        // and delete
+        for (ClientHandler c : publicListOf2) {
+            //clientHandler and c refer to the same object.
+            if (c == clientHandler) {
+                publicListOf2.remove(c);
+                flag = true;
+            }
+        }
+
+        if (!flag) {
+            for (ClientHandler c : publicListOf3) {
+                //clientHandler and c refer to the same object.
+                if (c == clientHandler) {
+                    publicListOf3.remove(c);
+                    flag = true;
+                }
+            }
+        }
+
+        if (!flag) {
+            for (ClientHandler c : publicListOf4) {
+                //clientHandler and c refer to the same object.
+                if (c == clientHandler) {
+                    publicListOf4.remove(c);
+                    flag = true;
+                }
+            }
+        }
+        if (flag) {
+            System.out.println ("removed client: " + clientHandler.getUsername() + "from lobby");
+        }
+        else {
+            System.out.println("client: " + clientHandler.getUsername() + "wasn't in lobby");
+        }
+
+    }
     public ClientHandler getClienthandlerfromLobby(String name){
          Optional<ClientHandler> clienthandler = Stream.of(publicListOf2, publicListOf3, publicListOf4)
                 .flatMap(ArrayList::stream)
