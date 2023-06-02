@@ -139,9 +139,16 @@ public class GameController {
     }
     public void disconnection(ClientHandler clientHandler){
         System.out.println("game controller stampa: siamo dentro al metodo disconnection");
-        if(clientHandler == players.get(currentPlayer)){
+        String username = players.get(currentPlayer).getUsername();
+        players.set(players.indexOf(clientHandler), null);
+        if(getNumOfConnectedPlayers()==0){
+            closeGame();
+        }
+        else if(players.get(currentPlayer) == null){   // se il giocatore che si è disconnesso è il currentPlayer
+            if(getNumOfConnectedPlayers()==1){
+
+            }
             nextPlayer();
-            //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
             // se il client è rimasto da solo faccio partire un conto alla rovescia che viene eliminato se qualcuno si
             //riconnette. Se il conto alla rovescia arriva a 0 decreto l'unico rimasto vincitore
             // comunico ai giocatori chi è il giocatore successivi
@@ -154,8 +161,11 @@ public class GameController {
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
 
         }
+        //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
+
+
         // setto nella lista di clientHandler il client che è uscito a null
-        players.set(players.indexOf(clientHandler), null);
+
         // devo settare in usernameIssuer lo username con lo stato disconnected
     }
 
@@ -177,5 +187,22 @@ public class GameController {
                 .filter(clientHandler -> clientHandler.getUsername().equals(name))
                 .findFirst();
         return clienthandler.orElse(null);
+    }
+
+    private int getNumOfConnectedPlayers(){
+        int counter=0;
+        for(int i=0; i<numOfPlayers;i++){
+            if(players.get(i)!=null){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    private void closeGame(){
+        /*
+        toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
+        distruggo tutte le strutture create
+        */
     }
 }

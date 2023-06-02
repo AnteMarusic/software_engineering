@@ -220,10 +220,10 @@ public class LobbyController {
             }
         }
         if (flag) {
-            System.out.println ("removed client: " + clientHandler.getUsername() + "from lobby");
+            System.out.println ("removed client: " + clientHandler.getUsername() + " from lobby");
         }
         else {
-            System.out.println("client: " + clientHandler.getUsername() + "wasn't in lobby");
+            System.out.println("client: " + clientHandler.getUsername() + " wasn't in lobby");
         }
 
     }

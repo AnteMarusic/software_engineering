@@ -176,7 +176,6 @@ public class ClientHandler implements Runnable{
     }
 
     private void disconnect () {
-        System.out.println("clientHandelr stampa: siamo dentro disconnect");
         System.out.println(this.username + " disconnected");
 
         if (lobbyController == null) {
@@ -229,32 +228,4 @@ public class ClientHandler implements Runnable{
         return RMIMessages.size()==0;
     }
 
-    /*public void countDown() {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        int mycounter = counter;
-        counter++;
-        // Create a Runnable task
-        Runnable task = () -> {
-            // Task logic to be executed
-            System.out.println(username + "is disconnected");
-            if(mycounter+1==counter)
-                disconnect();
-            // eseguo la disconnessione
-        };
-        // Schedule the task to be executed after a delay of 5 seconds
-        long delay = 5; // Delay in seconds
-        executor.schedule(task, delay, TimeUnit.SECONDS);
-        // Shutdown the executor service after all tasks are executed
-        executor.shutdown();
-    }
-
-     */
-
-
-
-    /*public void countDown(int period){
-
-    }
-
-     */
 }

@@ -17,27 +17,19 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.usernameIssuer = usernameIssuer;
         this.lobbyController = lobbyController;
     }
-    /*
-    public void login(Message usernameandGameModeMessage) throws RemoteException{
-        ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
-        clienthandler.onMessage(usernameandGameModeMessage);
-    }
 
-     */
+    @Override
     public void login(Message usernameMessage) throws RemoteException{
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         clienthandler.onMessage(usernameMessage);
     }
 
-//perchè ci sono due metodi con nomi uguali, uno qua e uno in client handler?
+    @Override
     public void onMessage(Message message) throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
     }
     public void reconnection() throws RemoteException{
-
-    }
-    public void disconnect() throws RemoteException{
 
     }
     @Override
@@ -49,8 +41,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         return clientHandler.popMessageRMI();
     }
+    @Override
     public RMIAvailability messagesAvailable(String username)throws RemoteException{
-        countDown(username);
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         if(clientHandler == null){
             throw new RuntimeException("something wrong happened, in method messageAvabile of RMI server because it returned a null client handler");
@@ -65,6 +57,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         }
 
     }
+    @Override
     public UsernameStatus usernameAlreadyTaken(String username) throws RemoteException {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         if (clientHandler == null)
@@ -80,13 +73,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
         }
     }
-
-    private void countDown(String username){
-        ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
-        clientHandler.countDown();
-    }
-
-
 
 }
 
