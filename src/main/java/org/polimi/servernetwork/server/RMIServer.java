@@ -27,7 +27,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     public void login(Message usernameMessage) throws RemoteException{
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         clienthandler.onMessage(usernameMessage);
-
     }
 
 //perchè ci sono due metodi con nomi uguali, uno qua e uno in client handler?
@@ -40,6 +39,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     }
     public void disconnect() throws RemoteException{
 
+    }
+    @Override
+    public void ping (String username) throws RemoteException {
+        ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
+        clientHandler.resetCountDown();
     }
     public Message getMessage(String username)throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);

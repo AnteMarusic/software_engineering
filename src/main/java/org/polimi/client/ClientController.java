@@ -466,9 +466,8 @@ public class ClientController {
         cli.setSharedGoal2(sharedGoal2);
     }
 
-    public void handleDisconnection() {
-        System.out.println("an error occurred, you disconnected from the server");
+    public void disconnect() {
+        cli.disconnect();
     }
-
 
 }

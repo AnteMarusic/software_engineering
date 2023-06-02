@@ -65,7 +65,7 @@ public class GameController {
     public void removeCards(List<Coordinates> coordinates) {
         game.remove(coordinates);
         for (ClientHandler c : players) {
-            if (!c.equals(players.get(currentPlayer))) {
+            if (c!=null && !c.equals(players.get(currentPlayer))) {
                 c.sendMessage(new CardToRemoveMessage("server", coordinates));
             }
         }
@@ -142,7 +142,8 @@ public class GameController {
         if(clientHandler == players.get(currentPlayer)){
             nextPlayer();
             //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
-            // ...
+            // se il client è rimasto da solo faccio partire un conto alla rovescia che viene eliminato se qualcuno si
+            //riconnette. Se il conto alla rovescia arriva a 0 decreto l'unico rimasto vincitore
             // comunico ai giocatori chi è il giocatore successivi
             for (ClientHandler c : players) {
                 if (c != players.get(currentPlayer) && c!=null)
@@ -156,8 +157,6 @@ public class GameController {
         // setto nella lista di clientHandler il client che è uscito a null
         players.set(players.indexOf(clientHandler), null);
         // devo settare in usernameIssuer lo username con lo stato disconnected
-
-
     }
 
     private int setFirstPlayer(int numOfPlayer){

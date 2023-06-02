@@ -20,6 +20,14 @@ public class RMIClient extends Client{
         createClientController();
         this.connected=false;
     }
+
+    public ClientController getClientController() {
+        return clientController;
+    }
+
+    private void createPinger () {
+        new Thread(new Pinger(this.username, this.server, this)).start();
+    }
     private void createClientController() throws RemoteException {
         this.clientController = new ClientController(this);
     }
@@ -63,6 +71,10 @@ public class RMIClient extends Client{
         return this.server;
     }
 
+    public void disconnect () {
+        clientController.disconnect();
+    }
+
     public static void main (String[] args) throws IOException, NotBoundException, InterruptedException {
         boolean bool;
         UsernameStatus alreadyTaken=null;
@@ -82,7 +94,12 @@ public class RMIClient extends Client{
             rmiClient.server.reconnection();
         }
         else if(alreadyTaken == UsernameStatus.NEVER_USED){
-            rmiClient.login();
+            try {
+                rmiClient.login();
+                rmiClient.createPinger();
+            } catch (RemoteException e) {
+                rmiClient.getClientController().disconnect();
+            }
         }
         while(rmiClient.ifConnected()){
             Thread.sleep(500);     // serve per non intasare il server

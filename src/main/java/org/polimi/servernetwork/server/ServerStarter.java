@@ -1,5 +1,6 @@
 package org.polimi.servernetwork.server;
 
+import org.polimi.servernetwork.controller.Decrementer;
 import org.polimi.servernetwork.controller.GameCodeIssuer;
 import org.polimi.servernetwork.controller.LobbyController;
 import org.polimi.servernetwork.controller.UsernameIssuer;
@@ -21,8 +22,10 @@ public class ServerStarter {
 
         try {
             Registry registry = LocateRegistry.createRegistry(rmiPort);
+            Decrementer decrementer = new Decrementer(usernameIssuer);
             RMIServer rmiServer = new RMIServer(gameCodeIssuer, usernameIssuer, lobby);
             registry.bind("server", rmiServer);
+            new Thread(decrementer).start();
         } catch (IOException | AlreadyBoundException e) {
             System.out.println("errore");
         }

@@ -318,7 +318,7 @@ public class Cli {
         System.out.println("this game code is already user in another game");
     }
 
-
-
-
+    public void disconnect () {
+        System.out.println("an error occurred, you disconnected from the server");
+    }
 }
