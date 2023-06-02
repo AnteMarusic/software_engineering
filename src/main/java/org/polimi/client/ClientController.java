@@ -1,6 +1,7 @@
 package org.polimi.client;
 
 import org.polimi.GameRules;
+import org.polimi.client.view.Cli;
 import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;

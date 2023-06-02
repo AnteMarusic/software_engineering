@@ -1,6 +1,5 @@
 package org.polimi.servernetwork.controller;
 
-import org.polimi.client.Cli;
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
 
