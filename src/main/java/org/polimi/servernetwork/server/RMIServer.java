@@ -46,6 +46,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         return clientHandler.popMessageRMI();
     }
     public RMIAvailability messagesAvailable(String username)throws RemoteException{
+        countDown(username);
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         if(clientHandler == null){
             throw new RuntimeException("something wrong happened, in method messageAvabile of RMI server because it returned a null client handler");
@@ -75,5 +76,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
         }
     }
+
+    private void countDown(String username){
+        ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
+        clientHandler.countDown();
+    }
+
+
+
 }
 

@@ -8,6 +8,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 public class ClientHandler implements Runnable{
     private Socket socket;
@@ -65,7 +69,8 @@ public class ClientHandler implements Runnable{
                     disconnect();
                 }
             } catch (IOException e) {
-                System.out.println("client " + username + "disconnected");
+                System.out.println("client " + username + " disconnected");
+                disconnect();
                 closeEverything();
 
             } catch (ClassNotFoundException e) {
@@ -129,41 +134,6 @@ public class ClientHandler implements Runnable{
                 }
 
             }
-            /*
-            case USERNAME_AND_GAMEMODE -> {
-                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
-                if(internalComunication == InternalComunication.OK) {
-                    usernameIssuer.setClientHandler(this, message.getUsername());
-                    this.username = message.getUsername();
-                    UsernameAndGameModeMessage chosenGameModeMessage = (UsernameAndGameModeMessage) message;
-                    switch (chosenGameModeMessage.getGameMode()) {
-                        case JOIN_RANDOM_GAME_2_PLAYER -> {
-                            lobbyController.insertPlayer(this, 2);
-                        }
-                        case JOIN_RANDOM_GAME_3_PLAYER -> {
-                            lobbyController.insertPlayer(this, 3);
-                        }
-                        case JOIN_RANDOM_GAME_4_PLAYER -> {
-                            lobbyController.insertPlayer(this , 4);
-                        }
-                        //to do: private game
-                    }
-                }
-                if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                    System.out.println("somebody tried to use an already taken username");
-                }
-                //to test
-                if(internalComunication == InternalComunication.RECONNECTION){
-                    this.username = message.getUsername();
-                    int gameId = usernameIssuer.getGameID(message.getUsername());
-                    GameController gameController = gameCodeIssuer.getGameController(gameId);
-                    usernameIssuer.setConnect(this.getUsername());
-                    gameController.reconnect(this);
-                }
-
-            }
-
-             */
             case CHOSEN_CARDS_REPLY -> {
                 ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
                 gameController.removeCards(chosenCards.getCoordinates());
@@ -193,6 +163,7 @@ public class ClientHandler implements Runnable{
     }
 
     private void disconnect () {
+        System.out.println("clientHandelr stampa: siamo dentro disconnect");
         if (lobbyController == null) {
             throw new NullPointerException();
         }
@@ -240,4 +211,33 @@ public class ClientHandler implements Runnable{
     public boolean rmiMessagesEmpty(){
         return RMIMessages.size()==0;
     }
+
+    /*public void countDown() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        int mycounter = counter;
+        counter++;
+        // Create a Runnable task
+        Runnable task = () -> {
+            // Task logic to be executed
+            System.out.println(username + "is disconnected");
+            if(mycounter+1==counter)
+                disconnect();
+            // eseguo la disconnessione
+        };
+        // Schedule the task to be executed after a delay of 5 seconds
+        long delay = 5; // Delay in seconds
+        executor.schedule(task, delay, TimeUnit.SECONDS);
+        // Shutdown the executor service after all tasks are executed
+        executor.shutdown();
+    }
+
+     */
+
+
+
+    /*public void countDown(int period){
+
+    }
+
+     */
 }

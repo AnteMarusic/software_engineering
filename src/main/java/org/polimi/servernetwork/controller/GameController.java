@@ -138,6 +138,7 @@ public class GameController {
         clientHandler.sendMessage(new Message("server", MessageType.WAITING_FOR_YOUR_TURN));
     }
     public void disconnection(ClientHandler clientHandler){
+        System.out.println("game controller stampa: siamo dentro al metodo disconnection");
         if(clientHandler == players.get(currentPlayer)){
             nextPlayer();
             //comunico a tutti i giocatori che clieentHandler.getUsername è uscito

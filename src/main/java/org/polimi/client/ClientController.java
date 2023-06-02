@@ -129,15 +129,26 @@ public class ClientController {
     }
     public Message chooseGameMode () {
         ChosenGameModeMessage message = null;
-        int input;
+        int input=0;
         int gameCode;
+        boolean valid=true;
         do {
-            cli.chooseGameMode();
-            input = scanner.nextInt();
-            if (input < 1 || input > 4) {
-                cli.invalid();
+            try {
+                cli.chooseGameMode();
+                input = scanner.nextInt();
+                if (input < 1 || input > 4) {
+                    cli.invalid();
+                }
+                valid = true;
             }
-        } while (input < 1 || input > 4);
+            catch(NumberFormatException | InputMismatchException e){
+                cli.invalid();
+                valid = false;
+                this.scanner = new Scanner(System.in);
+            }
+
+
+        } while (input < 1 || input > 4 || valid == false);
         switch (input) {
             case 1 -> {
                 do {

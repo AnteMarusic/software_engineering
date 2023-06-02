@@ -66,7 +66,7 @@ public class RMIClient extends Client{
     public static void main (String[] args) throws IOException, NotBoundException, InterruptedException {
         boolean bool;
         UsernameStatus alreadyTaken=null;
-        Message message, messagefromserver;
+        Message message, messagefromserver=null;
         RMIClient rmiClient= new RMIClient(port);
         do{
             bool=rmiClient.startConnection();
@@ -85,12 +85,25 @@ public class RMIClient extends Client{
             rmiClient.login();
         }
         while(rmiClient.ifConnected()){
-            Thread.sleep(1000);
-            RMIAvailability status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
+            Thread.sleep(500);     // serve per non intasare il server
+            RMIAvailability status = RMIAvailability.NOT_AVAILABLE;
+            try{
+                 status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
+            }
+            catch ( RemoteException e){
+                // gestire la disconnessione del server
+            }
             //System.out.println(status);
             if(status == RMIAvailability.AVAILABLE){
-                messagefromserver=rmiClient.getServer().getMessage(rmiClient.getUsername());
-                System.out.println("questo dal server "+messagefromserver);
+
+              try{
+                  messagefromserver=rmiClient.getServer().getMessage(rmiClient.getUsername());
+              }
+              catch ( RemoteException e){
+                  // gestire la disconnessione del server
+              }
+              // messagefromserver potrebbe essere null
+                System.out.println("questo dal server " + messagefromserver);
                 message= rmiClient.handleMessage(messagefromserver);
                 if(message!=null)
                     rmiClient.sendMessage(message);
