@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class ClientHandler implements Runnable{
+    private static final int COUNTDOWN = 5;
     private Socket socket;
     private boolean rmi;
     private ObjectInputStream input;
@@ -20,10 +21,12 @@ public class ClientHandler implements Runnable{
     private LobbyController lobbyController;
     private GameController gameController;
     private Queue<Message> RMIMessages;
+    private int countDown;
 
     public ClientHandler(boolean rmi,Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         try {
             this.rmi = rmi;
+            this.countDown = COUNTDOWN;
             this.usernameIssuer = usernameIssuer;
             this.gameCodeIssuer = gameCodeIssuer;
             this.lobbyController = lobbyController;
@@ -40,6 +43,17 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    public void resetCountDown () {
+        this.countDown = COUNTDOWN;
+    }
+
+    public void decreaseCountDown () {
+        this.countDown--;
+        if (this.countDown == 0) {
+            this.disconnect();
+        }
+    }
+
     public void setUsername(String name){
         this.username = name;
     }
@@ -50,16 +64,16 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        Message messageFromClient=null;
+        Message messageFromClient = null;
         while (!rmi && socket != null && socket.isConnected()) {
-            try {messageFromClient = (Message) input.readObject();
+            try {
+                messageFromClient = (Message) input.readObject();
                 // posso scartare tutti i messaggi di un client che è gia connesso alla partita se non è il suo turno
 
-                if(messageFromClient != null){
+                if (messageFromClient != null) {
                     System.out.println(messageFromClient);
                     onMessage(messageFromClient);
-                }
-                else {
+                } else {
                     //message == null. we suppose that this happens because you disconnected
                     System.out.println("received a null message from client " + username);
                     disconnect();
@@ -74,13 +88,12 @@ public class ClientHandler implements Runnable{
                 disconnect();
             }
         }
-            if (socket != null) {
+        if (socket != null) {
             System.out.println("client " + username + "disconnected");
             disconnect();
         }
 
     }
-
     public void onMessage(Message message){
         switch (message.getMessageType()){
             case USERNAME -> {
@@ -193,6 +206,7 @@ public class ClientHandler implements Runnable{
     }
 
     private void disconnect () {
+        System.out.println(this.username + " disconnected");
         if (lobbyController == null) {
             throw new NullPointerException();
         }
@@ -201,10 +215,12 @@ public class ClientHandler implements Runnable{
         //so, you should disconnect from it
         if (gameController == null) {
             lobbyController.disconnect(this);
+            usernameIssuer.removeUsername(this.username);
         }
         //if you are in a game you have to be disconnected from it
         if (gameController != null) {
             gameController.disconnection(this);
+            usernameIssuer.setDisconnect(this.username);
         }
         //closes the socket and the I/O streams
         closeEverything();

@@ -107,7 +107,7 @@ public class SocketClient extends Client{
     }
     public void handleDisconnection() {
         closeEverything();
-        clientController.handleDisconnection();
+        clientController.disconnect();
     }
     public void handleProtocolDisruption() {
         System.out.println("someone sent something that isn't a message");

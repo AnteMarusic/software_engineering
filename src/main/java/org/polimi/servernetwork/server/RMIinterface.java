@@ -15,4 +15,5 @@ public interface RMIinterface extends Remote {
     Message getMessage(String username)throws RemoteException;
     RMIAvailability messagesAvailable(String username)throws RemoteException;
     UsernameStatus usernameAlreadyTaken(String username) throws RemoteException;
+    void ping (String username) throws RemoteException;
 }
