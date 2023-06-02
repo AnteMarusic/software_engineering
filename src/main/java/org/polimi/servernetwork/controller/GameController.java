@@ -14,17 +14,18 @@ public class GameController {
     private int currentPlayer;
     private final int firstPlayer;
     private final Game game;
+    private int countDown;
 
 
     public GameController(ArrayList<ClientHandler> list) {
         numOfPlayers = list.size();
+        countDown = 60;
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
         initGameEnv();
         startGameTurn();
-
     }
 
     private void initGameEnv() {
@@ -146,7 +147,7 @@ public class GameController {
         }
         else if(players.get(currentPlayer) == null){   // se il giocatore che si è disconnesso è il currentPlayer
             if(getNumOfConnectedPlayers()==1){
-
+                new Thread (new DecrementerGameController(this)).start();
             }
             nextPlayer();
             // se il client è rimasto da solo faccio partire un conto alla rovescia che viene eliminato se qualcuno si
@@ -204,5 +205,15 @@ public class GameController {
         toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
         distruggo tutte le strutture create
         */
+    }
+
+    public void decreaseCountDown () {
+        countDown--;
+        if (countDown == 0) {
+            System.out.println("sono dentro al metodo decreaseCountDown e countDown è uguale a 0");
+            // decreto il vincitore
+            // mando messaggio di fine partita
+            // chiudo il gioco
+        }
     }
 }
