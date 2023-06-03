@@ -1,5 +1,6 @@
 package org.polimi.servernetwork.controller;
 
+import org.polimi.servernetwork.server.RMIMessagesHub;
 import org.polimi.messages.*;
 
 import java.io.IOException;
@@ -8,9 +9,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This class is responsible for handling the communication with a client.
@@ -28,9 +26,11 @@ public class ClientHandler implements Runnable{
     private LobbyController lobbyController;
     private GameController gameController;
     private Queue<Message> RMIMessages;
+
+    private RMIMessagesHub messagesHub;
     private int countDown;
 
-    public ClientHandler(boolean rmi,Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
+    public ClientHandler(boolean rmi, Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController, RMIMessagesHub messagesHub) {
         try {
             this.rmi = rmi;
             this.countDown = COUNTDOWN;
@@ -38,6 +38,7 @@ public class ClientHandler implements Runnable{
             this.gameCodeIssuer = gameCodeIssuer;
             this.lobbyController = lobbyController;
             this.socket = socket;
+            this.messagesHub = messagesHub;
             if(!rmi){
                 input = new ObjectInputStream(socket.getInputStream());
                 output = new ObjectOutputStream(socket.getOutputStream());
@@ -109,10 +110,10 @@ public class ClientHandler implements Runnable{
                 if(internalComunication == InternalComunication.OK) {
                     usernameIssuer.setClientHandler(this, message.getUsername());
                     this.username = message.getUsername();
-                    sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
+                    sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
                 }
                 if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                    sendMessage(new ErrorMessage("server", ErrorType.ALREADY_TAKEN_USERNAME));
+                    sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
                 }
                 //to test
                 if(internalComunication == InternalComunication.RECONNECTION){
@@ -140,8 +141,8 @@ public class ClientHandler implements Runnable{
                     }
                     case CREATE_PRIVATE_GAME -> {
                         if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
-                            sendMessage(new Message("server", MessageType.ALREADYTAKENGAMECODEMESSAGE ));
-                            sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
+                            sendMessage(new Message(this.username, MessageType.ALREADYTAKENGAMECODEMESSAGE ));
+                            sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
                         }
                         else{
                             lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this, chosenGameModeMessage.getNumOfPlayer());
@@ -153,7 +154,7 @@ public class ClientHandler implements Runnable{
             case CHOSEN_CARDS_REPLY -> {
                 ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
                 gameController.removeCards(chosenCards.getCoordinates());
-                sendMessage(new Message("server", MessageType.CHOOSE_COLUMN_REQUEST));
+                sendMessage(new Message(this.username, MessageType.CHOOSE_COLUMN_REQUEST));
             }
             case CHOSEN_COLUMN_REPLY -> {
                 ChosenColumnMessage chosenColumn = (ChosenColumnMessage) message;
@@ -170,7 +171,7 @@ public class ClientHandler implements Runnable{
             if(!rmi)
                 output.writeObject(message);
             else
-                RMIMessages.add(message);
+                messagesHub.onMessage(message);
         } catch(IOException IOe) {
             IOe.printStackTrace();
             closeEverything();

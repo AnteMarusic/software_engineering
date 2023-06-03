@@ -5,6 +5,8 @@ import org.polimi.messages.RMIAvailability;
 import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.controller.*;
 
+import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -12,20 +14,24 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private GameCodeIssuer gameCodeIssuer;
     private UsernameIssuer usernameIssuer;
     private LobbyController lobbyController;
-    public RMIServer(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
+    private RMIMessagesHub messagesHub;
+    public RMIServer(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController, RMIMessagesHub messagesHub) throws RemoteException{
         this.gameCodeIssuer = gameCodeIssuer;
         this.usernameIssuer = usernameIssuer;
         this.lobbyController = lobbyController;
+        this.messagesHub= messagesHub;
     }
+    /*
 
     /**
      * this method is called when a client wants to login and it is sure that the username provided is not already taken
      * @param usernameMessage the message containing the username
      * @throws RemoteException
      */
+
     @Override
-    public void login(Message usernameMessage) throws RemoteException{
-        ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+    public void login(Message usernameMessage) throws IOException, NotBoundException {
+        ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController, messagesHub);
         //new Thread(clienthandler).start();
         clienthandler.onMessage(usernameMessage);
     }
@@ -36,7 +42,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         clientHandler.onMessage(message);
     }
     public void reconnection(Message message) throws RemoteException{
-        ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+        ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController, messagesHub);
         clientHandler.onMessage(message);
     }
     @Override

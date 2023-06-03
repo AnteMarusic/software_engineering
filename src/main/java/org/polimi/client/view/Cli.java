@@ -38,6 +38,7 @@ public class Cli {
     //to modify (has to print a mini bookshelf)
     private ClientPersonalGoal personalGoal;
 
+
     public Cli() {
         board = null;
         bookshelves = new ArrayList<ClientBookshelf>();

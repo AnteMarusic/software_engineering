@@ -114,9 +114,9 @@ public class SocketClient extends Client{
     }
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         int port = 8181;
         SocketClient socket = new SocketClient(port);
-    }
+    }*/
 }
 
