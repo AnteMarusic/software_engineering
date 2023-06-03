@@ -29,8 +29,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
     }
-    public void reconnection() throws RemoteException{
-
+    public void reconnection(Message message) throws RemoteException{
+        ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+        clientHandler.onMessage(message);
     }
     @Override
     public void ping (String username) throws RemoteException {

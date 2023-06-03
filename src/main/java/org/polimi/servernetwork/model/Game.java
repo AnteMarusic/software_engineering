@@ -25,6 +25,7 @@ public class Game{
         this.readyToInsert = new LinkedList<>();
         for (int j=0; j<numOfPlayer; j++){
             players[j] = new Player(playerName.get(j));
+            System.out.println(j + "° giocatore è" + players[j].getName());
         }
         handOutGoalsPG(numOfPlayer);
         sharedGoal = new Goal[2];
@@ -228,7 +229,7 @@ public class Game{
     }
     public int getPosition(String username){
         for(int i=0; i<players.length; i++){
-            if(username == players[i].getName()){
+            if(Objects.equals(username, players[i].getName())){
                 return i;
             }
         }

@@ -91,7 +91,8 @@ public class RMIClient extends Client{
             }
         }while(alreadyTaken == UsernameStatus.USED);
         if(alreadyTaken == UsernameStatus.DISCONNECTED){  // mi devo occupare della riconnessione
-            rmiClient.server.reconnection();
+            Message usernamemessage = new Message(rmiClient.username, MessageType.USERNAME);
+            rmiClient.server.reconnection(usernamemessage);
         }
         else if(alreadyTaken == UsernameStatus.NEVER_USED){
             try {

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class PersonalGoal implements Goal{
-    private static final String FILENAME = "/src/main/resources/personal_goal.json";
+    private static final String FILENAME = "/src/main/resources/json/personal_goal.json";
     private static final int DIM = 6; //number of coordinates that is necessary to describe the personal goal
     private File file;
     private final Coordinates[] coordinates;

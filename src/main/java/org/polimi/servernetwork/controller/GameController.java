@@ -79,7 +79,7 @@ public class GameController {
         // manda al giocatore corrente il punteggio attuale
         players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
         for (ClientHandler c : players) {
-            if (!c.equals(players.get(currentPlayer))) {
+            if (c!=null && !c.equals(players.get(currentPlayer))) {
                 c.sendMessage(new ChosenColumnMessage("server", column));
             }
         }
@@ -113,7 +113,7 @@ public class GameController {
                 new Thread (decrementer).start();
                 // se non succede niente entro i 60 secondi il timer scaduto si occuperà di comunicare al giocatore di aver vinto il gioco
                 // se invece nel mentre un giocatore dovesse entrare, per come è scritta la reconnection il timer verrà stoppato e inizierà il turno per il giocatore dentro da più tempo
-
+                return;
             }
             // se invece ci sono almeno due giocatori collegati:
             // comunico a tutti chi sarà il prossimo giocatore
@@ -144,9 +144,13 @@ public class GameController {
     }
 
     public void reconnect (ClientHandler clientHandler){
+        System.out.println(clientHandler.getUsername() + " sta cercando di riconnettersi");
         // riinserisco il clienthandler nella lista di clienthanler del gameController
         int position = game.getPosition(clientHandler.getUsername());
-        players.add(position, clientHandler);
+        System.out.println(clientHandler.getUsername() + " era in posizione " + position);
+        System.out.println("questa è la lista di clienthandler: " + players.toString());
+        players.set(position, clientHandler);
+        System.out.println("questa è la lista di clienthandler: " + players.toString());
         for(ClientHandler c : players ) {
             if(c != clientHandler)
                 c.sendMessage(new ReconnectionMessage("server", clientHandler.getUsername()));
@@ -165,10 +169,11 @@ public class GameController {
             // gli chiedo di scegliere le carte da inserire
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         }
+        // comunico al giocatore riconnesso di essere entrato in una partita
     }
     public void disconnection(ClientHandler clientHandler){
         System.out.println("game controller stampa: siamo dentro al metodo disconnection");
-        String username = players.get(currentPlayer).getUsername();
+        String username = clientHandler.getUsername();
         // setto nella lista di clientHandler il client che è uscito a null
         players.set(players.indexOf(clientHandler), null);
         if(getNumOfConnectedPlayers()==0){
@@ -213,7 +218,7 @@ public class GameController {
 
             //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
             for (ClientHandler c : players) {
-                if (c != players.get(currentPlayer) && c!=null)
+                if (c!=null)
                     c.sendMessage(new DisconnectionAlert("server", username));
             }
         }
