@@ -1,0 +1,122 @@
+[
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":0}, "color" : "PINK"},
+    {"coordinates" : {"row":0,"col":2}, "color" : "BLUE"},
+    {"coordinates" : {"row":1,"col":4}, "color" : "GREEN"},
+    {"coordinates" : {"row":2,"col":3}, "color" : "WHITE"},
+    {"coordinates" : {"row":3,"col":1}, "color" : "ORANGE"},
+    {"coordinates" : {"row":5,"col":2}, "color" : "CYAN"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":1,"col":1}, "color" : "PINK"},
+    {"coordinates" : {"row":2,"col":0}, "color" : "GREEN"},
+    {"coordinates" : {"row":2,"col":2}, "color" : "ORANGE"},
+    {"coordinates" : {"row":3,"col":4}, "color" : "WHITE"},
+    {"coordinates" : {"row":4,"col":3}, "color" : "CYAN"},
+    {"coordinates" : {"row":5,"col":4}, "color" : "BLUE"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":1,"col":0}, "color" : "BLUE"},
+    {"coordinates" : {"row":1,"col":3}, "color" : "ORANGE"},
+    {"coordinates" : {"row":2,"col":2}, "color" : "PINK"},
+    {"coordinates" : {"row":3,"col":1}, "color" : "GREEN"},
+    {"coordinates" : {"row":3,"col":4}, "color" : "CYAN"},
+    {"coordinates" : {"row":5,"col":0}, "color" : "WHITE"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":4}, "color" : "ORANGE"},
+    {"coordinates" : {"row":2,"col":0}, "color" : "CYAN"},
+    {"coordinates" : {"row":2,"col":2}, "color" : "BLUE"},
+    {"coordinates" : {"row":3,"col":3}, "color" : "PINK"},
+    {"coordinates" : {"row":4,"col":1}, "color" : "WHITE"},
+    {"coordinates" : {"row":4,"col":2}, "color" : "GREEN"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":1,"col":1}, "color" : "CYAN"},
+    {"coordinates" : {"row":3,"col":1}, "color" : "BLUE"},
+    {"coordinates" : {"row":3,"col":2}, "color" : "WHITE"},
+    {"coordinates" : {"row":4,"col":4}, "color" : "PINK"},
+    {"coordinates" : {"row":5,"col":0}, "color" : "ORANGE"},
+    {"coordinates" : {"row":5,"col":3}, "color" : "GREEN"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":2}, "color" : "CYAN"},
+    {"coordinates" : {"row":0,"col":4}, "color" : "GREEN"},
+    {"coordinates" : {"row":2,"col":3}, "color" : "WHITE"},
+    {"coordinates" : {"row":4,"col":1}, "color" : "ORANGE"},
+    {"coordinates" : {"row":4,"col":3}, "color" : "BLUE"},
+    {"coordinates" : {"row":5,"col":0}, "color" : "PINK"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":0}, "color" : "GREEN"},
+    {"coordinates" : {"row":1,"col":3}, "color" : "BLUE"},
+    {"coordinates" : {"row":2,"col":1}, "color" : "PINK"},
+    {"coordinates" : {"row":3,"col":0}, "color" : "CYAN"},
+    {"coordinates" : {"row":4,"col":4}, "color" : "ORANGE"},
+    {"coordinates" : {"row":5,"col":2}, "color" : "WHITE"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":4}, "color" : "BLUE"},
+    {"coordinates" : {"row":1,"col":1}, "color" : "GREEN"},
+    {"coordinates" : {"row":2,"col":2}, "color" : "CYAN"},
+    {"coordinates" : {"row":3,"col":0}, "color" : "PINK"},
+    {"coordinates" : {"row":4,"col":3}, "color" : "WHITE"},
+    {"coordinates" : {"row":5,"col":3}, "color" : "ORANGE"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":2}, "color" : "ORANGE"},
+    {"coordinates" : {"row":2,"col":2}, "color" : "GREEN"},
+    {"coordinates" : {"row":3,"col":4}, "color" : "WHITE"},
+    {"coordinates" : {"row":4,"col":1}, "color" : "CYAN"},
+    {"coordinates" : {"row":4,"col":4}, "color" : "PINK"},
+    {"coordinates" : {"row":5,"col":0}, "color" : "BLUE"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":4}, "color" : "CYAN"},
+    {"coordinates" : {"row":1,"col":1}, "color" : "ORANGE"},
+    {"coordinates" : {"row":2,"col":0}, "color" : "WHITE"},
+    {"coordinates" : {"row":3,"col":3}, "color" : "GREEN"},
+    {"coordinates" : {"row":4,"col":1}, "color" : "BLUE"},
+    {"coordinates" : {"row":5,"col":3}, "color" : "PINK"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":2}, "color" : "PINK"},
+    {"coordinates" : {"row":1,"col":1}, "color" : "WHITE"},
+    {"coordinates" : {"row":2,"col":0}, "color" : "ORANGE"},
+    {"coordinates" : {"row":3,"col":2}, "color" : "BLUE"},
+    {"coordinates" : {"row":4,"col":4}, "color" : "GREEN"},
+    {"coordinates" : {"row":5,"col":3}, "color" : "CYAN"}
+  ]
+  },
+  {"goal" :
+  [
+    {"coordinates" : {"row":0,"col":2}, "color" : "WHITE"},
+    {"coordinates" : {"row":1,"col":1}, "color" : "PINK"},
+    {"coordinates" : {"row":2,"col":2}, "color" : "BLUE"},
+    {"coordinates" : {"row":3,"col":3}, "color" : "CYAN"},
+    {"coordinates" : {"row":4,"col":4}, "color" : "ORANGE"},
+    {"coordinates" : {"row":5,"col":0}, "color" : "GREEN"}
+  ]
+  }
+]

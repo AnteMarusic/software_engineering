@@ -1,0 +1,9 @@
+ .root {
+    -fx-background-image: url("../images/17_MyShelfie_BGA/Publisher_material/banner_1386x400px.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+#nicknameField{
+    -fx-alignment: center center;
+}
