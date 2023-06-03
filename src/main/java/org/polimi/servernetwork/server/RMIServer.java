@@ -18,9 +18,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.lobbyController = lobbyController;
     }
 
+    /**
+     * this method is called when a client wants to login and it is sure that the username provided is not already taken
+     * @param usernameMessage the message containing the username
+     * @throws RemoteException
+     */
     @Override
     public void login(Message usernameMessage) throws RemoteException{
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+        //new Thread(clienthandler).start();
         clienthandler.onMessage(usernameMessage);
     }
 

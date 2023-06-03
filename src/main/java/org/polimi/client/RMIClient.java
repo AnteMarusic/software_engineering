@@ -78,13 +78,13 @@ public class RMIClient extends Client{
     public static void main (String[] args) throws IOException, NotBoundException, InterruptedException {
         boolean bool;
         UsernameStatus alreadyTaken=null;
-        Message message, messagefromserver=null;
+        Message message, messageFromServer=null;
         RMIClient rmiClient= new RMIClient(port);
         do{
             bool=rmiClient.startConnection();
         }while(!bool);
         do {
-            rmiClient.chooseUsername();//comunicazione solo client e clientcontroller
+            rmiClient.chooseUsername();//comunicazione solo client e client-controller
             alreadyTaken = rmiClient.server.usernameAlreadyTaken(rmiClient.username);
             if (alreadyTaken == UsernameStatus.USED) {
                 System.out.println("Already taken username, choose another");
@@ -114,14 +114,14 @@ public class RMIClient extends Client{
             if(status == RMIAvailability.AVAILABLE){
 
               try{
-                  messagefromserver=rmiClient.getServer().getMessage(rmiClient.getUsername());
+                  messageFromServer=rmiClient.getServer().getMessage(rmiClient.getUsername());
               }
               catch ( RemoteException e){
                   // gestire la disconnessione del server
               }
               // messagefromserver potrebbe essere null
-                System.out.println("questo dal server " + messagefromserver);
-                message= rmiClient.handleMessage(messagefromserver);
+                System.out.println("questo dal server " + messageFromServer);
+                message= rmiClient.handleMessage(messageFromServer);
                 if(message!=null)
                     rmiClient.sendMessage(message);
             }

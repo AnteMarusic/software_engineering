@@ -8,7 +8,7 @@ public class UsernameIssuer {
     public UsernameIssuer () {
         map = new HashMap<String, Object[]>();
     }
-    public void setClientHandler(ClientHandler clientHandler, String username){
+    public synchronized void setClientHandler(ClientHandler clientHandler, String username){
         Object[] object = map.get(username);
         if(object == null){
             throw new RuntimeException("you tried to set a clienthandler to a non registered username");
@@ -17,6 +17,10 @@ public class UsernameIssuer {
         map.put(username, object);
     }
 
+    /**
+     * sinchronized even if it is called only by the decrementer
+     * @return a list of all the active clientHandlers
+     */
     public synchronized List <ClientHandler> getActiveClientHandlers () {
         List <ClientHandler> list = new ArrayList<>();
         for (String s : map.keySet()) {
@@ -35,7 +39,7 @@ public class UsernameIssuer {
         }
     }
 
-    private void printMap () {
+    private synchronized void printMap () {
         Object [] o;
         for (String s : map.keySet()) {
             System.out.print(s);
@@ -75,7 +79,7 @@ public class UsernameIssuer {
         }
     }
 
-    public ClientHandler getClientHandler(String username){
+    public synchronized ClientHandler getClientHandler(String username){
         Object[] object = map.get(username);
         if(object == null){
             return null;
@@ -88,7 +92,7 @@ public class UsernameIssuer {
         }
     }
 
-    public int getGameID (String username){
+    public synchronized int getGameID (String username){
         Object [] object;
         object = map.get(username);
         return (int)object[1];
@@ -111,12 +115,12 @@ public class UsernameIssuer {
             throw new NullPointerException();
         }
     }
-    public void setConnect(String username){
+    public synchronized void setConnect(String username){
         Object[] object = map.get(username);
         object[0]=ConnectionStatus.CONNECTED;
         map.put(username, object);
     }
-    public ConnectionStatus getConnectionStatus(String username){
+    public synchronized ConnectionStatus getConnectionStatus(String username){
         Object [] object;
         object = map.get(username);
         return (ConnectionStatus)object[0];
