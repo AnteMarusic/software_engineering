@@ -1,5 +1,6 @@
 package org.polimi.client.view.gui;
 
+/*
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,3 +26,5 @@ public class Gui extends Application {
         launch(args);
     }
 }
+
+ */

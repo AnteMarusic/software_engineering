@@ -1,5 +1,5 @@
 package org.polimi.client.view.gui.sceneControllers;
-
+/*
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,3 +25,5 @@ public class LoginSceneController {
         System.out.println(nickname+" porcamadonna");
     }
 }
+
+ */

@@ -34,28 +34,34 @@ public class LobbyController {
     private void printLobby (int gameMode) {
         switch (gameMode) {
             case 2 -> {
-                System.out.print("lobby of two: ");
-                System.out.print("size: " + publicListOf2.size() + "contains: ");
-                for (ClientHandler c : publicListOf2) {
-                    System.out.print(c.getUsername());
+                synchronized (publicListOf2){
+                    System.out.print("lobby of two: ");
+                    System.out.print("size: " + publicListOf2.size() + "contains: ");
+                    for (ClientHandler c : publicListOf2) {
+                        System.out.print(c.getUsername());
+                    }
+                    System.out.println();
                 }
-                System.out.println();
              }
             case 3 -> {
-                System.out.print("lobby of three: ");
-                System.out.print("size: " + publicListOf3.size() + "contains: ");
-                for (ClientHandler c : publicListOf3) {
-                    System.out.print(c.getUsername());
+                synchronized (publicListOf3){
+                    System.out.print("lobby of three: ");
+                    System.out.print("size: " + publicListOf3.size() + "contains: ");
+                    for (ClientHandler c : publicListOf3) {
+                        System.out.print(c.getUsername());
+                    }
+                    System.out.println();
                 }
-                System.out.println();
             }
             case 4 -> {
-                System.out.print("lobby of four: ");
-                System.out.print("size: " + publicListOf4.size() + "contains: ");
-                for (ClientHandler c : publicListOf4) {
-                    System.out.print(c.getUsername());
+                synchronized (publicListOf4){
+                    System.out.print("lobby of four: ");
+                    System.out.print("size: " + publicListOf4.size() + "contains: ");
+                    for (ClientHandler c : publicListOf4) {
+                        System.out.print(c.getUsername());
+                    }
+                    System.out.println();
                 }
-                System.out.println();
             }
         }
     }
@@ -132,44 +138,63 @@ public class LobbyController {
         readyToStartGame.add(gameCode);
         list.add(clientHandler);
         if(numOfPlayer == 2){
-            privateGameOf2.put(gameCode, list);
+            synchronized (privateGameOf2){
+                privateGameOf2.put(gameCode, list);
+            }
+
         }
         if(numOfPlayer == 3){
-            privateGameOf3.put(gameCode, list);
+            synchronized (privateGameOf3){
+                privateGameOf3.put(gameCode, list);
+            }
+
         }
         if(numOfPlayer == 4){
-            privateGameOf4.put(gameCode, list);
+            synchronized (privateGameOf4){
+                privateGameOf4.put(gameCode, list);
+            }
+
         }
     }
     public void addInAPrivateGame(int gameCode, ClientHandler clientHandler){
-        if(privateGameOf2.containsKey(gameCode)){
-            ArrayList<ClientHandler> list = privateGameOf2.get(gameCode);
-            list.add(clientHandler);
-            privateGameOf2.put(gameCode, list);
-            if(list.size()==2){
-                createPrivateGame(list, gameCode, 2);
+        boolean flag = false;
+        synchronized (privateGameOf2){
+            if(privateGameOf2.containsKey(gameCode)){
+                ArrayList<ClientHandler> list = privateGameOf2.get(gameCode);
+                list.add(clientHandler);
+                privateGameOf2.put(gameCode, list);
+                if(list.size()==2){
+                    createPrivateGame(list, gameCode, 2);
+                }
+                flag = true;
             }
         }
-        else if(privateGameOf3.containsKey(gameCode)){
-            ArrayList<ClientHandler> list = privateGameOf3.get(gameCode);
-            list.add(clientHandler);
-            privateGameOf3.put(gameCode, list);
-            if(list.size()==3){
-                createPrivateGame(list, gameCode, 3);
+        synchronized (privateGameOf3){
+            if(!flag && privateGameOf3.containsKey(gameCode)){
+                ArrayList<ClientHandler> list = privateGameOf3.get(gameCode);
+                list.add(clientHandler);
+                privateGameOf3.put(gameCode, list);
+                if(list.size()==3){
+                    createPrivateGame(list, gameCode, 3);
+                }
             }
         }
-        else if (privateGameOf4.containsKey(gameCode)){
-            ArrayList<ClientHandler> list = privateGameOf4.get(gameCode);
-            list.add(clientHandler);
-            privateGameOf4.put(gameCode, list);
-            if(list.size()==4){
-                createPrivateGame(list, gameCode, 4);
+        synchronized (privateGameOf4){
+            if(!flag && privateGameOf4.containsKey(gameCode)){
+                ArrayList<ClientHandler> list = privateGameOf4.get(gameCode);
+                list.add(clientHandler);
+                privateGameOf4.put(gameCode, list);
+                if(list.size()==4){
+                    createPrivateGame(list, gameCode, 4);
+                }
             }
         }
-        else{
-            // il game code non va bene
-            clientHandler.sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
-        }
+
+
+        if(!flag)
+                clientHandler.sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
+
+
     }
     public void createPrivateGame(ArrayList<ClientHandler> list, int gameCode, int numOfPlayer){
         GameController gameController = new GameController(list);
@@ -191,32 +216,41 @@ public class LobbyController {
         boolean flag = false;
         // find client handler in one of the lobbies
         // and delete
-        for (ClientHandler c : publicListOf2) {
-            //clientHandler and c refer to the same object.
-            if (c == clientHandler) {
-                publicListOf2.remove(c);
-                flag = true;
-            }
-        }
-
-        if (!flag) {
-            for (ClientHandler c : publicListOf3) {
+        synchronized (publicListOf2){
+            for (ClientHandler c : publicListOf2) {
                 //clientHandler and c refer to the same object.
                 if (c == clientHandler) {
-                    publicListOf3.remove(c);
+                    publicListOf2.remove(c);
                     flag = true;
                 }
             }
         }
 
+
         if (!flag) {
-            for (ClientHandler c : publicListOf4) {
-                //clientHandler and c refer to the same object.
-                if (c == clientHandler) {
-                    publicListOf4.remove(c);
-                    flag = true;
+            synchronized (publicListOf3){
+                for (ClientHandler c : publicListOf3) {
+                    //clientHandler and c refer to the same object.
+                    if (c == clientHandler) {
+                        publicListOf3.remove(c);
+                        flag = true;
+                    }
                 }
             }
+
+        }
+
+        if (!flag) {
+            synchronized (publicListOf4){
+                for (ClientHandler c : publicListOf4) {
+                    //clientHandler and c refer to the same object.
+                    if (c == clientHandler) {
+                        publicListOf4.remove(c);
+                        flag = true;
+                    }
+                }
+            }
+
         }
         if (flag) {
             System.out.println ("removed client: " + clientHandler.getUsername() + " from lobby");
@@ -225,13 +259,6 @@ public class LobbyController {
             System.out.println("client: " + clientHandler.getUsername() + " wasn't in lobby");
         }
 
-    }
-    public ClientHandler getClienthandlerfromLobby(String name){
-         Optional<ClientHandler> clienthandler = Stream.of(publicListOf2, publicListOf3, publicListOf4)
-                .flatMap(ArrayList::stream)
-                .filter(clientHandler -> clientHandler.getUsername().equals(name))
-                 .findFirst();
-        return clienthandler.orElse(null);
     }
     public boolean readyToCreatePrivateGame(int gameCode){
         if(readyToStartGame.contains(gameCode))

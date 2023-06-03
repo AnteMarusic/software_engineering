@@ -61,7 +61,7 @@ public class GameCodeIssuer {
 
     }
     */
-    public boolean alreadyExistGameCode(int gameCode){  // metodo che controlla se esiste già un privateGAME con lo stesso gameCode
+    public synchronized boolean alreadyExistGameCode(int gameCode){  // metodo che controlla se esiste già un privateGAME con lo stesso gameCode
         if(associations.get(gameCode) == null){
             return false;
         }

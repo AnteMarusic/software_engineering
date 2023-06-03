@@ -102,6 +102,13 @@ public class ClientController {
                 cli.alreadyTakenGameCode();
                 return null;
             }
+            case AREALONE -> {
+                cli.youAreAlone();
+            }
+            case DISCONNECTION_ALLERT -> {
+                DisconnectionAlert m = (DisconnectionAlert) message;
+                cli.disconnectionAlert(m.getUsernameDisconnected());
+            }
             case NOTIFY_GOAL_COMPLETION -> {
             }
             case NOTIFY_GAME_END -> {

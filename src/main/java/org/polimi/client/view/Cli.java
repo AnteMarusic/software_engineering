@@ -324,4 +324,10 @@ public class Cli {
     public void disconnect () {
         System.out.println("an error occurred, you disconnected from the server");
     }
+    public void youAreAlone() {
+        System.out.println("you are alone in the game, timer started, if nobody enter in 60second you are the winner");
+    }
+    public void disconnectionAlert(String username){
+        System.out.println(username + " left the game");
+    }
 }
