@@ -12,7 +12,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * This class is responsible for handling the communication with a client.
+ * la classe non è thread safe, ma è thread confined
+ */
 public class ClientHandler implements Runnable{
     private static final int COUNTDOWN = 5;
     private Socket socket;

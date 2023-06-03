@@ -18,6 +18,7 @@ public class ServerStarter {
         UsernameIssuer usernameIssuer = new UsernameIssuer();
         LobbyController lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
         SocketServer serverSocket = new SocketServer(socketPort, gameCodeIssuer, usernameIssuer, lobby);
+        //start server runs on a different thread than gameCodeIssuer and usernameIssuer and lobby
         serverSocket.startServer();
 
         try {
