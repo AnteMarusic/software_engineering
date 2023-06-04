@@ -27,12 +27,11 @@ public class ClientStarter {
         input = scanner.nextInt();
         if(input == 1){
             RMIClient rmiClient = new RMIClient(1099);
-            Message messageFromServer = null, message;
             do {
                 bool = rmiClient.startConnection();
             } while (!bool);
             rmiClient.login();
-            while (rmiClient.ifConnected()) {
+            /*while (rmiClient.ifConnected()) {
                 // messagefromserver potrebbe essere null
                 RMIAvailability status = RMIAvailability.NOT_AVAILABLE;
                 try{
@@ -54,7 +53,7 @@ public class ClientStarter {
                         rmiClient.sendMessage(message);
                 }
 
-            }
+            }*/
         }
         else if(input==2){
             SocketClient socket = new SocketClient(8181);

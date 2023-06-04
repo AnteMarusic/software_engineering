@@ -2,6 +2,7 @@ package org.polimi.client;
 
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
+import org.polimi.messages.RMIAvailability;
 import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.server.RMIinterface;
 
@@ -10,21 +11,28 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RemoteObject;
+import java.rmi.server.RemoteObjectInvocationHandler;
+import java.rmi.server.RemoteRef;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class RMIClient extends Client {
+public class RMIClient extends Client implements RMICallback  {
     private static final int port = 1099;
     private ClientController clientController;
     private RMIinterface server;
     private boolean connected;
     private Queue<Message> RMIMessages;
 
+    private RMIAvailability availability;
+
     public RMIClient(int port) throws IOException, NotBoundException {
         super(port);
         createClientController();
         this.RMIMessages = new LinkedList<>();
         this.connected = false;
+        this.availability=RMIAvailability.NOT_AVAILABLE;
     }
 
     public ClientController getClientController() {
@@ -65,6 +73,8 @@ public class RMIClient extends Client {
         }
         else if (alreadyTaken == UsernameStatus.NEVER_USED) {
             try {
+                RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
+                server.subscribe(username, clientStub);
                 server.login(usernamemessage);
                 createPinger();
             } catch (IOException | NotBoundException e) {
@@ -158,6 +168,15 @@ public class RMIClient extends Client {
     @Override
     public String toString() {
         return username;
+    }
+
+    @Override
+    public synchronized void getNotified() throws RemoteException {
+        Message message, messageFromServer;
+        messageFromServer = server.getMessage(username);
+        message = handleMessage(messageFromServer);
+        if (message != null)
+            sendMessage(message);
     }
 }
 

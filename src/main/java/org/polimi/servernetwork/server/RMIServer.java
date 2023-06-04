@@ -1,5 +1,6 @@
 package org.polimi.servernetwork.server;
 
+import org.polimi.client.RMICallback;
 import org.polimi.messages.Message;
 import org.polimi.messages.RMIAvailability;
 import org.polimi.messages.UsernameStatus;
@@ -9,15 +10,21 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private GameCodeIssuer gameCodeIssuer;
     private UsernameIssuer usernameIssuer;
     private LobbyController lobbyController;
+    private Map<String, RMICallback> subscribers;
     public RMIServer(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
         this.gameCodeIssuer = gameCodeIssuer;
         this.usernameIssuer = usernameIssuer;
         this.lobbyController = lobbyController;
+        this.subscribers = new HashMap<>();
     }
     /*
 
@@ -32,16 +39,19 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         //new Thread(clienthandler).start();
         clienthandler.onMessage(usernameMessage);
+        subscribers.get(usernameMessage.getUsername()).getNotified();
     }
 
     @Override
     public void onMessage(Message message) throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
+        subscribers.get(message.getUsername()).getNotified();
     }
     public void reconnection(Message message) throws RemoteException{
         ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         clientHandler.onMessage(message);
+        subscribers.get(message.getUsername()).getNotified();
     }
     @Override
     public void ping (String username) throws RemoteException {
@@ -52,7 +62,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         return clientHandler.popMessageRMI();
     }
-    @Override
+    /*@Override
     public RMIAvailability messagesAvailable(String username)throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         if(clientHandler == null){
@@ -67,7 +77,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
             }
         }
 
-    }
+    }*/
     @Override
     public UsernameStatus usernameAlreadyTaken(String username) throws RemoteException {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
@@ -83,6 +93,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
                 throw new RuntimeException("problemi in usernameAlreadyTaken");
 
         }
+    }
+    public void subscribe(String username, RMICallback rmiclient) throws RemoteException{
+        subscribers.put(username, rmiclient);
     }
 
 }
