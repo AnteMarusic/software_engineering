@@ -1,7 +1,9 @@
 package org.polimi.client;
 
+import javafx.application.Application;
 import org.polimi.client.RMIClient;
 import org.polimi.client.SocketClient;
+import org.polimi.client.view.gui.Gui;
 import org.polimi.messages.Message;
 import org.polimi.messages.RMIAvailability;
 import org.polimi.messages.UsernameStatus;
@@ -19,19 +21,23 @@ public class ClientStarter {
         Scanner scanner = new Scanner(System.in);
         int input;
         boolean bool;
-        RMIinterface server= null;
-        System.out.println("choose rmi or socket");
-        System.out.println("(1) rmi");
-        System.out.println("(2) scoket");
-        System.out.println("type 1 or 2");
-        input = scanner.nextInt();
-        if(input == 1){
-            RMIClient rmiClient = new RMIClient(1099);
-            do {
-                bool = rmiClient.startConnection();
-            } while (!bool);
-            rmiClient.login();
-            /*while (rmiClient.ifConnected()) {
+        System.out.println("choose cli or gui");
+        System.out.println("(1) cli");
+        System.out.println("(2) gui");
+        input=scanner.nextInt();
+        if(input==1){
+            System.out.println("choose rmi or socket");
+            System.out.println("(1) rmi");
+            System.out.println("(2) scoket");
+            System.out.println("type 1 or 2");
+            input = scanner.nextInt();
+            if(input == 1){
+                RMIClient rmiClient = new RMIClient(1099);
+                do {
+                    bool = rmiClient.startConnection();
+                } while (!bool);
+                rmiClient.login();
+             /*while (rmiClient.ifConnected()) {
                 // messagefromserver potrebbe essere null
                 RMIAvailability status = RMIAvailability.NOT_AVAILABLE;
                 try{
@@ -54,9 +60,13 @@ public class ClientStarter {
                 }
 
             }*/
+            }
+            else if(input==2){
+                SocketClient socket = new SocketClient(8181);
+            }
         }
         else if(input==2){
-            SocketClient socket = new SocketClient(8181);
+            Application.launch(Gui.class);
         }
     }
 }
