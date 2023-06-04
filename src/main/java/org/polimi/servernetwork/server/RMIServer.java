@@ -14,12 +14,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private GameCodeIssuer gameCodeIssuer;
     private UsernameIssuer usernameIssuer;
     private LobbyController lobbyController;
-    private RMIMessagesHub messagesHub;
-    public RMIServer(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController, RMIMessagesHub messagesHub) throws RemoteException{
+    public RMIServer(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
         this.gameCodeIssuer = gameCodeIssuer;
         this.usernameIssuer = usernameIssuer;
         this.lobbyController = lobbyController;
-        this.messagesHub= messagesHub;
     }
     /*
 
@@ -31,7 +29,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
     @Override
     public void login(Message usernameMessage) throws IOException, NotBoundException {
-        ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController, messagesHub);
+        ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         //new Thread(clienthandler).start();
         clienthandler.onMessage(usernameMessage);
     }
@@ -42,7 +40,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         clientHandler.onMessage(message);
     }
     public void reconnection(Message message) throws RemoteException{
-        ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController, messagesHub);
+        ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         clientHandler.onMessage(message);
     }
     @Override

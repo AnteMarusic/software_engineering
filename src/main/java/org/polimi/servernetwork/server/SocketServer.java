@@ -36,7 +36,7 @@ public class SocketServer implements Runnable{
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 System.out.println("a client has connected to the socketServer");
-                ClientHandler clientHandler =new ClientHandler(false, socket, usernameIssuer, gameCodeIssuer, lobby, null);
+                ClientHandler clientHandler =new ClientHandler(false, socket, usernameIssuer, gameCodeIssuer, lobby);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }

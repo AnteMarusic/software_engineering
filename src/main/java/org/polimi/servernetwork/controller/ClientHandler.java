@@ -1,6 +1,5 @@
 package org.polimi.servernetwork.controller;
 
-import org.polimi.servernetwork.server.RMIMessagesHub;
 import org.polimi.messages.*;
 
 import java.io.IOException;
@@ -26,11 +25,9 @@ public class ClientHandler implements Runnable{
     private LobbyController lobbyController;
     private GameController gameController;
     private Queue<Message> RMIMessages;
-
-    private RMIMessagesHub messagesHub;
     private int countDown;
 
-    public ClientHandler(boolean rmi, Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController, RMIMessagesHub messagesHub) {
+    public ClientHandler(boolean rmi, Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         try {
             this.rmi = rmi;
             this.countDown = COUNTDOWN;
@@ -38,7 +35,6 @@ public class ClientHandler implements Runnable{
             this.gameCodeIssuer = gameCodeIssuer;
             this.lobbyController = lobbyController;
             this.socket = socket;
-            this.messagesHub = messagesHub;
             if(!rmi){
                 input = new ObjectInputStream(socket.getInputStream());
                 output = new ObjectOutputStream(socket.getOutputStream());
@@ -171,7 +167,7 @@ public class ClientHandler implements Runnable{
             if(!rmi)
                 output.writeObject(message);
             else
-                messagesHub.onMessage(message);
+                RMIMessages.add(message);
         } catch(IOException IOe) {
             IOe.printStackTrace();
             closeEverything();

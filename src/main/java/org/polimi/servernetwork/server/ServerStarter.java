@@ -17,7 +17,7 @@ public class ServerStarter {
         GameCodeIssuer gameCodeIssuer = new GameCodeIssuer();
         UsernameIssuer usernameIssuer = new UsernameIssuer();
         LobbyController lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
-        RMIMessagesHub messagesHub = new RMIMessagesHub();
+        //RMIMessagesHub messagesHub = new RMIMessagesHub();
         SocketServer serverSocket = new SocketServer(socketPort, gameCodeIssuer, usernameIssuer, lobby);
         //start server runs on a different thread than gameCodeIssuer and usernameIssuer and lobby
         serverSocket.startServer();
@@ -25,7 +25,7 @@ public class ServerStarter {
         try {
             Registry registry = LocateRegistry.createRegistry(rmiPort);
             Decrementer decrementer = new Decrementer(usernameIssuer);
-            RMIServer rmiServer = new RMIServer(gameCodeIssuer, usernameIssuer, lobby, messagesHub);
+            RMIServer rmiServer = new RMIServer(gameCodeIssuer, usernameIssuer, lobby);
             registry.bind("server", rmiServer);
             new Thread(decrementer).start();
         } catch (IOException | AlreadyBoundException e) {

@@ -3,7 +3,6 @@ package org.polimi.client;
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
 import org.polimi.messages.UsernameStatus;
-import org.polimi.servernetwork.server.RMIMessagesHub;
 import org.polimi.servernetwork.server.RMIinterface;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.Queue;
 public class RMIClient extends Client {
     private static final int port = 1099;
     private ClientController clientController;
-    private transient RMIinterface server;
+    private RMIinterface server;
     private boolean connected;
     private Queue<Message> RMIMessages;
 
@@ -26,7 +25,6 @@ public class RMIClient extends Client {
         createClientController();
         this.RMIMessages = new LinkedList<>();
         this.connected = false;
-        RMIMessagesHub.getInstance().addRMIClient(this);
     }
 
     public ClientController getClientController() {

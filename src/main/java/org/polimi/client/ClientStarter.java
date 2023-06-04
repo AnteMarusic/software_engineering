@@ -3,6 +3,7 @@ package org.polimi.client;
 import org.polimi.client.RMIClient;
 import org.polimi.client.SocketClient;
 import org.polimi.messages.Message;
+import org.polimi.messages.RMIAvailability;
 import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.server.RMIinterface;
 
@@ -26,19 +27,33 @@ public class ClientStarter {
         input = scanner.nextInt();
         if(input == 1){
             RMIClient rmiClient = new RMIClient(1099);
+            Message messageFromServer = null, message;
             do {
                 bool = rmiClient.startConnection();
             } while (!bool);
             rmiClient.login();
             while (rmiClient.ifConnected()) {
                 // messagefromserver potrebbe essere null
-                if (rmiClient.messagesToRead()) {
-                    Message messageFromServer=rmiClient.popMessageRMI();
-                    System.out.println("questo dal server " + messageFromServer);
-                    Message message = rmiClient.handleMessage(messageFromServer);
+                RMIAvailability status = RMIAvailability.NOT_AVAILABLE;
+                try{
+                    status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
+                }
+                catch ( RemoteException e){
+                    // gestire la disconnessione del server
+                }
+                //System.out.println(status);
+                if(status == RMIAvailability.AVAILABLE){
+                    try{
+                        messageFromServer=rmiClient.getServer().getMessage(rmiClient.getUsername());
+                    }
+                    catch ( RemoteException e){
+                        // gestire la disconnessione del server
+                    }
+                    message = rmiClient.handleMessage(messageFromServer);
                     if (message != null)
                         rmiClient.sendMessage(message);
                 }
+
             }
         }
         else if(input==2){
