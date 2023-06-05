@@ -79,7 +79,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
     }*/
     @Override
-    public UsernameStatus usernameAlreadyTaken(String username) throws RemoteException {
+    public UsernameStatus isUsernameAlreadyTaken(String username) throws RemoteException {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         if (clientHandler == null)
             return UsernameStatus.NEVER_USED;
