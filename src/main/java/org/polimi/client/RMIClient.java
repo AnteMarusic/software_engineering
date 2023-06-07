@@ -11,9 +11,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.RemoteObject;
-import java.rmi.server.RemoteObjectInvocationHandler;
-import java.rmi.server.RemoteRef;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -57,25 +54,31 @@ public class RMIClient extends Client implements RMICallback  {
         } else return false;
     }
 
+    /**
+     * TODO: gestire la riconnessione, cosa succede se usernameAlreadyTaken è NEVER_USED ma quando chiamo login qualcuno
+     *  me lo ha rubato?
+     *
+     * @throws RemoteException
+     */
     public void login() throws RemoteException {
         //UsernameAndGameModeMessage message = new UsernameAndGameModeMessage(this.username, this.gamemode, -1);
-        UsernameStatus alreadyTaken = null;
+        UsernameStatus usernameStatus = null;
         do {
             chooseUsername();//comunicazione solo client e client-controller
-            alreadyTaken = server.usernameAlreadyTaken(this.username);
-            if (alreadyTaken == UsernameStatus.USED) {
+            usernameStatus = server.isUsernameAlreadyTaken(this.username);
+            if (usernameStatus == UsernameStatus.USED) {
                 System.out.println("Already taken username, choose another");
             }
-        } while (alreadyTaken == UsernameStatus.USED);
-        Message usernamemessage = new Message(this.username, MessageType.USERNAME);
-        if (alreadyTaken == UsernameStatus.DISCONNECTED) {  // mi devo occupare della riconnessione
-            server.reconnection(usernamemessage);
+        } while (usernameStatus == UsernameStatus.USED);
+        Message usernameMessage = new Message(this.username, MessageType.USERNAME);
+        if (usernameStatus == UsernameStatus.DISCONNECTED) {  // mi devo occupare della riconnessione
+            server.reconnection(usernameMessage);
         }
-        else if (alreadyTaken == UsernameStatus.NEVER_USED) {
+        else if (usernameStatus == UsernameStatus.NEVER_USED) {
             try {
                 RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
                 server.subscribe(username, clientStub);
-                server.login(usernamemessage);
+                server.login(usernameMessage);
                 createPinger();
             } catch (IOException | NotBoundException e) {
                 System.out.println("quiii");

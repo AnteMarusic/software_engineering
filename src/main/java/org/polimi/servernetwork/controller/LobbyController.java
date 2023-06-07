@@ -212,6 +212,10 @@ public class LobbyController {
         }
     }
 
+    /**
+     * TODO: remove clientHandler from the lobby gives a ConcurrentModificationException
+     * @param clientHandler
+     */
     public void disconnect(ClientHandler clientHandler) {
         boolean flag = false;
         // find client handler in one of the lobbies
