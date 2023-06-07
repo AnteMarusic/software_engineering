@@ -20,16 +20,11 @@ public class RMIClient extends Client implements RMICallback  {
     private ClientController clientController;
     private RMIinterface server;
     private boolean connected;
-    private Queue<Message> RMIMessages;
-
-    private RMIAvailability availability;
 
     public RMIClient(int port) throws IOException, NotBoundException {
         super(port);
         createClientController();
-        this.RMIMessages = new LinkedList<>();
         this.connected = false;
-        this.availability=RMIAvailability.NOT_AVAILABLE;
     }
 
     public ClientController getClientController() {
@@ -100,11 +95,6 @@ public class RMIClient extends Client implements RMICallback  {
         this.username = message.getUsername();
     }
 
-    /*public void chooseGameMode(){
-        this.gamemode= ((ChosenGameModeMessage)clientController.chooseGameMode()).getGameMode();
-    }
-
-     */
     public boolean ifConnected() {
         return connected;
     }
@@ -120,54 +110,6 @@ public class RMIClient extends Client implements RMICallback  {
     public void disconnect() {
         clientController.disconnect();
     }
-
-    public Message popMessageRMI() {
-        return RMIMessages.remove();
-    }
-
-    public boolean messagesToRead() {
-        return RMIMessages.size() != 0;
-    }
-    public void addMessage(Message message){
-        RMIMessages.add(message);
-    }
-    /*public static void main(String[] args) throws IOException, NotBoundException, InterruptedException {
-        boolean bool;
-        UsernameStatus alreadyTaken = null;
-        Message message, messageFromServer = null;
-        RMIClient rmiClient = new RMIClient(port);
-        do {
-            bool = rmiClient.startConnection();
-        } while (!bool);
-        rmiClient.login();
-        while (rmiClient.ifConnected()) {
-            /*RMIAvailability status = RMIAvailability.NOT_AVAILABLE;
-            try{
-                 status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
-            }
-            catch ( RemoteException e){
-                // gestire la disconnessione del server
-            }
-            //System.out.println(status);
-            if(status == RMIAvailability.AVAILABLE){
-
-              try{
-                  messageFromServer=rmiClient.getServer().getMessage(rmiClient.getUsername());
-              }
-              catch ( RemoteException e){
-                  // gestire la disconnessione del server
-              }
-            // messagefromserver potrebbe essere null
-            if (rmiClient.messagesToRead()) {
-                messageFromServer=rmiClient.popMessageRMI();
-                System.out.println("questo dal server " + messageFromServer);
-                message = rmiClient.handleMessage(messageFromServer);
-                if (message != null)
-                    rmiClient.sendMessage(message);
-            }
-        }
-    }*/
-
     @Override
     public String toString() {
         return username;
