@@ -4,6 +4,8 @@ import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
 import org.polimi.messages.RMIAvailability;
 import org.polimi.messages.UsernameStatus;
+import org.polimi.servernetwork.controller.InternalComunication;
+import org.polimi.servernetwork.server.Pinger;
 import org.polimi.servernetwork.server.RMIinterface;
 
 import java.io.IOException;
@@ -16,24 +18,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class RMIClient extends Client implements RMICallback  {
+    private static final int COUNTDOWN = 5;
     private static final int port = 1099;
     private ClientController clientController;
     private RMIinterface server;
     private boolean connected;
+    private int countDown;
 
     public RMIClient(int port) throws IOException, NotBoundException {
         super(port);
         createClientController();
         this.connected = false;
+        this.countDown = COUNTDOWN;
     }
 
     public ClientController getClientController() {
         return clientController;
-    }
-
-    private void createPinger() {
-        new Thread(new Pinger(this.username, this.server, this)).start();
-        System.out.println("RMI client stampa: pinger creato");
     }
 
     private void createClientController() throws RemoteException {
@@ -58,6 +58,7 @@ public class RMIClient extends Client implements RMICallback  {
      */
     public void login() throws RemoteException {
         //UsernameAndGameModeMessage message = new UsernameAndGameModeMessage(this.username, this.gamemode, -1);
+        /*
         UsernameStatus usernameStatus = null;
         do {
             chooseUsername();//comunicazione solo client e client-controller
@@ -81,7 +82,30 @@ public class RMIClient extends Client implements RMICallback  {
                 getClientController().disconnect();
             }
         }
+
+         */
+        chooseUsername();
+        InternalComunication internalComunication = server.login(new Message(this.username, MessageType.USERNAME));
+        if (internalComunication == InternalComunication.OK) {
+            clientController.loginSuccessful();
+            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
+            server.subscribe(username, clientStub);
+            //create Decrementer
+            createDecrementer();
+        }
+        if (internalComunication == InternalComunication.RECONNECTION) {
+            clientController.reconnectionSuccessful();
+        }
+        if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+            clientController.alreadyTakenUsername();
+            chooseUsername();
+        }
     }
+
+    private void createDecrementer () {
+        new Thread(new Decrementer(this)).start();
+    }
+
 
     public void sendMessage(Message message) throws RemoteException {
         if (server == null) {
@@ -126,7 +150,14 @@ public class RMIClient extends Client implements RMICallback  {
     }
     @Override
     public void ping(){
-        
+        countDown = COUNTDOWN;
+    }
+
+    public void decrementCountDown() {
+        countDown--;
+        if(countDown == 0) {
+           disconnect();
+        }
     }
 }
 

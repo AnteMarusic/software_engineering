@@ -2,6 +2,12 @@ package org.polimi.servernetwork.controller;
 
 import java.util.*;
 
+/**
+ * this class uses a map where the key is the username and value is an array of 3 objects
+ * index 0 connection status of the player
+ * index 1 the gameCode
+ * index 2 the clientHandler
+ */
 public class UsernameIssuer {
     private final Map<String, Object[]> map;
 

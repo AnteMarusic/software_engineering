@@ -446,6 +446,20 @@ public class ClientController {
     }
 
     /**
+     * should call the correspondent method of CLI
+     */
+    public void loginSuccessful () {
+        System.out.println("login successful");
+    }
+
+    /**
+     * should call the correspondent method of CLI
+     */
+    public void reconnectionSuccessful () {
+        System.out.println("reconnection successful");
+    }
+
+    /**
      * calls the correspondent method of CLI
      */
     public void startGameMessage () {}

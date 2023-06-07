@@ -3,6 +3,7 @@ package org.polimi.servernetwork.server;
 import org.polimi.client.RMICallback;
 import org.polimi.messages.Message;
 import org.polimi.messages.UsernameStatus;
+import org.polimi.servernetwork.controller.InternalComunication;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -10,13 +11,12 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RMIinterface extends Remote {
-    void login(Message usernameMessage) throws IOException, NotBoundException;
+    InternalComunication login(Message usernameMessage);
     void onMessage(Message message) throws RemoteException;
     void reconnection(Message message) throws RemoteException;
     Message getMessage(String username)throws RemoteException;
     /*RMIAvailability messagesAvailable(String username)throws RemoteException;*/
-    UsernameStatus isUsernameAlreadyTaken(String username) throws RemoteException;
-    void ping (String username) throws RemoteException;
+    //UsernameStatus isUsernameAlreadyTaken(String username) throws RemoteException;
     void subscribe(String username, RMICallback rmiClient) throws RemoteException;
 
 }

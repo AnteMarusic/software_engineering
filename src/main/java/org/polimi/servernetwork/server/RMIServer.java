@@ -1,6 +1,4 @@
 package org.polimi.servernetwork.server;
-
-import org.polimi.client.Pinger;
 import org.polimi.client.RMICallback;
 import org.polimi.messages.Message;
 import org.polimi.messages.RMIAvailability;
@@ -35,17 +33,77 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      * @throws RemoteException
      */
 
+
+    /**
+     * this method reserves a line in the table of usernames in username issuer if the username provided as argument is not already taken
+     * differently, it returns the status of the username
+     * @param usernameMessage message conaining the username
+     * @return OK if the username is not already taken, RECONNECTION if you are reconnecting, ALREADY_TAKEN_USERNAME otherwise
+     * @throws IOException
+     * @throws NotBoundException
+     */
     @Override
-    public void login(Message usernameMessage) throws IOException, NotBoundException {
+    public InternalComunication login(Message usernameMessage){
+        /*
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         createPinger();
         //new Thread(clienthandler).start();
         clienthandler.onMessage(usernameMessage);
         subscribers.get(usernameMessage.getUsername()).getNotified();
+         */
+
+        InternalComunication internalComunication = this.usernameIssuer.login(usernameMessage.getUsername());
+        if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+            return InternalComunication.ALREADY_TAKEN_USERNAME;
+        } else if (internalComunication == InternalComunication.OK) {
+            ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+            this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
+            return InternalComunication.OK;
+            /*
+            createPinger();
+
+
+            //new Thread(clienthandler).start();
+            clienthandler.onMessage(usernameMessage);
+            subscribers.get(usernameMessage.getUsername()).getNotified();
+
+             */
+
+        } else{
+            //InternalComunication.RECONNECTION
+            ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+            this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
+            return InternalComunication.RECONNECTION;
+        }
     }
-    private createPinger(){
-            new Thread(new Pinger(this.username, this.server, this)).start();
+        /*
+        ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
+        if (clientHandler == null)
+            return UsernameStatus.NEVER_USED;
+        else {
+            if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.CONNECTED)
+                return UsernameStatus.USED;
+            else if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.DISCONNECTED) {
+                return UsernameStatus.DISCONNECTED;
+            }
+            else
+                throw new RuntimeException("problemi in usernameAlreadyTaken");
+
+        }
+
+         */
+    private void createPinger(String username, RMICallback rmiClient){
+            new Thread(new Pinger(rmiClient, this, username)).start();
             System.out.println("RMI client stampa: pinger creato");
+    }
+
+    /**
+     * TODO: implement this method
+     * method invoked by Pinger when the client isn't reachable anymore
+     * @param username of the client to disconnect
+     */
+    public void disconnect (String username) {
+
     }
 
 
@@ -59,12 +117,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         clientHandler.onMessage(message);
         subscribers.get(message.getUsername()).getNotified();
-    }
-    @Override
-    public void ping (String username) throws RemoteException {
-        System.out.println("sono in classe RMI server: ping di " + username);
-        ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
-        clientHandler.resetCountDown();
     }
     public Message getMessage(String username)throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
@@ -86,6 +138,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         }
 
     }*/
+    /*
     @Override
     public UsernameStatus isUsernameAlreadyTaken(String username) throws RemoteException {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
@@ -102,8 +155,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
         }
     }
+
+     */
     public void subscribe(String username, RMICallback rmiclient) throws RemoteException{
         subscribers.put(username, rmiclient);
+        createPinger(username, rmiclient);
     }
 
 }
