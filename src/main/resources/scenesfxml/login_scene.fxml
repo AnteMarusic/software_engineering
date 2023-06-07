@@ -32,6 +32,7 @@
                         </Button>
                     </children>
                 </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
             </children>
         </Group>
     </children>
