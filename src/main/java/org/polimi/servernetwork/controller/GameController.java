@@ -160,7 +160,7 @@ public class GameController {
         // quindi non stava giocando ma era solo in attesa
         if(getNumOfConnectedPlayers()==2){
             // in questo caso azzero il timer di decrementer
-            decrementer.stop();   // non so se si chiami così un metodo del thread
+            decrementer.stop();
             System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
             // riporto coutDown a 60
             countDown=60;
@@ -269,6 +269,7 @@ public class GameController {
         if (countDown == 0) {
             System.out.println("sono dentro al metodo decreaseCountDown e countDown è uguale a 0");
             // fermo il Decrementer
+            decrementer.stop();
             // decreto il vincitore
             // mando messaggio di fine partita
             // chiudo il gioco
