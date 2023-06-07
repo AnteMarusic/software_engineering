@@ -1,5 +1,6 @@
 package org.polimi.servernetwork.server;
 
+import org.polimi.client.Pinger;
 import org.polimi.client.RMICallback;
 import org.polimi.messages.Message;
 import org.polimi.messages.RMIAvailability;
@@ -37,10 +38,16 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     @Override
     public void login(Message usernameMessage) throws IOException, NotBoundException {
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+        createPinger();
         //new Thread(clienthandler).start();
         clienthandler.onMessage(usernameMessage);
         subscribers.get(usernameMessage.getUsername()).getNotified();
     }
+    private createPinger(){
+            new Thread(new Pinger(this.username, this.server, this)).start();
+            System.out.println("RMI client stampa: pinger creato");
+    }
+
 
     @Override
     public void onMessage(Message message) throws RemoteException{
@@ -55,6 +62,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     }
     @Override
     public void ping (String username) throws RemoteException {
+        System.out.println("sono in classe RMI server: ping di " + username);
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
         clientHandler.resetCountDown();
     }

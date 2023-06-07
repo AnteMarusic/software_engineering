@@ -8,4 +8,5 @@ import java.rmi.RemoteException;
 
 public interface RMICallback extends Remote {
    void getNotified() throws RemoteException;
+   void ping() throws RemoteException;
 }

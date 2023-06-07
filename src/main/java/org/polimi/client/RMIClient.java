@@ -38,6 +38,7 @@ public class RMIClient extends Client implements RMICallback  {
 
     private void createPinger() {
         new Thread(new Pinger(this.username, this.server, this)).start();
+        System.out.println("RMI client stampa: pinger creato");
     }
 
     private void createClientController() throws RemoteException {
@@ -180,6 +181,10 @@ public class RMIClient extends Client implements RMICallback  {
         message = handleMessage(messageFromServer);
         if (message != null)
             sendMessage(message);
+    }
+    @Override
+    public void ping(){
+        
     }
 }
 
