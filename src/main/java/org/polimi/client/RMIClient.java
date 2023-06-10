@@ -32,6 +32,7 @@ public class RMIClient extends Client implements RMICallback  {
         this.countDown = COUNTDOWN;
     }
 
+
     public ClientController getClientController() {
         return clientController;
     }
@@ -90,8 +91,7 @@ public class RMIClient extends Client implements RMICallback  {
             clientController.loginSuccessful();
             RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
             server.subscribe(username, clientStub);
-            //create Decrementer
-            createDecrementer();
+            new Thread(new Decrementer(this)).start();
         }
         if (internalComunication == InternalComunication.RECONNECTION) {
             clientController.reconnectionSuccessful();
@@ -102,16 +102,8 @@ public class RMIClient extends Client implements RMICallback  {
         }
     }
 
-    private void createDecrementer () {
-        new Thread(new Decrementer(this)).start();
-    }
-
-
+    @Override
     public void sendMessage(Message message) throws RemoteException {
-        if (server == null) {
-            throw new RemoteException();
-        }
-
         server.onMessage(message);
     }
 
@@ -146,7 +138,7 @@ public class RMIClient extends Client implements RMICallback  {
         messageFromServer = server.getMessage(username);
         message = handleMessage(messageFromServer);
         if (message != null)
-            sendMessage(message);
+            server.onMessage(message);
     }
     @Override
     public void ping(){
@@ -156,7 +148,8 @@ public class RMIClient extends Client implements RMICallback  {
     public void decrementCountDown() {
         countDown--;
         if(countDown == 0) {
-           disconnect();
+            System.out.println("lost comunication with the server");
+            disconnect();
         }
     }
 }

@@ -43,7 +43,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      * @throws NotBoundException
      */
     @Override
-    public InternalComunication login(Message usernameMessage){
+    public InternalComunication login(Message usernameMessage) throws RemoteException{
         /*
         ClientHandler clienthandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
         createPinger();
@@ -69,29 +69,30 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
              */
 
-        } else{
+        } else if (internalComunication == InternalComunication.RECONNECTION){
             //InternalComunication.RECONNECTION
             ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
             this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
             return InternalComunication.RECONNECTION;
         }
+        return internalComunication;
     }
-        /*
-        ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
-        if (clientHandler == null)
-            return UsernameStatus.NEVER_USED;
-        else {
-            if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.CONNECTED)
-                return UsernameStatus.USED;
-            else if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.DISCONNECTED) {
-                return UsernameStatus.DISCONNECTED;
-            }
-            else
-                throw new RuntimeException("problemi in usernameAlreadyTaken");
-
+ /*
+    ClientHandler clientHandler = usernameIssuer.getClientHandler(username);
+    if (clientHandler == null)
+        return UsernameStatus.NEVER_USED;
+    else {
+        if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.CONNECTED)
+            return UsernameStatus.USED;
+        else if (usernameIssuer.getConnectionStatus(clientHandler.getUsername()) == ConnectionStatus.DISCONNECTED) {
+            return UsernameStatus.DISCONNECTED;
         }
+        else
+            throw new RuntimeException("problemi in usernameAlreadyTaken");
 
-         */
+  }
+
+   */
     private void createPinger(String username, RMICallback rmiClient){
             new Thread(new Pinger(rmiClient, this, username)).start();
             System.out.println("RMI client stampa: pinger creato");

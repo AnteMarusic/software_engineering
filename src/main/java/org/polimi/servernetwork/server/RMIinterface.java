@@ -11,7 +11,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RMIinterface extends Remote {
-    InternalComunication login(Message usernameMessage);
+    InternalComunication login(Message usernameMessage) throws RemoteException;
     void onMessage(Message message) throws RemoteException;
     void reconnection(Message message) throws RemoteException;
     Message getMessage(String username)throws RemoteException;
