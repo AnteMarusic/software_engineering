@@ -1,5 +1,6 @@
 package org.polimi.servernetwork.controller;
 
+import org.polimi.client.RMICallback;
 import org.polimi.messages.*;
 
 import java.io.IOException;
@@ -25,9 +26,10 @@ public class ClientHandler implements Runnable{
     private LobbyController lobbyController;
     private GameController gameController;
     private Queue<Message> RMIMessages;
+    private RMICallback rmistub;
     private int countDown;
 
-    public ClientHandler(boolean rmi, Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
+    public ClientHandler(boolean rmi,RMICallback rmistub, Socket socket, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         try {
             this.rmi = rmi;
             this.countDown = COUNTDOWN;
@@ -35,6 +37,7 @@ public class ClientHandler implements Runnable{
             this.gameCodeIssuer = gameCodeIssuer;
             this.lobbyController = lobbyController;
             this.socket = socket;
+            this.rmistub=rmistub;
             if(!rmi){
                 input = new ObjectInputStream(socket.getInputStream());
                 output = new ObjectOutputStream(socket.getOutputStream());
@@ -102,13 +105,11 @@ public class ClientHandler implements Runnable{
     public void onMessage(Message message){
         switch (message.getMessageType()){
             case USERNAME -> {
-                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
-                if(internalComunication == InternalComunication.OK) {
-                    usernameIssuer.setClientHandler(this, message.getUsername());
-                    this.username = message.getUsername();
-                    sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-                }
-                if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+                /*usernameIssuer.setClientHandler(this, message.getUsername());*/
+                this.username = message.getUsername();
+                sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
+
+                /*if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
                     sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
                 }
                 //to test
@@ -118,23 +119,15 @@ public class ClientHandler implements Runnable{
                     GameController gameController = gameCodeIssuer.getGameController(gameId);
                     usernameIssuer.setConnect(this.getUsername());
                     gameController.reconnect(this);
-                }
+                }*/
             }
             case CHOOSE_GAME_MODE -> {
                 ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
                 switch (chosenGameModeMessage.getGameMode()) {
-                    case JOIN_RANDOM_GAME_2_PLAYER -> {
-                        lobbyController.insertPlayer(this, 2);
-                    }
-                    case JOIN_RANDOM_GAME_3_PLAYER -> {
-                        lobbyController.insertPlayer(this, 3);
-                    }
-                    case JOIN_RANDOM_GAME_4_PLAYER -> {
-                        lobbyController.insertPlayer(this , 4);
-                    }
-                    case JOIN_PRIVATE_GAME -> {
-                        lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
-                    }
+                    case JOIN_RANDOM_GAME_2_PLAYER -> lobbyController.insertPlayer(this, 2);
+                    case JOIN_RANDOM_GAME_3_PLAYER -> lobbyController.insertPlayer(this, 3);
+                    case JOIN_RANDOM_GAME_4_PLAYER -> lobbyController.insertPlayer(this , 4);
+                    case JOIN_PRIVATE_GAME -> lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
                     case CREATE_PRIVATE_GAME -> {
                         if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
                             sendMessage(new Message(this.username, MessageType.ALREADYTAKENGAMECODEMESSAGE ));
@@ -144,6 +137,7 @@ public class ClientHandler implements Runnable{
                             lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this, chosenGameModeMessage.getNumOfPlayer());
                         }
                     }
+                    default-> System.out.println("errore nella ricezione del messaggio gamemode");
                 }
 
             }
@@ -166,8 +160,11 @@ public class ClientHandler implements Runnable{
         try{
             if(!rmi)
                 output.writeObject(message);
-            else
+            else{
                 RMIMessages.add(message);
+                System.out.println("aggiunto questo messaggio da leggere da r"+username+": "+ message);
+                rmistub.getNotified();
+            }
         } catch(IOException IOe) {
             IOe.printStackTrace();
             closeEverything();

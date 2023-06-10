@@ -56,8 +56,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
             return InternalComunication.ALREADY_TAKEN_USERNAME;
         } else if (internalComunication == InternalComunication.OK) {
-            ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
-            this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
             return InternalComunication.OK;
             /*
             createPinger();
@@ -71,8 +69,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
         } else if (internalComunication == InternalComunication.RECONNECTION){
             //InternalComunication.RECONNECTION
-            ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
-            this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
+            //ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
+            //this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
             return InternalComunication.RECONNECTION;
         }
         return internalComunication;
@@ -110,13 +108,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
     @Override
     public void onMessage(Message message) throws RemoteException{
+        System.out.println("ricevuto questo dal client"+ message);
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
         subscribers.get(message.getUsername()).getNotified();
     }
     public void reconnection(Message message) throws RemoteException {
-        ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);
-        clientHandler.onMessage(message);
+        /*ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);*/
+        //clientHandler.onMessage(message);
         subscribers.get(message.getUsername()).getNotified();
     }
     public Message getMessage(String username)throws RemoteException{
@@ -160,6 +159,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      */
     public void subscribe(String username, RMICallback rmiclient) throws RemoteException{
         subscribers.put(username, rmiclient);
+        Message usernameMessage = new Message(username);
+        ClientHandler clientHandler = new ClientHandler(true, rmiclient, null, usernameIssuer, gameCodeIssuer, lobbyController);
+        this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
+        onMessage(usernameMessage);
         createPinger(username, rmiclient);
     }
 

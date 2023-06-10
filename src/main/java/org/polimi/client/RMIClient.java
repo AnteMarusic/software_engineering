@@ -48,7 +48,8 @@ public class RMIClient extends Client implements RMICallback  {
             System.out.println("connesso");
             connected = true;
             return true;
-        } else return false;
+        }
+        return false;
     }
 
     /**
@@ -136,9 +137,21 @@ public class RMIClient extends Client implements RMICallback  {
     public synchronized void getNotified() throws RemoteException {
         Message message, messageFromServer;
         messageFromServer = server.getMessage(username);
+        if(messageFromServer== null){
+            for(int i=0; i<10; i++){
+                messageFromServer=server.getMessage(username);
+                if(messageFromServer!=null)
+                    break;
+            }
+        }
+        if(messageFromServer!=null){
+            System.out.println("appena ricevuto questo dla server"+ messageFromServer);
+        }
         message = handleMessage(messageFromServer);
-        if (message != null)
+        if (message != null){
+            System.out.println("inviando questo al server"+ message);
             server.onMessage(message);
+        }
     }
     @Override
     public void ping(){
