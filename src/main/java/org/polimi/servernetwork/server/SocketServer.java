@@ -36,9 +36,9 @@ public class SocketServer implements Runnable{
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 System.out.println("a client has connected to the socketServer");
-                ClientHandler clientHandler =new ClientHandler(false, null,socket, usernameIssuer, gameCodeIssuer, lobby);
+                ClientHandler clientHandler =new SocketClientHandler(socket, usernameIssuer, gameCodeIssuer, lobby);
                 // creare il pinger
-                Thread thread = new Thread(clientHandler);
+                Thread thread = new Thread((Runnable) clientHandler);
                 thread.start();
             }
         } catch (IOException IOe) {

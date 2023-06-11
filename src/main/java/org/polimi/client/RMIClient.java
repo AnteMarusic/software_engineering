@@ -164,7 +164,7 @@ public class RMIClient extends Client implements RMICallback  {
     public void decrementCountDown() {
         countDown--;
         if(countDown == 0) {
-            System.out.println("lost comunication with the server");
+            System.out.println("lost comunication with the server, ping timeout");
             disconnect();
         }
     }

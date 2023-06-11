@@ -11,7 +11,7 @@ public class Pinger implements Runnable{
 
     public Pinger (RMICallback client, RMIServer server, String username) {
         this.client = client;
-        //riferimento a server mi sa che è necessario perchè se il client si disconnette va rimosso dalla mappa del server
+        //riferimento a server mi sa che è necessario perché se il client si disconnette va rimosso dalla mappa del server
         this.server = server;
         this.username = username;
     }
