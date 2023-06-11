@@ -86,20 +86,23 @@ public class RMIClient extends Client implements RMICallback  {
         }
 
          */
-        chooseUsername();
-        InternalComunication internalComunication = server.login(new Message(this.username, MessageType.USERNAME));
+        InternalComunication internalComunication;
+        do{
+            chooseUsername();
+            internalComunication = server.login(new Message(this.username, MessageType.USERNAME));
+            if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+                clientController.alreadyTakenUsername();
+            }
+        }while(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME);
+        if (internalComunication == InternalComunication.RECONNECTION) {
+            clientController.reconnectionSuccessful();
+            //serve altro codice?
+        }
         if (internalComunication == InternalComunication.OK) {
             clientController.loginSuccessful();
             RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
             server.subscribe(username, clientStub);
             new Thread(new Decrementer(this)).start();
-        }
-        if (internalComunication == InternalComunication.RECONNECTION) {
-            clientController.reconnectionSuccessful();
-        }
-        if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-            clientController.alreadyTakenUsername();
-            chooseUsername();
         }
     }
 
@@ -133,23 +136,23 @@ public class RMIClient extends Client implements RMICallback  {
         return username;
     }
 
+    /**
+     * Da chiamare solo se c'è un messaggio da leggere
+     */
     @Override
-    public synchronized void getNotified() throws RemoteException {
-        Message message, messageFromServer;
-        messageFromServer = server.getMessage(username);
-        if(messageFromServer== null){
-            for(int i=0; i<10; i++){
-                messageFromServer=server.getMessage(username);
-                if(messageFromServer!=null)
-                    break;
-            }
-        }
+    public void getNotified() throws RemoteException {
+        Message message, messageFromServer=null;
+        do{
+            messageFromServer = server.getMessage(username);
+            if(messageFromServer == null)
+                System.out.println("cercando di leggere....");
+        }while(messageFromServer==null);
         if(messageFromServer!=null){
-            System.out.println("appena ricevuto questo dla server"+ messageFromServer);
+            System.out.println("appena ricevuto questo dal server: "+ messageFromServer);
         }
         message = handleMessage(messageFromServer);
         if (message != null){
-            System.out.println("inviando questo al server"+ message);
+            System.out.println("inviando questo al server: "+ message +"\n in risposta a "+ messageFromServer);
             server.onMessage(message);
         }
     }

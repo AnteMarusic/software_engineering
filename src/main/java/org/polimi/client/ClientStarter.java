@@ -29,6 +29,7 @@ public class ClientStarter {
             System.out.println("choose cli or gui");
             System.out.println("(1) cli");
             System.out.println("(2) gui");
+            System.out.println("type 1 or 2");
             if (scanner.hasNextInt()) {
                 // If the next input is an integer
                 input = scanner.nextInt();
@@ -38,7 +39,6 @@ public class ClientStarter {
                         System.out.println("choose rmi or socket");
                         System.out.println("(1) rmi");
                         System.out.println("(2) socket");
-                        System.out.println("type 1 or 2");
                         if (scanner.hasNextInt()) {
                             input = scanner.nextInt();
                             if (input == 1) {

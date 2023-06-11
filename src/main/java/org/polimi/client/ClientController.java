@@ -133,7 +133,6 @@ public class ClientController {
      */
     public void alreadyTakenUsername () {
         cli.alreadyTakenUsername();
-        chooseUsername();
     }
     public Message chooseGameMode () {
         ChosenGameModeMessage message = null;

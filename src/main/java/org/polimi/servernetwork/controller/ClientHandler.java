@@ -105,21 +105,29 @@ public class ClientHandler implements Runnable{
     public void onMessage(Message message){
         switch (message.getMessageType()){
             case USERNAME -> {
-                /*usernameIssuer.setClientHandler(this, message.getUsername());*/
-                this.username = message.getUsername();
-                sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-
-                /*if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                    sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
+                if(!rmi){
+                    InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
+                    if(internalComunication == InternalComunication.OK) {
+                        usernameIssuer.setClientHandler(this, message.getUsername());
+                        this.username = message.getUsername();
+                        sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
+                    }
+                    if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+                        sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
+                    }
+                    //to test
+                    if(internalComunication == InternalComunication.RECONNECTION){
+                        this.username = message.getUsername();
+                        int gameId = usernameIssuer.getGameID(message.getUsername());
+                        GameController gameController = gameCodeIssuer.getGameController(gameId);
+                        usernameIssuer.setConnect(this.getUsername());
+                        gameController.reconnect(this);
+                    }
                 }
-                //to test
-                if(internalComunication == InternalComunication.RECONNECTION){
+                else{
                     this.username = message.getUsername();
-                    int gameId = usernameIssuer.getGameID(message.getUsername());
-                    GameController gameController = gameCodeIssuer.getGameController(gameId);
-                    usernameIssuer.setConnect(this.getUsername());
-                    gameController.reconnect(this);
-                }*/
+                    sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
+                }
             }
             case CHOOSE_GAME_MODE -> {
                 ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
@@ -162,7 +170,7 @@ public class ClientHandler implements Runnable{
                 output.writeObject(message);
             else{
                 RMIMessages.add(message);
-                System.out.println("aggiunto questo messaggio da leggere da r"+username+": "+ message);
+                System.out.println("aggiunto questo messaggio da leggere per "+username+": "+ message);
                 rmistub.getNotified();
             }
         } catch(IOException IOe) {

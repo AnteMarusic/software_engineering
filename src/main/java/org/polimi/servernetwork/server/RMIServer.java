@@ -108,15 +108,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
 
     @Override
     public void onMessage(Message message) throws RemoteException{
-        System.out.println("ricevuto questo dal client"+ message);
+        System.out.println("ricevuto questo dal client, inoltro al clienthandler: "+ message);
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
-        subscribers.get(message.getUsername()).getNotified();
     }
     public void reconnection(Message message) throws RemoteException {
         /*ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);*/
         //clientHandler.onMessage(message);
-        subscribers.get(message.getUsername()).getNotified();
     }
     public Message getMessage(String username)throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(username);

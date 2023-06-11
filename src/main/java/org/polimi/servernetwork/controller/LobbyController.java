@@ -75,7 +75,7 @@ public class LobbyController {
                         this.createGame(2);
                     }
                     else {
-                        clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                        clientHandler.sendMessage(new Message(clientHandler.getUsername(), MessageType.WAITING_IN_LOBBY));
                     }
                 }
             }
@@ -87,7 +87,7 @@ public class LobbyController {
                         this.createGame(3);
                     }
                     else{
-                        clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                        clientHandler.sendMessage(new Message(clientHandler.getUsername(), MessageType.WAITING_IN_LOBBY));
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class LobbyController {
                         this.createGame(4);
                     }
                     else{
-                        clientHandler.sendMessage(new Message("server", MessageType.WAITING_IN_LOBBY));
+                        clientHandler.sendMessage(new Message(clientHandler.getUsername(), MessageType.WAITING_IN_LOBBY));
                     }
                 }
             }
@@ -192,7 +192,7 @@ public class LobbyController {
 
 
         if(!flag)
-                clientHandler.sendMessage(new Message("server", MessageType.CHOOSE_GAME_MODE ));
+                clientHandler.sendMessage(new Message(clientHandler.getUsername(), MessageType.CHOOSE_GAME_MODE ));
 
 
     }
