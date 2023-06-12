@@ -1,8 +1,7 @@
 package org.polimi.servernetwork.server;
+
 import org.polimi.client.RMICallback;
 import org.polimi.messages.Message;
-import org.polimi.messages.RMIAvailability;
-import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.controller.*;
 
 import java.io.IOException;
@@ -10,9 +9,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private GameCodeIssuer gameCodeIssuer;
@@ -87,6 +84,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         onMessage(usernameMessage);
         createPinger(username, rmiclient);
     }
+    public void sendChatMessage(String message) throws RemoteException{
+        for(Map.Entry<String, RMICallback> entry : subscribers.entrySet()){
+            entry.getValue().receiveChatMessage(message);
+        }
+    }
+
 
 }
 

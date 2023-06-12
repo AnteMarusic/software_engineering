@@ -275,4 +275,7 @@ public class GameController {
             // chiudo il gioco
         }
     }
+    public ArrayList<ClientHandler> returnClientHandlers(){
+        return players;
+    }
 }

@@ -1,14 +1,6 @@
 package org.polimi.servernetwork.controller;
 
-import org.polimi.client.RMICallback;
-import org.polimi.messages.*;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Queue;
+import org.polimi.messages.Message;
 
 /**
  * This class is responsible for handling the communication with a client.

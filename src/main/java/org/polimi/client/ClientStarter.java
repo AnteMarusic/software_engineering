@@ -48,6 +48,7 @@ public class ClientStarter {
                                     bool = rmiClient.startConnection();
                                 } while (!bool);
                                 rmiClient.login();
+                                rmiClient.startChatClient();
                             } else if (input == 2) {
                                 secondWhile = false;
                                 SocketClient socket = new SocketClient(socketPort);

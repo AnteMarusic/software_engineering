@@ -9,4 +9,5 @@ import java.rmi.RemoteException;
 public interface RMICallback extends Remote {
    void getNotified() throws RemoteException;
    void ping() throws RemoteException;
+   void receiveChatMessage(String message) throws RemoteException;
 }

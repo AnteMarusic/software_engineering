@@ -8,7 +8,9 @@ import org.polimi.servernetwork.controller.InternalComunication;
 import org.polimi.servernetwork.server.Pinger;
 import org.polimi.servernetwork.server.RMIinterface;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -168,7 +170,33 @@ public class RMIClient extends Client implements RMICallback  {
             disconnect();
         }
     }
+    public void receiveChatMessage(String message) throws RemoteException{
+        System.out.println(message);
+    }
+
+    public void startChatClient(){
+        new Thread(()->{
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+            String userInput;
+            while (true) {
+                try {
+                    if (!((userInput = consoleInput.readLine()) != null)) break;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    if(userInput.startsWith("$")){
+                        String cleanedMessage = userInput.substring(1).trim();
+                        server.sendChatMessage(username + ": "+ cleanedMessage);
+                    }
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
 }
+
 
 
 
