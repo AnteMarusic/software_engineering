@@ -32,6 +32,12 @@ public class RMIClient extends Client implements RMICallback  {
         createClientController();
         this.connected = false;
         this.countDown = COUNTDOWN;
+        boolean bool;
+        do {
+            bool = this.startConnection();
+        } while (!bool);
+        this.login();
+        //rmiClient.startChatClient();
     }
 
 
@@ -43,6 +49,12 @@ public class RMIClient extends Client implements RMICallback  {
         this.clientController = new ClientController(this);
     }
 
+    /**
+     * search the server using RMI registry and if the server is found set the boolean connected to true
+     * @return true if connection is established, false otherwise
+     * @throws IOException
+     * @throws NotBoundException
+     */
     public boolean startConnection() throws IOException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(port);
         server = (RMIinterface) registry.lookup("server");
@@ -58,6 +70,9 @@ public class RMIClient extends Client implements RMICallback  {
      * TODO: gestire la riconnessione, cosa succede se usernameAlreadyTaken è NEVER_USED ma quando chiamo login qualcuno
      *  me lo ha rubato?
      *
+     *  calls login method of the server. if the return value is ALREADY_USED, the client is asked to choose another
+     *  if the return value is OK the RMI client object is created and given to the server using subscribe method
+     *  in this case is also started the decrementer thread
      * @throws RemoteException
      */
     public void login() throws RemoteException {

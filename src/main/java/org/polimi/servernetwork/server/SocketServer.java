@@ -20,6 +20,8 @@ public class SocketServer implements Runnable{
         this.usernameIssuer=usernameIssuer;
         startServer();
     }
+
+    //start server runs on a different thread than gameCodeIssuer and usernameIssuer and lobby
     public void startServer ()  {
         try {
             serverSocket = new ServerSocket(port);

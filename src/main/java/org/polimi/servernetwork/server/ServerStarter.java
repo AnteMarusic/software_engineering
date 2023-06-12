@@ -13,7 +13,7 @@ import java.rmi.registry.Registry;
 /**
  * This class starts the RMI server and the socket server
  * in particular it creates gameCodeIssuer, usernameIssuer and lobby controller that are unique objects shared between
- * RMI and socket server. It calls socket server constructor and calls on it start server method
+ * RMI and socket server. It calls socket server constructor and RMI server constructor
  *
  */
 public class ServerStarter {
@@ -25,21 +25,6 @@ public class ServerStarter {
         LobbyController lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
         //RMIMessagesHub messagesHub = new RMIMessagesHub();
         SocketServer serverSocket = new SocketServer(socketPort, gameCodeIssuer, usernameIssuer, lobby);
-        //start server runs on a different thread than gameCodeIssuer and usernameIssuer and lobby
-        serverSocket.startServer();
-
-        try {
-            Registry registry = LocateRegistry.createRegistry(rmiPort);
-            //Decrementer decrementer = new Decrementer(usernameIssuer);
-            RMIServer rmiServer = new RMIServer(gameCodeIssuer, usernameIssuer, lobby);
-            registry.bind("server", rmiServer);
-            //new Thread(decrementer).start();
-            System.out.println("RMI server is up");
-        } catch (IOException | AlreadyBoundException e) {
-            System.out.println("errore rmi server, l'errore è:");
-            System.out.println(e);
-        }
-
+        RMIServer rmiServer = new RMIServer(rmiPort, gameCodeIssuer, usernameIssuer, lobby);
     }
-
 }

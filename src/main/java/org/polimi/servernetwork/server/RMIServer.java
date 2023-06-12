@@ -5,8 +5,11 @@ import org.polimi.messages.Message;
 import org.polimi.servernetwork.controller.*;
 
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +19,22 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private UsernameIssuer usernameIssuer;
     private LobbyController lobbyController;
     private Map<String, RMICallback> subscribers;
-    public RMIServer(GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
+    public RMIServer(int rmiPort, GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
         this.gameCodeIssuer = gameCodeIssuer;
         this.usernameIssuer = usernameIssuer;
         this.lobbyController = lobbyController;
         this.subscribers = new HashMap<>();
+
+        try {
+            Registry registry = LocateRegistry.createRegistry(rmiPort);
+            //Decrementer decrementer = new Decrementer(usernameIssuer);
+            registry.bind("server", this);
+            //new Thread(decrementer).start();
+            System.out.println("RMI server is up");
+        } catch (IOException | AlreadyBoundException e) {
+            System.out.println("errore rmi server, l'errore è:");
+            System.out.println(e);
+        }
     }
     /**
      * this method reserves a line in the table of usernames in username issuer if the username provided as argument is not already taken
