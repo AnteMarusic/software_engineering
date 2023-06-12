@@ -21,6 +21,13 @@ public class GameCodeIssuer {
             return associations.get(idCode);
         }
     }
+
+    /**
+     * Associates a new idCode to a gameController. Makes sure that the idCode is unique.
+     * @param gameController the gameController to be associated
+     * @return the idCode associated to the gameController
+     * @throws NullPointerException if gameController is null
+     */
     public synchronized int associateCodeTo (GameController gameController) throws NullPointerException {
         if (gameController == null)
             throw new NullPointerException();

@@ -10,6 +10,12 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * This class starts the RMI server and the socket server
+ * in particular it creates gameCodeIssuer, usernameIssuer and lobby controller that are unique objects shared between
+ * RMI and socket server. It calls socket server constructor and calls on it start server method
+ *
+ */
 public class ServerStarter {
     private static final int socketPort = 8181;
     private static final int rmiPort = 1099;

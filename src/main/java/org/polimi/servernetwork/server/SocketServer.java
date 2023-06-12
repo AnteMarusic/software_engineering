@@ -18,6 +18,7 @@ public class SocketServer implements Runnable{
         this.lobby=lobby;
         this.gameCodeIssuer=gameCodeIssuer;
         this.usernameIssuer=usernameIssuer;
+        startServer();
     }
     public void startServer ()  {
         try {

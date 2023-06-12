@@ -11,9 +11,18 @@ import java.util.*;
 public class UsernameIssuer {
     private final Map<String, Object[]> map;
 
+    /**
+     * constructor, initializes the map
+     */
     public UsernameIssuer () {
         map = new HashMap<String, Object[]>();
     }
+
+    /**
+     * associates a client handler to a username. in case the username is not registered it throws an exception
+     * @param clientHandler the client handler to be associated
+     * @param username the username of the client handler
+     */
     public synchronized void setClientHandler(ClientHandler clientHandler, String username){
         Object[] object = map.get(username);
         if(object == null){
