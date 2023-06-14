@@ -11,7 +11,7 @@ public class SocketClient extends Client{
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private ClientController clientController;
+    private CliClientController cliClientController;
     public SocketClient(int port) {
         super(port);
         try{
@@ -31,12 +31,12 @@ public class SocketClient extends Client{
         }
         createClientController();
         startListeningToMessages();
-        Message message = clientController.chooseUsername();
+        Message message = cliClientController.chooseUsername();
         this.username=message.getUsername();
         sendMessage(message);
     }
     private void createClientController() {
-        this.clientController = new ClientController(this);
+        this.cliClientController = new CliClientController(this);
     }
     public void sendMessage(Message message) {
         try {
@@ -69,7 +69,7 @@ public class SocketClient extends Client{
                     if (!(message instanceof Message)) {
                         handleProtocolDisruption();
                     } else {
-                        toSend = clientController.handleMessage((Message) message);
+                        toSend = cliClientController.handleMessage((Message) message);
                         if (toSend != null) {
                             sendMessage(toSend);
                         }
@@ -107,7 +107,7 @@ public class SocketClient extends Client{
     }
     public void handleDisconnection() {
         closeEverything();
-        clientController.disconnect();
+        cliClientController.disconnect();
     }
     public void handleProtocolDisruption() {
         System.out.println("someone sent something that isn't a message");
