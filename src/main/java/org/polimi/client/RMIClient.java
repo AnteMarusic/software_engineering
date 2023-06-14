@@ -114,6 +114,7 @@ public class RMIClient extends Client implements RMICallback  {
         if (internalComunication == InternalComunication.RECONNECTION) {
             clientController.reconnectionSuccessful();
             //serve altro codice?
+            // devo chiamare su RMIserver la reconnection
         }
         if (internalComunication == InternalComunication.OK) {
             clientController.loginSuccessful();

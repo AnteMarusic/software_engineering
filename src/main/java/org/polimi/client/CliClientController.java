@@ -42,6 +42,10 @@ public class CliClientController implements ClientControllerInterface {
                 cli.setMyUsername(username);
                 return chooseGameMode();
             }
+            case USERNAME -> {
+                System.out.println("cazzoooooo il nome è: " + username);
+                cli.setMyUsername(username);
+            }
 
             case WAITING_IN_LOBBY -> {
                 //in case of update message the client doesn't have to send any message

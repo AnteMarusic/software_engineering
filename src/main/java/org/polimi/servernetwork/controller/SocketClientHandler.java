@@ -68,6 +68,7 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
                     this.username = message.getUsername();
                     int gameId = usernameIssuer.getGameID(message.getUsername());
                     GameController gameController = gameCodeIssuer.getGameController(gameId);
+                    setGameController(gameController);
                     usernameIssuer.setConnect(this.getUsername());
                     gameController.reconnect(this);
                 }

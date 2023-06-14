@@ -75,6 +75,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     public void reconnection(Message message) throws RemoteException {
         /*ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);*/
         //clientHandler.onMessage(message);
+        // devo resettare il gamecontroller
+        //setGameController(gameController);
     }
     public Message getMessage(String username)throws RemoteException{
         RMIClientHandler clientHandler = (RMIClientHandler) usernameIssuer.getClientHandler(username);
