@@ -5,4 +5,4 @@ TODO
 rimuovere l'username dalla lista degli utenti connessi ma si accorge che l'username è null quindi viene lanciata un'eccezione
 soluzione: il client handler anche in caso di socket viene creato solo quando l'username è stato scelto ed è valido
 andrebbe creata uan classe che si occupa solo della comunicazione socket (ha solo il metodo send message e il metodo run per rimanere in ascolto)
-
+-togliere print da RMIclient e SocketClient
