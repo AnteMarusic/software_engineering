@@ -4,6 +4,8 @@ import org.polimi.client.RMICallback;
 import org.polimi.messages.*;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.rmi.UnmarshalException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -56,15 +58,26 @@ public class RMIClientHandler extends ClientHandler{
         }
     }
     public void sendMessage (Message message) {
-        try{
-            RMIMessages.add(message);
-            System.out.println("(RMICLIentHandler) aggiunto questo messaggio da leggere per "+username+": "+ message);
-            rmistub.getNotified();
-        } catch(IOException IOe) {
-            IOe.printStackTrace();
-            closeEverything();
+        new Thread (() -> {
+                synchronized (RMIMessages) {
+                    try {
+                        RMIMessages.add(message);
+                        System.out.println("(RMICLIentHandler) aggiunto questo messaggio da leggere per " + username + ": " + message);
+                        rmistub.getNotified();
+                    } catch (UnmarshalException e) {
+                        System.out.println("Client disconnected");
+                        closeEverything();
+                    } catch (RemoteException e) {
+                        System.out.println("Client disconnected");
+                        closeEverything();
+                    }
+                    catch (IOException IOe) {
+                        System.out.println("Client disconnected");
+                        closeEverything();
+                    }
+                }
+        }).start();
         }
-    }
 
     public void closeEverything() {
     }
