@@ -50,11 +50,12 @@ public class GameController {
     private void startGameTurn() {
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+        System.out.println("Sono in startGameTurn nella classe gamecontroller: stampo la lista di player: " + players.toString());
         // mando a tutti gli altri chi è il currentPlayer
         for (ClientHandler c : players) {
+            System.out.println("Sono in startGameTurn nella classe gamecontroller: mando a " + c.username + "il giocatore che sta giocando");
             if (c != players.get(currentPlayer) && c!=null)
                 c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername()));
-
         }
     }
 
