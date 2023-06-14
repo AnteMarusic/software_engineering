@@ -48,7 +48,10 @@ public class GameController {
     public void startGameTurn() {
         System.out.println("entrato nel cazzo di metodo1");
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
-        players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+        new Thread(() -> {
+            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+        }).start();
+
         System.out.println("Sono in startGameTurn nella classe gamecontroller: stampo la lista di player: " + players.toString());
         // mando a tutti gli altri chi è il currentPlayer
         for (ClientHandler c : players) {
