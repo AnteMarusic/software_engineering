@@ -11,9 +11,11 @@ public class SocketClient extends Client{
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private CliClientController cliClientController;
-    public SocketClient(int port) {
+    private final boolean guiMode;
+    private ClientControllerInterface clientController;
+    public SocketClient(int port, boolean guiMode) {
         super(port);
+        this.guiMode = guiMode;
         try{
             this.socket = new Socket("localhost",port);
         }
@@ -29,14 +31,22 @@ public class SocketClient extends Client{
             System.out.println("exception in client constructor method 2");
             handleDisconnection();
         }
-        createClientController();
-        startListeningToMessages();
-        Message message = cliClientController.chooseUsername();
-        this.username=message.getUsername();
-        sendMessage(message);
+        if(!guiMode) {
+            createCliClientController();
+            startListeningToMessages();
+            Message message = clientController.chooseUsername();
+            this.username = message.getUsername();
+            sendMessage(message);
+        }else{
+
+        }
     }
-    private void createClientController() {
-        this.cliClientController = new CliClientController(this);
+    private void createCliClientController() {
+        this.clientController = new CliClientController(this);
+    }
+
+    private void createGuiClientController() {
+        this.clientController = new GuiClientController(this);
     }
     public void sendMessage(Message message) {
         try {
@@ -69,7 +79,7 @@ public class SocketClient extends Client{
                     if (!(message instanceof Message)) {
                         handleProtocolDisruption();
                     } else {
-                        toSend = cliClientController.handleMessage((Message) message);
+                        toSend = clientController.handleMessage((Message) message);
                         if (toSend != null) {
                             sendMessage(toSend);
                         }
@@ -107,7 +117,7 @@ public class SocketClient extends Client{
     }
     public void handleDisconnection() {
         closeEverything();
-        cliClientController.disconnect();
+        clientController.disconnect();
     }
     public void handleProtocolDisruption() {
         System.out.println("someone sent something that isn't a message");

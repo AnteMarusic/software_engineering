@@ -17,14 +17,20 @@ import java.rmi.server.UnicastRemoteObject;
 public class RMIClient extends Client implements RMICallback  {
     private static final int COUNTDOWN = 5;
     private static final int port = 1099;
-    private ClientControllerInterface cliClientController;
+    private ClientControllerInterface clientController;
     private RMIinterface server;
     private boolean connected;
     private int countDown;
 
-    public RMIClient(int port) throws IOException, NotBoundException {
+    private final boolean guiMode;
+    public RMIClient(int port, boolean guiMode) throws IOException, NotBoundException {
         super(port);
-        createClientController();
+        this.guiMode = guiMode;
+        if(guiMode){
+            createCliClientController();
+        }else{
+            createGuiClientController();
+        }
         this.connected = false;
         this.countDown = COUNTDOWN;
         boolean bool;
@@ -37,11 +43,15 @@ public class RMIClient extends Client implements RMICallback  {
 
 
     public ClientControllerInterface getClientController() {
-        return cliClientController;
+        return clientController;
     }
 
-    private void createClientController() throws RemoteException {
-        this.cliClientController = new CliClientController(this);
+    private void createCliClientController() throws RemoteException {
+        this.clientController = new CliClientController(this);
+    }
+
+    private void createGuiClientController() throws RemoteException {
+        this.clientController = new GuiClientController(this);
     }
 
     /**
@@ -103,15 +113,15 @@ public class RMIClient extends Client implements RMICallback  {
             chooseUsername();
             internalComunication = server.login(new Message(this.username, MessageType.USERNAME));
             if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                cliClientController.alreadyTakenUsername();
+                clientController.alreadyTakenUsername();
             }
         }while(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME);
         if (internalComunication == InternalComunication.RECONNECTION) {
-            cliClientController.reconnectionSuccessful();
+            clientController.reconnectionSuccessful();
             //serve altro codice?
         }
         if (internalComunication == InternalComunication.OK) {
-            cliClientController.loginSuccessful();
+            clientController.loginSuccessful();
             RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
             server.subscribe(username, clientStub);
             new Thread(new Decrementer(this)).start();
@@ -124,7 +134,7 @@ public class RMIClient extends Client implements RMICallback  {
     }
 
     public void chooseUsername() {
-        Message message = cliClientController.chooseUsername();
+        Message message = clientController.chooseUsername();
         this.username = message.getUsername();
     }
 
@@ -133,7 +143,7 @@ public class RMIClient extends Client implements RMICallback  {
     }
 
     public Message handleMessage(Message message) {
-        return cliClientController.handleMessage(message);
+        return clientController.handleMessage(message);
     }
 
     public RMIinterface getServer() {
@@ -141,7 +151,7 @@ public class RMIClient extends Client implements RMICallback  {
     }
 
     public void disconnect() {
-        cliClientController.disconnect();
+        clientController.disconnect();
     }
     @Override
     public String toString() {
