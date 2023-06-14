@@ -70,6 +70,7 @@ public class LobbyController {
             case 2-> {
                 synchronized (publicListOf2) {
                     publicListOf2.add(clientHandler);
+                    System.out.println("inserendo in lobbycontroller "+clientHandler.getUsername());
                     printLobby(gameMode);
                     if(publicListOf2.size()==2){
                         this.createGame(2);
@@ -82,6 +83,7 @@ public class LobbyController {
             case 3-> {
                 synchronized (publicListOf3) {
                     publicListOf3.add(clientHandler);
+                    System.out.println("inserendo in lobbycontroller "+clientHandler.getUsername());
                     printLobby(gameMode);
                     if(publicListOf3.size()==3){
                         this.createGame(3);
@@ -106,24 +108,40 @@ public class LobbyController {
         }
     }
 
-    private void createGame(int gameMode){
+    private void createGame(int gameMode)  {
         switch (gameMode) {
             case 2-> {
                 GameController gameController = new GameController(publicListOf2);
+                gameController.initGameEnv();
+                gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
                 publicListOf2.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
+                for(ClientHandler clientHandler: publicListOf2){
+                    if(clientHandler.gameControllerPresent()){
+                        System.out.println(clientHandler.getUsername() + " ha il gamecontrller");
+                    }
+                }
                 publicListOf2.clear();
             }
             case 3-> {
                 GameController gameController = new GameController(publicListOf3);
+                gameController.initGameEnv();
+                gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
                 publicListOf3.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf3.forEach(clientHandler -> clientHandler.setGameController(gameController));
+                for(ClientHandler clientHandler: publicListOf3){
+                    if(clientHandler.gameControllerPresent()){
+                        System.out.println(clientHandler.getUsername() + " ha il gamecontrller");
+                    }
+                }
                 publicListOf3.clear();
             }
             case 4-> {
                 GameController gameController = new GameController(publicListOf4);
+                gameController.initGameEnv();
+                gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
                 publicListOf4.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf4.forEach(clientHandler -> clientHandler.setGameController(gameController));

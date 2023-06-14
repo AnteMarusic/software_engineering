@@ -32,8 +32,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
             //new Thread(decrementer).start();
             System.out.println("RMI server is up");
         } catch (IOException | AlreadyBoundException e) {
-            System.out.println("errore rmi server, l'errore è:");
-            System.out.println(e);
+            System.out.println("errore rmi server, l'errore è:" + e);
         }
     }
     /**
@@ -41,8 +40,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      * differently, it returns the status of the username
      * @param usernameMessage message containing the username
      * @return OK if the username is not already taken, RECONNECTION if you are reconnecting, ALREADY_TAKEN_USERNAME otherwise
-     * @throws IOException
-     * @throws NotBoundException
      */
     @Override
     public InternalComunication login(Message usernameMessage) throws RemoteException{

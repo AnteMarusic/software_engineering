@@ -60,5 +60,7 @@ public abstract class ClientHandler{
         this.gameController = gameController;
     }
 
-
+    public boolean gameControllerPresent(){
+        return this.gameController != null;
+    }
 }

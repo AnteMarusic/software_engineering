@@ -58,7 +58,7 @@ public class RMIClientHandler extends ClientHandler{
     public void sendMessage (Message message) {
         try{
             RMIMessages.add(message);
-            System.out.println("aggiunto questo messaggio da leggere per "+username+": "+ message);
+            System.out.println("(RMICLIentHandler) aggiunto questo messaggio da leggere per "+username+": "+ message);
             rmistub.getNotified();
         } catch(IOException IOe) {
             IOe.printStackTrace();
