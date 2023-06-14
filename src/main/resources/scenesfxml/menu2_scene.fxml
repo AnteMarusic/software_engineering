@@ -10,10 +10,10 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.polimi.client.view.gui.sceneControllers.Menu2SceneController">
    <children>
-      <Button layoutX="256.0" layoutY="129.0" mnemonicParsing="false" text="Private Game" />
-      <Button layoutX="240.0" layoutY="174.0" mnemonicParsing="false" text="Random game of 2" />
-      <Button layoutX="241.0" layoutY="220.0" mnemonicParsing="false" text="Random game of 3" />
-      <Button layoutX="241.0" layoutY="265.0" mnemonicParsing="false" text="Random game of 4" />
+      <Button layoutX="256.0" layoutY="129.0" mnemonicParsing="false" onAction="#privateGame" text="Private Game" />
+      <Button layoutX="240.0" layoutY="174.0" mnemonicParsing="false" onAction="#randomOf2" text="Random game of 2" />
+      <Button layoutX="241.0" layoutY="220.0" mnemonicParsing="false" onAction="#randomOf3" text="Random game of 3" />
+      <Button layoutX="241.0" layoutY="265.0" mnemonicParsing="false" onAction="#randomOf4" text="Random game of 4" />
       <Label alignment="CENTER" layoutX="-3.0" layoutY="59.0" prefHeight="58.0" prefWidth="600.0" text="Choose the game mode">
          <font>
             <Font size="24.0" />

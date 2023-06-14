@@ -28,6 +28,7 @@ public class MenuSceneController implements Initializable {
     private double num=0;
     public void chooseRMI(ActionEvent e) throws IOException, NotBoundException {
         RMIClient rmiClient = new RMIClient(1099, true);
+        rmiClient.startConnection();
         SceneController.getInstance().switchScene(e, "login_scene");
     }
     public void chooseSocket(ActionEvent e) throws IOException {

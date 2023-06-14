@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.polimi.client.GuiClientController;
+import org.polimi.client.RMIClient;
 
 import java.io.IOException;
 
@@ -24,8 +26,12 @@ public class LoginSceneController {
     private void onJoinBtnClick(ActionEvent event) throws IOException {
         joinBtn.setDisable(true);
         String nickname = nicknameField.getText();
-        System.out.println(nickname+" bruh");
-        SceneController.getInstance().switchScene(event, "menu2_scene");
+        GuiClientController.messagges.add(nickname);
+        if(GuiClientController.getNotified("username")){
+            SceneController.getInstance().switchScene(event, "menu2_scene");
+        }else{
+            SceneController.getInstance().switchScene(event, "login_scene");
+        }
     }
 }
 

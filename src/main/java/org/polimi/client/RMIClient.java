@@ -1,5 +1,6 @@
 package org.polimi.client;
 
+import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
 import org.polimi.servernetwork.controller.InternalComunication;
@@ -75,34 +76,28 @@ public class RMIClient extends Client implements RMICallback  {
      *  in this case is also started the decrementer thread
      * @throws RemoteException
      */
-    public void login() throws RemoteException {
-        //UsernameAndGameModeMessage message = new UsernameAndGameModeMessage(this.username, this.gamemode, -1);
-        /*
-        UsernameStatus usernameStatus = null;
-        do {
-            chooseUsername();//comunicazione solo client e client-controller
-            usernameStatus = server.isUsernameAlreadyTaken(this.username);
-            if (usernameStatus == UsernameStatus.USED) {
-                System.out.println("Already taken username, choose another");
-            }
-        } while (usernameStatus == UsernameStatus.USED);
-        Message usernameMessage = new Message(this.username, MessageType.USERNAME);
-        if (usernameStatus == UsernameStatus.DISCONNECTED) {  // mi devo occupare della riconnessione
-            server.reconnection(usernameMessage);
-        }
-        else if (usernameStatus == UsernameStatus.NEVER_USED) {
-            try {
-                RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
-                server.subscribe(username, clientStub);
-                server.login(usernameMessage);
-                createPinger();
-            } catch (IOException | NotBoundException e) {
-                System.out.println("quiii");
-                getClientController().disconnect();
-            }
-        }
 
-         */
+    public boolean loginGui(String username) throws RemoteException {
+        InternalComunication internalComunication;
+        do{
+            this.username = username;
+            internalComunication = server.login(new Message(this.username, MessageType.USERNAME));
+            if (internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+                return false;
+            }
+        }while(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME);
+        if (internalComunication == InternalComunication.RECONNECTION) {
+            return false;
+        }
+        if (internalComunication == InternalComunication.OK) {
+            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
+            server.subscribe(this.username, clientStub);
+            new Thread(new Decrementer(this)).start();
+            return true;
+        }
+        return false;
+    }
+    public void login() throws RemoteException {
         InternalComunication internalComunication;
         do{
             chooseUsername();
