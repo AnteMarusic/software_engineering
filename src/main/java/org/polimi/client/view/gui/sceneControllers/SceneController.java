@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.polimi.client.GuiClientController;
 import org.polimi.client.view.gui.Gui;
 
 import java.io.IOException;
@@ -14,7 +15,6 @@ public class SceneController {
     private Stage stage;
     private Scene scene;
     private Parent root;
-
     private static SceneController instance;
 
 

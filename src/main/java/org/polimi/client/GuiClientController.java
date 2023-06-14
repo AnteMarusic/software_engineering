@@ -1,20 +1,45 @@
 package org.polimi.client;
 
-import org.polimi.messages.Message;
+import javafx.scene.Scene;
+import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class GuiClientController implements ClientControllerInterface{
-    private final Client client;
-    private String username;
+    private static Client client;
+    private static String username;
+
+    public static List<Object> messagges;
 
     public GuiClientController(Client client) {
         this.client = client;
+        this.messagges = new LinkedList<Object>();
     }
+
+
+    //viene chiamato ogni volta che il controller di una scena vuole passare parametri a questa classe
+    public static boolean getNotified(String notificationType) throws RemoteException {
+        switch(notificationType){
+            case "username" ->{
+                username = (String) messagges.get(0);
+                try {
+                    return ((RMIClient) client).loginGui(username);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "RandomGameof2" -> {
+                ((RMIClient) client).getServer().onMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1));
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void setUsername(String username) {
@@ -31,6 +56,8 @@ public class GuiClientController implements ClientControllerInterface{
         return null;
     }
 
+
+
     @Override
     public void alreadyTakenUsername() {
 
@@ -38,6 +65,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public Message chooseGameMode() {
+        System.out.println("arrivati a choose game mode");
         return null;
     }
 
