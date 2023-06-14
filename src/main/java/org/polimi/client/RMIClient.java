@@ -27,9 +27,9 @@ public class RMIClient extends Client implements RMICallback  {
         super(port);
         this.guiMode = guiMode;
         if(guiMode){
-            createCliClientController();
-        }else{
             createGuiClientController();
+        }else{
+            createCliClientController();
         }
         this.connected = false;
         this.countDown = COUNTDOWN;
