@@ -51,25 +51,11 @@ public class GameController {
         new Thread(() -> {
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         }).start();
-
-        System.out.println("Sono in startGameTurn nella classe gamecontroller: stampo la lista di player: " + players.toString());
-        // mando a tutti gli altri chi è il currentPlayer
-        for (ClientHandler c : players) {
-            System.out.println("Sono in startGameTurn nella classe gamecontroller: mando a " + c.username + "il giocatore che sta giocando");
-            if (c != players.get(currentPlayer) && c != null)
-                c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername()));
-
-            new Thread(() -> {
-                players.get(currentPlayer).sendMessage(new Message(players.get(currentPlayer).getUsername(), MessageType.CHOOSE_CARDS_REQUEST));
-            }).start();
-            System.out.println("entrato nel cazzo di metodo222");
-            // mando a tutti gli altri chi è il currentPlayer
-            for (ClientHandler d : players) {
-                System.out.println("entrato nel for");
-                if (d != players.get(currentPlayer) && d != null) {
-                    System.out.println("entrato nel if");
-                    d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername()));
-                }
+        for (ClientHandler d : players) {
+            System.out.println("entrato nel for");
+            if (d != players.get(currentPlayer) && d != null) {
+                System.out.println("entrato nel if");
+                d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername()));
             }
         }
     }
