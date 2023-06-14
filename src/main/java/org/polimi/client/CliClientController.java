@@ -8,20 +8,22 @@ import org.polimi.servernetwork.model.Coordinates;
 
 import java.util.*;
 
-public class ClientController {
+public class CliClientController implements ClientControllerInterface {
     private Cli cli;
     private Scanner scanner;
     private final Client client;
     private String username;
 
-    public ClientController(Client client) {
+    public CliClientController(Client client) {
         this.scanner = new Scanner(System.in);
         this.username = "unknown";
         cli = new Cli();
         this.client = client;
     }
+    @Override
     public void setUsername (String username) {this.username = username;}
 
+    @Override
     public Message handleMessage (Message message) {
         switch (message.getMessageType()) {
             case ERROR_MESSAGE -> {
@@ -122,6 +124,7 @@ public class ClientController {
     /**
      * asks to type in stdin the username and sends a message of type username to the server.
      */
+    @Override
     public Message chooseUsername () {
         cli.askForUsername();
         setUsername(scanner.nextLine());
@@ -131,9 +134,11 @@ public class ClientController {
     /**
      * writes an informative message that the username is already in use and calls chooseUsername method
      */
+    @Override
     public void alreadyTakenUsername () {
         cli.alreadyTakenUsername();
     }
+    @Override
     public Message chooseGameMode () {
         ChosenGameModeMessage message = null;
         int input=0;
@@ -206,6 +211,8 @@ public class ClientController {
      * ensures that the dimension of the arrayList isn't greater than maxInsertable in bookshelf
      * ensures that the cards are picked in a line from the board
      */
+
+    @Override
     public Message chooseCards() {
 
 
@@ -368,7 +375,8 @@ public class ClientController {
     }
 
     //the array contains coordinates, so CLI has to show the changes during this procedure
-    private LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
+    @Override
+    public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         int position;
         int i = 0;
         LinkedList<Coordinates>  orderedCoordinates = new LinkedList<Coordinates>();
@@ -407,9 +415,12 @@ public class ClientController {
         cli.setChosenCards(ordered);
         return orderedCoordinates;
     }
+    @Override
     public void newPlayerJoinedLobby (String newPlayer) {
         cli.addNewPlayer(newPlayer);
     }
+
+    @Override
 
     public Message chooseColumn () {
         int input;
@@ -440,6 +451,7 @@ public class ClientController {
     /**
      * calls the correspondent method of CLI
      */
+    @Override
     public void errorMessage () {
 
     }
@@ -447,6 +459,7 @@ public class ClientController {
     /**
      * should call the correspondent method of CLI
      */
+    @Override
     public void loginSuccessful () {
         System.out.println("login successful");
     }
@@ -454,6 +467,7 @@ public class ClientController {
     /**
      * should call the correspondent method of CLI
      */
+    @Override
     public void reconnectionSuccessful () {
         System.out.println("reconnection successful");
     }
@@ -461,6 +475,7 @@ public class ClientController {
     /**
      * calls the correspondent method of CLI
      */
+
     public void startGameMessage () {}
 
     /**
@@ -472,6 +487,8 @@ public class ClientController {
     /**
      * handles ModelStatusAllMessage
      */
+
+    @Override
     public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         if (this.cli == null)
@@ -487,6 +504,7 @@ public class ClientController {
         cli.setSharedGoal2(sharedGoal2);
     }
 
+    @Override
     public void disconnect() {
         cli.disconnect();
     }

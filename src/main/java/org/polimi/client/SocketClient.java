@@ -11,9 +11,11 @@ public class SocketClient extends Client{
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private ClientController clientController;
-    public SocketClient(int port) {
+    private final boolean guiMode;
+    private ClientControllerInterface clientController;
+    public SocketClient(int port, boolean guiMode) {
         super(port);
+        this.guiMode = guiMode;
         try{
             this.socket = new Socket("localhost",port);
         }
@@ -29,14 +31,22 @@ public class SocketClient extends Client{
             System.out.println("exception in client constructor method 2");
             handleDisconnection();
         }
-        createClientController();
-        startListeningToMessages();
-        Message message = clientController.chooseUsername();
-        this.username=message.getUsername();
-        sendMessage(message);
+        if(!guiMode) {
+            createCliClientController();
+            startListeningToMessages();
+            Message message = clientController.chooseUsername();
+            this.username = message.getUsername();
+            sendMessage(message);
+        }else{
+
+        }
     }
-    private void createClientController() {
-        this.clientController = new ClientController(this);
+    private void createCliClientController() {
+        this.clientController = new CliClientController(this);
+    }
+
+    private void createGuiClientController() {
+        this.clientController = new GuiClientController(this);
     }
     public void sendMessage(Message message) {
         try {

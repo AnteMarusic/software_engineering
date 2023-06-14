@@ -26,11 +26,9 @@ public class GameController {
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
-        initGameEnv();
-        startGameTurn();
     }
 
-    private void initGameEnv() {
+    public void initGameEnv() {
         // manda a tutti clientHandler un messaggio in cui dice che il gioco sta iniziando e con chi sta giocando
         // manda a tutti la bord gli shared goal e a ogni client il proprio private goal
         List<String> usernames;
@@ -41,21 +39,35 @@ public class GameController {
             bookshelves.add(game.getBookshelfGrid(i));
         }
         for (i = 0; i < players.size(); i++) {
-            players.get(i).sendMessage(new StartGameMessage("server", usernames));
-            players.get(i).sendMessage(new ModelStatusAllMessage("server", game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), usernames));
+            players.get(i).sendMessage(new StartGameMessage(players.get(i).getUsername(), usernames));
+            players.get(i).sendMessage(new ModelStatusAllMessage(players.get(i).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), usernames));
         }
 
     }
-
-    private void startGameTurn() {
+    //questo metodo non viene chiamato nel caso di client rmi
+    public void startGameTurn() {
+        System.out.println("entrato nel cazzo di metodo1");
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         System.out.println("Sono in startGameTurn nella classe gamecontroller: stampo la lista di player: " + players.toString());
         // mando a tutti gli altri chi è il currentPlayer
         for (ClientHandler c : players) {
             System.out.println("Sono in startGameTurn nella classe gamecontroller: mando a " + c.username + "il giocatore che sta giocando");
-            if (c != players.get(currentPlayer) && c!=null)
+            if (c != players.get(currentPlayer) && c != null)
                 c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername()));
+
+            new Thread(() -> {
+                players.get(currentPlayer).sendMessage(new Message(players.get(currentPlayer).getUsername(), MessageType.CHOOSE_CARDS_REQUEST));
+            }).start();
+            System.out.println("entrato nel cazzo di metodo222");
+            // mando a tutti gli altri chi è il currentPlayer
+            for (ClientHandler d : players) {
+                System.out.println("entrato nel for");
+                if (d != players.get(currentPlayer) && d != null) {
+                    System.out.println("entrato nel if");
+                    d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername()));
+                }
+            }
         }
     }
 

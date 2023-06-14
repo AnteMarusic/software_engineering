@@ -1,6 +1,7 @@
 package org.polimi.servernetwork.controller;
 
 import org.polimi.messages.*;
+import org.polimi.servernetwork.model.Game;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

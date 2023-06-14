@@ -56,10 +56,11 @@ public abstract class ClientHandler{
 
     protected abstract void closeEverything();
 
-
     public void setGameController(GameController gameController){
         this.gameController = gameController;
     }
 
-
+    public boolean gameControllerPresent(){
+        return this.gameController != null;
+    }
 }
