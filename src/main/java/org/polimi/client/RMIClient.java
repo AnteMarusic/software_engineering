@@ -2,10 +2,7 @@ package org.polimi.client;
 
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
-import org.polimi.messages.RMIAvailability;
-import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.controller.InternalComunication;
-import org.polimi.servernetwork.server.Pinger;
 import org.polimi.servernetwork.server.RMIinterface;
 
 import java.io.BufferedReader;
@@ -16,37 +13,40 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class RMIClient extends Client implements RMICallback  {
     private static final int COUNTDOWN = 5;
     private static final int port = 1099;
-    private ClientController clientController;
+    private ClientControllerInterface clientController;
     private RMIinterface server;
     private boolean connected;
     private int countDown;
 
-    public RMIClient(int port) throws IOException, NotBoundException {
+    private final boolean guiMode;
+    public RMIClient(int port, boolean guiMode) throws IOException, NotBoundException {
         super(port);
-        createClientController();
+        this.guiMode = guiMode;
+        if(guiMode){
+            createCliClientController();
+        }else{
+            createGuiClientController();
+        }
         this.connected = false;
         this.countDown = COUNTDOWN;
-        boolean bool;
-        do {
-            bool = this.startConnection();
-        } while (!bool);
-        this.login();
         //rmiClient.startChatClient();
     }
 
 
-    public ClientController getClientController() {
+    public ClientControllerInterface getClientController() {
         return clientController;
     }
 
-    private void createClientController() throws RemoteException {
-        this.clientController = new ClientController(this);
+    private void createCliClientController() throws RemoteException {
+        this.clientController = new CliClientController(this);
+    }
+
+    private void createGuiClientController() throws RemoteException {
+        this.clientController = new GuiClientController(this);
     }
 
     /**

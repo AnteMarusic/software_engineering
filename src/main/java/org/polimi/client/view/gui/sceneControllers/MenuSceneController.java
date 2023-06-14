@@ -27,17 +27,11 @@ public class MenuSceneController implements Initializable {
 
     private double num=0;
     public void chooseRMI(ActionEvent e) throws IOException, NotBoundException {
-        /*RMIClient rmiClient = new RMIClient(1099);
-        do {
-            bool = rmiClient.startConnection();
-        } while (!bool);
-        rmiClient.login();*/
-        System.out.println("rmi");
+        RMIClient rmiClient = new RMIClient(1099, true);
         SceneController.getInstance().switchScene(e, "login_scene");
     }
     public void chooseSocket(ActionEvent e) throws IOException {
-        /*SocketClient socket = new SocketClient(8181);*/
-        System.out.println("scoket");
+        SocketClient socket = new SocketClient(8181, true);
         SceneController.getInstance().switchScene(e, "login_scene");
     }
 
