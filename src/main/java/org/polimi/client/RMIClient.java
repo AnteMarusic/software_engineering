@@ -33,11 +33,6 @@ public class RMIClient extends Client implements RMICallback  {
         }
         this.connected = false;
         this.countDown = COUNTDOWN;
-        boolean bool;
-        do {
-            bool = this.startConnection();
-        } while (!bool);
-        this.login();
         //rmiClient.startChatClient();
     }
 

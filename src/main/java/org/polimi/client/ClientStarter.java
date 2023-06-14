@@ -44,6 +44,10 @@ public class ClientStarter {
                             if (input == 1) {
                                 secondWhile = false;
                                 RMIClient rmiClient = new RMIClient(rmiPort, false);
+                                do {
+                                    bool = rmiClient.startConnection();
+                                } while (!bool);
+                                rmiClient.login();
                             } else if (input == 2) {
                                 secondWhile = false;
                                 SocketClient socket = new SocketClient(socketPort, false);
