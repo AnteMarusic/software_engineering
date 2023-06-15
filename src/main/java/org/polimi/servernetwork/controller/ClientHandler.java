@@ -32,7 +32,7 @@ public abstract class ClientHandler{
     public abstract void onMessage(Message message);
     public abstract void sendMessage (Message message);
 
-    protected void disconnect () {
+    public void disconnect () {
         System.out.println(this.username + " disconnected");
 
         if (lobbyController == null) {

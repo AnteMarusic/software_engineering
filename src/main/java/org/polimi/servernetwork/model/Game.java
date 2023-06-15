@@ -235,4 +235,12 @@ public class Game{
         }
         return -1;
     }
+
+    public List<String> getPlayersUsername(){
+        List<String> usernames = new ArrayList<>();
+        for(int i=0; i<players.length; i++){
+            usernames.add(players[i].getName());
+        }
+        return usernames;
+    }
 }

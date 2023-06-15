@@ -34,7 +34,7 @@ public class GameController {
         List<String> usernames;
         int i;
         List<Card[][]> bookshelves = new LinkedList<>();
-        usernames = getPlayersUsername();
+        usernames = game.getPlayersUsername();
         for (i = 0; i < players.size(); i ++) {
             bookshelves.add(game.getBookshelfGrid(i));
         }
@@ -43,6 +43,18 @@ public class GameController {
             players.get(i).sendMessage(new ModelStatusAllMessage(players.get(i).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), usernames));
         }
 
+    }
+
+    public void resetGameEnv(int position){
+        List<String> usernames;
+        int i;
+        List<Card[][]> bookshelves = new LinkedList<>();
+        usernames = game.getPlayersUsername();
+        for (i = 0; i < players.size(); i ++) {
+            bookshelves.add(game.getBookshelfGrid(i));
+        }
+        players.get(position).sendMessage(new Message("server", MessageType.USERNAME));
+        players.get(position).sendMessage(new ModelStatusAllMessage(players.get(position).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(position),game.getPersonalGoalColors(position), usernames));
     }
     //questo metodo non viene chiamato nel caso di client rmi
     public void startGameTurn() {
@@ -158,8 +170,9 @@ public class GameController {
         System.out.println("questa è la lista di clienthandler: " + players.toString());
         players.set(position, clientHandler);
         System.out.println("questa è la lista di clienthandler: " + players.toString());
+        resetGameEnv(position);
         for(ClientHandler c : players ) {
-            if(c != clientHandler)
+            if(c !=null && c != clientHandler)
                 c.sendMessage(new ReconnectionMessage("server", clientHandler.getUsername()));
         }
         clientHandler.sendMessage(new Message("server", MessageType.WAITING_FOR_YOUR_TURN));
@@ -270,7 +283,7 @@ public class GameController {
 
     public void decreaseCountDown () {
         countDown--;
-        if(countDown==29){
+        if(countDown==58){
             System.out.println("count down started");
         }
         if (countDown == 0) {
