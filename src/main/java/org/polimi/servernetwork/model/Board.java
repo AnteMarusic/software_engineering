@@ -36,7 +36,7 @@ public class Board {
     /**
      * fills the board with new cards taken from the bag, and sets border-cards' state to PICKABLE, otherwise to NOT_PICKABLE
      */
-    private void fill() {
+    public void fill() {
         int start, length;
         for (int i = 0; i < 9; i++) {
             int[] arr= GameRules.getCorrectStartAndLength(i, numOfPlayers);

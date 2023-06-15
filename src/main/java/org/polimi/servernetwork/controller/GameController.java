@@ -20,7 +20,7 @@ public class GameController {
 
     public GameController(ArrayList<ClientHandler> list) {
         numOfPlayers = list.size();
-        countDown = 60;
+        countDown = 10;
         decrementer = null;
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
@@ -80,10 +80,22 @@ public class GameController {
      * @param coordinates coordinates to remove (sent by the client)
      */
     public void removeCards(List<Coordinates> coordinates) {
-        game.remove(coordinates);
-        for (ClientHandler c : players) {
-            if (c!=null && !c.equals(players.get(currentPlayer))) {
-                c.sendMessage(new CardToRemoveMessage("server", coordinates));
+
+        boolean empty = game.remove(coordinates);
+        if(!empty) {
+            for (ClientHandler c : players) {
+                if (c != null && !c.equals(players.get(currentPlayer))) {
+                    c.sendMessage(new CardToRemoveMessage("server", coordinates));
+                }
+            }
+        }
+        else {
+            System.out.println("la board è vuota, la riempio");
+            game.fillBoard();
+            for (ClientHandler c : players) {
+                if (c != null && !c.equals(players.get(currentPlayer))) {
+                    c.sendMessage(new BoardMessage(game.getBoardMap()));
+                }
             }
         }
     }
@@ -278,7 +290,7 @@ public class GameController {
 
     public void decreaseCountDown () {
         countDown--;
-        if(countDown==58){
+        if(countDown==8){
             System.out.println("count down started");
         }
         if (countDown == 0) {
@@ -288,6 +300,7 @@ public class GameController {
             // decreto il vincitore
             // mando messaggio di fine partita
             // chiudo il gioco
+            endGame();
         }
     }
     public ArrayList<ClientHandler> returnClientHandlers(){

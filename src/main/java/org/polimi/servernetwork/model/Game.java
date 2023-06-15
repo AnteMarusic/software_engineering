@@ -117,12 +117,13 @@ public class Game{
         if (j == 11) sharedGoal[1] = new SharedGoal12(numOfPlayers);
     }
 
-    public void remove(List<Coordinates> coordinates){
+    public boolean remove(List<Coordinates> coordinates){
         // salvo le carte e le rimuovo, metto la prima che mi manda in posizione 0
         readyToInsert.clear();
-        for (int i=0; i<coordinates.size(); i++) {
+        for(int i=0; i<coordinates.size(); i++) {
             readyToInsert.add(board.getCardAtCoordinates(coordinates.get(i)));   // va corretta getCardAtCoordinates siccome fa controlli inutili
         }
+        return board.refillCheck();
     }
 
     public List<Coordinates> geToUpdateToPickable () {
@@ -242,5 +243,8 @@ public class Game{
             usernames.add(players[i].getName());
         }
         return usernames;
+    }
+    public void fillBoard(){
+        board.fill();
     }
 }

@@ -42,8 +42,10 @@ public class CliClientController implements ClientControllerInterface {
                 cli.setMyUsername(username);
                 return chooseGameMode();
             }
+
+            // nuovo messaggio aggiunto
             case USERNAME -> {
-                System.out.println("cazzoooooo il nome è: " + username);
+                System.out.println("il nome è: " + username);
                 cli.setMyUsername(username);
             }
 
@@ -72,6 +74,15 @@ public class CliClientController implements ClientControllerInterface {
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames);
                 cli.printRoutine();
                 return null;
+            }
+
+
+            // nuovo messaggio aggiunto
+            case BOARDMESSAGE -> {
+                BoardMessage m = (BoardMessage) message;
+                Map<Coordinates, Card> board = m.getBoard();
+                newBoardRefill(board);
+                cli.printRoutine();
             }
 
             case CARD_TO_REMOVE -> {
@@ -506,6 +517,9 @@ public class CliClientController implements ClientControllerInterface {
         cli.setPersonalGoal(personalGoalCoordinates, personalGoalColors);
         cli.setSharedGoal1(sharedGoal1);
         cli.setSharedGoal2(sharedGoal2);
+    }
+    public void newBoardRefill(Map<Coordinates, Card> board){
+        cli.setBoard(board);
     }
 
     @Override
