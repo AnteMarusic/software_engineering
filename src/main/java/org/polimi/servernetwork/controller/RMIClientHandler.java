@@ -12,11 +12,15 @@ import java.util.Queue;
 public class RMIClientHandler extends ClientHandler{
     private Queue<Message> RMIMessages;
     private RMICallback rmistub;
+    private final Object taskLock;
+    private final Object RMIMessagesLock;
 
     public RMIClientHandler(RMICallback rmistub, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         super(usernameIssuer, gameCodeIssuer, lobbyController);
         this.rmistub=rmistub;
         this.RMIMessages = new LinkedList<>();
+        taskLock = new Object();
+        RMIMessagesLock = new Object();
     }
     public void onMessage(Message message){
         switch (message.getMessageType()){
@@ -57,12 +61,20 @@ public class RMIClientHandler extends ClientHandler{
             }
         }
     }
+
+    /**
+     * this method waits for RMIMessageLock to be free and then enqueue the message.
+     * Then it starts a new thread that waits for taskLock (happens when the previous sendMessage finished to send
+     * the message) and when is free calls the method getNotified() on the rmistub.
+     * @param message the message to be sent
+     */
     public void sendMessage (Message message) {
-        new Thread (() -> {
-                synchronized (RMIMessages) {
+        synchronized (RMIMessagesLock) {
+            RMIMessages.add(message);
+            System.out.println("(RMIClientHandler) added this message for " + username + "to read: " + message);
+            new Thread (()-> {
+                synchronized (taskLock) {
                     try {
-                        RMIMessages.add(message);
-                        System.out.println("(RMICLIentHandler) aggiunto questo messaggio da leggere per " + username + ": " + message);
                         rmistub.getNotified();
                     } catch (UnmarshalException e) {
                         System.out.println("Client disconnected");
@@ -76,13 +88,16 @@ public class RMIClientHandler extends ClientHandler{
                         closeEverything();
                     }
                 }
-        }).start();
+            }).start();
         }
+    }
 
     public void closeEverything() {
     }
 
     public Message popMessageRMI(){
-        return RMIMessages.remove();
+        synchronized (RMIMessages) {
+            return RMIMessages.remove();
+        }
     }
 }

@@ -119,7 +119,7 @@ public class LobbyController {
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 for(ClientHandler clientHandler: publicListOf2){
                     if(clientHandler.gameControllerPresent()){
-                        System.out.println(clientHandler.getUsername() + " ha il gamecontrller");
+                        System.out.println("(LobbyController) " + clientHandler.getUsername() + " ha il gameController");
                     }
                 }
                 publicListOf2.clear();
