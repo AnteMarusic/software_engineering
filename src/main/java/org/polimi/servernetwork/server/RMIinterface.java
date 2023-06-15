@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 public interface RMIinterface extends Remote {
     InternalComunication login(Message usernameMessage) throws RemoteException;
     void onMessage(Message message) throws RemoteException;
-    void reconnection(Message message) throws RemoteException;
+    void reconnection(String username, RMICallback rmiclient) throws RemoteException;
     Message getMessage(String username)throws RemoteException;
     /*RMIAvailability messagesAvailable(String username)throws RemoteException;*/
     //UsernameStatus isUsernameAlreadyTaken(String username) throws RemoteException;

@@ -17,7 +17,8 @@ public class Pinger implements Runnable{
     }
 
     public void run () {
-        while (true) {
+        boolean condition=true;
+        while (condition) {
             try {
                 Thread.sleep(1000);
                 client.ping();
@@ -25,6 +26,7 @@ public class Pinger implements Runnable{
                 System.out.println("interrupted exception in pinger");
             } catch (RemoteException e) {
                 server.disconnect(this.username);
+                condition = false;
             }
         }
     }

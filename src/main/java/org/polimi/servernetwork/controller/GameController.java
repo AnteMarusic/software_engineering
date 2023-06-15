@@ -20,7 +20,7 @@ public class GameController {
 
     public GameController(ArrayList<ClientHandler> list) {
         numOfPlayers = list.size();
-        countDown = 10;
+        countDown = 30;
         decrementer = null;
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
@@ -87,14 +87,12 @@ public class GameController {
     public void removeCards(List<Coordinates> coordinates) {
 
         boolean empty = game.remove(coordinates);
-        if(!empty) {
-            for (ClientHandler c : players) {
-                if (c != null && !c.equals(players.get(currentPlayer))) {
-                    c.sendMessage(new CardToRemoveMessage("server", coordinates));
-                }
+        for (ClientHandler c : players) {
+            if (c != null && !c.equals(players.get(currentPlayer))) {
+                c.sendMessage(new CardToRemoveMessage("server", coordinates));
             }
         }
-        else {
+        if(empty) {
             System.out.println("la board è vuota, la riempio");
             game.fillBoard();
             for (ClientHandler c : players) {
@@ -192,10 +190,14 @@ public class GameController {
         // quindi non stava giocando ma era solo in attesa
         if(getNumOfConnectedPlayers()==2){
             // in questo caso azzero il timer di decrementer
-            decrementer.stop();
-            System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
-            // riporto coutDown a 60
-            countDown=60;
+            // non è detto ch il decrementer sia partito
+            if(countDown!=30){
+                decrementer.stop();
+                System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
+                // riporto coutDown a 60
+                countDown=30;
+            }
+
 
             //e assegno il turno al giocatore che era già dentro al gioco (teoricamente dovrebbe essere già il currentplayer)
             // gli chiedo di scegliere le carte da inserire
@@ -204,9 +206,11 @@ public class GameController {
         // comunico al giocatore riconnesso di essere entrato in una partita
     }
     public void disconnection(ClientHandler clientHandler){
-        System.out.println("game controller stampa: siamo dentro al metodo disconnection");
+        System.out.println("game controller stampa: siamo dentro al metodo disconnection in game controller");
         String username = clientHandler.getUsername();
+        System.out.println("sto cercando di rimuovere il giocatore: " + username);
         // setto nella lista di clientHandler il client che è uscito a null
+        System.out.println("questa è la lista di clienthandler: " + players.toString());
         players.set(players.indexOf(clientHandler), null);
         if(getNumOfConnectedPlayers()==0){
             closeGame();
@@ -295,7 +299,7 @@ public class GameController {
 
     public void decreaseCountDown () {
         countDown--;
-        if(countDown==8){
+        if(countDown==28){
             System.out.println("count down started");
         }
         if (countDown == 0) {

@@ -100,4 +100,13 @@ public class RMIClientHandler extends ClientHandler{
             return RMIMessages.remove();
         }
     }
+
+    public void reconnection(){
+        int gameId = usernameIssuer.getGameID(username);
+        GameController gameController = gameCodeIssuer.getGameController(gameId);
+        usernameIssuer.setClientHandler(this, username);
+        setGameController(gameController);
+        usernameIssuer.setConnect(username);
+        gameController.reconnect(this);
+    }
 }

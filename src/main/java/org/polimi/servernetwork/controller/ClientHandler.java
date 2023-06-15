@@ -31,6 +31,7 @@ public abstract class ClientHandler{
 
     public abstract void onMessage(Message message);
     public abstract void sendMessage (Message message);
+    public abstract void reconnection();
 
     public void disconnect () {
         System.out.println(this.username + " disconnected");
@@ -47,6 +48,7 @@ public abstract class ClientHandler{
         }
         //if you are in a game you have to be disconnected from it
         if (gameController != null) {
+            System.out.println(this.username + " era dentro ad un gioco ");
             gameController.disconnection(this);
             usernameIssuer.setDisconnect(this.username);
         }

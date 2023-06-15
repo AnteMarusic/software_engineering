@@ -64,6 +64,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      * @param username of the client to disconnect
      */
     public void disconnect (String username) {
+        subscribers.remove(username);
         usernameIssuer.getClientHandler(username).disconnect();
     }
 
@@ -72,12 +73,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
         clientHandler.onMessage(message);
     }
-    public void reconnection(Message message) throws RemoteException {
-        /*ClientHandler clientHandler = new ClientHandler(true, null, usernameIssuer, gameCodeIssuer, lobbyController);*/
-        //clientHandler.onMessage(message);
-        // devo resettare il gamecontroller
-        //setGameController(gameController);
-    }
+
     public Message getMessage(String username)throws RemoteException{
         RMIClientHandler clientHandler = (RMIClientHandler) usernameIssuer.getClientHandler(username);
         return clientHandler.popMessageRMI();
@@ -96,6 +92,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
         onMessage(usernameMessage);
         createPinger(username, rmiclient);
+    }
+
+    public void reconnection(String username, RMICallback rmiclient) throws RemoteException {
+        subscribers.put(username, rmiclient);
+        ClientHandler clientHandler = new RMIClientHandler(rmiclient, usernameIssuer, gameCodeIssuer, lobbyController);
+        clientHandler.setUsername(username);
+        createPinger(username, rmiclient);
+        clientHandler.reconnection();
     }
     public void sendChatMessage(String message) throws RemoteException{
         for(Map.Entry<String, RMICallback> entry : subscribers.entrySet()){

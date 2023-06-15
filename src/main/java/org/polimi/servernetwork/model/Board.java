@@ -131,7 +131,7 @@ public class Board {
                         AdjacentCoords[2] = new Coordinates(i, j - 1);
                         AdjacentCoords[3] = new Coordinates(i - 1, j);
                         for (int k = 0; k < 4; k++) {
-                            if (boardRowColInBound(AdjacentCoords[i].getRow(), AdjacentCoords[i].getCol(), numOfPlayers) && board.get(AdjacentCoords[i]) != null) {
+                            if (boardRowColInBound(AdjacentCoords[k].getRow(), AdjacentCoords[k].getCol(), numOfPlayers) && board.get(AdjacentCoords[k]) != null) {
                                 return false;
                             }
                         }

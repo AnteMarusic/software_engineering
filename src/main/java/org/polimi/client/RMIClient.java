@@ -120,8 +120,8 @@ public class RMIClient extends Client implements RMICallback  {
         }while(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME);
         if (internalComunication == InternalComunication.RECONNECTION) {
             clientController.reconnectionSuccessful();
-            //serve altro codice?
-            // devo chiamare su RMIserver la reconnection
+            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
+            server.reconnection(username, clientStub);
         }
         if (internalComunication == InternalComunication.OK) {
             clientController.loginSuccessful();
