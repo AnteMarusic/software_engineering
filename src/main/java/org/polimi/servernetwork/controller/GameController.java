@@ -48,9 +48,14 @@ public class GameController {
     public void startGameTurn() {
         System.out.println("entrato nel cazzo di metodo1");
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
+        /*
         new Thread(() -> {
+
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         }).start();
+
+         */
+        players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         for (ClientHandler d : players) {
             System.out.println("entrato nel for");
             if (d != players.get(currentPlayer) && d != null) {

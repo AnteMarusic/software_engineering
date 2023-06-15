@@ -13,7 +13,13 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
+import java.util.Queue;
 
+/**
+ * messages has to be sent in the right order, because they will be executed by the client
+ * in the same order they have been sent (the same thing happen in SocketClient)
+ */
 public class RMIClient extends Client implements RMICallback  {
     private static final int COUNTDOWN = 5;
     private static final int port = 1099;
@@ -21,6 +27,9 @@ public class RMIClient extends Client implements RMICallback  {
     private RMIinterface server;
     private boolean connected;
     private int countDown;
+    private Queue<Message> messageQueue;
+    private final Object taskLock;
+    private final Object messageQueueLock;
 
     private final boolean guiMode;
     public RMIClient(int port, boolean guiMode) throws IOException, NotBoundException {
@@ -34,6 +43,9 @@ public class RMIClient extends Client implements RMICallback  {
         this.connected = false;
         this.countDown = COUNTDOWN;
         //rmiClient.startChatClient();
+        messageQueue = new LinkedList<Message>();
+        taskLock = new Object();
+        messageQueueLock = new Object();
     }
 
 
@@ -154,7 +166,10 @@ public class RMIClient extends Client implements RMICallback  {
     }
 
     /**
-     * Da chiamare solo se c'è un messaggio da leggere
+     * this method is called by the server when a message is sent to the client
+     * it adds the message to the message queue and starts a new thread that waits on taskLock to be free
+     * and then calls handleMessage method of the clientController and in case of a message to be sent to the server
+     * it sends this message.
      */
     @Override
     public void getNotified() throws RemoteException {
@@ -167,11 +182,28 @@ public class RMIClient extends Client implements RMICallback  {
         if(messageFromServer!=null){
             System.out.println("appena ricevuto questo dal server: "+ messageFromServer);
         }
-        message = handleMessage(messageFromServer);
-        if (message != null){
-            System.out.println("inviando questo al server: "+ message +"\n in risposta a "+ messageFromServer);
-            server.onMessage(message);
+        //message = handleMessage(messageFromServer);
+        synchronized (messageQueueLock) {
+            messageQueue.add(messageFromServer);
         }
+        new Thread (()->{
+            Message answer;
+            Message message1;
+            synchronized (taskLock) {
+                synchronized (messageQueueLock) {
+                    message1 = messageQueue.poll();
+                }
+                answer = handleMessage(message1);
+            }
+            if (answer != null){
+                System.out.println("inviando questo al server: "+ answer +"\n in risposta a "+ message1);
+                try {
+                    server.onMessage(answer);
+                } catch (RemoteException e) {
+                    System.out.println("(RMIclient) error sending message to server");
+                }
+            }
+        }).start();
     }
     @Override
     public void ping(){
