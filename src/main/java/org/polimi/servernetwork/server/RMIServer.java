@@ -2,6 +2,7 @@ package org.polimi.servernetwork.server;
 
 import org.polimi.client.RMICallback;
 import org.polimi.messages.Message;
+import org.polimi.messages.MessageType;
 import org.polimi.servernetwork.controller.*;
 
 import java.io.IOException;
@@ -87,10 +88,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      */
     public void subscribe(String username, RMICallback rmiclient) throws RemoteException{
         subscribers.put(username, rmiclient);
-        Message usernameMessage = new Message(username);
+        //Message usernameMessage = new Message(username);
         ClientHandler clientHandler = new RMIClientHandler(rmiclient, usernameIssuer, gameCodeIssuer, lobbyController);
-        this.usernameIssuer.setClientHandler(clientHandler, usernameMessage.getUsername());
-        onMessage(usernameMessage);
+        clientHandler.setUsername(username);
+        this.usernameIssuer.setClientHandler(clientHandler, username);
+        //onMessage(usernameMessage);
+        clientHandler.sendMessage (new Message(username, MessageType.CHOOSE_GAME_MODE ));
         createPinger(username, rmiclient);
     }
 

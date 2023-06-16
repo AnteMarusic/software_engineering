@@ -23,7 +23,7 @@ public class Pinger implements Runnable{
                 Thread.sleep(1000);
                 client.ping();
             } catch (InterruptedException e) {
-                System.out.println("interrupted exception in pinger");
+                System.out.println("(Pinger) interrupted exception");
             } catch (RemoteException e) {
                 server.disconnect(this.username);
                 condition = false;

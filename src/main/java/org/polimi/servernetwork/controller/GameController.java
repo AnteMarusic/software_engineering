@@ -206,9 +206,8 @@ public class GameController {
         // comunico al giocatore riconnesso di essere entrato in una partita
     }
     public void disconnection(ClientHandler clientHandler){
-        System.out.println("game controller stampa: siamo dentro al metodo disconnection in game controller");
+        System.out.println("(GameController) disconnect " + clientHandler.getUsername());
         String username = clientHandler.getUsername();
-        System.out.println("sto cercando di rimuovere il giocatore: " + username);
         // setto nella lista di clientHandler il client che è uscito a null
         System.out.println("questa è la lista di clienthandler: " + players.toString());
         players.set(players.indexOf(clientHandler), null);

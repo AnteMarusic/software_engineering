@@ -28,10 +28,12 @@ public class UsernameIssuer {
     public synchronized void setClientHandler(ClientHandler clientHandler, String username){
         Object[] object = map.get(username);
         if(object == null){
-            throw new RuntimeException("you tried to set a clienthandler to a non registered username");
+            throw new RuntimeException("you tried to set a clientHandler to a non registered username");
         }
         object[2] = clientHandler;
+        System.out.println("(UsernameIssuer) added ClientHandler to: " + username);
         map.put(username, object);
+        printMap();
     }
 
     /**
@@ -49,43 +51,49 @@ public class UsernameIssuer {
     }
 
     public synchronized void removeUsername (String username) throws NoSuchElementException {
-        if (username != null && map.containsKey(username))
+        if (username != null && map.containsKey(username)) {
             map.remove(username);
+            System.out.println("(UsernameIssuer) removed " + username);
+        }
         else {
             throw new NoSuchElementException();
         }
     }
 
     private synchronized void printMap () {
+        System.out.println("(UsernameIssuer) print table");
         Object [] o;
         for (String s : map.keySet()) {
-            System.out.print(s);
+            System.out.print("(UsernameIssuer) "+s);
             o = map.get(s);
-            System.out.println(" : " + o[0] + ", " + o [1]);
+            System.out.println(" : connection status: " + o[0] + ", game code: " + o [1] + ", client handler: " + o[2]);
         }
     }
 
     /**
-     *
+     * if username is not in the data structure the method stores a line for the new player
+     * with connection status CONNECTED and no other attributes and responds OK.
+     * if the username is present, either is currently connected or is disconnected. In the first case the method
+     * returns ALREADY_TAKEN_USERNAME, in the second case RECONNECTION.
      * @param username username of the player that is connecting
      * @return return an InternalComunication that explains what to do
      */
     public synchronized InternalComunication login(String username){
-        System.out.println("currently in login method of usernameIssuer");
         printMap();
         if(!map.containsKey(username)){
             Object[] object = new Object[3];
             object[0]= ConnectionStatus.CONNECTED;
             object[1]=null;
+            object[2] = null;
             map.put(username,object);
-            System.out.println("handle message if");
+            System.out.println("(UsernameIssuer) reserved row for: " + username);
             printMap();
             return InternalComunication.OK;
         }
         else{
             Object[] object;
             object = map.get(username);
-            System.out.println("handle message else");
+            System.out.println("(UsernameIssuer) impossible to reserve a row for: " + username);
             printMap();
             if(object[0]==ConnectionStatus.CONNECTED){
                 return InternalComunication.ALREADY_TAKEN_USERNAME;

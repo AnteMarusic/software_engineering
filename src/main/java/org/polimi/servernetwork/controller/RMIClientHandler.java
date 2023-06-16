@@ -21,14 +21,18 @@ public class RMIClientHandler extends ClientHandler{
         this.RMIMessages = new LinkedList<>();
         taskLock = new Object();
         RMIMessagesLock = new Object();
+        isLogged = true;
     }
+    /*
     public void onMessage(Message message){
         switch (message.getMessageType()){
+
             case USERNAME -> {
                 this.username = message.getUsername();
                 sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
 
             }
+
             case CHOOSE_GAME_MODE -> {
                 ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
                 switch (chosenGameModeMessage.getGameMode()) {
@@ -61,6 +65,7 @@ public class RMIClientHandler extends ClientHandler{
             }
         }
     }
+    */
 
     /**
      * this method waits for RMIMessageLock to be free and then enqueue the message.
@@ -71,20 +76,20 @@ public class RMIClientHandler extends ClientHandler{
     public void sendMessage (Message message) {
         synchronized (RMIMessagesLock) {
             RMIMessages.add(message);
-            System.out.println("(RMIClientHandler) added this message for " + username + "to read: " + message);
+            System.out.println("(RMIClientHandler) added this message for " + username + " to read: " + message);
             new Thread (()-> {
                 synchronized (taskLock) {
                     try {
                         rmistub.getNotified();
                     } catch (UnmarshalException e) {
-                        System.out.println("Client disconnected");
+                        System.out.println("(RMIClientHandler username: " + this.username + ") disconnection");
                         closeEverything();
                     } catch (RemoteException e) {
-                        System.out.println("Client disconnected");
+                        System.out.println("(RMIClientHandler username: " + this.username + ") disconnection");
                         closeEverything();
                     }
                     catch (IOException IOe) {
-                        System.out.println("Client disconnected");
+                        System.out.println("(RMIClientHandler username: " + this.username + ") disconnection");
                         closeEverything();
                     }
                 }

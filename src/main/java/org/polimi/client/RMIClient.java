@@ -136,6 +136,10 @@ public class RMIClient extends Client implements RMICallback  {
         server.onMessage(message);
     }
 
+    /**
+     * this method calls clientController method chooseUsername and sets the username of this client
+     * to the username in the message returned by chooseUsername.
+     */
     public void chooseUsername() {
         Message message = clientController.chooseUsername();
         this.username = message.getUsername();
@@ -173,10 +177,10 @@ public class RMIClient extends Client implements RMICallback  {
         do{
             messageFromServer = server.getMessage(username);
             if(messageFromServer == null)
-                System.out.println("cercando di leggere....");
+                System.out.println("(RMIClient getNotified) cercando di leggere....");
         }while(messageFromServer==null);
         if(messageFromServer!=null){
-            System.out.println("appena ricevuto questo dal server: "+ messageFromServer);
+            System.out.println("(RMIClient getNotified) appena ricevuto questo dal server: "+ messageFromServer);
         }
         //message = handleMessage(messageFromServer);
         synchronized (messageQueueLock) {
@@ -192,11 +196,11 @@ public class RMIClient extends Client implements RMICallback  {
                 answer = handleMessage(message1);
             }
             if (answer != null){
-                System.out.println("inviando questo al server: "+ answer +"\n in risposta a "+ message1);
+                System.out.println("(RMIclient getNotified) inviando questo al server: "+ answer +"\n in risposta a "+ message1);
                 try {
                     server.onMessage(answer);
                 } catch (RemoteException e) {
-                    System.out.println("(RMIclient) error sending message to server");
+                    System.out.println("(RMIclient getNotified) error sending message to server");
                 }
             }
         }).start();

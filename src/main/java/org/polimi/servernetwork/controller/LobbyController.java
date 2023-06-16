@@ -35,8 +35,8 @@ public class LobbyController {
         switch (gameMode) {
             case 2 -> {
                 synchronized (publicListOf2){
-                    System.out.print("lobby of two: ");
-                    System.out.print("size: " + publicListOf2.size() + "contains: ");
+                    System.out.print("(LobbyController) lobby of two: ");
+                    System.out.print("size: " + publicListOf2.size() + " contains: ");
                     for (ClientHandler c : publicListOf2) {
                         System.out.print(c.getUsername());
                     }
@@ -45,8 +45,8 @@ public class LobbyController {
              }
             case 3 -> {
                 synchronized (publicListOf3){
-                    System.out.print("lobby of three: ");
-                    System.out.print("size: " + publicListOf3.size() + "contains: ");
+                    System.out.print("(LobbyController) lobby of three: ");
+                    System.out.print("size: " + publicListOf3.size() + " contains: ");
                     for (ClientHandler c : publicListOf3) {
                         System.out.print(c.getUsername());
                     }
@@ -55,8 +55,8 @@ public class LobbyController {
             }
             case 4 -> {
                 synchronized (publicListOf4){
-                    System.out.print("lobby of four: ");
-                    System.out.print("size: " + publicListOf4.size() + "contains: ");
+                    System.out.print("(LobbyController) lobby of four: ");
+                    System.out.print("size: " + publicListOf4.size() + " contains: ");
                     for (ClientHandler c : publicListOf4) {
                         System.out.print(c.getUsername());
                     }
@@ -70,7 +70,7 @@ public class LobbyController {
             case 2-> {
                 synchronized (publicListOf2) {
                     publicListOf2.add(clientHandler);
-                    System.out.println("inserendo in lobbycontroller "+clientHandler.getUsername());
+                    System.out.println("(LobbyController) inserisco in lobby da due: " + clientHandler.getUsername());
                     printLobby(gameMode);
                     if(publicListOf2.size()==2){
                         this.createGame(2);
@@ -83,7 +83,7 @@ public class LobbyController {
             case 3-> {
                 synchronized (publicListOf3) {
                     publicListOf3.add(clientHandler);
-                    System.out.println("inserendo in lobbycontroller "+clientHandler.getUsername());
+                    System.out.println("(LobbyController) inserisco in lobby da tre: " + clientHandler.getUsername());
                     printLobby(gameMode);
                     if(publicListOf3.size()==3){
                         this.createGame(3);
@@ -96,6 +96,7 @@ public class LobbyController {
             case 4-> {
                 synchronized (publicListOf4) {
                     publicListOf4.add(clientHandler);
+                    System.out.println("(LobbyController) inserisco in lobby da quattro: " + clientHandler.getUsername());
                     printLobby(gameMode);
                     if(publicListOf4.size()==4){
                         this.createGame(4);
@@ -133,7 +134,7 @@ public class LobbyController {
                 publicListOf3.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 for(ClientHandler clientHandler: publicListOf3){
                     if(clientHandler.gameControllerPresent()){
-                        System.out.println(clientHandler.getUsername() + " ha il gamecontrller");
+                        System.out.println("(LobbyController) " + clientHandler.getUsername() + " ha il gameController");
                     }
                 }
                 publicListOf3.clear();
@@ -243,6 +244,7 @@ public class LobbyController {
                 //clientHandler and c refer to the same object.
                 if (c == clientHandler) {
                     publicListOf2.remove(c);
+                    System.out.println ("(LobbyController) removed client: " + clientHandler.getUsername() + " from lobby of 2");
                     flag = true;
                 }
             }
@@ -255,6 +257,7 @@ public class LobbyController {
                     //clientHandler and c refer to the same object.
                     if (c == clientHandler) {
                         publicListOf3.remove(c);
+                        System.out.println ("(LobbyController) removed client: " + clientHandler.getUsername() + " from lobby of 3");
                         flag = true;
                     }
                 }
@@ -268,19 +271,16 @@ public class LobbyController {
                     //clientHandler and c refer to the same object.
                     if (c == clientHandler) {
                         publicListOf4.remove(c);
+                        System.out.println ("(LobbyController) removed client: " + clientHandler.getUsername() + " from lobby of 4");
                         flag = true;
                     }
                 }
             }
 
         }
-        if (flag) {
-            System.out.println ("removed client: " + clientHandler.getUsername() + " from lobby");
+        if (!flag) {
+            System.out.println("(LobbyController) client: " + clientHandler.getUsername() + " wasn't in lobby");
         }
-        else {
-            System.out.println("client: " + clientHandler.getUsername() + " wasn't in lobby");
-        }
-
     }
     public boolean readyToCreatePrivateGame(int gameCode){
         if(readyToStartGame.contains(gameCode))

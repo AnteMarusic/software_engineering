@@ -1,6 +1,6 @@
 package org.polimi.servernetwork.controller;
 
-import org.polimi.messages.Message;
+import org.polimi.messages.*;
 
 /**
  * This class is responsible for handling the communication with a client.
@@ -12,13 +12,18 @@ public abstract class ClientHandler{
     protected GameCodeIssuer gameCodeIssuer;
     protected LobbyController lobbyController;
     protected GameController gameController;
+    /**
+     * this attribute is used to identify a socket client handler that belongs to a client
+     * that hasn't successfully logged in yet. By default, is set to true on RMIClientHandlers because those are created
+     * only if the client has properly logged in.
+     */
+    protected boolean isLogged;
 
 
     public ClientHandler(UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         this.usernameIssuer = usernameIssuer;
         this.gameCodeIssuer = gameCodeIssuer;
         this.lobbyController = lobbyController;
-
     }
 
     public void setUsername(String name){
@@ -29,30 +34,93 @@ public abstract class ClientHandler{
         return this.username;
     }
 
-    public abstract void onMessage(Message message);
+    public void onMessage(Message message){
+        switch (message.getMessageType()){
+            /*
+            case USERNAME -> {
+
+                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
+                if(internalComunication == InternalComunication.OK) {
+                    usernameIssuer.setClientHandler(this, message.getUsername());
+                    this.username = message.getUsername();
+                    sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
+                }
+                if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
+                    sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
+                }
+                //to test
+                if(internalComunication == InternalComunication.RECONNECTION){
+                    this.username = message.getUsername();
+                    int gameId = usernameIssuer.getGameID(message.getUsername());
+                    GameController gameController = gameCodeIssuer.getGameController(gameId);
+                    usernameIssuer.setClientHandler(this, message.getUsername());
+                    setGameController(gameController);
+                    usernameIssuer.setConnect(this.getUsername());
+                    gameController.reconnect(this);
+                }
+            }
+             */
+            case CHOOSE_GAME_MODE -> {
+                ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
+                switch (chosenGameModeMessage.getGameMode()) {
+                    case JOIN_RANDOM_GAME_2_PLAYER -> lobbyController.insertPlayer(this, 2);
+                    case JOIN_RANDOM_GAME_3_PLAYER -> lobbyController.insertPlayer(this, 3);
+                    case JOIN_RANDOM_GAME_4_PLAYER -> lobbyController.insertPlayer(this , 4);
+                    case JOIN_PRIVATE_GAME -> lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
+                    case CREATE_PRIVATE_GAME -> {
+                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
+                            sendMessage(new Message(this.username, MessageType.ALREADYTAKENGAMECODEMESSAGE ));
+                            sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
+                        }
+                        else{
+                            lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this, chosenGameModeMessage.getNumOfPlayer());
+                        }
+                    }
+                    default-> System.out.println("(ClientHandler) received unknown value of GameMode");
+                }
+
+            }
+            case CHOSEN_CARDS_REPLY -> {
+                ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
+                gameController.removeCards(chosenCards.getCoordinates());
+                sendMessage(new Message(this.username, MessageType.CHOOSE_COLUMN_REQUEST));
+            }
+            case CHOSEN_COLUMN_REPLY -> {
+                ChosenColumnMessage chosenColumn = (ChosenColumnMessage) message;
+                gameController.insertInBookshelf(chosenColumn.getColumn());
+                gameController.notifyNextPlayer();
+            }
+        }
+    }
     public abstract void sendMessage (Message message);
     public abstract void reconnection();
 
+    /**
+     * if a ClientHandler is logged the disconnection procedure is the same between RMI and socket.
+     * if the ClientHandler is not logged (this happens only in Socket) we just call closeEverything method
+     */
     public void disconnect () {
-        System.out.println(this.username + " disconnected");
+        if (isLogged) {
+            System.out.println("(ClientHandler) " + this.username + " disconnected");
 
-        if (lobbyController == null) {
-            throw new NullPointerException();
-        }
+            if (lobbyController == null) {
+                throw new NullPointerException();
+            }
 
-        //if game controller is null you are either in a lobby or waiting to get in one
-        //so, you should disconnect from it
-        if (gameController == null) {
-            lobbyController.disconnect(this);
-            usernameIssuer.removeUsername(this.username);
+            //if game controller is null you are either in a lobby or waiting to get in one
+            //so, you should disconnect from it
+            if (gameController == null) {
+                lobbyController.disconnect(this);
+                usernameIssuer.removeUsername(this.username);
+            }
+            //if you are in a game you have to be disconnected from it
+            if (gameController != null) {
+                System.out.println("(ClientHandler) " + this.username + " is in a game");
+                gameController.disconnection(this);
+                usernameIssuer.setDisconnect(this.username);
+            }
+            //closes the socket and the I/O streams
         }
-        //if you are in a game you have to be disconnected from it
-        if (gameController != null) {
-            System.out.println(this.username + " era dentro ad un gioco ");
-            gameController.disconnection(this);
-            usernameIssuer.setDisconnect(this.username);
-        }
-        //closes the socket and the I/O streams
         closeEverything();
     }
 
@@ -64,5 +132,9 @@ public abstract class ClientHandler{
 
     public boolean gameControllerPresent(){
         return this.gameController != null;
+    }
+
+    public boolean isLogged () {
+        return isLogged;
     }
 }

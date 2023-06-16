@@ -38,7 +38,7 @@ public class SocketServer implements Runnable{
             System.out.println("Socket server is up");
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
-                System.out.println("a client has connected to the socketServer");
+                System.out.println("(SocketServer) a client connected");
                 ClientHandler clientHandler =new SocketClientHandler(socket, usernameIssuer, gameCodeIssuer, lobby);
                 // creare il pinger
                 Thread thread = new Thread((Runnable) clientHandler);
@@ -46,7 +46,7 @@ public class SocketServer implements Runnable{
             }
         } catch (IOException IOe) {
             IOe.printStackTrace();
-            System.out.println("exception in startServer of SocketServer");
+            System.out.println("(SocketServer) IOException. Terminating the process");
         }
     }
 
