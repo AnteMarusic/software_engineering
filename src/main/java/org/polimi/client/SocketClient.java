@@ -46,7 +46,7 @@ public class SocketClient extends Client{
     }
 
     private void createGuiClientController() {
-        this.clientController = new GuiClientController(this);
+        this.clientController = new GuiClientController(this, false);
     }
     public void sendMessage(Message message) {
         try {

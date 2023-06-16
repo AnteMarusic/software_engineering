@@ -59,7 +59,7 @@ public class RMIClient extends Client implements RMICallback  {
     }
 
     private void createGuiClientController() throws RemoteException {
-        this.clientController = new GuiClientController(this);
+        this.clientController = new GuiClientController(this, true);
     }
 
     /**
@@ -149,7 +149,7 @@ public class RMIClient extends Client implements RMICallback  {
         return connected;
     }
 
-    public Message handleMessage(Message message) {
+    public Message handleMessage(Message message) throws IOException {
         return clientController.handleMessage(message);
     }
 
@@ -192,8 +192,14 @@ public class RMIClient extends Client implements RMICallback  {
             synchronized (taskLock) {
                 synchronized (messageQueueLock) {
                     message1 = messageQueue.poll();
+                    System.out.println("(RMIClient getNotified) letto questo dal server "+ message1);
+
                 }
-                answer = handleMessage(message1);
+                try {
+                    answer = handleMessage(message1);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             if (answer != null){
                 System.out.println("(RMIclient getNotified) inviando questo al server: "+ answer +"\n in risposta a "+ message1);

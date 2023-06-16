@@ -4,13 +4,14 @@ import org.polimi.messages.Message;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public interface ClientControllerInterface {
     public void setUsername (String username);
-    public Message handleMessage (Message message);
+    public Message handleMessage (Message message) throws IOException;
     public Message chooseUsername ();
     public void alreadyTakenUsername ();
     public Message chooseGameMode ();
