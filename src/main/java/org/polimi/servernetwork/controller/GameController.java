@@ -196,12 +196,13 @@ public class GameController {
                 System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
                 // riporto coutDown a 60
                 countDown=30;
+                players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
             }
 
 
             //e assegno il turno al giocatore che era già dentro al gioco (teoricamente dovrebbe essere già il currentplayer)
             // gli chiedo di scegliere le carte da inserire
-            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+
         }
         // comunico al giocatore riconnesso di essere entrato in una partita
     }
