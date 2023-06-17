@@ -13,6 +13,6 @@ public class RankingMessage extends Message implements Serializable {
     }
     @Override
     public String toString() {
-        return super.toString() + "Game ranking" + "the other players are:" + gameRanking.toString();
+        return super.toString() + "Game ranking" + gameRanking.toString();
     }
 }

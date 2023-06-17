@@ -438,23 +438,30 @@ public class CliClientController implements ClientControllerInterface {
     @Override
 
     public Message chooseColumn () {
-        int input;
+        int input = -1;
         boolean flag = false;
         do {
             System.out.println("choose the column where to insert the cards");
-            input = scanner.nextInt();
-            if (!GameRules.bookshelfColInBound(input)) {
-                System.out.println("invalid input");
-            }
-            else {
-                if (cli.getInsertable(input) >=  cli.getChosenCardsSize()) {
-                    System.out.println("insert in Bookshelf");
-                    flag = true;
-                    cli.insertInBookshelf(input);
+            if (scanner.hasNextInt()) {
+                // If the next input is an integer
+                input = scanner.nextInt();
+                if (!GameRules.bookshelfColInBound(input)) {
+                    System.out.println("invalid input");
                 }
                 else {
-                    System.out.println("not enough space to store cards in the column you chose");
+                    if (cli.getInsertable(input) >=  cli.getChosenCardsSize()) {
+                        System.out.println("insert in Bookshelf");
+                        flag = true;
+                        cli.insertInBookshelf(input);
+                    }
+                    else {
+                        System.out.println("not enough space to store cards in the column you chose");
+                    }
                 }
+            }
+            else {
+                System.out.println("invalid input");
+                scanner.nextLine();
             }
         } while (!GameRules.bookshelfColInBound(input) || !flag);
         cli.printRoutine();
