@@ -4,12 +4,14 @@ import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 import org.polimi.servernetwork.model.Game;
+import org.polimi.servernetwork.saver.CountDown;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 public class GameController {
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
+    private static final int COUNT_DOWN = 20;
     private final int numOfPlayers;
     private int currentPlayer;
     private final int firstPlayer;
@@ -20,7 +22,7 @@ public class GameController {
 
     public GameController(ArrayList<ClientHandler> list) {
         numOfPlayers = list.size();
-        countDown = 30;
+        countDown = COUNT_DOWN;
         decrementer = null;
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
@@ -163,7 +165,9 @@ public class GameController {
     private void gameAwarding (Map<String,Integer> ranking){
         // mando a tutti un messaggio contenente la classifica
         for(ClientHandler player : players ){
-            player.sendMessage(new RankingMessage("server", ranking));
+            if (player != null) {
+                player.sendMessage(new RankingMessage("server", ranking));
+            }
         }
     }
     private void nextPlayer() {
@@ -191,17 +195,15 @@ public class GameController {
         if(getNumOfConnectedPlayers()==2){
             // in questo caso azzero il timer di decrementer
             // non è detto ch il decrementer sia partito
-            if(countDown!=30){
+            if(countDown!=COUNT_DOWN){
                 decrementer.stop();
                 System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
-                // riporto coutDown a 60
-                countDown=30;
+                // riporto coutDown a COUNT_DOWN
+                countDown=COUNT_DOWN;
+                //e assegno il turno al giocatore che era già dentro al gioco (teoricamente dovrebbe essere già il currentplayer)
+                // gli chiedo di scegliere le carte da inserire
+                players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
             }
-
-
-            //e assegno il turno al giocatore che era già dentro al gioco (teoricamente dovrebbe essere già il currentplayer)
-            // gli chiedo di scegliere le carte da inserire
-            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         }
         // comunico al giocatore riconnesso di essere entrato in una partita
     }
@@ -298,7 +300,7 @@ public class GameController {
 
     public void decreaseCountDown () {
         countDown--;
-        if(countDown==28){
+        if(countDown==COUNT_DOWN - 1){
             System.out.println("count down started");
         }
         if (countDown == 0) {
