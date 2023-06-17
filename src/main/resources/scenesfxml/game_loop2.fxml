@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.polimi.client.view.gui.sceneControllers.GameLoopController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="">
    <children>
       <SplitPane prefHeight="423.0" prefWidth="642.0">
         <items>
@@ -28,7 +28,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="102.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="103.0" layoutY="145.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -38,7 +38,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="145.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="103.0" layoutY="186.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -48,7 +48,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="186.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="103.0" layoutY="229.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -58,7 +58,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="229.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
@@ -68,7 +68,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="101.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="144.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -78,7 +78,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="144.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true">
@@ -88,7 +88,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="185.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="228.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -98,7 +98,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="228.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="271.0" layoutY="101.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -108,7 +108,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="60.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="271.0" layoutY="144.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -118,7 +118,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="313.0" layoutY="144.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="271.0" layoutY="185.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -128,7 +128,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="313.0" layoutY="185.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="271.0" layoutY="228.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -138,7 +138,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="313.0" layoutY="228.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="103.0" layoutY="272.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -148,7 +148,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="272.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="271.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -158,7 +158,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="271.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="271.0" layoutY="271.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -168,7 +168,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="314.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="314.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -178,7 +178,7 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="314.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="61.0" layoutY="145.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -213,27 +213,27 @@
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="229.0" layoutY="356.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="356.0" layoutY="144.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="356.0" layoutY="185.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="18.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="145.0" layoutY="61.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="39.0" fitWidth="38.0" layoutX="187.0" layoutY="17.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -321,7 +321,7 @@
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="514.0" layoutY="303.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="538.0" layoutY="283.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -331,7 +331,7 @@
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="538.0" layoutY="303.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="467.0" layoutY="283.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -341,12 +341,12 @@
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="467.0" layoutY="303.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="491.0" layoutY="283.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="491.0" layoutY="303.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -366,7 +366,7 @@
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="514.0" layoutY="323.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="514.0" layoutY="343.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -441,7 +441,7 @@
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="468.0" layoutY="384.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="491.0" layoutY="364.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
@@ -451,7 +451,7 @@
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="491.0" layoutY="384.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png" />
+                        <Image url="@../../java/org/polimi/client/view/gui/sceneControllers/Gatti1_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="18.0" fitWidth="20.0" layoutX="561.0" layoutY="364.0" onMouseClicked="#choosedCard" pickOnBounds="true" preserveRatio="true">
