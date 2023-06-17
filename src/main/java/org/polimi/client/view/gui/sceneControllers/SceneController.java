@@ -153,4 +153,8 @@ public class SceneController {
     public void setBoard(ClientBoard board) {
         this.board = board;
     }
+
+    public ClientBoard getBoard(){
+        return this.board;
+    }
 }
