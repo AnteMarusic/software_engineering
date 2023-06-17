@@ -19,7 +19,7 @@
                         <Image url="@../images/17_MyShelfie_BGA/boards/livingroom.png" />
                      </image>
                   </ImageView>
-                  <GridPane layoutX="15.0" layoutY="17.0" prefHeight="401.0" prefWidth="404.0">
+                  <GridPane fx:id="gridPane" layoutX="15.0" layoutY="17.0" prefHeight="401.0" prefWidth="404.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.33334350585938" minWidth="10.0" prefWidth="47.333343505859375" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="75.33331298828125" minWidth="10.0" prefWidth="43.33335367838541" />
