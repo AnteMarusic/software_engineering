@@ -112,10 +112,11 @@ public class LobbyController {
     private void createGame(int gameMode)  {
         switch (gameMode) {
             case 2-> {
-                GameController gameController = new GameController(publicListOf2);
+                GameController gameController = new GameController(publicListOf2, usernameIssuer, gameCodeIssuer);
                 gameController.initGameEnv();
                 gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
+
                 publicListOf2.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 for(ClientHandler clientHandler: publicListOf2){
@@ -126,7 +127,7 @@ public class LobbyController {
                 publicListOf2.clear();
             }
             case 3-> {
-                GameController gameController = new GameController(publicListOf3);
+                GameController gameController = new GameController(publicListOf3, usernameIssuer, gameCodeIssuer);
                 gameController.initGameEnv();
                 gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
@@ -140,7 +141,7 @@ public class LobbyController {
                 publicListOf3.clear();
             }
             case 4-> {
-                GameController gameController = new GameController(publicListOf4);
+                GameController gameController = new GameController(publicListOf4, usernameIssuer, gameCodeIssuer);
                 gameController.initGameEnv();
                 gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
@@ -216,7 +217,7 @@ public class LobbyController {
 
     }
     public void createPrivateGame(ArrayList<ClientHandler> list, int gameCode, int numOfPlayer){
-        GameController gameController = new GameController(list);
+        GameController gameController = new GameController(list, usernameIssuer, gameCodeIssuer);
         gameCodeIssuer.associatePrivateCodeTo(gameController, gameCode);
         list.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), gameCode)));
         list.forEach(clientHandler -> clientHandler.setGameController(gameController));

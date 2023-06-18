@@ -12,22 +12,32 @@ import java.util.stream.Stream;
 public class GameController {
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private static final int COUNT_DOWN = 20;
+    private int gameCode;
     private final int numOfPlayers;
     private int currentPlayer;
     private final int firstPlayer;
-    private final Game game;
+    private Game game;
     private int countDown;
     private DecrementerGameController decrementer;
+    private UsernameIssuer usernameIssuer;
+    private GameCodeIssuer gameCodeIssuer;
 
 
-    public GameController(ArrayList<ClientHandler> list) {
+    public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
         numOfPlayers = list.size();
+        gameCode = 0;
+        this.usernameIssuer = usernameIssuer;
+        this. gameCodeIssuer = gameCodeIssuer;
         countDown = COUNT_DOWN;
         decrementer = null;
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
+    }
+
+    public void setGameCode(int gameCode){
+        this.gameCode = gameCode;
     }
 
     public void initGameEnv() {
@@ -160,6 +170,7 @@ public class GameController {
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
+        closeGame();
     }
 
     private void gameAwarding (Map<String,Integer> ranking){
@@ -214,6 +225,8 @@ public class GameController {
         System.out.println("questa è la lista di clienthandler: " + players.toString());
         players.set(players.indexOf(clientHandler), null);
         if(getNumOfConnectedPlayers()==0){
+            if (countDown != COUNT_DOWN)
+                decrementer.stop();
             closeGame();
         }
         else if(players.get(currentPlayer) == null){   // se il giocatore che si è disconnesso è il currentPlayer
@@ -296,6 +309,18 @@ public class GameController {
         toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
         distruggo tutte le strutture create
         */
+        List<String> playersUsername = game.getPlayersUsername();
+        for(int i=0; i<numOfPlayers; i++){
+            usernameIssuer.removeUsername(playersUsername.get(i));
+        }
+        gameCodeIssuer.removeGame(gameCode);
+        for (ClientHandler c : players) {
+            if (c!=null)
+                c.closeEverything();
+        }
+        players.clear();
+        System.out.println("chiuso il gioco " + gameCode);
+        game = null;
     }
 
     public void decreaseCountDown () {
