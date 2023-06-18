@@ -104,6 +104,7 @@ public abstract class ClientHandler{
             System.out.println("(ClientHandler) " + this.username + " disconnected");
 
             if (lobbyController == null) {
+                System.out.println("(ClientHandler username: " + this.username + ") sistemic failure. for some reason lobbyController attribute is null");
                 throw new NullPointerException();
             }
 

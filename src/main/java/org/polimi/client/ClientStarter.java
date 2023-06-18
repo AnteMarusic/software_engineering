@@ -58,7 +58,7 @@ public class ClientStarter {
                         } else {
                             // If the next input is not an integer
                             System.out.println("Invalid input. Please enter an integer.");
-                            scanner.nextLine();
+                            scanner.next();
                         }
                     }
                 }
