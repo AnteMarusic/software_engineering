@@ -44,6 +44,18 @@ public class GameCodeIssuer {
             }
         }
     }
+    public synchronized int reservCodeTo(){
+        if (!freedIdCodes.isEmpty()) {
+            int temp = freedIdCodes.get(0);
+            associations.put(temp, null);
+            return temp;
+        }
+        else {
+            currentHighestCode ++;
+            associations.put(currentHighestCode, null);
+            return currentHighestCode;
+        }
+    }
     public synchronized void associatePrivateCodeTo (GameController gameController, int gameCode) throws NullPointerException{
         if (gameController == null)
             throw new NullPointerException();

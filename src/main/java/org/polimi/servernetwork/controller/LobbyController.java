@@ -14,8 +14,6 @@ public class LobbyController {
     private final Map<Integer, ArrayList<ClientHandler>> privateGameOf2;
     private final Map<Integer, ArrayList<ClientHandler>> privateGameOf3;
     private final Map<Integer, ArrayList<ClientHandler>> privateGameOf4;
-    private ArrayList<Integer> readyToStartGame;
-
     GameCodeIssuer gameCodeIssuer;
     UsernameIssuer usernameIssuer;
 
@@ -28,7 +26,6 @@ public class LobbyController {
         this.privateGameOf2 = new HashMap<Integer, ArrayList<ClientHandler>>();
         this.privateGameOf3 = new HashMap<Integer, ArrayList<ClientHandler>>();
         this.privateGameOf4 = new HashMap<Integer, ArrayList<ClientHandler>>();
-        this.readyToStartGame = new ArrayList<Integer>();
     }
 
     private void printLobby (int gameMode) {
@@ -113,10 +110,8 @@ public class LobbyController {
         switch (gameMode) {
             case 2-> {
                 GameController gameController = new GameController(publicListOf2, usernameIssuer, gameCodeIssuer);
-                gameController.initGameEnv();
-                gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
-
+                gameController.setGameCode(code);
                 publicListOf2.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 for(ClientHandler clientHandler: publicListOf2){
@@ -124,6 +119,8 @@ public class LobbyController {
                         System.out.println("(LobbyController) " + clientHandler.getUsername() + " ha il gameController");
                     }
                 }
+                gameController.initGameEnv();
+                gameController.startGameTurn();
                 publicListOf2.clear();
             }
             case 3-> {
@@ -155,7 +152,6 @@ public class LobbyController {
 
     public void addPrivateGameCode(int gameCode, ClientHandler clientHandler, int numOfPlayer ){
         ArrayList<ClientHandler> list = new ArrayList<ClientHandler>();
-        readyToStartGame.add(gameCode);
         list.add(clientHandler);
         if(numOfPlayer == 2){
             synchronized (privateGameOf2){
@@ -173,7 +169,6 @@ public class LobbyController {
             synchronized (privateGameOf4){
                 privateGameOf4.put(gameCode, list);
             }
-
         }
     }
     public void addInAPrivateGame(int gameCode, ClientHandler clientHandler){
@@ -197,6 +192,7 @@ public class LobbyController {
                 if(list.size()==3){
                     createPrivateGame(list, gameCode, 3);
                 }
+                flag = true;
             }
         }
         synchronized (privateGameOf4){
@@ -207,9 +203,9 @@ public class LobbyController {
                 if(list.size()==4){
                     createPrivateGame(list, gameCode, 4);
                 }
+                flag = true;
             }
         }
-
 
         if(!flag)
                 clientHandler.sendMessage(new Message(clientHandler.getUsername(), MessageType.CHOOSE_GAME_MODE ));
@@ -217,10 +213,14 @@ public class LobbyController {
 
     }
     public void createPrivateGame(ArrayList<ClientHandler> list, int gameCode, int numOfPlayer){
+        System.out.println("sono dentro alla createPrivateGame");
         GameController gameController = new GameController(list, usernameIssuer, gameCodeIssuer);
+        gameController.setGameCode(gameCode);
         gameCodeIssuer.associatePrivateCodeTo(gameController, gameCode);
         list.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), gameCode)));
         list.forEach(clientHandler -> clientHandler.setGameController(gameController));
+        gameController.initGameEnv();
+        gameController.startGameTurn();
         if(numOfPlayer == 2){  // devo rimuovere la lista dalla hashMap nella lobby
             privateGameOf2.remove(gameCode);
         }
@@ -282,12 +282,5 @@ public class LobbyController {
         if (!flag) {
             System.out.println("(LobbyController) client: " + clientHandler.getUsername() + " wasn't in lobby");
         }
-    }
-    public boolean readyToCreatePrivateGame(int gameCode){
-        if(readyToStartGame.contains(gameCode))
-            return true;
-
-        else
-            return false;
     }
 }

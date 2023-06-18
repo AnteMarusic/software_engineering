@@ -43,6 +43,11 @@ public class CliClientController implements ClientControllerInterface {
                 return chooseGameMode();
             }
 
+            case GAME_CODE_MESSAGE -> {
+                GameCodeMessage gameCodeMessage = (GameCodeMessage) message;
+                cli.printGameCode(gameCodeMessage.getGameCode());
+            }
+
             // nuovo messaggio aggiunto
             case USERNAME -> {
                 System.out.println("il nome è: " + username);
@@ -204,11 +209,7 @@ public class CliClientController implements ClientControllerInterface {
                             cli.invalid();
                         }
                     } while (input < 2 || input >4);
-                    do{
-                        cli.chooseGameCode();
-                        gameCode = scanner.nextInt();
-                    }while(gameCode<1000 || gameCode>1999);
-                    message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, gameCode, input);
+                    message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME,-1, input);
                     cli.waitForTheOtherPlayer();
                 }
                 else {

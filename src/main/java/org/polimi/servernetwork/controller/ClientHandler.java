@@ -68,13 +68,9 @@ public abstract class ClientHandler{
                     case JOIN_RANDOM_GAME_4_PLAYER -> lobbyController.insertPlayer(this , 4);
                     case JOIN_PRIVATE_GAME -> lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
                     case CREATE_PRIVATE_GAME -> {
-                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
-                            sendMessage(new Message(this.username, MessageType.ALREADYTAKENGAMECODEMESSAGE ));
-                            sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-                        }
-                        else{
-                            lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this, chosenGameModeMessage.getNumOfPlayer());
-                        }
+                        int privateCode = gameCodeIssuer.reservCodeTo();
+                        lobbyController.addPrivateGameCode(privateCode, this, chosenGameModeMessage.getNumOfPlayer());
+                        sendMessage(new GameCodeMessage(privateCode));
                     }
                     default-> System.out.println("(ClientHandler) received unknown value of GameMode");
                 }
@@ -117,8 +113,8 @@ public abstract class ClientHandler{
             //if you are in a game you have to be disconnected from it
             if (gameController != null) {
                 System.out.println("(ClientHandler) " + this.username + " is in a game");
-                gameController.disconnection(this);
                 usernameIssuer.setDisconnect(this.username);
+                gameController.disconnection(this);
             }
             //closes the socket and the I/O streams
         }

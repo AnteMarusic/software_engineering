@@ -331,4 +331,7 @@ public class Cli {
     public void disconnectionAlert(String username){
         System.out.println(username + " left the game");
     }
+    public void printGameCode(int gameCode){
+        System.out.println("il game code private è: " + gameCode + "condividilo con i tuoi amici per giocare");
+    }
 }
