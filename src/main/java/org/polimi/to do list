@@ -8,5 +8,5 @@ andrebbe creata uan classe che si occupa solo della comunicazione socket (ha sol
 chi chiama la disconnessione in questo caso?
 -togliere print da RMIclient e SocketClient
 -print della CLI accazzo a causa del multithreading di RMI non ci saranno nella versione finale (sono cose di debug)
--se si disconnette un client sia RMI che Socket che è in lobby esce una ConcurrentModificationException
+-se finisce la partita manca la parte in cui si tolgono gli username dei player da username issuer
 

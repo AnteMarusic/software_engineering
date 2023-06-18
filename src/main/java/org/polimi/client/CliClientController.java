@@ -141,8 +141,19 @@ public class CliClientController implements ClientControllerInterface {
      */
     @Override
     public Message chooseUsername () {
-        cli.askForUsername();
-        setUsername(scanner.nextLine());
+        boolean flag = false;
+        do {
+            cli.askForUsername();
+            if (scanner.hasNextInt()) {
+                scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("integers aren't valid usernames");
+            }
+            else {
+                setUsername(scanner.next());
+                flag = true;
+            }
+        } while (!flag);
         return new Message(username, MessageType.USERNAME);
     }
 
@@ -229,78 +240,89 @@ public class CliClientController implements ClientControllerInterface {
 
     @Override
     public Message chooseCards() {
-
-
-
-        // to do: se mi metto in un caso in cui non posso più scegliere carte allora non po
-
-
-
-
-
         //since the cards have to be picked in a line, each card picked has to have one constant coordinate
         int counter = 0;
         Coordinates c1 = null, c2 = null, c3 = null;
         int row, col;
         int maxInsertable = cli.getMaxInsertable();
-        boolean flag;
-        boolean escFlag;
-        String esc;
+        boolean normalFlag;
+        boolean actionFlag;
+        String action;
 
         LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
+        System.out.println("type 'undo' to undo previous card, 'stop' to terminate choice or just write the next choice");
         while (counter < maxInsertable) {
             switch (counter) {
                 //you necessarily have to chose at least a card
                 case 0 -> {
                     do {
-                        flag = false;
+                        normalFlag = false;
+                        actionFlag = false;
                         cli.typeRow();
-                        row = scanner.nextInt();
-                        cli.typeCol();
-                        col = scanner.nextInt();
-                        if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
-                            cli.notInBoundError();
-                        } else {
-                            c1 = new Coordinates(row, col);
-                            if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
-                                cli.notValidCard();
-                            } else if (cli.isCardPickable(c1)) {
-                                System.out.println("ok");
-                                chosenCoordinates.add(c1);
-                                flag = true;
-                            } else {
-                                System.out.println("this card is not pickable yet");
+                        if (scanner.hasNextInt()) {
+                            // If the next input is an integer
+                            row = scanner.nextInt();
+                            scanner.nextLine(); //removes carriage return
+                            cli.typeCol();
+                            if (scanner.hasNextInt()) {
+                                col = scanner.nextInt();
+                                scanner.nextLine(); //removes carriage return
+                                if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
+                                    cli.notInBoundError();
+                                } else {
+                                    c1 = new Coordinates(row, col);
+                                    if (cli.boardSeeCardAtCoordinates(new Coordinates(row, col)) == null) {
+                                        cli.notValidCard();
+                                    } else if (cli.isCardPickable(c1)) {
+                                        System.out.println("ok, great choice");
+                                        chosenCoordinates.add(c1);
+                                        normalFlag = true;
+                                    } else {
+                                        System.out.println("this card is not pickable yet");
+                                    }
+                                }
+                            }
+                            else {
+                                action = scanner.next();
+                                if (Objects.equals(action, "stop")) {
+                                    System.out.println("you can't stop here");
+                                }
+                                else if (Objects.equals(action, "redo")) {
+                                    System.out.println("you can't redo here");
+                                }
+                                else {
+                                    System.out.println("invalid input");
+                                }
                             }
                         }
-                    } while (!flag);
+                        else {
+                            action = scanner.next();
+                            if (Objects.equals(action, "stop")) {
+                                System.out.println("you can't stop here");
+                            }
+                            else if (Objects.equals(action, "redo")) {
+                                System.out.println("you can't redo here");
+                            }
+                            else {
+                                System.out.println("invalid input");
+                            }
+                        }
+                    } while (!normalFlag);
                     counter++;
                 }
                 case 1 -> {
-                    flag = false;
-                    escFlag = false;
+                    normalFlag = false;
+                    actionFlag = false;
                     do {
-                        //I read the \n character
-                        scanner.nextLine();
-                        System.out.println("type 'undo' to undo previous card selection or type 'ok' to choose another or 'esc' to terminate choice");
-                        esc = scanner.nextLine();
-                        if (esc.equalsIgnoreCase("esc")) {
-                            escFlag = true;
-                            counter = maxInsertable;
-                        }
-
-                        else if (esc.equalsIgnoreCase("undo")) {
-                            escFlag = true;
-                            chosenCoordinates.removeLast();
-                            counter --;
-                        }
-                        else if (esc.equalsIgnoreCase("ok")) {
-                            escFlag = true;
-                            do {
-                                System.out.println("Choose your next Card");
-                                System.out.println("Type row number (0 to 8)");
-                                row = scanner.nextInt();
-                                System.out.println("Type col number (0 to 8)");
+                        System.out.println("Choose your next Card");
+                        System.out.println("Type row number (0 to 8)");
+                        if (scanner.hasNextInt()) {
+                            row = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("Type col number (0 to 8)");
+                            if (scanner.hasNextInt()) {
                                 col = scanner.nextInt();
+                                scanner.nextLine();
                                 if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
                                     System.out.println("coordinates not in bound");
                                 } else {
@@ -309,9 +331,9 @@ public class CliClientController implements ClientControllerInterface {
                                         System.out.println("the card has already been taken! please choose another one");
                                     } else if (cli.isCardPickable(c2)) {
                                         if (GameRules.areCoordinatesAligned(c1, c2)) {
-                                            System.out.println("ok");
+                                            System.out.println("ok, great choice");
                                             chosenCoordinates.add(c2);
-                                            flag = true;
+                                            normalFlag = true;
                                         } else {
                                             System.out.println("this card isn't aligned with the first one");
                                         }
@@ -319,39 +341,50 @@ public class CliClientController implements ClientControllerInterface {
                                         System.out.println("this card is not pickable yet");
                                     }
                                 }
-                            } while (!flag);
-                            counter++;
+                            } else {
+                                action = scanner.next();
+                                if (Objects.equals(action, "stop")) {
+                                    System.out.println("you can't stop here");
+                                } else if (Objects.equals(action, "redo")) {
+                                    System.out.println("you can't redo here");
+                                } else {
+                                    System.out.println("invalid input");
+                                }
+                            }
                         }
-                    } while (!escFlag);
-
-
+                        else {
+                            action = scanner.next();
+                            if (action.equalsIgnoreCase("stop")) {
+                                System.out.println("ok, you stopped card selection");
+                                counter = maxInsertable;
+                                actionFlag = true;
+                            } else if (Objects.equals(action, "redo")) {
+                                System.out.println("ok, going back to previous step");
+                                chosenCoordinates.removeLast();
+                                counter--;
+                                actionFlag = true;
+                            } else {
+                                System.out.println("invalid input");
+                            }
+                        }
+                    }while (!normalFlag && !actionFlag) ;
+                    if (normalFlag) {
+                        counter++;
+                    }
                 }
                 case 2 -> {
-                    flag = false;
-                    escFlag = false;
-
+                    normalFlag = false;
+                    actionFlag = false;
                     do {
-                        //I read the \n character
-                        scanner.nextLine();
-                        System.out.println("type 'undo' to undo previous card selection or type 'ok' to choose another or 'esc' to terminate choice");
-                        esc = scanner.nextLine();
-                        if (esc.equalsIgnoreCase("esc")) {
-                            escFlag = true;
-                            counter = maxInsertable;
-                        }
-                        else if (esc.equalsIgnoreCase("undo")) {
-                            escFlag = true;
-                            chosenCoordinates.removeLast();
-                            counter --;
-                        }
-                        else if (esc.equalsIgnoreCase("ok")) {
-                            escFlag = true;
-                            do {
-                                System.out.println("Choose your next Card");
-                                System.out.println("Type row number (0 to 8)");
-                                row = scanner.nextInt();
-                                System.out.println("Type col number (0 to 8)");
+                        System.out.println("Choose your next Card");
+                        System.out.println("Type row number (0 to 8)");
+                        if (scanner.hasNextInt()) {
+                            row = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("Type col number (0 to 8)");
+                            if (scanner.hasNextInt()) {
                                 col = scanner.nextInt();
+                                scanner.nextLine();
                                 if (!GameRules.boardRowColInBound(row, col, cli.getNumOfPlayers())) {
                                     System.out.println("coordinates not in bound");
                                 } else {
@@ -362,7 +395,7 @@ public class CliClientController implements ClientControllerInterface {
                                         if (GameRules.areCoordinatesAligned(c1, c2, c3)) {
                                             System.out.println("ok");
                                             chosenCoordinates.add(c3);
-                                            flag = true;
+                                            normalFlag = true;
                                         } else {
                                             System.out.println("this card isn't aligned with the first one");
                                         }
@@ -370,11 +403,38 @@ public class CliClientController implements ClientControllerInterface {
                                         System.out.println("this card is not pickable yet");
                                     }
                                 }
-                            } while (!flag);
-                            counter++;
+                            }
+                            else {
+                                action = scanner.next();
+                                if (Objects.equals(action, "stop")) {
+                                    System.out.println("you can't stop here");
+                                } else if (Objects.equals(action, "redo")) {
+                                    System.out.println("you can't redo here");
+                                } else {
+                                    System.out.println("invalid input");
+                                }
+                            }
+                        }
+                        else {
+                            action = scanner.next();
+                            if (action.equalsIgnoreCase("stop")) {
+                                System.out.println("ok, you stopped card selection");
+                                counter = maxInsertable;
+                                actionFlag = true;
+                            } else if (Objects.equals(action, "redo")) {
+                                System.out.println("ok, going back to previous step");
+                                chosenCoordinates.removeLast();
+                                counter--;
+                                actionFlag = true;
+                            } else {
+                                System.out.println("invalid input");
+                            }
                         }
 
-                    }while (!escFlag);
+                    } while (!normalFlag && !actionFlag);
+                    if (normalFlag) {
+                        counter++;
+                    }
                 }
             }
         }
@@ -384,9 +444,7 @@ public class CliClientController implements ClientControllerInterface {
             System.out.println("order");
             chosenCoordinates = orderChosenCards(chosenCoordinates);
         }
-
         return new ChosenCardsMessage(username, chosenCoordinates);
-
     }
 
     //the array contains coordinates, so CLI has to show the changes during this procedure

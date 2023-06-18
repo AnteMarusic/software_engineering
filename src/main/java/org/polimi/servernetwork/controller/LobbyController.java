@@ -238,26 +238,26 @@ public class LobbyController {
      */
     public void disconnect(ClientHandler clientHandler) {
         boolean flag = false;
+        int i;
         // find client handler in one of the lobbies
         // and delete
         synchronized (publicListOf2){
-            for (ClientHandler c : publicListOf2) {
+            for (i = 0; i < publicListOf2.size(); i ++) {
                 //clientHandler and c refer to the same object.
-                if (c == clientHandler) {
-                    publicListOf2.remove(c);
+                if (publicListOf2.get(i) == clientHandler) {
+                    publicListOf2.remove(i);
                     System.out.println ("(LobbyController) removed client: " + clientHandler.getUsername() + " from lobby of 2");
                     flag = true;
                 }
             }
         }
 
-
         if (!flag) {
             synchronized (publicListOf3){
-                for (ClientHandler c : publicListOf3) {
+                for (i = 0; i < publicListOf3.size(); i ++) {
                     //clientHandler and c refer to the same object.
-                    if (c == clientHandler) {
-                        publicListOf3.remove(c);
+                    if (publicListOf3.get(i) == clientHandler) {
+                        publicListOf3.remove(i);
                         System.out.println ("(LobbyController) removed client: " + clientHandler.getUsername() + " from lobby of 3");
                         flag = true;
                     }
@@ -268,10 +268,10 @@ public class LobbyController {
 
         if (!flag) {
             synchronized (publicListOf4){
-                for (ClientHandler c : publicListOf4) {
+                for (i = 0; i < publicListOf4.size(); i ++) {
                     //clientHandler and c refer to the same object.
-                    if (c == clientHandler) {
-                        publicListOf4.remove(c);
+                    if (publicListOf4.get(i) == clientHandler) {
+                        publicListOf4.remove(i);
                         System.out.println ("(LobbyController) removed client: " + clientHandler.getUsername() + " from lobby of 4");
                         flag = true;
                     }
