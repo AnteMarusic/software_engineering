@@ -10,22 +10,22 @@ public class BagOfCards {
         random = new Random();
         bag = new ArrayList<Card>(132);
         for(int i = 0; i < 22; i ++) {
-            bag.add(new Card(Card.Color.CYAN, Card.State.IN_BAG));
+            bag.add(new Card(Card.Color.CYAN, Card.State.IN_BAG, i%3));
         }
         for(int i = 0; i < 22; i ++) {
-            bag.add(new Card(Card.Color.ORANGE, Card.State.IN_BAG));
+            bag.add(new Card(Card.Color.ORANGE, Card.State.IN_BAG,i%3));
         }
         for(int i = 0; i < 22; i ++) {
-            bag.add(new Card(Card.Color.WHITE, Card.State.IN_BAG));
+            bag.add(new Card(Card.Color.WHITE, Card.State.IN_BAG,i%3));
         }
         for(int i = 0; i < 22; i ++) {
-            bag.add(new Card(Card.Color.GREEN, Card.State.IN_BAG));
+            bag.add(new Card(Card.Color.GREEN, Card.State.IN_BAG,i%3));
         }
         for(int i = 0; i < 22; i ++) {
-            bag.add(new Card(Card.Color.BLUE, Card.State.IN_BAG));
+            bag.add(new Card(Card.Color.BLUE, Card.State.IN_BAG,i%3));
         }
         for(int i = 0; i < 22; i ++) {
-            bag.add(new Card(Card.Color.PINK, Card.State.IN_BAG));
+            bag.add(new Card(Card.Color.PINK, Card.State.IN_BAG,i%3));
         }
     }
 

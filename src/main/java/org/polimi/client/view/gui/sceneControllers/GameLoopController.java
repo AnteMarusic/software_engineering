@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.polimi.client.ClientBoard;
+import org.polimi.servernetwork.controller.GameController;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
@@ -25,6 +26,10 @@ public class GameLoopController {
 
     private ClientBoard board;
 
+
+    public void GameController(){
+    }
+
     @FXML
     public void initialize(){
         board = SceneController.getInstance().getBoard();
@@ -34,32 +39,57 @@ public class GameLoopController {
                 if(card!=null) {
                     switch (card.getColor()) {
                         case CYAN -> {
-                            image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
+                            switch(card.getType()){
+                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
+                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
+                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
+                            }
                         }
                         case WHITE -> {
-                            image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
+                            switch(card.getType()){
+                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
+                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
+                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
+                            }
                         }
                         case PINK -> {
-                            image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
+                            switch(card.getType()){
+                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
+                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
+                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
+                            }
                         }
                         case ORANGE -> {
-                            image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
+                            switch(card.getType()){
+                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
+                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
+                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
+                            }
                         }
                         case BLUE -> {
-                            image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici.1.png");
+                            switch(card.getType()){
+                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
+                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
+                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
+                            }
                         }
                         case GREEN -> {
-                            image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png");
+                            switch(card.getType()){
+                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.1.png");
+                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
+                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
+                            }
                         }
                     }
+                    ImageView imageView = new ImageView();
+                    imageView.setImage(image);
+                    imageView.setFitWidth(50);
+                    imageView.setFitHeight(50);
+                    Pane pane = new Pane();
+                    pane.getChildren().add(imageView);
+                    gridPane.add(pane, i, j);
                 }
-                ImageView imageView = new ImageView();
-                imageView.setImage(image);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                Pane pane = new Pane();
-                pane.getChildren().add(imageView);
-                gridPane.add(pane, i, j);
+
             }
         }
     }
