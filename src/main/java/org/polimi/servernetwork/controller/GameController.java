@@ -108,7 +108,7 @@ public class GameController {
             System.out.println("la board è vuota, la riempio");
             game.fillBoard();
             for (ClientHandler c : players) {
-                if (c != null && !c.equals(players.get(currentPlayer))) {
+                if (c != null) {
                     c.sendMessage(new BoardMessage(game.getBoardMap()));
                 }
             }
