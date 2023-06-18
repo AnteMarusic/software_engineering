@@ -11,6 +11,10 @@ public class RankingMessage extends Message implements Serializable {
         super(username, MessageType.RANKING_MESSAGE );
         gameRanking = ranking;
     }
+
+    public Map<String,Integer> getRanking(){
+        return gameRanking;
+    }
     @Override
     public String toString() {
         return super.toString() + "Game ranking" + gameRanking.toString();

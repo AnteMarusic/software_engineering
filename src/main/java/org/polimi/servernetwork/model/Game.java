@@ -151,7 +151,10 @@ public class Game{
     }
 
     public Map<String,Integer> endGame(){
-        players[ender].setWinPoint();
+
+        if(endGame){
+            players[ender].setWinPoint();
+        }
 
         // ordino l'array di player in base ha quanti punti hanno fatto, tanto non mi interessano più le posizioni
         Arrays.sort(players, new Comparator<Player>(){       // non so cosa accada se due giocatori hanno gli stessi punti

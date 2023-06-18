@@ -66,7 +66,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      */
     public void disconnect (String username) {
         subscribers.remove(username);
-        usernameIssuer.getClientHandler(username).disconnect();
+        if(usernameIssuer.getClientHandler(username)!=null){
+            usernameIssuer.getClientHandler(username).disconnect();
+        }
+
     }
 
     @Override

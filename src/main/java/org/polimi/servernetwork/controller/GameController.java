@@ -170,6 +170,14 @@ public class GameController {
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
+        System.out.println("il gioco è finito");
+        // fermo il thred 10 secodni per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
+        try{
+            Thread.sleep(1000);
+        }catch (InterruptedException e){
+            System.out.println("eccezione lanciata in GameController nel metodo end game");
+        }
+
         closeGame();
     }
 

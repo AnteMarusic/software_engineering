@@ -334,4 +334,7 @@ public class Cli {
     public void printGameCode(int gameCode){
         System.out.println("il game code private è: " + gameCode + "condividilo con i tuoi amici per giocare");
     }
+    public void printRanking(Map<String,Integer> ranking){
+        System.out.println("Il gioco è concluso, la classifica finale è: " + ranking.toString());
+    }
 }

@@ -136,6 +136,9 @@ public class CliClientController implements ClientControllerInterface {
             case NOTIFY_GAME_END -> {
             }
             case RANKING_MESSAGE -> {
+                RankingMessage m = (RankingMessage) message;
+                Map<String,Integer> ranking = m.getRanking();
+                cli.printRanking(ranking);
             }
         }
         return null;
