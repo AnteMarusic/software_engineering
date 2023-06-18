@@ -34,6 +34,8 @@ public class GameLoopController {
 
     @FXML
     private Image image;
+
+    //usare 25x25 per le tiles nella bookshelf
     @FXML
     private GridPane bookshelfGridPane;
 
@@ -105,9 +107,16 @@ public class GameLoopController {
                     insertInGridPane(imageView, 50, 50, gridPane, i, j);
                     imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(card.getState() == Card.State.PICKABLE){
-                            imageView.setImage(new Image("/images/17_MyShelfie_BGA/scoring_tokens/scoring_back_EMPTY.jpg"));
+                            //prima di pescare le carte, fare una copia della board, nella copia della board prendere le carte via via, cosìcche
+                            // se si vuole cambiare scelta basta ricaricare la board originale, farne di nuovo una copia, e procedere a prendeere
+                            //le carte ...
+                            //nella copia della board rimuovere veramente le carte così si aggiornano i PICKABLE
+                            //scelte le carte, inviare le coordinate al server, in modo tale che sia il server a modificare la board orginale,
+                            //e riordinarle.
+
+                            /*imageView.setImage(new Image("/images/17_MyShelfie_BGA/scoring_tokens/scoring_back_EMPTY.jpg"));
                             ImageView imageView2 = new ImageView();
-                            insertInGridPane(imageView2, 25, 25, bookshelfGridPane, 0, 0);
+                            insertInGridPane(imageView2, 25, 25, bookshelfGridPane, 0, 0);*/
                         }
                     });
                 }

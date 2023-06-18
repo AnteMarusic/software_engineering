@@ -257,7 +257,7 @@ public class CliClientController implements ClientControllerInterface {
         System.out.println("type 'undo' to undo previous card, 'stop' to terminate choice or just write the next choice");
         while (counter < maxInsertable) {
             switch (counter) {
-                //you necessarily have to chose at least a card
+                //you necessarily have to choose at least a card
                 case 0 -> {
                     do {
                         normalFlag = false;
