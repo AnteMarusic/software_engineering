@@ -16,20 +16,21 @@ public class SocketClient extends Client{
     public SocketClient(int port, boolean guiMode) {
         super(port);
         this.guiMode = guiMode;
+    }
+
+    public boolean connect () {
         try{
-            this.socket = new Socket("localhost",port);
+            this.socket = new Socket("localhost", this.getPort());
         }
         catch(IOException e){
-            System.out.println("exception in client constructor method 1");
+            return false;
         }
-        this.input = null;
-        this.output = null;
         try {
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
         } catch (IOException IOe) {
-            System.out.println("exception in client constructor method 2");
-            handleDisconnection();
+            closeEverything();
+            return false;
         }
         if(!guiMode) {
             createCliClientController();
@@ -37,9 +38,8 @@ public class SocketClient extends Client{
             Message message = clientController.chooseUsername();
             this.username = message.getUsername();
             sendMessage(message);
-        }else{
-
         }
+        return true;
     }
     private void createCliClientController() {
         this.clientController = new CliClientController(this);

@@ -68,9 +68,13 @@ public class RMIClient extends Client implements RMICallback  {
      * @throws IOException
      * @throws NotBoundException
      */
-    public boolean startConnection() throws IOException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(port);
-        server = (RMIinterface) registry.lookup("server");
+    public boolean startConnection() {
+        try {
+            Registry registry = LocateRegistry.getRegistry(port);
+            server = (RMIinterface) registry.lookup("server");
+        }catch (IOException | NotBoundException e) {
+            return false;
+        }
         if (server != null) {
             System.out.println("connesso");
             connected = true;

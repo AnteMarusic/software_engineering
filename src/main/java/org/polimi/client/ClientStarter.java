@@ -19,12 +19,14 @@ import java.util.Scanner;
 public class ClientStarter {
     private static final int rmiPort = 1099;
     private static final int socketPort = 8181;
+    private static final int NUMBER_OF_TRIES = 1000;
     public static void main(String[] args) throws IOException, NotBoundException {
         Scanner scanner = new Scanner(System.in);
         int input;
         boolean bool;
         boolean firstWhile = true;
         boolean secondWhile = true;
+        int numberOfTries = NUMBER_OF_TRIES;
         while (firstWhile) {
             System.out.println("choose cli or gui");
             System.out.println("(1) cli");
@@ -46,11 +48,24 @@ public class ClientStarter {
                                 RMIClient rmiClient = new RMIClient(rmiPort, false);
                                 do {
                                     bool = rmiClient.startConnection();
-                                } while (!bool);
+                                    numberOfTries --;
+                                    if (bool) {
+                                        break;
+                                    }
+                                } while (numberOfTries > 0);
+                                if (!bool) {
+                                    System.out.println("RMI connection failed, restart the client to retry");
+                                    break;
+                                }
                                 rmiClient.login();
                             } else if (input == 2) {
                                 secondWhile = false;
                                 SocketClient socket = new SocketClient(socketPort, false);
+                                bool = socket.connect();
+                                if (!bool) {
+                                    System.out.println("Socket connection failed, restart the client to retry");
+                                    break;
+                                }
                             } else {
                                 System.out.println("Invalid input. please enter 1 or 2.");
                                 scanner.nextLine();
