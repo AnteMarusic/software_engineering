@@ -157,4 +157,8 @@ public class SceneController {
     public ClientBoard getBoard(){
         return this.board;
     }
+
+    public List<ClientBookshelf> getBookshelves(){
+        return this.bookshelves;
+    }
 }

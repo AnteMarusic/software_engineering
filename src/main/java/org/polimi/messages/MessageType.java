@@ -30,6 +30,7 @@ public enum MessageType {
 
     ALREADYTAKENGAMECODEMESSAGE,
     BOARDMESSAGE,
+    GAME_CODE_MESSAGE,
     AREALONE;
 
 }

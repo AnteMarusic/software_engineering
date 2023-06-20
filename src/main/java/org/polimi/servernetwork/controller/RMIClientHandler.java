@@ -98,6 +98,7 @@ public class RMIClientHandler extends ClientHandler{
     }
 
     public void closeEverything() {
+
     }
 
     public Message popMessageRMI(){

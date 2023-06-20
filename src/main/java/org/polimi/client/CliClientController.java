@@ -43,6 +43,11 @@ public class CliClientController implements ClientControllerInterface {
                 return chooseGameMode();
             }
 
+            case GAME_CODE_MESSAGE -> {
+                GameCodeMessage gameCodeMessage = (GameCodeMessage) message;
+                cli.printGameCode(gameCodeMessage.getGameCode());
+            }
+
             // nuovo messaggio aggiunto
             case USERNAME -> {
                 System.out.println("il nome è: " + username);
@@ -131,6 +136,9 @@ public class CliClientController implements ClientControllerInterface {
             case NOTIFY_GAME_END -> {
             }
             case RANKING_MESSAGE -> {
+                RankingMessage m = (RankingMessage) message;
+                Map<String,Integer> ranking = m.getRanking();
+                cli.printRanking(ranking);
             }
         }
         return null;
@@ -204,11 +212,7 @@ public class CliClientController implements ClientControllerInterface {
                             cli.invalid();
                         }
                     } while (input < 2 || input >4);
-                    do{
-                        cli.chooseGameCode();
-                        gameCode = scanner.nextInt();
-                    }while(gameCode<1000 || gameCode>1999);
-                    message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME, gameCode, input);
+                    message = new ChosenGameModeMessage(username, GameMode.CREATE_PRIVATE_GAME,-1, input);
                     cli.waitForTheOtherPlayer();
                 }
                 else {
@@ -253,7 +257,7 @@ public class CliClientController implements ClientControllerInterface {
         System.out.println("type 'undo' to undo previous card, 'stop' to terminate choice or just write the next choice");
         while (counter < maxInsertable) {
             switch (counter) {
-                //you necessarily have to chose at least a card
+                //you necessarily have to choose at least a card
                 case 0 -> {
                     do {
                         normalFlag = false;

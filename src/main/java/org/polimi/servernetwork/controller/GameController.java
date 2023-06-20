@@ -12,22 +12,32 @@ import java.util.stream.Stream;
 public class GameController {
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private static final int COUNT_DOWN = 20;
+    private int gameCode;
     private final int numOfPlayers;
     private int currentPlayer;
     private final int firstPlayer;
-    private final Game game;
+    private Game game;
     private int countDown;
     private DecrementerGameController decrementer;
+    private UsernameIssuer usernameIssuer;
+    private GameCodeIssuer gameCodeIssuer;
 
 
-    public GameController(ArrayList<ClientHandler> list) {
+    public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
         numOfPlayers = list.size();
+        gameCode = 0;
+        this.usernameIssuer = usernameIssuer;
+        this. gameCodeIssuer = gameCodeIssuer;
         countDown = COUNT_DOWN;
         decrementer = null;
         players.addAll(list);
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
+    }
+
+    public void setGameCode(int gameCode){
+        this.gameCode = gameCode;
     }
 
     public void initGameEnv() {
@@ -98,7 +108,7 @@ public class GameController {
             System.out.println("la board è vuota, la riempio");
             game.fillBoard();
             for (ClientHandler c : players) {
-                if (c != null && !c.equals(players.get(currentPlayer))) {
+                if (c != null) {
                     c.sendMessage(new BoardMessage(game.getBoardMap()));
                 }
             }
@@ -160,6 +170,15 @@ public class GameController {
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
+        System.out.println("il gioco è finito");
+        // fermo il thred 10 secodni per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
+        try{
+            Thread.sleep(1000);
+        }catch (InterruptedException e){
+            System.out.println("eccezione lanciata in GameController nel metodo end game");
+        }
+
+        closeGame();
     }
 
     private void gameAwarding (Map<String,Integer> ranking){
@@ -192,20 +211,20 @@ public class GameController {
         clientHandler.sendMessage(new Message("server", MessageType.WAITING_FOR_YOUR_TURN));
         // faccio un controllo: se adesso il numero di giocatori connsessi è 2 significa che prima che io mi riconnettessi il giocatore era dentro da solo
         // quindi non stava giocando ma era solo in attesa
-        if(getNumOfConnectedPlayers()==2){
+        if(getNumOfConnectedPlayers()==2) {
             // in questo caso azzero il timer di decrementer
             // non è detto ch il decrementer sia partito
-            if(countDown!=COUNT_DOWN){
+            if (countDown != COUNT_DOWN) {
                 decrementer.stop();
                 System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
-                // riporto coutDown a COUNT_DOWN
-                countDown=COUNT_DOWN;
+
+                // riporto coutDown a 60
+                countDown = COUNT_DOWN;
                 //e assegno il turno al giocatore che era già dentro al gioco (teoricamente dovrebbe essere già il currentplayer)
                 // gli chiedo di scegliere le carte da inserire
                 players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
             }
         }
-        // comunico al giocatore riconnesso di essere entrato in una partita
     }
     public void disconnection(ClientHandler clientHandler){
         System.out.println("(GameController) disconnect " + clientHandler.getUsername());
@@ -214,6 +233,8 @@ public class GameController {
         System.out.println("questa è la lista di clienthandler: " + players.toString());
         players.set(players.indexOf(clientHandler), null);
         if(getNumOfConnectedPlayers()==0){
+            if (countDown != COUNT_DOWN)
+                decrementer.stop();
             closeGame();
         }
         else if(players.get(currentPlayer) == null){   // se il giocatore che si è disconnesso è il currentPlayer
@@ -296,6 +317,18 @@ public class GameController {
         toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
         distruggo tutte le strutture create
         */
+        List<String> playersUsername = game.getPlayersUsername();
+        for(int i=0; i<numOfPlayers; i++){
+            usernameIssuer.removeUsername(playersUsername.get(i));
+        }
+        gameCodeIssuer.removeGame(gameCode);
+        for (ClientHandler c : players) {
+            if (c!=null)
+                c.closeEverything();
+        }
+        players.clear();
+        System.out.println("chiuso il gioco " + gameCode);
+        game = null;
     }
 
     public void decreaseCountDown () {

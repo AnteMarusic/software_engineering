@@ -44,6 +44,18 @@ public class GameCodeIssuer {
             }
         }
     }
+    public synchronized int reservCodeTo(){
+        if (!freedIdCodes.isEmpty()) {
+            int temp = freedIdCodes.get(0);
+            associations.put(temp, null);
+            return temp;
+        }
+        else {
+            currentHighestCode ++;
+            associations.put(currentHighestCode, null);
+            return currentHighestCode;
+        }
+    }
     public synchronized void associatePrivateCodeTo (GameController gameController, int gameCode) throws NullPointerException{
         if (gameController == null)
             throw new NullPointerException();
@@ -51,23 +63,7 @@ public class GameCodeIssuer {
             associations.put(gameCode, gameController);
         }
     }
-    public synchronized void freeCodeAssociatedWith (GameController gameController) throws NullPointerException, NoSuchElementException{
-        if (gameController == null) throw new NullPointerException();
-        else if (!associations.containsValue(gameController)) throw new NoSuchElementException();
-        else {
-            int key = associations.keySet().parallelStream().filter((x) -> associations.get(x).equals(gameController)).findFirst().orElse(-1);
-            associations.remove(key);
-            freedIdCodes.add(key);
-        }
-    }
 
-    /*
-    public static void main (String[] args) {
-        GameCodeIssuer g = new GameCodeIssuer();
-        System.out.println(g.associateCodeTo(new Game(new Player[1])));
-
-    }
-    */
     public synchronized boolean alreadyExistGameCode(int gameCode){  // metodo che controlla se esiste già un privateGAME con lo stesso gameCode
         if(associations.get(gameCode) == null){
             return false;
@@ -75,6 +71,10 @@ public class GameCodeIssuer {
         else
             return true;
 
+    }
+    public void removeGame(int gameCode){
+        associations.remove(gameCode);
+        freedIdCodes.add(gameCode);
     }
 
 

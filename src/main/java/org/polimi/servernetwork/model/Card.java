@@ -6,9 +6,12 @@ public class Card implements Serializable {
     private State state;
     private final Color color;
 
-    public Card(Color color, State state) {
+    private int type;
+
+    public Card(Color color, State state,int type) {
         this.setState(state);
         this.color = color;
+        this.type=type;
     }
 
     public enum Color {
@@ -39,6 +42,8 @@ public class Card implements Serializable {
     public Color getColor() {
         return this.color;
     }
+
+    public int getType(){return this.type;}
 
     @Override
     public String toString() {
