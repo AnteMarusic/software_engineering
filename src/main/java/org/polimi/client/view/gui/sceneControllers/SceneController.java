@@ -44,6 +44,10 @@ public class SceneController {
     //to modify (has to print a mini bookshelf)
     private ClientPersonalGoal personalGoal;
 
+    private int sharedGoal1Index;
+
+    private int sharedGoal2Index;
+
 
     public SceneController(){
         board = null;
@@ -127,6 +131,7 @@ public class SceneController {
             case 11 -> {sharedGoal1 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal1 = "error";}
         }
+        this.sharedGoal1Index = i;
     }
 
     public void setSharedGoal2(int i) {
@@ -145,6 +150,15 @@ public class SceneController {
             case 11 -> {sharedGoal2 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal2 = "error";}
         }
+        this.sharedGoal2Index = i;
+    }
+
+    public int getSharedGoal1Index() {
+        return sharedGoal1Index;
+    }
+
+    public int getSharedGoal2Index() {
+        return sharedGoal2Index;
     }
     public void setPersonalGoal (Coordinates[] coordinates, Card.Color[] colors) {
         this.personalGoal = new ClientPersonalGoal(coordinates, colors);

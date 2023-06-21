@@ -17,6 +17,9 @@ import org.polimi.servernetwork.controller.GameController;
 import org.polimi.servernetwork.model.Bookshelf;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
+import org.polimi.servernetwork.model.goal.PersonalGoal;
+import org.polimi.servernetwork.model.goal.shared_goal.AbstractSharedGoal;
+import org.polimi.servernetwork.model.goal.shared_goal.SharedGoal1;
 
 import java.awt.*;
 import java.awt.print.Book;
@@ -30,10 +33,26 @@ public class GameLoopController {
     private GridPane gridPane;
 
     @FXML
+    private ImageView personalGoalView;
+    @FXML
+    private ImageView sharedGoal1View;
+
+    @FXML
+    private ImageView sharedGoal2View;
+
+
+    @FXML
     private Node ciao;
 
     @FXML
     private Image image;
+
+    @FXML
+    private Image sharedGoal1Image;
+
+    @FXML
+    private Image sharedGoal2Image;
+
 
     //usare 25x25 per le tiles nella bookshelf
     @FXML
@@ -42,11 +61,9 @@ public class GameLoopController {
     private ClientBoard board;
 
     private List<ClientBookshelf> bookshelves;
-
     private LinkedList<Coordinates> chosenCoordinates;
 
-
-    public void GameController(){
+    public void GameController(int personalGoalIndex, int sharedGoal1Index, int SharedGoal2Index){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
     }
@@ -55,6 +72,7 @@ public class GameLoopController {
     public void initialize(){
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
+
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
@@ -123,6 +141,14 @@ public class GameLoopController {
 
             }
         }
+
+        //inizializzazione dei common goals
+        System.out.println(SceneController.getInstance().getSharedGoal1Index());
+        System.out.println(SceneController.getInstance().getSharedGoal2Index());
+        sharedGoal1Image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+SceneController.getInstance().getSharedGoal1Index() +".jpg");
+        sharedGoal2Image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+SceneController.getInstance().getSharedGoal2Index() +".jpg");
+        sharedGoal1View = new ImageView(sharedGoal1Image);
+        sharedGoal2View = new ImageView(sharedGoal2Image);
     }
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridpane, int x, int y){
         imageView.setImage(image);
@@ -133,9 +159,6 @@ public class GameLoopController {
         gridpane.add(pane, x, y);
     }
 
-    public void choosedCard(){
-
-    }
 
     public void col0(){
 
