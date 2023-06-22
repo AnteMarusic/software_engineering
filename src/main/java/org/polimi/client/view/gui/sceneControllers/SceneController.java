@@ -65,6 +65,14 @@ public class SceneController {
         }
         return instance;
     }
+
+    public void setMyUsername(String username){
+        this.myUsername = username;
+    }
+
+    public int getMyIndex(){
+        return this.players.indexOf(myUsername);
+    }
     public void switchScene(ActionEvent event, String sceneName) throws IOException {
         String ref ="/scenesfxml/"+ sceneName +".fxml";
         root= FXMLLoader.load(getClass().getResource(ref));

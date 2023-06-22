@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import org.polimi.GameRules;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
 import org.polimi.servernetwork.controller.GameController;
@@ -38,6 +39,7 @@ public class GameLoopController {
     private GridPane choosenCardsPane;
 
     private int choosenCardsDim=0;
+    private int myIndex;
 
     @FXML
     private Node ciao;
@@ -61,6 +63,7 @@ public class GameLoopController {
     public void GameController(int personalGoalIndex, int sharedGoal1Index, int SharedGoal2Index){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
+        this.myIndex = SceneController.getInstance().getMyIndex();
     }
 
     @FXML
@@ -75,19 +78,50 @@ public class GameLoopController {
                     loadTileImage(card);
                     ImageView imageView = new ImageView();
                     insertInGridPane(imageView, 50, 50, gridPane, j, i);
+                    int row = i;
+                    int col = j;
                     imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
-                            if (card.getState() == Card.State.PICKABLE) {
-                                choosenCardsDim++;
-                                loadTileImage(card);
-                                ImageView imageViewcurr = new ImageView();
-                                insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim - 1, 0);
-                                //rimozione delle carte dalla board
+                            if(card.getState() == Card.State.PICKABLE) {
+                                switch(choosenCardsDim){
+                                    case 1 ->  {
+                                        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
+                                            choosenCardsDim++;
+                                            loadTileImage(card);
+                                            ImageView imageViewcurr = new ImageView();
+                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim - 1, 0);
+                                            chosenCoordinates.add(new Coordinates(row,col));
+                                        }else{
+                                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                            alert.setTitle("Information");
+                                            alert.setHeaderText(null);
+                                            alert.setContentText("Cards are not aligned");
+                                            // Display the Alert
+                                            alert.showAndWait();
+                                        }
+                                    }
+                                    case 2 ->{
+                                        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
+                                            choosenCardsDim++;
+                                            loadTileImage(card);
+                                            ImageView imageViewcurr = new ImageView();
+                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim - 1, 0);
+                                            chosenCoordinates.add(new Coordinates(row,col));
+                                        }else{
+                                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                            alert.setTitle("Information");
+                                            alert.setHeaderText(null);
+                                            alert.setContentText("Cards are not aligned");
+                                            // Display the Alert
+                                            alert.showAndWait();
+                                        }
+                                    }
+                                }
                             } else {
                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setTitle("Information");
                                 alert.setHeaderText(null);
-                                alert.setContentText("Not choosable card!");
+                                alert.setContentText("Not pickable card!");
                                 // Display the Alert
                                 alert.showAndWait();
                             }
@@ -177,7 +211,11 @@ public class GameLoopController {
 
 
     public void col0(){
-
+        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+            for(int i=0 ; i<choosenCardsDim ; i++){
+                bookshelves.get(myIndex).insert((List<Card>) board.seeCardAtCoordinates(chosenCoordinates.get(choosenCardsDim-1)), 0);
+            }
+        }
     }
 
     public void col1(){
