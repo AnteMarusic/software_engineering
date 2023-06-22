@@ -9,6 +9,7 @@ import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.polimi.client.ClientBoard;
@@ -33,25 +34,13 @@ public class GameLoopController {
     private GridPane gridPane;
 
     @FXML
-    private ImageView personalGoalView;
-    @FXML
-    private ImageView sharedGoal1View;
-
-    @FXML
-    private ImageView sharedGoal2View;
-
-
-    @FXML
     private Node ciao;
 
     @FXML
     private Image image;
 
     @FXML
-    private Image sharedGoal1Image;
-
-    @FXML
-    private Image sharedGoal2Image;
+    private GridPane goalsPane;
 
 
     //usare 25x25 per le tiles nella bookshelf
@@ -145,10 +134,14 @@ public class GameLoopController {
         //inizializzazione dei common goals
         System.out.println(SceneController.getInstance().getSharedGoal1Index());
         System.out.println(SceneController.getInstance().getSharedGoal2Index());
-        sharedGoal1Image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+SceneController.getInstance().getSharedGoal1Index() +".jpg");
-        sharedGoal2Image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+SceneController.getInstance().getSharedGoal2Index() +".jpg");
-        sharedGoal1View = new ImageView(sharedGoal1Image);
-        sharedGoal2View = new ImageView(sharedGoal2Image);
+        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal1Index())+".jpg");
+        ImageView imageView = new ImageView();
+        insertInGridPane(imageView, 94, 62, goalsPane, 1, 0);
+        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal2Index())+".jpg");
+        ImageView imageView2 = new ImageView();
+        insertInGridPane(imageView2, 94, 62, goalsPane, 2, 0);
+
+
     }
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridpane, int x, int y){
         imageView.setImage(image);

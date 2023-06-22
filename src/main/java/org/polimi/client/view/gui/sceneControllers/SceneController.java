@@ -131,7 +131,7 @@ public class SceneController {
             case 11 -> {sharedGoal1 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal1 = "error";}
         }
-        this.sharedGoal1Index = i;
+        this.sharedGoal1Index = i+1;
     }
 
     public void setSharedGoal2(int i) {
@@ -150,7 +150,7 @@ public class SceneController {
             case 11 -> {sharedGoal2 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal2 = "error";}
         }
-        this.sharedGoal2Index = i;
+        this.sharedGoal2Index = i+1;
     }
 
     public int getSharedGoal1Index() {
