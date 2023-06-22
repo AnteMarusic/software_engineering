@@ -16,6 +16,8 @@ import javafx.scene.layout.Pane;
 import org.polimi.GameRules;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
+import org.polimi.client.GuiClientController;
+import org.polimi.messages.Message;
 import org.polimi.servernetwork.controller.GameController;
 import org.polimi.servernetwork.model.Bookshelf;
 import org.polimi.servernetwork.model.Card;
@@ -26,6 +28,8 @@ import org.polimi.servernetwork.model.goal.shared_goal.SharedGoal1;
 
 import java.awt.*;
 import java.awt.print.Book;
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,8 +42,6 @@ public class GameLoopController {
     @FXML
     private GridPane choosenCardsPane;
 
-    private int choosenCardsDim=0;
-    private int myIndex;
 
     @FXML
     private Node ciao;
@@ -51,16 +53,21 @@ public class GameLoopController {
     private GridPane goalsPane;
 
 
-    //usare 25x25 per le tiles nella bookshelf
+    //usare 25x25 per le tiles nella bookshel
     @FXML
     private GridPane bookshelfGridPane;
+    private int choosenCardsDim=0;
+    private int myIndex;
+
 
     private ClientBoard board;
 
     private List<ClientBookshelf> bookshelves;
     private LinkedList<Coordinates> chosenCoordinates;
 
-    public void GameController(int personalGoalIndex, int sharedGoal1Index, int SharedGoal2Index){
+    private boolean yourTurn;
+    //prima instanziare gameloopcontroller (viene chiamato subito initialize), poi settare a true il myturn, poi refreshare
+    public GameLoopController(){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
         this.myIndex = SceneController.getInstance().getMyIndex();
@@ -68,9 +75,11 @@ public class GameLoopController {
 
     @FXML
     public void initialize(){
+        initializeScene();
+    }
+    private void initializeScene(){
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
-
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
@@ -80,17 +89,26 @@ public class GameLoopController {
                     insertInGridPane(imageView, 50, 50, gridPane, j, i);
                     int row = i;
                     int col = j;
-                    imageView.setOnMouseClicked((MouseEvent event) -> {
+                    if(yourTurn){
+                        imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
                             if(card.getState() == Card.State.PICKABLE) {
                                 switch(choosenCardsDim){
+                                    case 0 ->{
+                                        loadTileImage(card);
+                                        ImageView imageViewcurr = new ImageView();
+                                        insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim , 0);
+                                        chosenCoordinates.add(new Coordinates(row,col));
+                                        System.out.println("fatto chosencoordinates .add, prima di dim++");
+                                        choosenCardsDim++;
+                                    }
                                     case 1 ->  {
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
-                                            choosenCardsDim++;
                                             loadTileImage(card);
                                             ImageView imageViewcurr = new ImageView();
-                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim - 1, 0);
+                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
+                                            choosenCardsDim++;
                                         }else{
                                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                             alert.setTitle("Information");
@@ -102,11 +120,11 @@ public class GameLoopController {
                                     }
                                     case 2 ->{
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
-                                            choosenCardsDim++;
                                             loadTileImage(card);
                                             ImageView imageViewcurr = new ImageView();
-                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim - 1, 0);
+                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
+                                            choosenCardsDim++;
                                         }else{
                                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                             alert.setTitle("Information");
@@ -134,6 +152,10 @@ public class GameLoopController {
                             alert.showAndWait();
                         }
                     });
+                    }
+                    else{
+                        imageView.setOnMouseClicked(null);
+                    }
                 }
 
             }
@@ -153,6 +175,10 @@ public class GameLoopController {
 
 
     }
+    public void refreshScene(){
+        initializeScene();
+    }
+
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridpane, int x, int y){
         imageView.setImage(image);
         imageView.setFitWidth(width);
@@ -210,11 +236,27 @@ public class GameLoopController {
     }
 
 
-    public void col0(){
+    public void col0() throws RemoteException {
         if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+            List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
-                bookshelves.get(myIndex).insert((List<Card>) board.seeCardAtCoordinates(chosenCoordinates.get(choosenCardsDim-1)), 0);
+                list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
+                System.out.println("dentro col0, nel for");
             }
+            bookshelves.get(myIndex).insert(list, 0);
+            for(int i = 0; i<5; i++){
+                for(int j= 0; j<6; j++){
+                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    if(card!=null) {
+                        loadTileImage(card);
+                        ImageView imageView3 = new ImageView();
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    }
+                }
+            }
+            GuiClientController.getNotified("chosencards");
+            SceneController.getInstance().setChosencol(0);
+            SceneController.getInstance().setChosenCards(chosenCoordinates);
         }
     }
 

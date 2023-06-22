@@ -35,9 +35,9 @@ public class SceneController {
     private int me; //my player index
     private int currentPlayer;
     private int lastPlayerInserted;
-    private List<Card> chosenCards;
+    private List<Coordinates> chosenCards;
     private List<Card> otherPlayerChosenCards;
-    private List<Card> orderedChosenCards;
+    private List<Coordinates> orderedChosenCards;
 
     private String sharedGoal1;
     private String sharedGoal2;
@@ -47,6 +47,13 @@ public class SceneController {
     private int sharedGoal1Index;
 
     private int sharedGoal2Index;
+
+    private int chosencol;
+
+    private boolean myTurn;
+
+    private GameLoopController gameLoopController;
+
 
 
     public SceneController(){
@@ -66,6 +73,17 @@ public class SceneController {
         return instance;
     }
 
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
+        if(gameLoopController!=null){
+            gameLoopController.refreshScene();
+        }
+    }
+
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
     public void setMyUsername(String username){
         this.myUsername = username;
     }
@@ -75,7 +93,12 @@ public class SceneController {
     }
     public void switchScene(ActionEvent event, String sceneName) throws IOException {
         String ref ="/scenesfxml/"+ sceneName +".fxml";
-        root= FXMLLoader.load(getClass().getResource(ref));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+        this.root = loader.load();
+        if(sceneName.equals("game_loop")){
+            this.gameLoopController = loader.getController();
+            GuiClientController.getNotified("createdgameloop");
+        }
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         if(sceneName.equals("login_scene")){
             scene = new Scene(root,693, 200);
@@ -85,6 +108,14 @@ public class SceneController {
             scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void setChosencol(int chosencol) {
+        this.chosencol = chosencol;
+    }
+
+    public int getChosencol() {
+        return chosencol;
     }
 
     //lancia null pointer
@@ -107,11 +138,15 @@ public class SceneController {
         this.me = this.players.indexOf(myUsername);
     }
 
+    public List<Coordinates> getChosenCards() {
+        return chosenCards;
+    }
+
     public void setBookshelves(List<ClientBookshelf> bookshelves) {
         this.bookshelves = bookshelves;
     }
 
-    public void setChosenCards(List<Card> chosenCards) {
+    public void setChosenCards(List<Coordinates> chosenCards) {
         this.chosenCards = chosenCards;
     }
 
@@ -119,7 +154,7 @@ public class SceneController {
         this.otherPlayerChosenCards = otherPlayerChosenCards;
     }
 
-    public void setOrderedChosenCards(List<Card> orderedChosenCards) {
+    public void setOrderedChosenCards(List<Coordinates> orderedChosenCards) {
         this.orderedChosenCards = orderedChosenCards;
     }
 
@@ -182,5 +217,17 @@ public class SceneController {
 
     public List<ClientBookshelf> getBookshelves(){
         return this.bookshelves;
+    }
+
+    public List<Card> getOtherPlayerChosenCards() {
+        return otherPlayerChosenCards;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentPlayer = players.indexOf(currentPlayer);
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
     }
 }

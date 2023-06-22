@@ -1,6 +1,7 @@
 package org.polimi.client;
 
 import org.polimi.servernetwork.model.Card;
+import org.polimi.servernetwork.model.Coordinates;
 
 import java.util.List;
 
@@ -177,5 +178,8 @@ public class ClientBookshelf {
             }
         }
         this.maxInsertable = max;
+    }
+    public Card seeCardAtCoordinates(Coordinates coor){
+        return this.grid[coor.getRow()][coor.getCol()];
     }
 }
