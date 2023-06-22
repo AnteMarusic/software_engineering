@@ -361,7 +361,17 @@ public class ModelStatusSaver {
         modelStatusSaver.save(bookshelf.getGrid());
         modelStatusSaver.save(board.getGrid());
         Card[][] bookshelfFromFile = modelStatusSaver.getBookshelf();
-
+        for (int i = 0; i < ROW; i ++) {
+            for (int j = 0; j < COL; j ++) {
+                if (bookshelfFromFile[i][j] == null) {
+                    System.out.print("N");
+                }
+                else {
+                    System.out.print(bookshelfFromFile[i][j].convertColorToChar());
+                }
+            }
+            System.out.println(" ");
+        }
         /*
         modelStatusSaver.board_fromJsonToMap().forEach((key, value) -> System.out.println(key + " " + value));
         Card[][] b = modelStatusSaver.bookshelf_fromJsonToCardMatrix();
