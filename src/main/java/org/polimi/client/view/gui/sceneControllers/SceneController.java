@@ -44,6 +44,10 @@ public class SceneController {
     //to modify (has to print a mini bookshelf)
     private ClientPersonalGoal personalGoal;
 
+    private int sharedGoal1Index;
+
+    private int sharedGoal2Index;
+
 
     public SceneController(){
         board = null;
@@ -60,6 +64,14 @@ public class SceneController {
             instance = new SceneController();
         }
         return instance;
+    }
+
+    public void setMyUsername(String username){
+        this.myUsername = username;
+    }
+
+    public int getMyIndex(){
+        return this.players.indexOf(myUsername);
     }
     public void switchScene(ActionEvent event, String sceneName) throws IOException {
         String ref ="/scenesfxml/"+ sceneName +".fxml";
@@ -127,6 +139,7 @@ public class SceneController {
             case 11 -> {sharedGoal1 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal1 = "error";}
         }
+        this.sharedGoal1Index = i+1;
     }
 
     public void setSharedGoal2(int i) {
@@ -145,6 +158,15 @@ public class SceneController {
             case 11 -> {sharedGoal2 = "Five columns of increasing or decreasing height. Starting from the first column on the left or on the right, each next column must be made of exactly one more tile. Tiles can be of any type. ";}
             default -> {sharedGoal2 = "error";}
         }
+        this.sharedGoal2Index = i+1;
+    }
+
+    public int getSharedGoal1Index() {
+        return sharedGoal1Index;
+    }
+
+    public int getSharedGoal2Index() {
+        return sharedGoal2Index;
     }
     public void setPersonalGoal (Coordinates[] coordinates, Card.Color[] colors) {
         this.personalGoal = new ClientPersonalGoal(coordinates, colors);

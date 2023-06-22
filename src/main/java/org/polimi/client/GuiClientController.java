@@ -45,6 +45,7 @@ public class GuiClientController implements ClientControllerInterface{
             switch(notificationType){
                 case "username" ->{
                     username = (String) messagges.get(0);
+                    SceneController.getInstance().setMyUsername(username);
                     try {
                         return ((RMIClient) client).loginGui(username);
                     } catch (RemoteException e) {
