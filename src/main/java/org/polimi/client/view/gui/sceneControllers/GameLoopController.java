@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,6 +33,11 @@ public class GameLoopController {
     //gridpane è 450x450, ogni cella è 50x50 pixel
     @FXML
     private GridPane gridPane;
+
+    @FXML
+    private GridPane choosenCardsPane;
+
+    private int choosenCardsDim=0;
 
     @FXML
     private Node ciao;
@@ -66,64 +72,32 @@ public class GameLoopController {
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
                 if(card!=null) {
-                    switch (card.getColor()) {
-                        case CYAN -> {
-                            switch(card.getType()){
-                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
-                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
-                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
-                            }
-                        }
-                        case WHITE -> {
-                            switch(card.getType()){
-                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
-                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
-                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
-                            }
-                        }
-                        case PINK -> {
-                            switch(card.getType()){
-                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
-                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
-                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
-                            }
-                        }
-                        case ORANGE -> {
-                            switch(card.getType()){
-                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
-                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
-                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
-                            }
-                        }
-                        case BLUE -> {
-                            switch(card.getType()){
-                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
-                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
-                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
-                            }
-                        }
-                        case GREEN -> {
-                            switch(card.getType()){
-                                case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1_1.png");
-                                case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
-                                case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
-                            }
-                        }
-                    }
+                    loadTileImage(card);
                     ImageView imageView = new ImageView();
-                    insertInGridPane(imageView, 50, 50, gridPane, i, j);
+                    insertInGridPane(imageView, 50, 50, gridPane, j, i);
                     imageView.setOnMouseClicked((MouseEvent event) -> {
-                        if(card.getState() == Card.State.PICKABLE){
-                            //prima di pescare le carte, fare una copia della board, nella copia della board prendere le carte via via, cosìcche
-                            // se si vuole cambiare scelta basta ricaricare la board originale, farne di nuovo una copia, e procedere a prendeere
-                            //le carte ...
-                            //nella copia della board rimuovere veramente le carte così si aggiornano i PICKABLE
-                            //scelte le carte, inviare le coordinate al server, in modo tale che sia il server a modificare la board orginale,
-                            //e riordinarle.
-
-                            /*imageView.setImage(new Image("/images/17_MyShelfie_BGA/scoring_tokens/scoring_back_EMPTY.jpg"));
-                            ImageView imageView2 = new ImageView();
-                            insertInGridPane(imageView2, 25, 25, bookshelfGridPane, 0, 0);*/
+                        if(choosenCardsDim<=2) {
+                            if (card.getState() == Card.State.PICKABLE) {
+                                choosenCardsDim++;
+                                loadTileImage(card);
+                                ImageView imageViewcurr = new ImageView();
+                                insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim - 1, 0);
+                                //rimozione delle carte dalla board
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Not choosable card!");
+                                // Display the Alert
+                                alert.showAndWait();
+                            }
+                        }else{
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Information");
+                            alert.setHeaderText(null);
+                            alert.setContentText("You cannot choose more than 3 cards per turn");
+                            // Display the Alert
+                            alert.showAndWait();
                         }
                     });
                 }
@@ -141,6 +115,8 @@ public class GameLoopController {
         ImageView imageView2 = new ImageView();
         insertInGridPane(imageView2, 94, 62, goalsPane, 2, 0);
 
+        //inizializzazione del personal goal
+
 
     }
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridpane, int x, int y){
@@ -150,6 +126,53 @@ public class GameLoopController {
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
         gridpane.add(pane, x, y);
+    }
+
+    private void loadTileImage(Card card){
+        switch (card.getColor()) {
+            case CYAN -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
+                }
+            }
+            case WHITE -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
+                }
+            }
+            case PINK -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
+                }
+            }
+            case ORANGE -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
+                }
+            }
+            case BLUE -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
+                }
+            }
+            case GREEN -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1_1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
+                }
+            }
+        }
     }
 
 
