@@ -33,6 +33,12 @@ public class Bookshelf {
         }
     }
 
+    public Bookshelf(Card[][] grid, int[] index, int maxInsertable) {
+        this.grid = grid;
+        this.index = index;
+        this.maxInsertable = maxInsertable;
+    }
+
     public int getMaxInsertable() {
         return maxInsertable;
     }

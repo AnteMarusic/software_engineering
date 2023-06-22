@@ -25,7 +25,7 @@ public class Game{
         this.readyToInsert = new LinkedList<>();
         for (int j=0; j<numOfPlayer; j++){
             players[j] = new Player(playerName.get(j));
-            System.out.println(j + "° giocatore è" + players[j].getName());
+            System.out.println("(Game) " + j + "° giocatore è " + players[j].getName());
         }
         handOutGoalsPG(numOfPlayer);
         sharedGoal = new Goal[2];

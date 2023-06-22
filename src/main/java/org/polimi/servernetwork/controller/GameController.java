@@ -52,7 +52,7 @@ public class GameController {
         }
         for (i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new StartGameMessage(players.get(i).getUsername(), usernames));
-            players.get(i).sendMessage(new ModelStatusAllMessage(players.get(i).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), usernames));
+            players.get(i).sendMessage(new ModelStatusAllMessage(players.get(i).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), game.getPersonalGoalIndex(i), usernames));
         }
 
     }
@@ -66,11 +66,11 @@ public class GameController {
             bookshelves.add(game.getBookshelfGrid(i));
         }
         players.get(position).sendMessage(new Message("server", MessageType.USERNAME));
-        players.get(position).sendMessage(new ModelStatusAllMessage(players.get(position).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(position),game.getPersonalGoalColors(position), usernames));
+        players.get(position).sendMessage(new ModelStatusAllMessage(players.get(position).getUsername(), game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(position),game.getPersonalGoalColors(position), game.getPersonalGoalIndex(position), usernames));
     }
     //questo metodo non viene chiamato nel caso di client rmi
     public void startGameTurn() {
-        System.out.println("entrato nel cazzo di metodo1");
+        System.out.println("(GameController startGameTurn)");
         // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
         /*
         new Thread(() -> {

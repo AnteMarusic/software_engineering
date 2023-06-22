@@ -1,12 +1,17 @@
 TODO
 - riconnessione del client disconnesso
 - se chiudi il server e mandi un messaggio da un socket client connesso in una partita esce un'eccezione "socket closed"
-- se chiudi un socket client prima che venga scelto l'username viene aperta la procedura di disconnessione e username issuer cerca di
-rimuovere l'username dalla lista degli utenti connessi ma si accorge che l'username è null quindi viene lanciata un'eccezione
-soluzione: il client handler anche in caso di socket viene creato solo quando l'username è stato scelto ed è valido
-andrebbe creata uan classe che si occupa solo della comunicazione socket (ha solo il metodo send message e il metodo run per rimanere in ascolto)
-chi chiama la disconnessione in questo caso?
 -togliere print da RMIclient e SocketClient
 -print della CLI accazzo a causa del multithreading di RMI non ci saranno nella versione finale (sono cose di debug)
 -se finisce la partita manca la parte in cui si tolgono gli username dei player da username issuer
+- CLI: stampare la bookshelf personale accanto alla board e le bookshelf degli altri una accanto all'altra
+       migliorare l'aspetto dell'array di carte scelte
+- il codice delle partite private va scelto dal server
+- se un client scrive merda quando non è il suo turno poi quando arriva il suo turno tutto lo schifo che ha scritto rimane
+        nell'input e quindi vengono stampati mille volte i messaggi di errore di input
+- migliorare la leggibilità del processo di scelta delle carte
+- quando uno sceglie delle carte, siccome non viene cambiate la board ma solo l'array di carte scelte forse conviene stampare solo quello
+- mettere un thread sempre attivo sul client che se non sono in una fase in cui devo scrivere allora qualsiasi cosa scrivo mi dice
+    che non posso scrivere e di aspettare il mio turno (e poi fa flush dello stream di input)
+
 

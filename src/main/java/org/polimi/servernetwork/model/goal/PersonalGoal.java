@@ -20,7 +20,10 @@ public class PersonalGoal implements Goal{
     private File file;
     private final Coordinates[] coordinates;
     private final Card.Color[] colors;
-    private int index;
+    /**
+     * personal goal code
+     */
+    private final int index;
 
     public PersonalGoal(int index) {
         String filePath = new File("").getAbsolutePath();
