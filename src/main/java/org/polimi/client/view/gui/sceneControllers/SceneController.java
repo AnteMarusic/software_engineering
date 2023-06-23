@@ -67,6 +67,7 @@ public class SceneController {
         chosenCards = new ArrayList<>();
         otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
+
     }
     public static SceneController getInstance() {
         if (instance == null) {
