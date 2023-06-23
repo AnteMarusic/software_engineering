@@ -211,12 +211,16 @@ public class Game{
      * @param currentPlayer is the player that inserted in bookshelf
      */
     private void updateScore(int currentPlayer){
+        System.out.println("(Game updateScore) old personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
         players[currentPlayer].updatePersonalScore();
+        System.out.println("(Game updateScore) updated personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
         if(!players[currentPlayer].getSharedGoal1Achieved())
         {
             int newPoint;
+            System.out.println("(Game updateScore goal 1) old shared score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
             newPoint = sharedGoal[0].getScore(players[currentPlayer].getGrid());
             players[currentPlayer].increaseSharedScore(newPoint);
+            System.out.println("(Game updateScore goal 1) new shared score for goal 1 for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
             if (newPoint != 0)
                 players[currentPlayer].setSharedGoal1AchievedToTrue();
         }
@@ -225,8 +229,11 @@ public class Game{
         if(!players[currentPlayer].getSharedGoal2Achieved())
         {
             int newPoint;
+            System.out.println("(Game updateScore goal 2) old shared score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
             newPoint = sharedGoal[1].getScore(players[currentPlayer].getGrid());
             players[currentPlayer].increaseSharedScore(newPoint);
+            System.out.println("(Game updateScore goal 2) new shared score for goal 1 for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
+
             if (newPoint != 0)
                 players[currentPlayer].setSharedGoal2AchievedToTrue();
         }

@@ -225,12 +225,17 @@ public class ModelStatusSaver {
         for (Object o : jsonArray) {
             JSONObject jsonObject = (JSONObject) o;
             JSONObject coordinates = (JSONObject) jsonObject.get("coordinates");
-            JSONObject card = (JSONObject) jsonObject.get("card");
             row = (long) coordinates.get("row");
             col = (long) coordinates.get("col");
             intRow = row.intValue();
             intCol = col.intValue();
-            bookshelf[intRow][intCol] = new Card(toColor((String) card.get("color")), toState(((String) card.get("state"))), 0);
+            JSONObject card = (JSONObject) jsonObject.get("card");
+            if (card == null) {
+                bookshelf[intRow][intCol] = null;
+            }
+            else {
+                bookshelf[intRow][intCol] = new Card(toColor((String) card.get("color")), toState(((String) card.get("state"))), 0);
+            }
         }
         return bookshelf;
     }

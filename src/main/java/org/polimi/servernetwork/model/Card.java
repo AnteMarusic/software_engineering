@@ -13,6 +13,11 @@ public class Card implements Serializable {
         this.color = color;
         this.type=type;
     }
+    public Card(Color color, State state) {
+        this.setState(state);
+        this.color = color;
+        this.type=0;
+    }
 
     public enum Color {
         PINK,

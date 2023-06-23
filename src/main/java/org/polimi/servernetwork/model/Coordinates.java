@@ -1,5 +1,7 @@
 package org.polimi.servernetwork.model;
 
+import org.json.simple.JSONObject;
+
 import java.io.Serializable;
 import java.util.Objects;
 

@@ -34,6 +34,7 @@ public class GameController {
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
+        //save the goals
     }
 
     public void setGameCode(int gameCode){
@@ -99,6 +100,7 @@ public class GameController {
     public void removeCards(List<Coordinates> coordinates) {
 
         boolean empty = game.remove(coordinates);
+        //save status
         for (ClientHandler c : players) {
             if (c != null && !c.equals(players.get(currentPlayer))) {
                 c.sendMessage(new CardToRemoveMessage("server", coordinates));
@@ -107,6 +109,7 @@ public class GameController {
         if(empty) {
             System.out.println("la board è vuota, la riempio");
             game.fillBoard();
+            //save staus
             for (ClientHandler c : players) {
                 if (c != null) {
                     c.sendMessage(new BoardMessage(game.getBoardMap()));
@@ -117,6 +120,7 @@ public class GameController {
 
     public void insertInBookshelf(int column) {
         int currentPoints = game.insertInBookshelf(column, currentPlayer);
+        //save status
         // manda al giocatore corrente il punteggio attuale
         players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
         for (ClientHandler c : players) {
