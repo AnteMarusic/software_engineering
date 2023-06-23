@@ -78,6 +78,7 @@ public class GameLoopController {
         initializeScene();
     }
     private void initializeScene(){
+        yourTurn = SceneController.getInstance().getMyTurn();
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
         for(int i=0; i<9; i++){
@@ -90,6 +91,7 @@ public class GameLoopController {
                     int row = i;
                     int col = j;
                     if(yourTurn){
+                        System.out.println("é il mio turno");
                         imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
                             if(card.getState() == Card.State.PICKABLE) {
@@ -154,6 +156,7 @@ public class GameLoopController {
                     });
                     }
                     else{
+                        System.out.println("non é il mio turnno");
                         imageView.setOnMouseClicked(null);
                     }
                 }

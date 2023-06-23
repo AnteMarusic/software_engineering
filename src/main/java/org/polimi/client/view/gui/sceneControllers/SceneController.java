@@ -84,6 +84,10 @@ public class SceneController {
         }
     }
 
+    public boolean getMyTurn(){
+        return this.myTurn;
+    }
+
     public Stage getStage() {
         return stage;
     }
@@ -144,10 +148,6 @@ public class SceneController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
         this.root = loader.load();
 
-        if (sceneName.equals("game_loop")) {
-            this.gameLoopController = loader.getController();
-            GuiClientController.getNotified("createdgameloop");
-        }
         Scene newScene;
 
         if (sceneName.equals("login_scene")) {
@@ -260,5 +260,9 @@ public class SceneController {
 
     public int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public void setGameLoopController(GameLoopController gameLoopController) {
+        this.gameLoopController = gameLoopController;
     }
 }

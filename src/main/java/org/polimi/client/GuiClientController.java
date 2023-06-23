@@ -2,6 +2,7 @@ package org.polimi.client;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -138,6 +139,9 @@ public class GuiClientController implements ClientControllerInterface{
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
                 int currentPlayer = m.getCurrentPlayer();
+                String ref = "/scenesfxml/game_loop.fxml";
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+                SceneController.getInstance().setGameLoopController(loader.getController());
                 if(usernames.get(currentPlayer).equals(username)){
                     SceneController.getInstance().setMyTurn(true);
                 }else{
@@ -169,8 +173,6 @@ public class GuiClientController implements ClientControllerInterface{
             //first message that is sent when is your turn, best wway should be that upon receiving this message the scene changes
             case CHOOSE_CARDS_REQUEST -> {
                 System.out.println("sto prima del while notify cards (quello che gioca)");
-                while(!createdgameloop){
-                }
                 System.out.println("sto per settare a true  a true");
                 SceneController.getInstance().setMyTurn(true);
                 System.out.println("ho settato a true");
@@ -189,8 +191,6 @@ public class GuiClientController implements ClientControllerInterface{
             //message received when is not your turn and the server notifies you of the next client playing
             case NOTIFY_NEXT_PLAYER -> {
                 System.out.println("sto prima del while notify");
-                while(!createdgameloop){;
-                }
                 System.out.println("sto per settare a false");
                 SceneController.getInstance().setMyTurn(false);
                 System.out.println("ho settato a false");
