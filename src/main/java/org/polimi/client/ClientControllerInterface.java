@@ -22,6 +22,6 @@ public interface ClientControllerInterface {
     public void newPlayerJoinedLobby (String newPlayer);
     public void loginSuccessful ();
     public void reconnectionSuccessful ();
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames);
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal);
     public void disconnect();
 }

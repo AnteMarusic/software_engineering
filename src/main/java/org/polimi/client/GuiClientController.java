@@ -2,6 +2,8 @@ package org.polimi.client;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.polimi.client.view.gui.sceneControllers.LobbySceneController;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static org.polimi.GameRules.boardRowColInBound;
 
 public class GuiClientController implements ClientControllerInterface{
     private static Client client;
@@ -29,6 +33,10 @@ public class GuiClientController implements ClientControllerInterface{
 
     private static boolean startgame;
 
+    private static boolean chosencards;
+    private static boolean createdgameloop;
+
+
 
     public GuiClientController(Client client, boolean rmi) {
         this.client = client;
@@ -36,6 +44,8 @@ public class GuiClientController implements ClientControllerInterface{
         this.rmi=rmi;
         this.receivedgamemodemess=false;
         this.startgame=false;
+        this.chosencards = false;
+        this.createdgameloop = false;
     }
 
 
@@ -81,6 +91,9 @@ public class GuiClientController implements ClientControllerInterface{
                         return false;
                     return true;
                 }
+                case "chosencards"-> chosencards=true;
+                case "createdgameloop" -> {createdgameloop=true;
+                System.out.println("settato a true createdgameloop da guiclientcontroleer");}
                 default ->{
                     return false;
                 }
@@ -103,7 +116,8 @@ public class GuiClientController implements ClientControllerInterface{
                 receivedgamemodemess=true;
             }
             case START_GAME_MESSAGE -> {
-                System.out.println("ricevuto messaggio start game");
+                ///cambiare scena in qualche modo
+                SceneController.getInstance().switchScene("game_loop");
                 return null;
             }
 
@@ -117,11 +131,56 @@ public class GuiClientController implements ClientControllerInterface{
                 List<Card[][]> bookshelves = m.getBookshelves();
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
+                int personalGoal = m.getPersonalGoalIndex();
                 Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames);
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
+                return null;
+            }
+            case CARD_TO_REMOVE -> {
+                CardToRemoveMessage m = (CardToRemoveMessage) message;
+                removeOtherPlayerCards(m.getCoordinates());
+                return null;
+            }
+            case CHOSEN_COLUMN_REPLY -> {
+                ChosenColumnMessage m = (ChosenColumnMessage) message;
+                insertInOtherPlayerBookshelf(m.getColumn());
+                return null;
+            }
+
+            //first message that is sent when is your turn, best wway should be that upon receiving this message the scene changes
+            case CHOOSE_CARDS_REQUEST -> {
+                System.out.println("sto prima del while notify cards");
+                while(!createdgameloop){
+                }
+                System.out.println("sto per settare a true  a true");
+                SceneController.getInstance().setMyTurn(true);
+                System.out.println("ho settato a true");
+                while(!chosencards){
+
+                }
+                chosencards=false;
+                return chooseCards();
+            }
+
+            //message that should be received subsequently to the choice and the sorting of the cards.
+            case CHOOSE_COLUMN_REQUEST -> {
+                return chooseColumn();
+            }
+
+            //message received when is not your turn and the server notifies you of the next client playing
+            case NOTIFY_NEXT_PLAYER -> {
+                System.out.println("sto prima del while notify");
+                while(!createdgameloop){
+                    System.out.println("aspettando notify...");
+                }
+                System.out.println("sto per settare a false");
+                SceneController.getInstance().setMyTurn(false);
+                System.out.println("ho settato a false");
+                NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
+                SceneController.getInstance().setCurrentPlayer(m.getNextPlayer());
                 return null;
             }
 
@@ -134,36 +193,7 @@ public class GuiClientController implements ClientControllerInterface{
                 cli.printRoutine();
             }
 
-            case CARD_TO_REMOVE -> {
-                CardToRemoveMessage m = (CardToRemoveMessage) message;
-                cli.removeOtherPlayerCards(m.getCoordinates());
-                cli.printRoutine();
-                return null;
-            }
-            case CHOSEN_COLUMN_REPLY -> {
-                ChosenColumnMessage m = (ChosenColumnMessage) message;
-                cli.insertInOtherPlayerBookshelf(m.getColumn());
-                cli.printRoutine();
-                return null;
-            }
 
-            //first message that is sent when is your turn
-            case CHOOSE_CARDS_REQUEST -> {
-                return chooseCards();
-            }
-
-            //message that should be received subsequently to the choice and the sorting of the cards.
-            case CHOOSE_COLUMN_REQUEST -> {
-                return chooseColumn();
-            }
-
-            //message received when is not your turn and the server notifies you of the next client playing
-            case NOTIFY_NEXT_PLAYER -> {
-                NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
-                System.out.println(m.getNextPlayer() + " is now playing");
-                cli.setCurrentPlayer(m.getNextPlayer());
-                return null;
-            }
             case ALREADYTAKENGAMECODEMESSAGE -> {
                 cli.alreadyTakenGameCode();
                 return null;
@@ -190,7 +220,36 @@ public class GuiClientController implements ClientControllerInterface{
         return null;
     }
 
-
+    @Override
+    public Message chooseCards(){
+        return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCards());
+    }
+    public void removeOtherPlayerCards(List<Coordinates> toRemove){
+        Coordinates temp;
+        Card card;
+        ClientBoard board= SceneController.getInstance().getBoard();
+        Coordinates[] AdjacentCoordinates = new Coordinates[4];
+        int j = 0;
+        while (j < toRemove.size()) {
+            temp = toRemove.get(j);
+            card = board.removeCardAtCoordinates(temp);
+            SceneController.getInstance().getOtherPlayerChosenCards().add(card);
+            AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
+            AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
+            AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);
+            AdjacentCoordinates[3] = new Coordinates(temp.getRow() - 1, temp.getCol());
+            for (int i = 0; i < 4; i++) {
+                if (boardRowColInBound(AdjacentCoordinates[i].getRow(), AdjacentCoordinates[i].getCol(), numOfPlayers) && board.seeCardAtCoordinates(AdjacentCoordinates[i]) != null) {
+                    board.setToPickable(AdjacentCoordinates[i]);
+                }
+            }
+            j ++;
+        }
+    }
+    public void insertInOtherPlayerBookshelf (int col){
+        SceneController.getInstance().getBookshelves().get(SceneController.getInstance().getCurrentPlayer()).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
+        SceneController.getInstance().getOtherPlayerChosenCards().clear();
+    }
 
     @Override
     public void alreadyTakenUsername() {
@@ -203,10 +262,6 @@ public class GuiClientController implements ClientControllerInterface{
         return null;
     }
 
-    @Override
-    public Message chooseCards() {
-        return null;
-    }
 
     @Override
     public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
@@ -215,7 +270,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public Message chooseColumn() {
-        return null;
+        return new ChosenColumnMessage(username, SceneController.getInstance().getChosencol());
     }
 
     @Override
@@ -239,7 +294,7 @@ public class GuiClientController implements ClientControllerInterface{
     }
 
     @Override
-    public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames) {
+    public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         for(int i=0 ; i<usernames.size() ; i++) {
             l.add (new ClientBookshelf(bookshelves.get(i)));
@@ -251,6 +306,7 @@ public class GuiClientController implements ClientControllerInterface{
         SceneController.getInstance().setPersonalGoal(personalGoalCoordinates, personalGoalColors);
         SceneController.getInstance().setSharedGoal1(sharedGoal1);
         SceneController.getInstance().setSharedGoal2(sharedGoal2);
+        SceneController.getInstance().setPersonalGoalIndex(personalGoal);
     }
 
     @Override
