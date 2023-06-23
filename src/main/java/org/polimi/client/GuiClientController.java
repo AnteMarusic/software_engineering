@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.polimi.GameRules.boardRowColInBound;
 
@@ -39,6 +42,8 @@ public class GuiClientController implements ClientControllerInterface{
     private static boolean chosencards;
     private static boolean createdgameloop;
 
+    private static Lock lock;
+    private static Condition flagCondition;
 
 
     public GuiClientController(Client client, boolean rmi) {
@@ -49,8 +54,29 @@ public class GuiClientController implements ClientControllerInterface{
         this.startgame=false;
         this.chosencards = false;
         this.createdgameloop = false;
+        this.lock = new ReentrantLock();
+        this.flagCondition = lock.newCondition();
     }
 
+    public void waitForFlag() throws InterruptedException {
+        lock.lock();
+        try {
+            while (!this.chosencards) {
+                flagCondition.await(); // Wait until the flag is set
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void reset() {
+        lock.lock();
+        try {
+            chosencards = false;
+        } finally {
+            lock.unlock();
+        }
+    }
 
     //viene chiamato ogni volta che il controller di una scena vuole passare parametri a questa classe
     public static boolean getNotified(String notificationType) throws RemoteException {
@@ -94,7 +120,15 @@ public class GuiClientController implements ClientControllerInterface{
                         return false;
                     return true;
                 }
-                case "chosencards"-> chosencards=true;
+                case "chosencards"-> {
+                    lock.lock();
+                    try {
+                        chosencards = true;
+                        flagCondition.signal(); // Signal the waiting thread
+                    } finally {
+                        lock.unlock();
+                    }
+                }
                 case "createdgameloop" -> {createdgameloop=true;
                 System.out.println("settato a true createdgameloop da guiclientcontroleer");}
                 default ->{
@@ -176,10 +210,12 @@ public class GuiClientController implements ClientControllerInterface{
                 System.out.println("sto per settare a true  a true");
                 SceneController.getInstance().setMyTurn(true);
                 System.out.println("ho settato a true");
-                while(!chosencards){
-
+                try {
+                    this.waitForFlag();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
-                chosencards=false;
+                this.reset();
                 return chooseCards();
             }
 
