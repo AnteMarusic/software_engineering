@@ -179,7 +179,7 @@ public class GuiClientController implements ClientControllerInterface{
                 if(usernames.get(currentPlayer).equals(username)){
                     SceneController.getInstance().setMyTurn(true);
                 }else{
-                    SceneController.getInstance().setMyTurn(true);
+                    SceneController.getInstance().setMyTurn(false);
                 }
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
@@ -234,6 +234,7 @@ public class GuiClientController implements ClientControllerInterface{
                 SceneController.getInstance().setCurrentPlayer(m.getNextPlayer());
                 return null;
             }
+
 
             /*
             // nuovo messaggio aggiunto
