@@ -70,7 +70,7 @@ public class GameLoopController {
 
     private boolean yourTurn;
     //prima instanziare gameloopcontroller (viene chiamato subito initialize), poi settare a true il myturn, poi refreshare
-    public GameLoopController(){
+    public void gameLoopInit(){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
         this.myIndex = SceneController.getInstance().getMyIndex();
@@ -166,6 +166,11 @@ public class GameLoopController {
                         imageView.setOnMouseClicked(null);
                     }
                 }
+                else{
+                    ImageView imageViewtoremove = retrieveImageView(gridPane,i ,j);
+                    imageViewtoremove.setDisable(true);
+                    imageViewtoremove.setVisible(false);
+                }
 
             }
         }
@@ -199,7 +204,12 @@ public class GameLoopController {
         pane.getChildren().add(imageView);
         gridpane.add(pane, x, y);
     }
-
+    private ImageView retrieveImageView(GridPane gridPane, int j, int i){
+         return  (ImageView) gridPane.getChildren().stream()
+                .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
+                .findFirst()
+                .orElse(null);
+    }
     private void loadTileImage(Card card){
         switch (card.getColor()) {
             case CYAN -> {
@@ -269,6 +279,7 @@ public class GameLoopController {
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(0);
             SceneController.getInstance().setChosenCards(chosenCoordinates);
+            chosenCoordinates.clear();
         }
     }
 

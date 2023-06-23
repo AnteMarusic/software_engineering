@@ -3,10 +3,12 @@ package org.polimi.client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.polimi.client.view.gui.sceneControllers.GameLoopController;
 import org.polimi.client.view.gui.sceneControllers.LobbySceneController;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
@@ -173,25 +175,28 @@ public class GuiClientController implements ClientControllerInterface{
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
                 int currentPlayer = m.getCurrentPlayer();
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 String ref = "/scenesfxml/game_loop.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+                Parent root = loader.load();
                 if(loader.getController()==null){
                     System.out.println("il controller é null");
                 }else{
                     System.out.println("il controller non é null");
                 }
-                SceneController.getInstance().setGameLoopController(loader.getController());
+                GameLoopController gameLoopController = loader.getController();
+                gameLoopController.gameLoopInit();
+                SceneController.getInstance().setGameLoopController(gameLoopController);
                 if(usernames.get(currentPlayer).equals(username)){
                     SceneController.getInstance().setMyTurn(true);
                 }else{
                     SceneController.getInstance().setMyTurn(false);
                 }
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
                 Stage stage = SceneController.getInstance().getStage();
                 Platform.runLater(() -> {
                     try {
-                        SceneController.getInstance().switchScene3(stage, "game_loop", loader);
+                        SceneController.getInstance().switchScene3(stage, "game_loop",root);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -226,6 +231,7 @@ public class GuiClientController implements ClientControllerInterface{
 
             //message that should be received subsequently to the choice and the sorting of the cards.
             case CHOOSE_COLUMN_REQUEST -> {
+                SceneController.getInstance().setChosenCards(null);
                 return chooseColumn();
             }
 

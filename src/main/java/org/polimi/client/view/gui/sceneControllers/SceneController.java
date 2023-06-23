@@ -79,7 +79,10 @@ public class SceneController {
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
-        gameLoopController.refreshScene();
+        Platform.runLater(() -> {
+            gameLoopController.refreshScene();
+        });
+
 
     }
 
@@ -163,8 +166,8 @@ public class SceneController {
         });
     }
 
-    public void switchScene3(Stage stage, String sceneName, FXMLLoader loader) throws IOException {
-        this.root = loader.load();
+    public void switchScene3(Stage stage, String sceneName, Parent root) throws IOException {
+        this.root = root;
 
         Scene newScene;
 
