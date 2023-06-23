@@ -79,9 +79,8 @@ public class SceneController {
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
-        if(gameLoopController!=null){
-            gameLoopController.refreshScene();
-        }
+        gameLoopController.refreshScene();
+
     }
 
     public boolean getMyTurn(){

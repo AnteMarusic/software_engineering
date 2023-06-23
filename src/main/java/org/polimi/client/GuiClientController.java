@@ -206,8 +206,7 @@ public class GuiClientController implements ClientControllerInterface{
 
             //first message that is sent when is your turn, best wway should be that upon receiving this message the scene changes
             case CHOOSE_CARDS_REQUEST -> {
-                System.out.println("sto prima del while notify cards (quello che gioca)");
-                System.out.println("sto per settare a true  a true");
+                System.out.println("sto per settare a true");
                 SceneController.getInstance().setMyTurn(true);
                 System.out.println("ho settato a true");
                 try {
@@ -215,6 +214,7 @@ public class GuiClientController implements ClientControllerInterface{
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println("dopo try, prima di reset");
                 this.reset();
                 return chooseCards();
             }
@@ -226,7 +226,6 @@ public class GuiClientController implements ClientControllerInterface{
 
             //message received when is not your turn and the server notifies you of the next client playing
             case NOTIFY_NEXT_PLAYER -> {
-                System.out.println("sto prima del while notify");
                 System.out.println("sto per settare a false");
                 SceneController.getInstance().setMyTurn(false);
                 System.out.println("ho settato a false");

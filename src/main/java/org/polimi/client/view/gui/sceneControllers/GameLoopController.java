@@ -9,7 +9,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -99,6 +102,7 @@ public class GameLoopController {
                                     case 0 ->{
                                         loadTileImage(card);
                                         ImageView imageViewcurr = new ImageView();
+                                        setDragHandlers(imageViewcurr);
                                         insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim , 0);
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         System.out.println("fatto chosencoordinates .add, prima di dim++");
@@ -108,6 +112,7 @@ public class GameLoopController {
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
                                             loadTileImage(card);
                                             ImageView imageViewcurr = new ImageView();
+                                            setDragHandlers(imageViewcurr);
                                             insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
@@ -124,6 +129,7 @@ public class GameLoopController {
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                             loadTileImage(card);
                                             ImageView imageViewcurr = new ImageView();
+                                            setDragHandlers(imageViewcurr);
                                             insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
@@ -280,6 +286,63 @@ public class GameLoopController {
 
     public void col4(){
 
+    }
+    private void setDragHandlers(ImageView imageView) {
+        final ImageView sourceImageView = imageView;
+
+        imageView.setOnDragDetected(event -> {
+            Dragboard dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
+
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(imageView.getImage());
+            dragboard.setContent(content);
+
+            event.consume();
+        });
+
+        imageView.setOnDragOver(event -> {
+            if (event.getGestureSource() != imageView && event.getDragboard().hasImage()) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+
+        imageView.setOnDragEntered(event -> {
+            if (event.getGestureSource() != imageView && event.getDragboard().hasImage()) {
+                imageView.setStyle("-fx-border-color: red; -fx-border-width: 3;");
+            }
+            event.consume();
+        });
+
+        imageView.setOnDragExited(event -> {
+            imageView.setStyle("");
+            event.consume();
+        });
+
+        imageView.setOnDragDropped(event -> {
+            Dragboard dragboard = event.getDragboard();
+            boolean success = false;
+
+            if (dragboard.hasImage()) {
+                ImageView targetImageView = (ImageView) event.getSource();
+
+                // Swap the ImageViews in the GridPane
+                int sourceRow = GridPane.getRowIndex(sourceImageView);
+                int sourceCol = GridPane.getColumnIndex(sourceImageView);
+                int targetRow = GridPane.getRowIndex(targetImageView);
+                int targetCol = GridPane.getColumnIndex(targetImageView);
+
+                GridPane.setRowIndex(sourceImageView, targetRow);
+                GridPane.setColumnIndex(sourceImageView, targetCol);
+                GridPane.setRowIndex(targetImageView, sourceRow);
+                GridPane.setColumnIndex(targetImageView, sourceCol);
+
+                success = true;
+            }
+
+            event.setDropCompleted(success);
+            event.consume();
+        });
     }
 
 
