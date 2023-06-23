@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import org.polimi.client.view.gui.sceneControllers.LobbySceneController;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
@@ -136,12 +137,14 @@ public class GuiClientController implements ClientControllerInterface{
                 Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
+                int currentPlayer = m.getCurrentPlayer();
+
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
-                Scene currentScene = SceneController.getInstance().getStage().getScene();
+                Stage stage = SceneController.getInstance().getStage();
                 Platform.runLater(() -> {
                     try {
-                        SceneController.getInstance().switchScene2(currentScene, "game_loop");
+                        SceneController.getInstance().switchScene2(stage, "game_loop");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

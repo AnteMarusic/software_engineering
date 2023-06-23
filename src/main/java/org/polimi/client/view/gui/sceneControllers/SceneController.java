@@ -139,7 +139,7 @@ public class SceneController {
     }
 
     //lancia null pointer
-    public void switchScene2(Scene currentScene, String sceneName) throws IOException {
+    public void switchScene2(Stage stage, String sceneName) throws IOException {
         String ref = "/scenesfxml/" + sceneName + ".fxml";
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
         this.root = loader.load();
@@ -148,8 +148,6 @@ public class SceneController {
             this.gameLoopController = loader.getController();
             GuiClientController.getNotified("createdgameloop");
         }
-
-        Stage stage = (Stage) currentScene.getWindow();
         Scene newScene;
 
         if (sceneName.equals("login_scene")) {
