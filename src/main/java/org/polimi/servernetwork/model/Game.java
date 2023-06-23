@@ -91,15 +91,15 @@ public class Game{
         chosenSharedGoal[0]=i;
         chosenSharedGoal[1]=j;
 
-        if (i == 0) sharedGoal[0] = new SharedGoal1(numOfPlayers);
-        if (i == 1) sharedGoal[0] = new SharedGoal2(numOfPlayers);
         if (i == 2) sharedGoal[0] = new SharedGoal3(numOfPlayers);
         if (i == 3) sharedGoal[0] = new SharedGoal4(numOfPlayers);
         if (i == 4) sharedGoal[0] = new SharedGoal5(numOfPlayers);
+        if (i == 1) sharedGoal[0] = new SharedGoal2(numOfPlayers);
         if (i == 5) sharedGoal[0] = new SharedGoal6(numOfPlayers);
         if (i == 6) sharedGoal[0] = new SharedGoal7(numOfPlayers);
         if (i == 7) sharedGoal[0] = new SharedGoal8(numOfPlayers);
         if (i == 8) sharedGoal[0] = new SharedGoal9(numOfPlayers);
+        if (i == 0) sharedGoal[0] = new SharedGoal1(numOfPlayers);
         if (i == 9) sharedGoal[0] = new SharedGoal10(numOfPlayers);
         if (i == 10) sharedGoal[0] = new SharedGoal11(numOfPlayers);
         if (i == 11) sharedGoal[0] = new SharedGoal12(numOfPlayers);
