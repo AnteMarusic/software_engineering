@@ -138,7 +138,11 @@ public class GuiClientController implements ClientControllerInterface{
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
                 int currentPlayer = m.getCurrentPlayer();
-
+                if(usernames.get(currentPlayer).equals(username)){
+                    SceneController.getInstance().setMyTurn(true);
+                }else{
+                    SceneController.getInstance().setMyTurn(true);
+                }
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
                 Stage stage = SceneController.getInstance().getStage();
