@@ -172,6 +172,9 @@ public class GameLoopController {
         insertInGridPane(imageView2, 94, 62, goalsPane, 2, 0);
 
         //inizializzazione del personal goal
+        image = new Image("/images/17_MyShelfie_BGA/personal_goal_cards/Personal_Goals"+(SceneController.getInstance().getPersonalGoalIndex())+".png");
+        ImageView imageView4 = new ImageView();
+        insertInGridPane(imageView4, 62, 94, goalsPane,0, 0);
 
 
     }

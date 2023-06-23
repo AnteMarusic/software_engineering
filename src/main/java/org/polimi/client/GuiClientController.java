@@ -128,10 +128,11 @@ public class GuiClientController implements ClientControllerInterface{
                 List<Card[][]> bookshelves = m.getBookshelves();
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
+                int personalGoal = m.getPersonalGoalIndex();
                 Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames);
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
                 return null;
             }
@@ -290,7 +291,7 @@ public class GuiClientController implements ClientControllerInterface{
     }
 
     @Override
-    public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames) {
+    public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         for(int i=0 ; i<usernames.size() ; i++) {
             l.add (new ClientBookshelf(bookshelves.get(i)));
@@ -302,6 +303,7 @@ public class GuiClientController implements ClientControllerInterface{
         SceneController.getInstance().setPersonalGoal(personalGoalCoordinates, personalGoalColors);
         SceneController.getInstance().setSharedGoal1(sharedGoal1);
         SceneController.getInstance().setSharedGoal2(sharedGoal2);
+        SceneController.getInstance().setPersonalGoalIndex(personalGoal);
     }
 
     @Override

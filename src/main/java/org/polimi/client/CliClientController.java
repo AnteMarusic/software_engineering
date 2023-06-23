@@ -76,7 +76,8 @@ public class CliClientController implements ClientControllerInterface {
                 Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames);
+                int personalGoal = m.getPersonalGoalIndex();
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 cli.printRoutine();
                 return null;
             }
@@ -573,7 +574,7 @@ public class CliClientController implements ClientControllerInterface {
      */
 
     @Override
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames) {
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         if (this.cli == null)
             throw new NullPointerException();

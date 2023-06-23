@@ -48,6 +48,8 @@ public class SceneController {
 
     private int sharedGoal2Index;
 
+    private int personalGoalIndex;
+
     private int chosencol;
 
     private boolean myTurn;
@@ -108,6 +110,14 @@ public class SceneController {
             scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void setPersonalGoalIndex(int personalGoalIndex) {
+        this.personalGoalIndex = personalGoalIndex;
+    }
+
+    public int getPersonalGoalIndex() {
+        return personalGoalIndex;
     }
 
     public void setChosencol(int chosencol) {
