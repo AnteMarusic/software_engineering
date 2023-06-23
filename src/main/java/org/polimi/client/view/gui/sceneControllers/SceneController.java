@@ -162,6 +162,25 @@ public class SceneController {
             stage.show();
         });
     }
+
+    public void switchScene3(Stage stage, String sceneName, FXMLLoader loader) throws IOException {
+        this.root = loader.load();
+
+        Scene newScene;
+
+        if (sceneName.equals("login_scene")) {
+            newScene = new Scene(root, 693, 200);
+            stage.setResizable(false);
+        } else {
+            newScene = new Scene(root);
+        }
+
+        // Switch scenes on the JavaFX Application Thread
+        Platform.runLater(() -> {
+            stage.setScene(newScene);
+            stage.show();
+        });
+    }
     public void setPlayers(List<String> players) {
         this.players = players;
         this.numOfPlayers = players.size();

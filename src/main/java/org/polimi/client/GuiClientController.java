@@ -175,6 +175,11 @@ public class GuiClientController implements ClientControllerInterface{
                 int currentPlayer = m.getCurrentPlayer();
                 String ref = "/scenesfxml/game_loop.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+                if(loader.getController()==null){
+                    System.out.println("il controller é null");
+                }else{
+                    System.out.println("il controller non é null");
+                }
                 SceneController.getInstance().setGameLoopController(loader.getController());
                 if(usernames.get(currentPlayer).equals(username)){
                     SceneController.getInstance().setMyTurn(true);
@@ -186,7 +191,7 @@ public class GuiClientController implements ClientControllerInterface{
                 Stage stage = SceneController.getInstance().getStage();
                 Platform.runLater(() -> {
                     try {
-                        SceneController.getInstance().switchScene2(stage, "game_loop");
+                        SceneController.getInstance().switchScene3(stage, "game_loop", loader);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
