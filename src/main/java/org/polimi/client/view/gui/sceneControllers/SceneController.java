@@ -1,5 +1,6 @@
 package org.polimi.client.view.gui.sceneControllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -83,6 +84,10 @@ public class SceneController {
         }
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
     public boolean isMyTurn() {
         return myTurn;
     }
@@ -134,18 +139,31 @@ public class SceneController {
     }
 
     //lancia null pointer
-    public void switchScene(String sceneName) throws IOException {
+    public void switchScene2(Scene currentScene, String sceneName) throws IOException {
         String ref = "/scenesfxml/" + sceneName + ".fxml";
-        root = FXMLLoader.load(getClass().getResource(ref));
-        stage = (Stage) root.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+        this.root = loader.load();
+
+        if (sceneName.equals("game_loop")) {
+            this.gameLoopController = loader.getController();
+            GuiClientController.getNotified("createdgameloop");
+        }
+
+        Stage stage = (Stage) currentScene.getWindow();
+        Scene newScene;
+
         if (sceneName.equals("login_scene")) {
-            scene = new Scene(root, 693, 200);
+            newScene = new Scene(root, 693, 200);
             stage.setResizable(false);
         } else {
-            scene = new Scene(root);
+            newScene = new Scene(root);
         }
-        stage.setScene(scene);
-        stage.show();
+
+        // Switch scenes on the JavaFX Application Thread
+        Platform.runLater(() -> {
+            stage.setScene(newScene);
+            stage.show();
+        });
     }
     public void setPlayers(List<String> players) {
         this.players = players;

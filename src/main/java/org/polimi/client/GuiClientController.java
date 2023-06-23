@@ -1,5 +1,6 @@
 package org.polimi.client;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
@@ -117,7 +118,6 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case START_GAME_MESSAGE -> {
                 ///cambiare scena in qualche modo
-                SceneController.getInstance().switchScene("game_loop");
                 return null;
             }
 
@@ -125,6 +125,7 @@ public class GuiClientController implements ClientControllerInterface{
             //if the server recognises that this client is reconnecting, so it has to send the whole model status,
             //otherwise, it is sent at the beginning of the match
             case MODEL_STATUS_ALL -> {
+
                 //in case of status all message the client doesn't have to send any message
                 ModelStatusAllMessage m = (ModelStatusAllMessage) message;
                 Map<Coordinates, Card> board = m.getBoard();
@@ -137,6 +138,14 @@ public class GuiClientController implements ClientControllerInterface{
                 List <String> usernames = m.getUsernames();
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 startgame=true;
+                Scene currentScene = SceneController.getInstance().getStage().getScene();
+                Platform.runLater(() -> {
+                    try {
+                        SceneController.getInstance().switchScene2(currentScene, "game_loop");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 return null;
             }
             case CARD_TO_REMOVE -> {
@@ -152,7 +161,7 @@ public class GuiClientController implements ClientControllerInterface{
 
             //first message that is sent when is your turn, best wway should be that upon receiving this message the scene changes
             case CHOOSE_CARDS_REQUEST -> {
-                System.out.println("sto prima del while notify cards");
+                System.out.println("sto prima del while notify cards (quello che gioca)");
                 while(!createdgameloop){
                 }
                 System.out.println("sto per settare a true  a true");
@@ -173,8 +182,7 @@ public class GuiClientController implements ClientControllerInterface{
             //message received when is not your turn and the server notifies you of the next client playing
             case NOTIFY_NEXT_PLAYER -> {
                 System.out.println("sto prima del while notify");
-                while(!createdgameloop){
-                    System.out.println("aspettando notify...");
+                while(!createdgameloop){;
                 }
                 System.out.println("sto per settare a false");
                 SceneController.getInstance().setMyTurn(false);
