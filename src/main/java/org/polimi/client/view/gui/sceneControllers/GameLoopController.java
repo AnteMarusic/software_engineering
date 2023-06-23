@@ -167,9 +167,11 @@ public class GameLoopController {
                     }
                 }
                 else{
-                    ImageView imageViewtoremove = retrieveImageView(gridPane,i ,j);
-                    imageViewtoremove.setDisable(true);
-                    imageViewtoremove.setVisible(false);
+                    Node imageViewtoremove = retrieveImageView(gridPane,i ,j);
+                    if(imageViewtoremove!=null) {
+                        imageViewtoremove.setDisable(true);
+                        imageViewtoremove.setVisible(false);
+                    }
                 }
 
             }
@@ -204,8 +206,8 @@ public class GameLoopController {
         pane.getChildren().add(imageView);
         gridpane.add(pane, x, y);
     }
-    private ImageView retrieveImageView(GridPane gridPane, int j, int i){
-         return  (ImageView) gridPane.getChildren().stream()
+    private Node retrieveImageView(GridPane gridPane, int j, int i){
+         return  gridPane.getChildren().stream()
                 .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
                 .findFirst()
                 .orElse(null);
@@ -279,7 +281,6 @@ public class GameLoopController {
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(0);
             SceneController.getInstance().setChosenCards(chosenCoordinates);
-            chosenCoordinates.clear();
         }
     }
 
