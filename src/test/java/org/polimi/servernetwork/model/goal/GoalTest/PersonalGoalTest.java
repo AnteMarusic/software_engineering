@@ -36,4 +36,47 @@ public class PersonalGoalTest {
         assertArrayEquals (resultCoord, goal.getCoordinates());
         assertArrayEquals(resultColor, goal.getColors());
     }
+
+    @Test
+    public void getScore1Goal5Test() {
+        Card[][] b = new Card[6][5];
+        b[5][0] = new Card(Card.Color.PINK, Card.State.IN_BOOKSHELF);
+        printGrid(b);
+        assertEquals(1,goal.getScore(b));
+    }
+    @Test
+    public void getScore2Goal5Test() {
+        Card[][] b = new Card[6][5];
+        b[5][0] = new Card(Card.Color.PINK, Card.State.IN_BOOKSHELF);
+        b[5][1] = new Card(Card.Color.PINK, Card.State.IN_BOOKSHELF);
+        b[4][1] = new Card(Card.Color.ORANGE, Card.State.IN_BOOKSHELF);
+        printGrid(b);
+        assertEquals(2,goal.getScore(b));
+    }
+
+    @Test
+    public void getScore4Goal5Test() {
+        Card[][] b = new Card[6][5];
+        b[5][0] = new Card(Card.Color.PINK, Card.State.IN_BOOKSHELF);
+        b[5][1] = new Card(Card.Color.PINK, Card.State.IN_BOOKSHELF);
+        b[4][1] = new Card(Card.Color.ORANGE, Card.State.IN_BOOKSHELF);
+        b[4][1] = new Card(Card.Color.ORANGE, Card.State.IN_BOOKSHELF);
+        b[4][1] = new Card(Card.Color.ORANGE, Card.State.IN_BOOKSHELF);
+        printGrid(b);
+        assertEquals(4,goal.getScore(b));
+    }
+
+    private void printGrid (Card[][] grid) {
+        for (int i = 0; i < 6; i ++) {
+            for (int j = 0; j < 5; j ++) {
+                if (grid[i][j] == null) {
+                    System.out.print("N");
+                }
+                else {
+                    System.out.print(grid[i][j].convertColorToChar());
+                }
+            }
+            System.out.println(" ");
+        }
+    }
 }
