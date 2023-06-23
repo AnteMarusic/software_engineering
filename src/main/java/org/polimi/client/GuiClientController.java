@@ -2,6 +2,8 @@ package org.polimi.client;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.polimi.client.view.gui.sceneControllers.LobbySceneController;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
@@ -115,6 +117,7 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case START_GAME_MESSAGE -> {
                 ///cambiare scena in qualche modo
+                SceneController.getInstance().switchScene("game_loop");
                 return null;
             }
 

@@ -95,20 +95,24 @@ public class SceneController {
         return this.players.indexOf(myUsername);
     }
     public void switchScene(ActionEvent event, String sceneName) throws IOException {
-        String ref ="/scenesfxml/"+ sceneName +".fxml";
+        String ref = "/scenesfxml/" + sceneName + ".fxml";
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
         this.root = loader.load();
-        if(sceneName.equals("game_loop")){
+
+        if (sceneName.equals("game_loop")) {
             this.gameLoopController = loader.getController();
             GuiClientController.getNotified("createdgameloop");
         }
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        if(sceneName.equals("login_scene")){
-            scene = new Scene(root,693, 200);
+
+        stage = (Stage) ((Node) (event != null ? event.getSource() : null)).getScene().getWindow();
+
+        if (sceneName.equals("login_scene")) {
+            scene = new Scene(root, 693, 200);
             stage.setResizable(false);
-        }
-        else
+        } else {
             scene = new Scene(root);
+        }
+
         stage.setScene(scene);
         stage.show();
     }
