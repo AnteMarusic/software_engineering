@@ -311,8 +311,6 @@ public class GuiClientController implements ClientControllerInterface{
             j ++;
         }
     }
-
-    //la size della lista è sbagliata ( se sono due carte, è 4, se sono 3, è 5)
     public void insertInOtherPlayerBookshelf (int col){
         System.out.println("la size delle chosen cards dell'altro client è: "+SceneController.getInstance().getOtherPlayerChosenCards().size());
         SceneController.getInstance().getBookshelves().get(SceneController.getInstance().getCurrentPlayer()).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
