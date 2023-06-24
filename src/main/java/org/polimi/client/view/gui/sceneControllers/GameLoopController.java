@@ -1,5 +1,6 @@
 package org.polimi.client.view.gui.sceneControllers;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -101,9 +102,9 @@ public class GameLoopController {
                                 switch(choosenCardsDim){
                                     case 0 ->{
                                         loadTileImage(card);
-                                        ImageView imageViewcurr = new ImageView();
-                                        setDragHandlers(imageViewcurr);
-                                        insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim , 0);
+                                        //ImageView imageViewcurr = new ImageView();
+                                        setDragHandlers(imageView);
+                                        insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim , 0);
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         System.out.println("fatto chosencoordinates .add, prima di dim++");
                                         choosenCardsDim++;
@@ -111,9 +112,9 @@ public class GameLoopController {
                                     case 1 ->  {
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
                                             loadTileImage(card);
-                                            ImageView imageViewcurr = new ImageView();
-                                            setDragHandlers(imageViewcurr);
-                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                            ///ImageView imageViewcurr = new ImageView();
+                                            setDragHandlers(imageView);
+                                            insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
                                         }else{
@@ -128,9 +129,9 @@ public class GameLoopController {
                                     case 2 ->{
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                             loadTileImage(card);
-                                            ImageView imageViewcurr = new ImageView();
-                                            setDragHandlers(imageViewcurr);
-                                            insertInGridPane(imageViewcurr, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                            //ImageView imageViewcurr = new ImageView();
+                                            setDragHandlers(imageView);
+                                            insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
                                         }else{
@@ -167,10 +168,20 @@ public class GameLoopController {
                     }
                 }
                 else{
-                    Node imageViewtoremove = retrieveImageView(gridPane,i ,j);
-                    if(imageViewtoremove!=null) {
-                        imageViewtoremove.setDisable(true);
-                        imageViewtoremove.setVisible(false);
+                    Pane panewithimageView = retrievePane(gridPane,j ,i);
+                    if(panewithimageView!=null){
+                        System.out.println(panewithimageView.getChildren().size()+ " è la size");
+                        Node imageViewtoremove = panewithimageView.getChildren().get(0);
+                        if(imageViewtoremove!=null) {
+                            if(imageViewtoremove instanceof ImageView){
+                                System.out.println("si è una imageView");
+                            }
+                            //imageViewtoremove.setDisable(true);
+                            System.out.println("entrato nel if to imageview to remove");
+                            imageViewtoremove.setDisable(true);
+                            imageViewtoremove.setVisible(false);
+                            panewithimageView.getChildren().remove(imageViewtoremove);
+                        }
                     }
                 }
 
@@ -198,16 +209,20 @@ public class GameLoopController {
         initializeScene();
     }
 
-    private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridpane, int x, int y){
+    private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){
         imageView.setImage(image);
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
-        gridpane.add(pane, x, y);
+        /*if(gridp.getChildren()
+                .stream()
+                .noneMatch(child -> GridPane.getRowIndex(child) == y && GridPane.getColumnIndex(child) == x))*/
+        gridp.add(pane, x, y);
     }
-    private Node retrieveImageView(GridPane gridPane, int j, int i){
-         return  gridPane.getChildren().stream()
+
+    private Pane retrievePane(GridPane gridPane, int j, int i){
+         return (Pane) gridPane.getChildren().stream()
                 .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
                 .findFirst()
                 .orElse(null);
