@@ -290,7 +290,10 @@ public class GameLoopController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            alert.setContentText("There's no more space in this column");
+            if(choosenCardsDim==0)
+                alert.setContentText("Choose at least one card");
+            else
+                alert.setContentText("There's no more space in this column");
             // Display the Alert
             alert.showAndWait();
         }
