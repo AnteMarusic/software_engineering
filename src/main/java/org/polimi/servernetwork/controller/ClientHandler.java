@@ -78,7 +78,7 @@ public abstract class ClientHandler{
             }
             case CHOSEN_CARDS_REPLY -> {
                 ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
-                gameController.removeCards(chosenCards.getCoordinates());
+                gameController.removeCards(chosenCards.getCoordinates(), chosenCards.getCards());
                 sendMessage(new Message(this.username, MessageType.CHOOSE_COLUMN_REQUEST));
             }
             case CHOSEN_COLUMN_REPLY -> {

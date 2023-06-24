@@ -96,14 +96,14 @@ public class GameController {
      *
      * @param coordinates coordinates to remove (sent by the client)
      */
-    public void removeCards(List<Coordinates> coordinates) {
+    public void removeCards(List<Coordinates> coordinates, List<Card> cards) {
 
         boolean empty = game.remove(coordinates);
         //save status
         for (ClientHandler c : players) {
             //ho rimosso dall'if la condizione per la quale il messaggio non lo inviava a quello che ha effettivamente rimosso le carte
             if (c != null) {
-                c.sendMessage(new CardToRemoveMessage("server", coordinates));
+                c.sendMessage(new CardToRemoveMessage("server", coordinates, cards));
             }
         }
         if(empty) {

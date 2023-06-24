@@ -37,7 +37,9 @@ public class SceneController {
     private int me; //my player index
     private int currentPlayer;
     private int lastPlayerInserted;
-    private List<Coordinates> chosenCards;
+    private List<Card> chosenCards;
+
+    private List<Coordinates> chosenCardsCoords;
     private List<Card> otherPlayerChosenCards;
     private List<Coordinates> orderedChosenCards;
 
@@ -172,22 +174,41 @@ public class SceneController {
         this.me = this.players.indexOf(myUsername);
     }
 
-    public List<Coordinates> getChosenCards() {
+    public List<Card> getChosenCards() {
         return chosenCards;
+    }
+
+    public List<Coordinates> getChosenCardsCoords() {
+        return chosenCardsCoords;
+    }
+
+    public void setChosenCardsCoords(List<Coordinates> chosenCardsCoords) {
+        this.chosenCardsCoords = chosenCardsCoords;
     }
 
     public void setBookshelves(List<ClientBookshelf> bookshelves) {
         this.bookshelves = bookshelves;
     }
 
-    public void setChosenCards(List<Coordinates> chosenCards) {
+    public void setChosenCards(List<Card> chosenCards) {
         this.chosenCards = chosenCards;
     }
-
+    //setta correttamente
     public void setOtherPlayerChosenCards(List<Card> otherPlayerChosenCards) {
-        this.otherPlayerChosenCards = otherPlayerChosenCards;
+        if(otherPlayerChosenCards.size()<1 || otherPlayerChosenCards.size()>3){
+            throw new RuntimeException("something wrong with the size");
+        }
+        else{
+            this.otherPlayerChosenCards = otherPlayerChosenCards;
+        }
     }
-
+    public List<Card> getOtherPlayerChosenCards() {
+        System.out.println("chiamato getotherplayerchosencards, ");
+        for(Card card : otherPlayerChosenCards){
+            System.out.println("eccola dell'altro client : "+ card);
+        }
+        return otherPlayerChosenCards;
+    }
     public void setOrderedChosenCards(List<Coordinates> orderedChosenCards) {
         this.orderedChosenCards = orderedChosenCards;
     }
@@ -251,10 +272,6 @@ public class SceneController {
 
     public List<ClientBookshelf> getBookshelves(){
         return this.bookshelves;
-    }
-
-    public List<Card> getOtherPlayerChosenCards() {
-        return otherPlayerChosenCards;
     }
 
     public void setCurrentPlayer(String currentPlayer) {

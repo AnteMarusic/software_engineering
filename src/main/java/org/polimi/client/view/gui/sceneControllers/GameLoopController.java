@@ -95,6 +95,7 @@ public class GameLoopController {
                     int row = i;
                     int col = j;
                     if(yourTurn){
+                        int maxInsertable = bookshelves.get(myIndex).getMaxInsertable();
                         this.chosenCoordinates.clear();
                         imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
@@ -110,23 +111,43 @@ public class GameLoopController {
                                         choosenCardsDim++;
                                     }
                                     case 1 ->  {
-                                        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
-                                            loadTileImage(card);
-                                            ///ImageView imageViewcurr = new ImageView();
-                                            setDragHandlers(imageView);
-                                            insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
-                                            chosenCoordinates.add(new Coordinates(row,col));
-                                            choosenCardsDim++;
-                                        }else{
+                                        if(maxInsertable<2){
                                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                             alert.setTitle("Information");
                                             alert.setHeaderText(null);
-                                            alert.setContentText("Cards are not aligned");
+                                            alert.setContentText("You can't choose that many cards, as there's not enough space in your bookshelf");
                                             // Display the Alert
                                             alert.showAndWait();
                                         }
+                                        else {
+                                            if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
+                                                loadTileImage(card);
+                                                ///ImageView imageViewcurr = new ImageView();
+                                                setDragHandlers(imageView);
+                                                insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                                chosenCoordinates.add(new Coordinates(row,col));
+                                                choosenCardsDim++;
+                                            }
+                                            else{
+                                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                                alert.setTitle("Information");
+                                                alert.setHeaderText(null);
+                                                alert.setContentText("Cards are not aligned");
+                                                // Display the Alert
+                                                alert.showAndWait();
+                                            }
+                                        }
                                     }
                                     case 2 ->{
+                                        if(maxInsertable<3){
+                                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                            alert.setTitle("Information");
+                                            alert.setHeaderText(null);
+                                            alert.setContentText("You can't choose that many cards, as there's not enough space in your bookshelf");
+                                            // Display the Alert
+                                            alert.showAndWait();
+                                        }
+                                        else {
                                         if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                             loadTileImage(card);
                                             //ImageView imageViewcurr = new ImageView();
@@ -141,7 +162,7 @@ public class GameLoopController {
                                             alert.setContentText("Cards are not aligned");
                                             // Display the Alert
                                             alert.showAndWait();
-                                        }
+                                        }}
                                     }
                                 }
                             } else {
@@ -232,7 +253,8 @@ public class GameLoopController {
 
 
     public void col0() throws RemoteException {
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(myBookshelf.getInsertable(0) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -241,7 +263,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 0);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -251,7 +273,8 @@ public class GameLoopController {
             }
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(0);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
                 while(panewithimageView!=null){
@@ -263,10 +286,19 @@ public class GameLoopController {
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("There's no more space in this column");
+            // Display the Alert
+            alert.showAndWait();
+        }
     }
 
     public void col1() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(myBookshelf.getInsertable(1) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -275,7 +307,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 1);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -285,7 +317,8 @@ public class GameLoopController {
             }
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(1);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
                 while(panewithimageView!=null){
@@ -297,10 +330,22 @@ public class GameLoopController {
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            if(choosenCardsDim==0)
+                alert.setContentText("Choose at least one card");
+            else
+                alert.setContentText("There's no more space in this column");
+            // Display the Alert
+            alert.showAndWait();
+        }
     }
 
     public void col2() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(myBookshelf.getInsertable(2) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -309,7 +354,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 2);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -319,7 +364,8 @@ public class GameLoopController {
             }
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(2);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
                 while(panewithimageView!=null){
@@ -331,10 +377,22 @@ public class GameLoopController {
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            if(choosenCardsDim==0)
+                alert.setContentText("Choose at least one card");
+            else
+                alert.setContentText("There's no more space in this column");
+            // Display the Alert
+            alert.showAndWait();
+        }
     }
 
     public void col3() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(myBookshelf.getInsertable(3) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -343,7 +401,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 3);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -353,7 +411,8 @@ public class GameLoopController {
             }
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(3);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
                 while(panewithimageView!=null){
@@ -365,10 +424,22 @@ public class GameLoopController {
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            if(choosenCardsDim==0)
+                alert.setContentText("Choose at least one card");
+            else
+                alert.setContentText("There's no more space in this column");
+            // Display the Alert
+            alert.showAndWait();
+        }
     }
 
     public void col4() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(myBookshelf.getInsertable(4) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -377,7 +448,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 4);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -387,7 +458,8 @@ public class GameLoopController {
             }
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(4);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
                 while(panewithimageView!=null){
@@ -398,6 +470,17 @@ public class GameLoopController {
             }
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            if(choosenCardsDim==0)
+                alert.setContentText("Choose at least one card");
+            else
+                alert.setContentText("There's no more space in this column");
+            // Display the Alert
+            alert.showAndWait();
         }
     }
     private void setDragHandlers(ImageView imageView) {

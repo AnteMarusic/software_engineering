@@ -25,7 +25,7 @@ public class ClientBookshelf {
         this.maxInsertable = 3;
         this.index = new int[COL];
         for (int i = 0; i < COL; i ++) {
-            this.index[i] = ROW-1;
+            this.index[i] = ROW;
         }
     }
 
@@ -37,14 +37,12 @@ public class ClientBookshelf {
         for (int i = 0; i < COL; i ++) {
             for (int j = ROW - 1; j > 0; j --) {
                 if (grid[j][i] == null) {
-                    this.index[i] = j;
-                    System.out.print(index[i]);
+                    this.index[i] = ROW;
+                    System.out.println("valore di index in clientbookshelf: "+index[i]+ "in posizione" + i);
                     break;
                 }
             }
         }
-        System.out.println(" ");
-
         updateMaxInsertable();
     }
 
@@ -61,7 +59,7 @@ public class ClientBookshelf {
     }
 
     public int getInsertable (int col) {
-        return this.index[col]+1;
+        return this.index[col];
     }
 
     public int getMaxInsertable () {
@@ -70,7 +68,9 @@ public class ClientBookshelf {
 
     public void insert(List<Card> cards, int col) {
         int j = 0;
-        for (int i = index[col]; i > index[col] - cards.size(); i--) {
+        //index parte da 6
+        System.out.println("sto inserendo questo numero di carte: " + cards.size());
+        for (int i = index[col]-1; i > index[col] - cards.size()-1; i--) {
             this.grid[i][col] = cards.get(j);
             j ++;
         }
@@ -109,7 +109,6 @@ public class ClientBookshelf {
             System.out.println(" ");
         }
     }
-
     public void printMyBookshelf(){
         for (int i = 0; i < ROW; i++) {
             for(int k=0 ; k<COL ; k++) {

@@ -205,6 +205,8 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case CARD_TO_REMOVE -> {
                 CardToRemoveMessage m = (CardToRemoveMessage) message;
+                System.out.println("il server mi dice di togliere "+ m.getCards().size() + " carte");
+                SceneController.getInstance().setOtherPlayerChosenCards(m.getCards());
                 removeOtherPlayerCards(m.getCoordinates());
                 return null;
             }
@@ -245,15 +247,15 @@ public class GuiClientController implements ClientControllerInterface{
                 return null;
             }
 
-
-            /*
-            // nuovo messaggio aggiunto
             case BOARDMESSAGE -> {
                 BoardMessage m = (BoardMessage) message;
                 Map<Coordinates, Card> board = m.getBoard();
-                newBoardRefill(board);
-                cli.printRoutine();
+                ClientBoard clientBoard = new ClientBoard(board, numOfPlayers);
+                SceneController.getInstance().setBoard(clientBoard);
             }
+            /*
+            // nuovo messaggio aggiunto
+
 
 
             case ALREADYTAKENGAMECODEMESSAGE -> {
@@ -285,7 +287,7 @@ public class GuiClientController implements ClientControllerInterface{
     @Override
     public Message chooseCards(){
         System.out.println("sto inviando una lista di coordinate di dimensione "+ SceneController.getInstance().getChosenCards().size());
-        return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCards());
+        return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCardsCoords(), SceneController.getInstance().getChosenCards());
     }
     public void removeOtherPlayerCards(List<Coordinates> toRemove){
         Coordinates temp;
@@ -295,8 +297,8 @@ public class GuiClientController implements ClientControllerInterface{
         int j = 0;
         while (j < toRemove.size()) {
             temp = toRemove.get(j);
-            card = board.removeCardAtCoordinates(temp);
-            SceneController.getInstance().getOtherPlayerChosenCards().add(card);
+            board.removeCardAtCoordinates(temp);
+            //SceneController.getInstance().getOtherPlayerChosenCards().add(card);
             AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
             AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
             AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);
@@ -309,9 +311,12 @@ public class GuiClientController implements ClientControllerInterface{
             j ++;
         }
     }
+
+    //la size della lista è sbagliata ( se sono due carte, è 4, se sono 3, è 5)
     public void insertInOtherPlayerBookshelf (int col){
+        System.out.println("la size delle chosen cards dell'altro client è: "+SceneController.getInstance().getOtherPlayerChosenCards().size());
         SceneController.getInstance().getBookshelves().get(SceneController.getInstance().getCurrentPlayer()).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
-        SceneController.getInstance().getOtherPlayerChosenCards().clear();
+        //SceneController.getInstance().getOtherPlayerChosenCards().clear();
     }
 
     @Override
