@@ -1,10 +1,12 @@
 package org.polimi.client.view.gui.sceneControllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
@@ -78,9 +80,19 @@ public class SceneController {
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
-        if(gameLoopController!=null){
+        Platform.runLater(() -> {
             gameLoopController.refreshScene();
-        }
+        });
+
+
+    }
+
+    public boolean getMyTurn(){
+        return this.myTurn;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     public boolean isMyTurn() {
@@ -134,18 +146,25 @@ public class SceneController {
     }
 
     //lancia null pointer
-    public void switchScene(String sceneName) throws IOException {
-        String ref = "/scenesfxml/" + sceneName + ".fxml";
-        root = FXMLLoader.load(getClass().getResource(ref));
-        stage = (Stage) root.getScene().getWindow();
+
+    public void switchScene3(Stage stage, String sceneName, Parent root) throws IOException {
+        this.root = root;
+
+        Scene newScene = null;
+
         if (sceneName.equals("login_scene")) {
-            scene = new Scene(root, 693, 200);
-            stage.setResizable(false);
-        } else {
-            scene = new Scene(root);
+            newScene = new Scene(root, 693, 200);
+            stage.setResizable(false);}
+        else{
+            newScene = new Scene(root);
         }
-        stage.setScene(scene);
-        stage.show();
+
+        // Switch scenes on the JavaFX Application Thread
+        Scene finalNewScene = newScene;
+        Platform.runLater(() -> {
+            stage.setScene(finalNewScene);
+            stage.show();
+        });
     }
     public void setPlayers(List<String> players) {
         this.players = players;
@@ -244,5 +263,9 @@ public class SceneController {
 
     public int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public void setGameLoopController(GameLoopController gameLoopController) {
+        this.gameLoopController = gameLoopController;
     }
 }

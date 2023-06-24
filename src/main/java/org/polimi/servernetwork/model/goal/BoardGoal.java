@@ -3,6 +3,7 @@ package org.polimi.servernetwork.model.goal;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardGoal implements Goal {
@@ -10,6 +11,11 @@ public class BoardGoal implements Goal {
     private final static int COL = 5;
     private Card[][] grid;
     private List<Coordinates> visited;
+
+    public BoardGoal(){
+        this.grid = new Card[ROW][COL];
+        this. visited = new ArrayList<>();
+    }
 
     /**
      * @requires grid is a copy of the grid to check

@@ -1,9 +1,14 @@
 package org.polimi.client;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import org.polimi.client.view.gui.sceneControllers.GameLoopController;
 import org.polimi.client.view.gui.sceneControllers.LobbySceneController;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
@@ -16,6 +21,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.polimi.GameRules.boardRowColInBound;
 
@@ -36,6 +44,8 @@ public class GuiClientController implements ClientControllerInterface{
     private static boolean chosencards;
     private static boolean createdgameloop;
 
+    private static Lock lock;
+    private static Condition flagCondition;
 
 
     public GuiClientController(Client client, boolean rmi) {
@@ -46,8 +56,29 @@ public class GuiClientController implements ClientControllerInterface{
         this.startgame=false;
         this.chosencards = false;
         this.createdgameloop = false;
+        this.lock = new ReentrantLock();
+        this.flagCondition = lock.newCondition();
     }
 
+    public void waitForFlag() throws InterruptedException {
+        lock.lock();
+        try {
+            while (!this.chosencards) {
+                flagCondition.await(); // Wait until the flag is set
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void reset() {
+        lock.lock();
+        try {
+            chosencards = false;
+        } finally {
+            lock.unlock();
+        }
+    }
 
     //viene chiamato ogni volta che il controller di una scena vuole passare parametri a questa classe
     public static boolean getNotified(String notificationType) throws RemoteException {
@@ -91,7 +122,15 @@ public class GuiClientController implements ClientControllerInterface{
                         return false;
                     return true;
                 }
-                case "chosencards"-> chosencards=true;
+                case "chosencards"-> {
+                    lock.lock();
+                    try {
+                        chosencards = true;
+                        flagCondition.signal(); // Signal the waiting thread
+                    } finally {
+                        lock.unlock();
+                    }
+                }
                 case "createdgameloop" -> {createdgameloop=true;
                 System.out.println("settato a true createdgameloop da guiclientcontroleer");}
                 default ->{
@@ -117,7 +156,6 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case START_GAME_MESSAGE -> {
                 ///cambiare scena in qualche modo
-                SceneController.getInstance().switchScene("game_loop");
                 return null;
             }
 
@@ -125,6 +163,7 @@ public class GuiClientController implements ClientControllerInterface{
             //if the server recognises that this client is reconnecting, so it has to send the whole model status,
             //otherwise, it is sent at the beginning of the match
             case MODEL_STATUS_ALL -> {
+
                 //in case of status all message the client doesn't have to send any message
                 ModelStatusAllMessage m = (ModelStatusAllMessage) message;
                 Map<Coordinates, Card> board = m.getBoard();
@@ -135,8 +174,33 @@ public class GuiClientController implements ClientControllerInterface{
                 Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
+                int currentPlayer = m.getCurrentPlayer();
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
+                String ref = "/scenesfxml/game_loop.fxml";
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+                Parent root = loader.load();
+                if(loader.getController()==null){
+                    System.out.println("il controller é null");
+                }else{
+                    System.out.println("il controller non é null");
+                }
+                GameLoopController gameLoopController = loader.getController();
+                gameLoopController.gameLoopInit();
+                SceneController.getInstance().setGameLoopController(gameLoopController);
+                if(usernames.get(currentPlayer).equals(username)){
+                    SceneController.getInstance().setMyTurn(true);
+                }else{
+                    SceneController.getInstance().setMyTurn(false);
+                }
                 startgame=true;
+                Stage stage = SceneController.getInstance().getStage();
+                Platform.runLater(() -> {
+                    try {
+                        SceneController.getInstance().switchScene3(stage, "game_loop",root);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 return null;
             }
             case CARD_TO_REMOVE -> {
@@ -152,30 +216,27 @@ public class GuiClientController implements ClientControllerInterface{
 
             //first message that is sent when is your turn, best wway should be that upon receiving this message the scene changes
             case CHOOSE_CARDS_REQUEST -> {
-                System.out.println("sto prima del while notify cards");
-                while(!createdgameloop){
-                }
-                System.out.println("sto per settare a true  a true");
+                System.out.println("sto per settare a true");
                 SceneController.getInstance().setMyTurn(true);
                 System.out.println("ho settato a true");
-                while(!chosencards){
-
+                try {
+                    this.waitForFlag();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
-                chosencards=false;
+                System.out.println("dopo try, prima di reset, finito wait del chosencards");
+                this.reset();
                 return chooseCards();
             }
 
             //message that should be received subsequently to the choice and the sorting of the cards.
             case CHOOSE_COLUMN_REQUEST -> {
+                SceneController.getInstance().setChosenCards(null);
                 return chooseColumn();
             }
 
             //message received when is not your turn and the server notifies you of the next client playing
             case NOTIFY_NEXT_PLAYER -> {
-                System.out.println("sto prima del while notify");
-                while(!createdgameloop){
-                    System.out.println("aspettando notify...");
-                }
                 System.out.println("sto per settare a false");
                 SceneController.getInstance().setMyTurn(false);
                 System.out.println("ho settato a false");
@@ -183,6 +244,7 @@ public class GuiClientController implements ClientControllerInterface{
                 SceneController.getInstance().setCurrentPlayer(m.getNextPlayer());
                 return null;
             }
+
 
             /*
             // nuovo messaggio aggiunto
@@ -222,6 +284,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public Message chooseCards(){
+        System.out.println("sto inviando una lista di coordinate di dimensione "+ SceneController.getInstance().getChosenCards().size());
         return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCards());
     }
     public void removeOtherPlayerCards(List<Coordinates> toRemove){

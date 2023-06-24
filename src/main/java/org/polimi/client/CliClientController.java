@@ -59,9 +59,6 @@ public class CliClientController implements ClientControllerInterface {
                 System.out.println("waiting in lobby...");
                 return null;
             }
-            case START_GAME_MESSAGE -> {
-                System.out.println("game started");
-            }
 
             //this message is sent
             //if the server recognises that this client is reconnecting, so it has to send the whole model status,
