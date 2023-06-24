@@ -95,7 +95,7 @@ public class GameLoopController {
                     int row = i;
                     int col = j;
                     if(yourTurn){
-                        System.out.println("é il mio turno");
+                        this.chosenCoordinates.clear();
                         imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
                             if(card.getState() == Card.State.PICKABLE) {
@@ -163,14 +163,15 @@ public class GameLoopController {
                     });
                     }
                     else{
-                        System.out.println("non é il mio turnno");
                         imageView.setOnMouseClicked(null);
                     }
                 }
                 else{
-                    Pane panewithimageView = retrievePane(gridPane,j ,i);
-                    if(panewithimageView!=null){
-                        System.out.println(panewithimageView.getChildren().size()+ " è la size");
+                    Pane panewithimageView = retrievePane(gridPane,j,i);
+                    while(panewithimageView!=null){
+                        gridPane.getChildren().remove(panewithimageView);
+                        panewithimageView = retrievePane(gridPane,j,i);
+                        /*System.out.println(panewithimageView.getChildren().size()+ " è la size");
                         Node imageViewtoremove = panewithimageView.getChildren().get(0);
                         if(imageViewtoremove!=null) {
                             if(imageViewtoremove instanceof ImageView){
@@ -181,7 +182,7 @@ public class GameLoopController {
                             imageViewtoremove.setDisable(true);
                             imageViewtoremove.setVisible(false);
                             panewithimageView.getChildren().remove(imageViewtoremove);
-                        }
+                        }*/
                     }
                 }
 
@@ -227,52 +228,7 @@ public class GameLoopController {
                 .findFirst()
                 .orElse(null);
     }
-    private void loadTileImage(Card card){
-        switch (card.getColor()) {
-            case CYAN -> {
-                switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
-                }
-            }
-            case WHITE -> {
-                switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
-                }
-            }
-            case PINK -> {
-                switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
-                }
-            }
-            case ORANGE -> {
-                switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
-                }
-            }
-            case BLUE -> {
-                switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
-                }
-            }
-            case GREEN -> {
-                switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1_1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
-                }
-            }
-        }
-    }
+
 
 
     public void col0() throws RemoteException {
@@ -296,23 +252,153 @@ public class GameLoopController {
             GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(0);
             SceneController.getInstance().setChosenCards(chosenCoordinates);
+            for(Coordinates coor: chosenCoordinates){
+                Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
+                while(panewithimageView!=null){
+                    gridPane.getChildren().remove(panewithimageView);
+                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
+
+                }
+            }
+            choosenCardsPane.getChildren().clear();
+            choosenCardsDim=0;
         }
     }
 
-    public void col1(){
+    public void col1() throws RemoteException{
+        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+            List<Card> list = new LinkedList<Card>();
+            for(int i=0 ; i<choosenCardsDim ; i++){
+                list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
+                System.out.println("dentro col0, nel for");
+            }
+            bookshelves.get(myIndex).insert(list, 1);
+            for(int i = 0; i<5; i++){
+                for(int j= 0; j<6; j++){
+                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    if(card!=null) {
+                        loadTileImage(card);
+                        ImageView imageView3 = new ImageView();
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    }
+                }
+            }
+            GuiClientController.getNotified("chosencards");
+            SceneController.getInstance().setChosencol(1);
+            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            for(Coordinates coor: chosenCoordinates){
+                Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
+                while(panewithimageView!=null){
+                    gridPane.getChildren().remove(panewithimageView);
+                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
 
+                }
+            }
+            choosenCardsPane.getChildren().clear();
+            choosenCardsDim=0;
+        }
     }
 
-    public void col2(){
+    public void col2() throws RemoteException{
+        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+            List<Card> list = new LinkedList<Card>();
+            for(int i=0 ; i<choosenCardsDim ; i++){
+                list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
+                System.out.println("dentro col0, nel for");
+            }
+            bookshelves.get(myIndex).insert(list, 2);
+            for(int i = 0; i<5; i++){
+                for(int j= 0; j<6; j++){
+                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    if(card!=null) {
+                        loadTileImage(card);
+                        ImageView imageView3 = new ImageView();
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    }
+                }
+            }
+            GuiClientController.getNotified("chosencards");
+            SceneController.getInstance().setChosencol(2);
+            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            for(Coordinates coor: chosenCoordinates){
+                Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
+                while(panewithimageView!=null){
+                    gridPane.getChildren().remove(panewithimageView);
+                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
 
+                }
+            }
+            choosenCardsPane.getChildren().clear();
+            choosenCardsDim=0;
+        }
     }
 
-    public void col3(){
+    public void col3() throws RemoteException{
+        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+            List<Card> list = new LinkedList<Card>();
+            for(int i=0 ; i<choosenCardsDim ; i++){
+                list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
+                System.out.println("dentro col0, nel for");
+            }
+            bookshelves.get(myIndex).insert(list, 3);
+            for(int i = 0; i<5; i++){
+                for(int j= 0; j<6; j++){
+                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    if(card!=null) {
+                        loadTileImage(card);
+                        ImageView imageView3 = new ImageView();
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    }
+                }
+            }
+            GuiClientController.getNotified("chosencards");
+            SceneController.getInstance().setChosencol(3);
+            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            for(Coordinates coor: chosenCoordinates){
+                Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
+                while(panewithimageView!=null){
+                    gridPane.getChildren().remove(panewithimageView);
+                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
 
+                }
+            }
+            choosenCardsPane.getChildren().clear();
+            choosenCardsDim=0;
+        }
     }
 
-    public void col4(){
+    public void col4() throws RemoteException{
+        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+            List<Card> list = new LinkedList<Card>();
+            for(int i=0 ; i<choosenCardsDim ; i++){
+                list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
+                System.out.println("dentro col0, nel for");
+            }
+            bookshelves.get(myIndex).insert(list, 4);
+            for(int i = 0; i<5; i++){
+                for(int j= 0; j<6; j++){
+                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    if(card!=null) {
+                        loadTileImage(card);
+                        ImageView imageView3 = new ImageView();
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    }
+                }
+            }
+            GuiClientController.getNotified("chosencards");
+            SceneController.getInstance().setChosencol(4);
+            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            for(Coordinates coor: chosenCoordinates){
+                Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
+                while(panewithimageView!=null){
+                    gridPane.getChildren().remove(panewithimageView);
+                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
 
+                }
+            }
+            choosenCardsPane.getChildren().clear();
+            choosenCardsDim=0;
+        }
     }
     private void setDragHandlers(ImageView imageView) {
         final ImageView sourceImageView = imageView;
@@ -371,6 +457,51 @@ public class GameLoopController {
             event.consume();
         });
     }
-
+    private void loadTileImage(Card card){
+        switch (card.getColor()) {
+            case CYAN -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
+                }
+            }
+            case WHITE -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
+                }
+            }
+            case PINK -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
+                }
+            }
+            case ORANGE -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
+                }
+            }
+            case BLUE -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
+                }
+            }
+            case GREEN -> {
+                switch(card.getType()){
+                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1_1.png");
+                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
+                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
+                }
+            }
+        }
+    }
 
 }

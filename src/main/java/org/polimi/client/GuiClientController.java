@@ -224,7 +224,7 @@ public class GuiClientController implements ClientControllerInterface{
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println("dopo try, prima di reset");
+                System.out.println("dopo try, prima di reset, finito wait del chosencards");
                 this.reset();
                 return chooseCards();
             }
@@ -284,6 +284,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public Message chooseCards(){
+        System.out.println("sto inviando una lista di coordinate di dimensione "+ SceneController.getInstance().getChosenCards().size());
         return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCards());
     }
     public void removeOtherPlayerCards(List<Coordinates> toRemove){

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
@@ -145,42 +146,23 @@ public class SceneController {
     }
 
     //lancia null pointer
-    public void switchScene2(Stage stage, String sceneName) throws IOException {
-        String ref = "/scenesfxml/" + sceneName + ".fxml";
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
-        this.root = loader.load();
-
-        Scene newScene;
-
-        if (sceneName.equals("login_scene")) {
-            newScene = new Scene(root, 693, 200);
-            stage.setResizable(false);
-        } else {
-            newScene = new Scene(root);
-        }
-
-        // Switch scenes on the JavaFX Application Thread
-        Platform.runLater(() -> {
-            stage.setScene(newScene);
-            stage.show();
-        });
-    }
 
     public void switchScene3(Stage stage, String sceneName, Parent root) throws IOException {
         this.root = root;
 
-        Scene newScene;
+        Scene newScene = null;
 
         if (sceneName.equals("login_scene")) {
             newScene = new Scene(root, 693, 200);
-            stage.setResizable(false);
-        } else {
+            stage.setResizable(false);}
+        else{
             newScene = new Scene(root);
         }
 
         // Switch scenes on the JavaFX Application Thread
+        Scene finalNewScene = newScene;
         Platform.runLater(() -> {
-            stage.setScene(newScene);
+            stage.setScene(finalNewScene);
             stage.show();
         });
     }

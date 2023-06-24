@@ -101,7 +101,8 @@ public class GameController {
         boolean empty = game.remove(coordinates);
         //save status
         for (ClientHandler c : players) {
-            if (c != null && !c.equals(players.get(currentPlayer))) {
+            //ho rimosso dall'if la condizione per la quale il messaggio non lo inviava a quello che ha effettivamente rimosso le carte
+            if (c != null) {
                 c.sendMessage(new CardToRemoveMessage("server", coordinates));
             }
         }
