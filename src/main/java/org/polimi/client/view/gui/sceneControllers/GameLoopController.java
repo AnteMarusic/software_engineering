@@ -254,7 +254,13 @@ public class GameLoopController {
 
     public void col0() throws RemoteException {
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
-        if(myBookshelf.getInsertable(0) > choosenCardsDim){
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+        }
+        else if(myBookshelf.getInsertable(0) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -290,10 +296,7 @@ public class GameLoopController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            if(choosenCardsDim==0)
-                alert.setContentText("Choose at least one card");
-            else
-                alert.setContentText("There's no more space in this column");
+            alert.setContentText("There's no more space in this column");
             // Display the Alert
             alert.showAndWait();
         }
@@ -301,6 +304,13 @@ public class GameLoopController {
 
     public void col1() throws RemoteException{
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+        }
+        else
         if(myBookshelf.getInsertable(1) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
@@ -337,10 +347,7 @@ public class GameLoopController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            if(choosenCardsDim==0)
-                alert.setContentText("Choose at least one card");
-            else
-                alert.setContentText("There's no more space in this column");
+            alert.setContentText("There's no more space in this column");
             // Display the Alert
             alert.showAndWait();
         }
@@ -348,6 +355,13 @@ public class GameLoopController {
 
     public void col2() throws RemoteException{
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+        }
+        else
         if(myBookshelf.getInsertable(2) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
@@ -384,9 +398,6 @@ public class GameLoopController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            if(choosenCardsDim==0)
-                alert.setContentText("Choose at least one card");
-            else
                 alert.setContentText("There's no more space in this column");
             // Display the Alert
             alert.showAndWait();
@@ -395,6 +406,13 @@ public class GameLoopController {
 
     public void col3() throws RemoteException{
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+        }
+        else
         if(myBookshelf.getInsertable(3) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
@@ -431,9 +449,7 @@ public class GameLoopController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            if(choosenCardsDim==0)
-                alert.setContentText("Choose at least one card");
-            else
+
                 alert.setContentText("There's no more space in this column");
             // Display the Alert
             alert.showAndWait();
@@ -442,6 +458,13 @@ public class GameLoopController {
 
     public void col4() throws RemoteException{
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+        }
+        else
         if(myBookshelf.getInsertable(4) > choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
@@ -478,9 +501,6 @@ public class GameLoopController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            if(choosenCardsDim==0)
-                alert.setContentText("Choose at least one card");
-            else
                 alert.setContentText("There's no more space in this column");
             // Display the Alert
             alert.showAndWait();
