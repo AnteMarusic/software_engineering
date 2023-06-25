@@ -5,9 +5,10 @@ import org.polimi.servernetwork.model.goal.Goal;
 import org.polimi.servernetwork.model.goal.PersonalGoal;
 import org.polimi.servernetwork.model.goal.shared_goal.*;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Game{
+public class Game implements Serializable {
     private boolean endGame = false;
     private final Board board;
     private final Player[] players;

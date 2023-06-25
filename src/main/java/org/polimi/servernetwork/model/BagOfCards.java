@@ -1,8 +1,9 @@
 package org.polimi.servernetwork.model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class BagOfCards {
+public class BagOfCards implements Serializable {
     private ArrayList<Card> bag;
     private Random random;
 

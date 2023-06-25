@@ -13,5 +13,6 @@ TODO
 - quando uno sceglie delle carte, siccome non viene cambiate la board ma solo l'array di carte scelte forse conviene stampare solo quello
 - mettere un thread sempre attivo sul client che se non sono in una fase in cui devo scrivere allora qualsiasi cosa scrivo mi dice
     che non posso scrivere e di aspettare il mio turno (e poi fa flush dello stream di input)
+- i file vengono bufferizzati. c'è un modo per togliere la bufferizzazione e vedere subito i cambiamenti sul file
 
 

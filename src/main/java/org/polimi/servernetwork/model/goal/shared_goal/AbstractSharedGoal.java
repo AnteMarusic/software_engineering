@@ -3,9 +3,10 @@ package org.polimi.servernetwork.model.goal.shared_goal;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.goal.Goal;
 
+import java.io.Serializable;
 import java.util.Stack;
 
-public abstract class AbstractSharedGoal implements Goal {
+public abstract class AbstractSharedGoal implements Goal, Serializable {
     /**
      * const values representing the size of the card[][] Bookshelf
      */

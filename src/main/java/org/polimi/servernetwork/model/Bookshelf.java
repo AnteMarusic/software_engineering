@@ -2,9 +2,10 @@ package org.polimi.servernetwork.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Bookshelf {
+public class Bookshelf implements Serializable {
     private static final int COL = 5;
     private static final int ROW = 6;
     /**

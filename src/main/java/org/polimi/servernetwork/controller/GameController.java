@@ -1,10 +1,15 @@
 package org.polimi.servernetwork.controller;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 import org.polimi.servernetwork.model.Game;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -20,6 +25,8 @@ public class GameController {
     private DecrementerGameController decrementer;
     private UsernameIssuer usernameIssuer;
     private GameCodeIssuer gameCodeIssuer;
+    private File file;
+    private static String path = "/src/main/resources/ser/";
 
 
     public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
@@ -33,7 +40,23 @@ public class GameController {
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
-        //save the goals
+    }
+
+    public void initializeSaveFile() {
+        //save
+        String filePath = new File("").getAbsolutePath();
+        System.out.println("(GameController initializeSaveFile) model status will be saved here: " + filePath.concat(path + gameCode + ".ser"));
+        this.file = new File(filePath.concat(path + gameCode + ".ser"));
+        try {
+            this.file.createNewFile();
+        }catch(IOException e) {
+            System.out.println("(GameController initializeSaveFile) exception in file creation");
+        }
+        System.out.println("(GameController initializeSaveFile) registering gameCode in gameListFile");
+        GameListFileAccessorSingleton fileAccessor = GameListFileAccessorSingleton.getInstance();
+        List <String> usernames = new LinkedList<>();
+        players.forEach((clientHandler) -> usernames.add(clientHandler.getUsername()));
+        fileAccessor.addGameIdWithPlayers(this.gameCode, usernames);
     }
 
     public void setGameCode(int gameCode){
@@ -351,5 +374,29 @@ public class GameController {
     }
     public ArrayList<ClientHandler> returnClientHandlers(){
         return players;
+    }
+
+    public void save () {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file, false))) {
+            oos.writeObject(game);
+            System.out.println("(GameController save) game object serialized and saved");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("(GameController save) exception in file writing");
+        }
+    }
+
+    //debug method
+    public Game readFileAndDeserialize () {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            Game deserializedGame = (Game) ois.readObject();
+            System.out.println("(GameController save) game object deserialized");
+            System.out.println(game);
+            return deserializedGame;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("(GameController save) exception in file reading");
+            return null;
+        }
     }
 }
