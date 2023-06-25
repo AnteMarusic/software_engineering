@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.effect.Effect;
@@ -47,6 +48,25 @@ import java.util.Optional;
 
 public class GameLoopController {
     //gridpane è 450x450, ogni cella è 50x50 pixel
+
+    @FXML
+    private Button column0;
+    @FXML
+    private Button column1;
+    @FXML
+    private Button column2;
+    @FXML
+    private Button column3;
+    @FXML
+    private Button column4;
+
+    @FXML
+    private Button tile0;
+    @FXML
+    private Button tile1;
+    @FXML
+    private Button tile2;
+
     @FXML
     private GridPane gridPane;
 
@@ -91,6 +111,8 @@ public class GameLoopController {
         yourTurn = SceneController.getInstance().getMyTurn();
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
+        resetColumnView();
+        initDeleteTileButtons();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
@@ -107,7 +129,7 @@ public class GameLoopController {
                         if(choosenCardsDim<=2) {
                             if(card.getState() == Card.State.PICKABLE) {
                                 switch(choosenCardsDim){
-                                    case 0 ->{
+                                    case 0 -> {
                                         loadTileImage(card);
                                         //ImageView imageViewcurr = new ImageView();
                                         setDragHandlers(imageView);
@@ -115,6 +137,8 @@ public class GameLoopController {
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         System.out.println("fatto chosencoordinates .add, prima di dim++");
                                         choosenCardsDim++;
+                                        checkColumn();
+                                        tile0.setVisible(true);
                                     }
                                     case 1 ->  {
                                         if(maxInsertable<2){
@@ -133,6 +157,9 @@ public class GameLoopController {
                                                 insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 choosenCardsDim++;
+                                                checkColumn();
+                                                tile0.setVisible(false);
+                                                tile1.setVisible(true);
                                             }
                                             else{
                                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -152,23 +179,26 @@ public class GameLoopController {
                                             alert.setContentText("You can't choose that many cards, as there's not enough space in your bookshelf");
                                             // Display the Alert
                                             alert.showAndWait();
+                                        } else {
+                                            if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
+                                                loadTileImage(card);
+                                                //ImageView imageViewcurr = new ImageView();
+                                                setDragHandlers(imageView);
+                                                insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                                chosenCoordinates.add(new Coordinates(row,col));
+                                                choosenCardsDim++;
+                                                checkColumn();
+                                                tile1.setVisible(false);
+                                                tile2.setVisible(true);
+                                            }else{
+                                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                                alert.setTitle("Information");
+                                                alert.setHeaderText(null);
+                                                alert.setContentText("Cards are not aligned");
+                                                // Display the Alert
+                                                alert.showAndWait();
+                                            }
                                         }
-                                        else {
-                                        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
-                                            loadTileImage(card);
-                                            //ImageView imageViewcurr = new ImageView();
-                                            setDragHandlers(imageView);
-                                            insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
-                                            chosenCoordinates.add(new Coordinates(row,col));
-                                            choosenCardsDim++;
-                                        }else{
-                                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                            alert.setTitle("Information");
-                                            alert.setHeaderText(null);
-                                            alert.setContentText("Cards are not aligned");
-                                            // Display the Alert
-                                            alert.showAndWait();
-                                        }}
                                     }
                                 }
                             } else {
@@ -269,8 +299,9 @@ public class GameLoopController {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Choose at least one card");
+            alert.showAndWait();
         }
-        else if(myBookshelf.getInsertable(0) > choosenCardsDim){
+        else if(myBookshelf.getInsertable(0) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -319,9 +350,9 @@ public class GameLoopController {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Choose at least one card");
+            alert.showAndWait();
         }
-        else
-        if(myBookshelf.getInsertable(1) > choosenCardsDim){
+        else if(myBookshelf.getInsertable(1) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -370,9 +401,9 @@ public class GameLoopController {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Choose at least one card");
+            alert.showAndWait();
         }
-        else
-        if(myBookshelf.getInsertable(2) > choosenCardsDim){
+        else if(myBookshelf.getInsertable(2) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -421,9 +452,9 @@ public class GameLoopController {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Choose at least one card");
+            alert.showAndWait();
         }
-        else
-        if(myBookshelf.getInsertable(3) > choosenCardsDim){
+        else if(myBookshelf.getInsertable(3) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -473,9 +504,9 @@ public class GameLoopController {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Choose at least one card");
+            alert.showAndWait();
         }
-        else
-        if(myBookshelf.getInsertable(4) > choosenCardsDim){
+        else if(myBookshelf.getInsertable(4) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -515,6 +546,39 @@ public class GameLoopController {
             // Display the Alert
             alert.showAndWait();
         }
+    }
+
+    public void deleteTile0(){
+        Pane panewithimageView = retrievePane(choosenCardsPane,0,0);
+        while(panewithimageView!=null) {
+            choosenCardsPane.getChildren().remove(panewithimageView);
+            panewithimageView = retrievePane(choosenCardsPane, 0, 0);
+        }
+        chosenCoordinates.remove(0);
+        choosenCardsDim--;
+        tile0.setVisible(false);
+    }
+    public void deleteTile1(){
+        Pane panewithimageView = retrievePane(choosenCardsPane,1,0);
+        while(panewithimageView!=null) {
+            choosenCardsPane.getChildren().remove(panewithimageView);
+            panewithimageView = retrievePane(choosenCardsPane, 1, 0);
+        }
+        chosenCoordinates.remove(1);
+        choosenCardsDim--;
+        tile1.setVisible(false);
+        tile0.setVisible(true);
+    }
+    public void deleteTile2(){
+        Pane panewithimageView = retrievePane(choosenCardsPane,2,0);
+        while(panewithimageView!=null) {
+            choosenCardsPane.getChildren().remove(panewithimageView);
+            panewithimageView = retrievePane(choosenCardsPane, 2, 0);
+        }
+        chosenCoordinates.remove(2);
+        choosenCardsDim--;
+        tile2.setVisible(false);
+        tile1.setVisible(true);
     }
     private void setDragHandlers(ImageView imageView) {
         final ImageView sourceImageView = imageView;
@@ -618,6 +682,62 @@ public class GameLoopController {
                 }
             }
         }
+    }
+
+    private void checkColumn(){
+        if(bookshelves.get(myIndex).getInsertable(0) < choosenCardsDim){
+            column0.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(1) < choosenCardsDim){
+            column1.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(2) < choosenCardsDim){
+            column2.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(3) < choosenCardsDim){
+            column3.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(4) < choosenCardsDim){
+            column4.setVisible(false);
+        }
+    }
+
+    private void resetColumnView(){
+        if(bookshelves.get(myIndex).getInsertable(0)==0){
+            column0.setVisible(false);
+        }else{
+            column0.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(1)==0){
+            column1.setVisible(false);
+        }else{
+            column1.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(2)==0){
+            column2.setVisible(false);
+        }else{
+            column2.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(3)==0){
+            column3.setVisible(false);
+        }else{
+            column3.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(4)==0){
+            column4.setVisible(false);
+        }else{
+            column4.setVisible(true);
+        }
+    }
+
+    private void initDeleteTileButtons(){
+        tile0.setVisible(false);
+        tile1.setVisible(false);
+        tile2.setVisible(false);
     }
 
 }
