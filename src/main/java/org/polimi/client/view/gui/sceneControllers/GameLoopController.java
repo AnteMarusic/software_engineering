@@ -4,9 +4,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +22,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.StageStyle;
 import org.polimi.GameRules;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
@@ -37,6 +43,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class GameLoopController {
     //gridpane è 450x450, ogni cella è 50x50 pixel
@@ -62,7 +69,6 @@ public class GameLoopController {
     private GridPane bookshelfGridPane;
     private int choosenCardsDim=0;
     private int myIndex;
-
 
     private ClientBoard board;
 
@@ -229,6 +235,10 @@ public class GameLoopController {
     }
     public void refreshScene(){
         initializeScene();
+    }
+
+    public void showBookshelves() throws IOException {
+        SceneController.getInstance().switchScenePopUp();
     }
 
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){

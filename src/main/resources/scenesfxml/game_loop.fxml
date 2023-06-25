@@ -101,6 +101,8 @@
             <Button layoutX="131.0" layoutY="274.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#col2" prefHeight="17.0" prefWidth="26.0" text="Button" />
             <Button layoutX="163.0" layoutY="274.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#col3" prefHeight="17.0" prefWidth="26.0" text="Button" />
             <Button layoutX="197.0" layoutY="274.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#col4" prefHeight="17.0" prefWidth="26.0" text="Button" />
+            <Button layoutX="275.0" layoutY="454.0" mnemonicParsing="false" onAction="#showBookshelves" prefHeight="26.0" prefWidth="55.0" />
+            <Label layoutX="245.0" layoutY="403.0" prefHeight="40.0" prefWidth="116.0" text="Tap to show other players bookshelves" wrapText="true" />
          </children></AnchorPane>
    </children>
 </AnchorPane>

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.polimi.client.ClientBoard;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class SceneController {
     private Stage stage;
@@ -130,6 +132,24 @@ public class SceneController {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchScenePopUp() throws IOException {
+        String sceneName = "bookshelves_view_scene";
+        String ref = "/scenesfxml/" + sceneName + ".fxml";
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+
+        // Create a new scene from the FXML file
+        AnchorPane anchorPane = loader.load();
+        Scene popUpScene= new Scene(anchorPane);
+        Stage popUpStage = new Stage();
+
+        // Show the new scene without closing the old one
+        Platform.runLater(() -> {
+            popUpStage.setScene(popUpScene);
+            popUpStage.showAndWait();
+        });
+    }
+
 
     public void setPersonalGoalIndex(int personalGoalIndex) {
         this.personalGoalIndex = personalGoalIndex;
@@ -284,5 +304,8 @@ public class SceneController {
 
     public void setGameLoopController(GameLoopController gameLoopController) {
         this.gameLoopController = gameLoopController;
+    }
+    public List<String> getPlayers() {
+        return players;
     }
 }
