@@ -178,7 +178,9 @@ public class GuiClientController implements ClientControllerInterface{
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 String ref = "/scenesfxml/game_loop.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+                System.out.println("prima di loader.load");
                 Parent root = loader.load();
+                System.out.println("dopo di loader.load");
                 if(loader.getController()==null){
                     System.out.println("il controller é null");
                 }else{

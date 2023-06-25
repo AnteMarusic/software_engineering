@@ -123,6 +123,7 @@ public class GameLoopController {
                     int row = i;
                     int col = j;
                     if(yourTurn){
+                        System.out.println("my turn è true, col "+ j+ "e row "+i);
                         int maxInsertable = bookshelves.get(myIndex).getMaxInsertable();
                         this.chosenCoordinates.clear();
                         imageView.setOnMouseClicked((MouseEvent event) -> {
@@ -220,6 +221,7 @@ public class GameLoopController {
                     });
                     }
                     else{
+                        System.out.println("my turn è false, col "+ j+ "e row "+i);
                         imageView.setOnMouseClicked(null);
                     }
                 }
