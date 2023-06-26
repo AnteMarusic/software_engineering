@@ -12,6 +12,16 @@ public class GameCodeIssuer {
         this.freedIdCodes = new LinkedList<>();
         this.currentHighestCode = 0;
     }
+    public void createRow (int gameCode) {
+        associations.put(gameCode, null);
+    }
+    public void setGameController (int gameCode, GameController gameController) {
+        associations.remove(gameCode);
+        associations.put(gameCode, gameController);
+    }
+    public void createRow (int gameCode, GameController gameController) {
+        associations.put(gameCode, gameController);
+    }
 
     public synchronized boolean containsIdCode (int idCode) {return associations.containsKey(idCode);}
     public synchronized GameController getGameController(int idCode) throws NoSuchElementException {

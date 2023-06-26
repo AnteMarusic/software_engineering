@@ -26,11 +26,12 @@ public class GameListFileAccessorSingleton {
     private GameListFileAccessorSingleton() {
         instance = this;
         String filePath = new File("").getAbsolutePath();
-        this.file = new File("(GameListFileAccessorSingleton) " + filePath.concat("/src/main/resources/json/gameList.json"));
-        System.out.println(filePath.concat("/src/main/resources/json/gameList.json"));
+        this.file = new File(filePath.concat("/src/main/resources/json/gameList.json"));
+        System.out.println("(GameListFileAccessorSingleton) " + filePath.concat("/src/main/resources/json/gameList.json"));
         if (file.exists()) {
             System.out.println("(GameListFileAccessorSingleton) gameListFile found");
             //il server si era disconnesso e deve ricaricare i salvataggi vecchi (potrebbe pure essere che il file è vuoto e quindi non deve fare niente)
+            //non devo scrivere codice qua
         } else {
             System.out.println("(GameListFileAccessorSingleton) gameListFile not found, creating it");
             try {
@@ -38,6 +39,7 @@ public class GameListFileAccessorSingleton {
                 initializeFile();
             } catch (IOException e) {
                 System.out.println("(GameListFileAccessorSingleton) exception in file creation");
+                e.printStackTrace();
             }
         }
     }
@@ -95,8 +97,8 @@ public class GameListFileAccessorSingleton {
         }
     }
 
-    public synchronized Map<String, List<String>> getGameIdsAndPlayers () {
-        Map map = new HashMap<String, List<String>>();
+    public synchronized Map<Integer, List<String>> getGameIdsAndPlayers () {
+        Map map = new HashMap<Integer, List<String>>();
         JSONArray whole = this.getWhole();
         for (int i = 0; i < whole.size(); i++) {
             JSONObject obj = (JSONObject) whole.get(i);

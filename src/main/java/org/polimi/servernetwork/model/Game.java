@@ -35,6 +35,13 @@ public class Game implements Serializable {
         this.boardGoal = new BoardGoal();
     }
 
+    public int getFirstPlayer() {
+        return firstPlayer;
+    }
+    public int getNumOfPlayers () {
+        return players.length;
+    }
+
     /**
      * for testing purposes
      * @return the array of coordinates
