@@ -255,6 +255,22 @@ public class GuiClientController implements ClientControllerInterface{
                 ClientBoard clientBoard = new ClientBoard(board, numOfPlayers);
                 SceneController.getInstance().setBoard(clientBoard);
             }
+            case RANKING_MESSAGE -> {
+                RankingMessage m = (RankingMessage) message;
+                Map<String,Integer> ranking = m.getRanking();
+                SceneController.getInstance().setRanking(ranking);
+                String ref = "/scenesfxml/final_scene.fxml";
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+                Parent root = loader.load();
+                Stage stage = SceneController.getInstance().getStage();
+                Platform.runLater(() -> {
+                    try {
+                        SceneController.getInstance().switchScene3(stage, "final_scene",root);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
             /*
             // nuovo messaggio aggiunto
 

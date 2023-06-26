@@ -15,22 +15,22 @@
                   <Image url="@../images/17_MyShelfie_BGA/Publisher_material/Title_2000x618px.png" />
                </image>
             </ImageView>
-            <Label fx:id="user0" layoutX="196.0" layoutY="147.0" prefHeight="29.0" prefWidth="209.0">
+            <Label fx:id="user0" layoutX="7.0" layoutY="147.0" prefHeight="29.0" prefWidth="581.0" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="user1" layoutX="196.0" layoutY="194.0" prefHeight="29.0" prefWidth="209.0">
+            <Label fx:id="user1" layoutX="10.0" layoutY="194.0" prefHeight="29.0" prefWidth="581.0" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="user2" layoutX="196.0" layoutY="244.0" prefHeight="29.0" prefWidth="209.0">
+            <Label fx:id="user2" layoutX="7.0" layoutY="244.0" prefHeight="29.0" prefWidth="591.0" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="user3" layoutX="195.0" layoutY="296.0" prefHeight="29.0" prefWidth="209.0">
+            <Label fx:id="user3" layoutX="7.0" layoutY="296.0" prefHeight="29.0" prefWidth="591.0" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
