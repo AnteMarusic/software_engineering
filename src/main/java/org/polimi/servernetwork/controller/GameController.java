@@ -264,9 +264,9 @@ public class GameController {
         // riinserisco il clienthandler nella lista di clienthanler del gameController
         int position = game.getPosition(clientHandler.getUsername());
         System.out.println("(GameController reconnect) " + clientHandler.getUsername() + " was in position " + position);
-        System.out.println("(GameController reconnect) this is the clientHandler list: " + players.toString());
+        System.out.println("(GameController reconnect) this is the clientHandler list before the insert of the new player: " + players.toString());
         players.set(position, clientHandler);
-        System.out.println("(GameController reconnect) questa è la lista di clienthandler: " + players.toString());
+        System.out.println("(GameController reconnect) this is the clientHandler list after the insert of the new player: " + players.toString());
         resetGameEnv(position);
         for(ClientHandler c : players ) {
             if(c !=null && c != clientHandler)
@@ -279,7 +279,10 @@ public class GameController {
         //per la riconnessione in caso di caduta del server ci vuole un if getNumOfConnectedPlayers() == 1
         //in questo caso facciamo partire un count down in modo che se si riconnette solo un tizio il gioco non
         //rimarrà per sempre aperto ma si chiuderà. Magari il countDown deve essere diverso da quello di fine gioco?
-
+        if (getNumOfConnectedPlayers() == 1) {
+            decrementer = new DecrementerGameController(this);
+            new Thread (decrementer).start();
+        }
 
         if(getNumOfConnectedPlayers()==2) {
             // in questo caso azzero il timer di decrementer

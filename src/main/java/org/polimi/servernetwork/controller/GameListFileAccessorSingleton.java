@@ -102,7 +102,8 @@ public class GameListFileAccessorSingleton {
         JSONArray whole = this.getWhole();
         for (int i = 0; i < whole.size(); i++) {
             JSONObject obj = (JSONObject) whole.get(i);
-            int gameCode = (int) obj.get("gameCode");
+            Long temp = (long) obj.get("gameCode");
+            int gameCode = temp.intValue();
             List<String> usernames = new LinkedList<>();
             JSONArray usernamesArray = (JSONArray) obj.get("playersNames");
             for (int j = 0; j < usernamesArray.size(); j ++) {
