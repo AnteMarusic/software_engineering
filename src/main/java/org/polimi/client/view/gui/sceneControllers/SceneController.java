@@ -61,6 +61,7 @@ public class SceneController {
     private boolean myTurn;
 
     private GameLoopController gameLoopController;
+    private BookshelvesViewController bookshelvesViewController;
 
 
 
@@ -86,6 +87,9 @@ public class SceneController {
         this.myTurn = myTurn;
         Platform.runLater(() -> {
             gameLoopController.refreshScene();
+            if(bookshelvesViewController!=null){
+                bookshelvesViewController.refreshScene();
+            }
         });
 
 
@@ -140,6 +144,7 @@ public class SceneController {
 
         // Create a new scene from the FXML file
         AnchorPane anchorPane = loader.load();
+        this.bookshelvesViewController = loader.getController();
         Scene popUpScene= new Scene(anchorPane);
         Stage popUpStage = new Stage();
 
@@ -309,6 +314,12 @@ public class SceneController {
     public void setGameLoopController(GameLoopController gameLoopController) {
         this.gameLoopController = gameLoopController;
     }
+
+    public void setBookshelvesViewController(BookshelvesViewController bookshelvesViewController) {
+        this.bookshelvesViewController = bookshelvesViewController;
+    }
+
+
     public List<String> getPlayers() {
         return players;
     }

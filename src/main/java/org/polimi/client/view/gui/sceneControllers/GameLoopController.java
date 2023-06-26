@@ -99,6 +99,8 @@ public class GameLoopController {
     private List<ClientBookshelf> bookshelves;
     private LinkedList<Coordinates> chosenCoordinates;
 
+    boolean checkLater = false;
+
     private boolean startTurnShown;
     private boolean yourTurn;
     //prima instanziare gameloopcontroller (viene chiamato subito initialize), poi settare a true il myturn, poi refreshare
@@ -131,7 +133,11 @@ public class GameLoopController {
                         imageView = new ImageView();
                         insertInGridPane(imageView, 50, 50, gridPane, j, i);
                     }else{
-                        imageView = (ImageView) paneWithImageView.getChildren().get(0);
+                        if(paneWithImageView.getChildren().size()>0) {
+                            imageView = (ImageView) paneWithImageView.getChildren().get(0);
+                        }else{
+                            imageView = null;
+                        }
                     }
                     int row = i;
                     int col = j;
@@ -161,29 +167,26 @@ public class GameLoopController {
                                     case 1 ->  {
                                         if(maxInsertable<2){
                                             showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
-                                        }
-                                        else {
-                                            if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
-                                                loadTileImage(card);
-                                                ///ImageView imageViewcurr = new ImageView();
-                                                setDragHandlers(imageView);
-                                                insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
-                                                chosenCoordinates.add(new Coordinates(row,col));
-                                                choosenCardsDim++;
-                                                checkColumn();
-                                                tile0.setVisible(false);
-                                                tile1.setVisible(true);
+                                        } else {
+                                            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col)) ) {
+                                                this.checkLater = true;
                                             }
-                                            else{
-                                                showAlert("Cards are not aligned");
+                                            loadTileImage(card);
+                                            ///ImageView imageViewcurr = new ImageView();
+                                            setDragHandlers(imageView);
+                                            insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                            chosenCoordinates.add(new Coordinates(row,col));
+                                            choosenCardsDim++;
+                                            checkColumn();
+                                            tile0.setVisible(false);
+                                            tile1.setVisible(true);
                                             }
                                         }
-                                    }
                                     case 2 ->{
                                         if(maxInsertable<3){
                                            showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {
-                                            if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
+                                            if(     GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                                 loadTileImage(card);
                                                 //ImageView imageViewcurr = new ImageView();
                                                 setDragHandlers(imageView);
@@ -296,6 +299,12 @@ public class GameLoopController {
         alert.showAndWait();
     }
     public void col0() throws RemoteException {
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
@@ -341,6 +350,12 @@ public class GameLoopController {
     }
 
     public void col1() throws RemoteException{
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
@@ -386,6 +401,12 @@ public class GameLoopController {
     }
 
     public void col2() throws RemoteException{
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
@@ -431,6 +452,12 @@ public class GameLoopController {
     }
 
     public void col3() throws RemoteException{
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
@@ -476,6 +503,12 @@ public class GameLoopController {
     }
 
     public void col4() throws RemoteException{
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
@@ -541,6 +574,7 @@ public class GameLoopController {
         tile1.setVisible(false);
         tile0.setVisible(true);
         checkColumn();
+        this.checkLater = false;
     }
     public void deleteTile2(){
         Pane panewithimageView = retrievePane(choosenCardsPane,2,0);
@@ -553,6 +587,11 @@ public class GameLoopController {
         tile2.setVisible(false);
         tile1.setVisible(true);
         checkColumn();
+        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+            this.checkLater = false;
+        }else{
+            this.checkLater = true;
+        }
     }
     private void setDragHandlers(ImageView imageView) {
         final ImageView sourceImageView = imageView;
