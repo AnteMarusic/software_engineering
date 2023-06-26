@@ -118,14 +118,21 @@ public class GameLoopController {
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
                 if(card!=null) {
                     loadTileImage(card);
-                    ImageView imageView = new ImageView();
-                    insertInGridPane(imageView, 50, 50, gridPane, j, i);
+                    ImageView imageView = null;
+                    Pane paneWithImageView = retrievePane(gridPane, j, i);
+                    if(paneWithImageView == null){
+                        imageView = new ImageView();
+                        insertInGridPane(imageView, 50, 50, gridPane, j, i);
+                    }else{
+                        imageView = (ImageView) paneWithImageView.getChildren().get(0);
+                    }
                     int row = i;
                     int col = j;
                     if(yourTurn){
                         System.out.println("my turn è true, col "+ j+ "e row "+i);
                         int maxInsertable = bookshelves.get(myIndex).getMaxInsertable();
                         this.chosenCoordinates.clear();
+                        ImageView finalImageView = imageView;
                         imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
                             if(card.getState() == Card.State.PICKABLE) {
@@ -133,8 +140,8 @@ public class GameLoopController {
                                     case 0 -> {
                                         loadTileImage(card);
                                         //ImageView imageViewcurr = new ImageView();
-                                        setDragHandlers(imageView);
-                                        insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim , 0);
+                                        setDragHandlers(finalImageView);
+                                        insertInGridPane(finalImageView, 50, 50, choosenCardsPane, choosenCardsDim , 0);
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         System.out.println("fatto chosencoordinates .add, prima di dim++");
                                         choosenCardsDim++;
@@ -154,8 +161,8 @@ public class GameLoopController {
                                             if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
                                                 loadTileImage(card);
                                                 ///ImageView imageViewcurr = new ImageView();
-                                                setDragHandlers(imageView);
-                                                insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                                setDragHandlers(finalImageView);
+                                                insertInGridPane(finalImageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 choosenCardsDim++;
                                                 checkColumn();
@@ -184,8 +191,8 @@ public class GameLoopController {
                                             if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                                 loadTileImage(card);
                                                 //ImageView imageViewcurr = new ImageView();
-                                                setDragHandlers(imageView);
-                                                insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                                setDragHandlers(finalImageView);
+                                                insertInGridPane(finalImageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 choosenCardsDim++;
                                                 checkColumn();
@@ -227,9 +234,9 @@ public class GameLoopController {
                 }
                 else{
                     Pane panewithimageView = retrievePane(gridPane,j,i);
-                    while(panewithimageView!=null){
+                    if(panewithimageView!=null){
                         gridPane.getChildren().remove(panewithimageView);
-                        panewithimageView = retrievePane(gridPane,j,i);
+                        //panewithimageView = retrievePane(gridPane,j,i);
                         /*System.out.println(panewithimageView.getChildren().size()+ " è la size");
                         Node imageViewtoremove = panewithimageView.getChildren().get(0);
                         if(imageViewtoremove!=null) {
@@ -285,6 +292,7 @@ public class GameLoopController {
         gridp.add(pane, x, y);
     }
 
+
     private Pane retrievePane(GridPane gridPane, int j, int i){
          return (Pane) gridPane.getChildren().stream()
                 .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
@@ -295,6 +303,7 @@ public class GameLoopController {
 
 
     public void col0() throws RemoteException {
+        switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -326,10 +335,8 @@ public class GameLoopController {
             SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
@@ -346,6 +353,7 @@ public class GameLoopController {
     }
 
     public void col1() throws RemoteException{
+        switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -377,10 +385,8 @@ public class GameLoopController {
             SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
@@ -397,6 +403,7 @@ public class GameLoopController {
     }
 
     public void col2() throws RemoteException{
+        switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -428,10 +435,8 @@ public class GameLoopController {
             SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
@@ -448,6 +453,7 @@ public class GameLoopController {
     }
 
     public void col3() throws RemoteException{
+        switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -479,10 +485,8 @@ public class GameLoopController {
             SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
@@ -500,6 +504,7 @@ public class GameLoopController {
     }
 
     public void col4() throws RemoteException{
+        switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -531,10 +536,8 @@ public class GameLoopController {
             SceneController.getInstance().setChosenCards(list);
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
@@ -685,7 +688,11 @@ public class GameLoopController {
             }
         }
     }
-
+    private void switchOffTiles(){
+        tile0.setVisible(false);
+        tile1.setVisible(false);
+        tile2.setVisible(false);
+    }
     private void checkColumn(){
         if(bookshelves.get(myIndex).getInsertable(0) < choosenCardsDim){
             column0.setVisible(false);
