@@ -4,9 +4,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +24,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.StageStyle;
 import org.polimi.GameRules;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
@@ -37,9 +45,29 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class GameLoopController {
     //gridpane è 450x450, ogni cella è 50x50 pixel
+
+    @FXML
+    private Button column0;
+    @FXML
+    private Button column1;
+    @FXML
+    private Button column2;
+    @FXML
+    private Button column3;
+    @FXML
+    private Button column4;
+
+    @FXML
+    private Button tile0;
+    @FXML
+    private Button tile1;
+    @FXML
+    private Button tile2;
+
     @FXML
     private GridPane gridPane;
 
@@ -56,6 +84,9 @@ public class GameLoopController {
     @FXML
     private GridPane goalsPane;
 
+    @FXML
+    private Label myScore;
+
 
     //usare 25x25 per le tiles nella bookshel
     @FXML
@@ -63,18 +94,22 @@ public class GameLoopController {
     private int choosenCardsDim=0;
     private int myIndex;
 
-
     private ClientBoard board;
 
     private List<ClientBookshelf> bookshelves;
     private LinkedList<Coordinates> chosenCoordinates;
 
+    boolean checkLater = false;
+
+    private boolean startTurnShown;
     private boolean yourTurn;
     //prima instanziare gameloopcontroller (viene chiamato subito initialize), poi settare a true il myturn, poi refreshare
     public void gameLoopInit(){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
         this.myIndex = SceneController.getInstance().getMyIndex();
+        this.yourTurn=false;
+        this.startTurnShown=false;
     }
 
     @FXML
@@ -85,22 +120,40 @@ public class GameLoopController {
         yourTurn = SceneController.getInstance().getMyTurn();
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
+        resetColumnView();
+        initDeleteTileButtons();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
                 if(card!=null) {
                     loadTileImage(card);
-                    ImageView imageView = new ImageView();
-                    insertInGridPane(imageView, 50, 50, gridPane, j, i);
+                    ImageView imageView;
+                    Pane paneWithImageView = retrievePane(gridPane, j, i);
+                    if(paneWithImageView == null){
+                        imageView = new ImageView();
+                        insertInGridPane(imageView, 50, 50, gridPane, j, i);
+                    }else{
+                        if(paneWithImageView.getChildren().size()>0) {
+                            imageView = (ImageView) paneWithImageView.getChildren().get(0);
+                        }else{
+                            imageView = null;
+                        }
+                    }
                     int row = i;
                     int col = j;
                     if(yourTurn){
+                        if(!startTurnShown){
+                            showAlert("IT'S YOUR TURN "+ SceneController.getInstance().getUsername());
+                            startTurnShown=true;
+                        }
+                        System.out.println("my turn è true, col "+ j+ "e row "+i);
+                        int maxInsertable = bookshelves.get(myIndex).getMaxInsertable();
                         this.chosenCoordinates.clear();
                         imageView.setOnMouseClicked((MouseEvent event) -> {
                         if(choosenCardsDim<=2) {
                             if(card.getState() == Card.State.PICKABLE) {
                                 switch(choosenCardsDim){
-                                    case 0 ->{
+                                    case 0 -> {
                                         loadTileImage(card);
                                         //ImageView imageViewcurr = new ImageView();
                                         setDragHandlers(imageView);
@@ -108,39 +161,44 @@ public class GameLoopController {
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         System.out.println("fatto chosencoordinates .add, prima di dim++");
                                         choosenCardsDim++;
+                                        checkColumn();
+                                        tile0.setVisible(true);
                                     }
                                     case 1 ->  {
-                                        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
+                                        if(maxInsertable<2){
+                                            showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
+                                        } else {
+                                            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col)) ) {
+                                                this.checkLater = true;
+                                            }
                                             loadTileImage(card);
                                             ///ImageView imageViewcurr = new ImageView();
                                             setDragHandlers(imageView);
                                             insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
-                                        }else{
-                                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                            alert.setTitle("Information");
-                                            alert.setHeaderText(null);
-                                            alert.setContentText("Cards are not aligned");
-                                            // Display the Alert
-                                            alert.showAndWait();
+                                            checkColumn();
+                                            tile0.setVisible(false);
+                                            tile1.setVisible(true);
+                                            }
                                         }
-                                    }
                                     case 2 ->{
-                                        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
-                                            loadTileImage(card);
-                                            //ImageView imageViewcurr = new ImageView();
-                                            setDragHandlers(imageView);
-                                            insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
-                                            chosenCoordinates.add(new Coordinates(row,col));
-                                            choosenCardsDim++;
-                                        }else{
-                                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                            alert.setTitle("Information");
-                                            alert.setHeaderText(null);
-                                            alert.setContentText("Cards are not aligned");
-                                            // Display the Alert
-                                            alert.showAndWait();
+                                        if(maxInsertable<3){
+                                           showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
+                                        } else {
+                                            if(     GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
+                                                loadTileImage(card);
+                                                //ImageView imageViewcurr = new ImageView();
+                                                setDragHandlers(imageView);
+                                                insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
+                                                chosenCoordinates.add(new Coordinates(row,col));
+                                                choosenCardsDim++;
+                                                checkColumn();
+                                                tile1.setVisible(false);
+                                                tile2.setVisible(true);
+                                            }else{
+                                               showAlert("Cards are not aligned");
+                                            }
                                         }
                                     }
                                 }
@@ -153,24 +211,21 @@ public class GameLoopController {
                                 alert.showAndWait();
                             }
                         }else{
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Information");
-                            alert.setHeaderText(null);
-                            alert.setContentText("You cannot choose more than 3 cards per turn");
-                            // Display the Alert
-                            alert.showAndWait();
+                            showAlert("You cannot choose more than 3 cards per turn");
                         }
                     });
                     }
                     else{
+                        startTurnShown=false;
+                        System.out.println("my turn è false, col "+ j+ "e row "+i);
                         imageView.setOnMouseClicked(null);
                     }
                 }
                 else{
                     Pane panewithimageView = retrievePane(gridPane,j,i);
-                    while(panewithimageView!=null){
+                    if(panewithimageView!=null){
                         gridPane.getChildren().remove(panewithimageView);
-                        panewithimageView = retrievePane(gridPane,j,i);
+                        //panewithimageView = retrievePane(gridPane,j,i);
                         /*System.out.println(panewithimageView.getChildren().size()+ " è la size");
                         Node imageViewtoremove = panewithimageView.getChildren().get(0);
                         if(imageViewtoremove!=null) {
@@ -210,6 +265,10 @@ public class GameLoopController {
         initializeScene();
     }
 
+    public void showBookshelves() throws IOException {
+        SceneController.getInstance().switchScenePopUp();
+    }
+
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){
         imageView.setImage(image);
         imageView.setFitWidth(width);
@@ -222,6 +281,7 @@ public class GameLoopController {
         gridp.add(pane, x, y);
     }
 
+
     private Pane retrievePane(GridPane gridPane, int j, int i){
          return (Pane) gridPane.getChildren().stream()
                 .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
@@ -230,9 +290,31 @@ public class GameLoopController {
     }
 
 
-
+    private void showAlert(String alertinfo){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(alertinfo);
+        // Display the Alert
+        alert.showAndWait();
+    }
     public void col0() throws RemoteException {
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
+        switchOffTiles();
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+            alert.showAndWait();
+        }
+        else if(myBookshelf.getInsertable(0) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -241,7 +323,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 0);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -249,24 +331,41 @@ public class GameLoopController {
                     }
                 }
             }
-            GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(0);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
+            GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+           showAlert("There's no more space in this column");
+        }
     }
 
     public void col1() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
+        switchOffTiles();
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+            alert.showAndWait();
+        }
+        else if(myBookshelf.getInsertable(1) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -275,7 +374,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 1);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -283,24 +382,41 @@ public class GameLoopController {
                     }
                 }
             }
-            GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(1);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
+            GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            showAlert("There's no more space in this column");
+        }
     }
 
     public void col2() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
+        switchOffTiles();
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+            alert.showAndWait();
+        }
+        else if(myBookshelf.getInsertable(2) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -309,7 +425,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 2);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -317,24 +433,41 @@ public class GameLoopController {
                     }
                 }
             }
-            GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(2);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
+            GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            showAlert("There's no more space in this column");
+        }
     }
 
     public void col3() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
+        switchOffTiles();
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+            alert.showAndWait();
+        }
+        else if(myBookshelf.getInsertable(3) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -343,7 +476,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 3);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -351,24 +484,41 @@ public class GameLoopController {
                     }
                 }
             }
-            GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(3);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
+            GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
         }
+        else{
+            showAlert("There's no more space in this column");
+        }
     }
 
     public void col4() throws RemoteException{
-        if(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim){
+        if(this.checkLater && choosenCardsDim==2){
+            if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+                showAlert("Cards are not aligned");
+            }
+            return;
+        }
+        switchOffTiles();
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        if(choosenCardsDim==0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Choose at least one card");
+            alert.showAndWait();
+        }
+        else if(myBookshelf.getInsertable(4) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -377,7 +527,7 @@ public class GameLoopController {
             bookshelves.get(myIndex).insert(list, 4);
             for(int i = 0; i<5; i++){
                 for(int j= 0; j<6; j++){
-                    Card card = bookshelves.get(myIndex).seeCardAtCoordinates(new Coordinates(j,i));
+                    Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
                         loadTileImage(card);
                         ImageView imageView3 = new ImageView();
@@ -385,19 +535,62 @@ public class GameLoopController {
                     }
                 }
             }
-            GuiClientController.getNotified("chosencards");
             SceneController.getInstance().setChosencol(4);
-            SceneController.getInstance().setChosenCards(chosenCoordinates);
+            SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            SceneController.getInstance().setChosenCards(list);
+            GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-                while(panewithimageView!=null){
+                if(panewithimageView!=null){
                     gridPane.getChildren().remove(panewithimageView);
-                    panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
-
                 }
             }
             choosenCardsPane.getChildren().clear();
             choosenCardsDim=0;
+        }
+        else{
+            showAlert("There's no more space in this column");
+        }
+    }
+    public void deleteTile0(){
+        Pane panewithimageView = retrievePane(choosenCardsPane,0,0);
+        if(panewithimageView!=null) {
+            choosenCardsPane.getChildren().remove(panewithimageView);
+        }
+        gridPane.add(panewithimageView, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow());
+        chosenCoordinates.remove(0);
+        choosenCardsDim--;
+        tile0.setVisible(false);
+        checkColumn();
+    }
+    public void deleteTile1(){
+        Pane panewithimageView = retrievePane(choosenCardsPane,1,0);
+        if(panewithimageView!=null) {
+            choosenCardsPane.getChildren().remove(panewithimageView);
+        }
+        gridPane.add(panewithimageView, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow());
+        chosenCoordinates.remove(1);
+        choosenCardsDim--;
+        tile1.setVisible(false);
+        tile0.setVisible(true);
+        checkColumn();
+        this.checkLater = false;
+    }
+    public void deleteTile2(){
+        Pane panewithimageView = retrievePane(choosenCardsPane,2,0);
+        if(panewithimageView!=null) {
+            choosenCardsPane.getChildren().remove(panewithimageView);
+        }
+        gridPane.add(panewithimageView, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow());
+        chosenCoordinates.remove(2);
+        choosenCardsDim--;
+        tile2.setVisible(false);
+        tile1.setVisible(true);
+        checkColumn();
+        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
+            this.checkLater = false;
+        }else{
+            this.checkLater = true;
         }
     }
     private void setDragHandlers(ImageView imageView) {
@@ -502,6 +695,66 @@ public class GameLoopController {
                 }
             }
         }
+    }
+    private void switchOffTiles(){
+        tile0.setVisible(false);
+        tile1.setVisible(false);
+        tile2.setVisible(false);
+    }
+    private void checkColumn(){
+        if(bookshelves.get(myIndex).getInsertable(0) < choosenCardsDim){
+            column0.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(1) < choosenCardsDim){
+            column1.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(2) < choosenCardsDim){
+            column2.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(3) < choosenCardsDim){
+            column3.setVisible(false);
+        }
+        if(bookshelves.get(myIndex).getInsertable(4) < choosenCardsDim){
+            column4.setVisible(false);
+        }
+    }
+
+    private void resetColumnView(){
+        if(bookshelves.get(myIndex).getInsertable(0)==0){
+            column0.setVisible(false);
+        }else{
+            column0.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(1)==0){
+            column1.setVisible(false);
+        }else{
+            column1.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(2)==0){
+            column2.setVisible(false);
+        }else{
+            column2.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(3)==0){
+            column3.setVisible(false);
+        }else{
+            column3.setVisible(true);
+        }
+
+        if(bookshelves.get(myIndex).getInsertable(4)==0){
+            column4.setVisible(false);
+        }else{
+            column4.setVisible(true);
+        }
+    }
+
+    private void initDeleteTileButtons(){
+        tile0.setVisible(false);
+        tile1.setVisible(false);
+        tile2.setVisible(false);
     }
 
 }

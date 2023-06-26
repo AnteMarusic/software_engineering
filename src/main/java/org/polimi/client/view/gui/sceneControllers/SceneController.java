@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.polimi.client.ClientBoard;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class SceneController {
     private Stage stage;
@@ -37,7 +39,9 @@ public class SceneController {
     private int me; //my player index
     private int currentPlayer;
     private int lastPlayerInserted;
-    private List<Coordinates> chosenCards;
+    private List<Card> chosenCards;
+
+    private List<Coordinates> chosenCardsCoords;
     private List<Card> otherPlayerChosenCards;
     private List<Coordinates> orderedChosenCards;
 
@@ -57,6 +61,7 @@ public class SceneController {
     private boolean myTurn;
 
     private GameLoopController gameLoopController;
+    private BookshelvesViewController bookshelvesViewController;
 
 
 
@@ -82,6 +87,9 @@ public class SceneController {
         this.myTurn = myTurn;
         Platform.runLater(() -> {
             gameLoopController.refreshScene();
+            if(bookshelvesViewController!=null){
+                bookshelvesViewController.refreshScene();
+            }
         });
 
 
@@ -129,6 +137,25 @@ public class SceneController {
         stage.show();
     }
 
+    public void switchScenePopUp() throws IOException {
+        String sceneName = "bookshelves_view_scene";
+        String ref = "/scenesfxml/" + sceneName + ".fxml";
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
+
+        // Create a new scene from the FXML file
+        AnchorPane anchorPane = loader.load();
+        this.bookshelvesViewController = loader.getController();
+        Scene popUpScene= new Scene(anchorPane);
+        Stage popUpStage = new Stage();
+
+        // Show the new scene without closing the old one
+        Platform.runLater(() -> {
+            popUpStage.setScene(popUpScene);
+            popUpStage.showAndWait();
+        });
+    }
+
+
     public void setPersonalGoalIndex(int personalGoalIndex) {
         this.personalGoalIndex = personalGoalIndex;
     }
@@ -146,6 +173,10 @@ public class SceneController {
     }
 
     //lancia null pointer
+
+    public String getUsername() {
+        return myUsername;
+    }
 
     public void switchScene3(Stage stage, String sceneName, Parent root) throws IOException {
         this.root = root;
@@ -172,22 +203,41 @@ public class SceneController {
         this.me = this.players.indexOf(myUsername);
     }
 
-    public List<Coordinates> getChosenCards() {
+    public List<Card> getChosenCards() {
         return chosenCards;
+    }
+
+    public List<Coordinates> getChosenCardsCoords() {
+        return chosenCardsCoords;
+    }
+
+    public void setChosenCardsCoords(List<Coordinates> chosenCardsCoords) {
+        this.chosenCardsCoords = chosenCardsCoords;
     }
 
     public void setBookshelves(List<ClientBookshelf> bookshelves) {
         this.bookshelves = bookshelves;
     }
 
-    public void setChosenCards(List<Coordinates> chosenCards) {
+    public void setChosenCards(List<Card> chosenCards) {
         this.chosenCards = chosenCards;
     }
-
+    //setta correttamente
     public void setOtherPlayerChosenCards(List<Card> otherPlayerChosenCards) {
-        this.otherPlayerChosenCards = otherPlayerChosenCards;
+        if(otherPlayerChosenCards.size()<1 || otherPlayerChosenCards.size()>3){
+            throw new RuntimeException("something wrong with the size");
+        }
+        else{
+            this.otherPlayerChosenCards = otherPlayerChosenCards;
+        }
     }
-
+    public List<Card> getOtherPlayerChosenCards() {
+        System.out.println("chiamato getotherplayerchosencards, ");
+        for(Card card : otherPlayerChosenCards){
+            System.out.println("eccola dell'altro client : "+ card);
+        }
+        return otherPlayerChosenCards;
+    }
     public void setOrderedChosenCards(List<Coordinates> orderedChosenCards) {
         this.orderedChosenCards = orderedChosenCards;
     }
@@ -253,10 +303,6 @@ public class SceneController {
         return this.bookshelves;
     }
 
-    public List<Card> getOtherPlayerChosenCards() {
-        return otherPlayerChosenCards;
-    }
-
     public void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = players.indexOf(currentPlayer);
     }
@@ -267,5 +313,14 @@ public class SceneController {
 
     public void setGameLoopController(GameLoopController gameLoopController) {
         this.gameLoopController = gameLoopController;
+    }
+
+    public void setBookshelvesViewController(BookshelvesViewController bookshelvesViewController) {
+        this.bookshelvesViewController = bookshelvesViewController;
+    }
+
+
+    public List<String> getPlayers() {
+        return players;
     }
 }

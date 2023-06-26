@@ -55,6 +55,7 @@ public class Card implements Serializable {
         return "Card{" +
                 "state=" + state +
                 ", color=" + color +
+                ", type=" + type +
                 '}';
     }
     public boolean equals(Object o) {
