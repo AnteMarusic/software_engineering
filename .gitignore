@@ -10,3 +10,6 @@ target/
 
 #StarUML
 *.mdj
+
+# useless files
+**/gameList.json

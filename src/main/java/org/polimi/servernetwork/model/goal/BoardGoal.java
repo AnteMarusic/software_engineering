@@ -3,10 +3,11 @@ package org.polimi.servernetwork.model.goal;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardGoal implements Goal {
+public class BoardGoal implements Goal, Serializable {
     private final static int ROW = 6;
     private final static int COL = 5;
     private Card[][] grid;

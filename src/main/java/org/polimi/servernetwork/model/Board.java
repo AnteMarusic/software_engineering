@@ -2,11 +2,12 @@ package org.polimi.servernetwork.model;
 
 import org.polimi.GameRules;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static org.polimi.GameRules.boardRowColInBound;
 
-public class Board {
+public class Board implements Serializable {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_CYAN = "\u001B[36m";

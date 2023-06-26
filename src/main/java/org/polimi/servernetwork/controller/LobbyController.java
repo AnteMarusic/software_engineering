@@ -112,6 +112,9 @@ public class LobbyController {
                 GameController gameController = new GameController(publicListOf2, usernameIssuer, gameCodeIssuer);
                 int code = gameCodeIssuer.associateCodeTo(gameController);
                 gameController.setGameCode(code);
+                gameController.initializeSaveFile(); //save
+                gameController.save();
+                gameController.readFileAndDeserialize(); //debug
                 publicListOf2.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf2.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 for(ClientHandler clientHandler: publicListOf2){
@@ -125,9 +128,11 @@ public class LobbyController {
             }
             case 3-> {
                 GameController gameController = new GameController(publicListOf3, usernameIssuer, gameCodeIssuer);
-                gameController.initGameEnv();
-                gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
+                gameController.setGameCode(code);
+                gameController.initializeSaveFile(); //save
+                gameController.save();
+                gameController.readFileAndDeserialize(); //debug
                 publicListOf3.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf3.forEach(clientHandler -> clientHandler.setGameController(gameController));
                 for(ClientHandler clientHandler: publicListOf3){
@@ -135,15 +140,21 @@ public class LobbyController {
                         System.out.println("(LobbyController) " + clientHandler.getUsername() + " ha il gameController");
                     }
                 }
+                gameController.initGameEnv();
+                gameController.startGameTurn();
                 publicListOf3.clear();
             }
             case 4-> {
                 GameController gameController = new GameController(publicListOf4, usernameIssuer, gameCodeIssuer);
-                gameController.initGameEnv();
-                gameController.startGameTurn();
                 int code = gameCodeIssuer.associateCodeTo(gameController);
+                gameController.setGameCode(code);
+                gameController.initializeSaveFile(); //save
+                gameController.save();
+                gameController.readFileAndDeserialize(); //debug
                 publicListOf4.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), code)));
                 publicListOf4.forEach(clientHandler -> clientHandler.setGameController(gameController));
+                gameController.initGameEnv();
+                gameController.startGameTurn();
                 publicListOf4.clear();
             }
         }
@@ -216,6 +227,9 @@ public class LobbyController {
         System.out.println("sono dentro alla createPrivateGame");
         GameController gameController = new GameController(list, usernameIssuer, gameCodeIssuer);
         gameController.setGameCode(gameCode);
+        gameController.initializeSaveFile(); //save
+        gameController.save();
+        gameController.readFileAndDeserialize(); //debug
         gameCodeIssuer.associatePrivateCodeTo(gameController, gameCode);
         list.forEach((clientHandler -> this.usernameIssuer.mapUsernameToGameCode(clientHandler.getUsername(), gameCode)));
         list.forEach(clientHandler -> clientHandler.setGameController(gameController));

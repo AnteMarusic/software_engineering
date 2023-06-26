@@ -156,5 +156,8 @@ public class UsernameIssuer {
         object[0]=ConnectionStatus.DISCONNECTED;
         map.put(username, object);
     }
+    public synchronized void createRow (String username) {
+        this.map.put (username, new Object[3]);
+    }
 }
 
