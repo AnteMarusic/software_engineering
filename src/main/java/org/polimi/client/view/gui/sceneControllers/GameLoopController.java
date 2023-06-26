@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -83,6 +84,9 @@ public class GameLoopController {
     @FXML
     private GridPane goalsPane;
 
+    @FXML
+    private Label myScore;
+
 
     //usare 25x25 per le tiles nella bookshel
     @FXML
@@ -94,6 +98,7 @@ public class GameLoopController {
 
     private List<ClientBookshelf> bookshelves;
     private LinkedList<Coordinates> chosenCoordinates;
+
     private boolean startTurnShown;
     private boolean yourTurn;
     //prima instanziare gameloopcontroller (viene chiamato subito initialize), poi settare a true il myturn, poi refreshare
@@ -523,28 +528,31 @@ public class GameLoopController {
         chosenCoordinates.remove(0);
         choosenCardsDim--;
         tile0.setVisible(false);
+        checkColumn();
     }
     public void deleteTile1(){
         Pane panewithimageView = retrievePane(choosenCardsPane,1,0);
         if(panewithimageView!=null) {
             choosenCardsPane.getChildren().remove(panewithimageView);
         }
-        gridPane.add(panewithimageView, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(0).getRow());
+        gridPane.add(panewithimageView, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow());
         chosenCoordinates.remove(1);
         choosenCardsDim--;
         tile1.setVisible(false);
         tile0.setVisible(true);
+        checkColumn();
     }
     public void deleteTile2(){
         Pane panewithimageView = retrievePane(choosenCardsPane,2,0);
         if(panewithimageView!=null) {
             choosenCardsPane.getChildren().remove(panewithimageView);
         }
-        gridPane.add(panewithimageView, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(0).getRow());
+        gridPane.add(panewithimageView, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow());
         chosenCoordinates.remove(2);
         choosenCardsDim--;
         tile2.setVisible(false);
         tile1.setVisible(true);
+        checkColumn();
     }
     private void setDragHandlers(ImageView imageView) {
         final ImageView sourceImageView = imageView;
