@@ -169,6 +169,10 @@ public class SceneController {
 
     //lancia null pointer
 
+    public String getUsername() {
+        return myUsername;
+    }
+
     public void switchScene3(Stage stage, String sceneName, Parent root) throws IOException {
         this.root = root;
 
