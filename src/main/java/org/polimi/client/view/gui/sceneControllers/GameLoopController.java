@@ -1,53 +1,34 @@
 package org.polimi.client.view.gui.sceneControllers;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.StageStyle;
 import org.polimi.GameRules;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
 import org.polimi.client.GuiClientController;
-import org.polimi.messages.Message;
-import org.polimi.servernetwork.controller.GameController;
-import org.polimi.servernetwork.model.Bookshelf;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
-import org.polimi.servernetwork.model.goal.PersonalGoal;
-import org.polimi.servernetwork.model.goal.shared_goal.AbstractSharedGoal;
-import org.polimi.servernetwork.model.goal.shared_goal.SharedGoal1;
 
-import java.awt.*;
-import java.awt.print.Book;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public class GameLoopController {
+
     //gridpane è 450x450, ogni cella è 50x50 pixel
 
     @FXML
@@ -87,6 +68,14 @@ public class GameLoopController {
     @FXML
     private Label myScore;
 
+    @FXML
+    private ImageView imageViewCommon1;
+
+    @FXML
+    private ImageView imageViewCommon2;
+    @FXML
+    private ImageView imageViewPersonal;
+
 
     //usare 25x25 per le tiles nella bookshel
     @FXML
@@ -115,13 +104,21 @@ public class GameLoopController {
     @FXML
     public void initialize(){
         initializeScene();
+        initializeGoals();
     }
     private void initializeScene(){
         yourTurn = SceneController.getInstance().getMyTurn();
+        if(yourTurn){
+            if(!startTurnShown){
+                Platform.runLater(()-> showAlert("IT'S YOUR TURN " + SceneController.getInstance().getUsername()));
+                startTurnShown=true;
+            }
+        }
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
         resetColumnView();
         initDeleteTileButtons();
+        choosenCardsDim = 0;
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
@@ -133,20 +130,22 @@ public class GameLoopController {
                         imageView = new ImageView();
                         insertInGridPane(imageView, 50, 50, gridPane, j, i);
                     }else{
-                        if(paneWithImageView.getChildren().size()>0) {
-                            imageView = (ImageView) paneWithImageView.getChildren().get(0);
-                        }else{
-                            imageView = null;
+                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + "in pos "+ "col ="+j+" row="+i);
+                        if(paneWithImageView.getChildren().size()==0){
+                            System.out.println("000000000" +
+                                    "" +
+                                    "" +
+                                    "" +
+                                    "" +
+                                    "");
                         }
+                        imageView = (ImageView) paneWithImageView.getChildren().get(0);
                     }
                     int row = i;
                     int col = j;
                     if(yourTurn){
-                        if(!startTurnShown){
-                            showAlert("IT'S YOUR TURN "+ SceneController.getInstance().getUsername());
-                            startTurnShown=true;
-                        }
-                        System.out.println("my turn è true, col "+ j+ "e row "+i);
+
+                        //System.out.println("my turn è true, col "+ j+ "e row "+i);
                         int maxInsertable = bookshelves.get(myIndex).getMaxInsertable();
                         this.chosenCoordinates.clear();
                         imageView.setOnMouseClicked((MouseEvent event) -> {
@@ -156,10 +155,8 @@ public class GameLoopController {
                                     case 0 -> {
                                         loadTileImage(card);
                                         //ImageView imageViewcurr = new ImageView();
-                                        setDragHandlers(imageView);
                                         insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim , 0);
                                         chosenCoordinates.add(new Coordinates(row,col));
-                                        System.out.println("fatto chosencoordinates .add, prima di dim++");
                                         choosenCardsDim++;
                                         checkColumn();
                                         tile0.setVisible(true);
@@ -173,7 +170,6 @@ public class GameLoopController {
                                             }
                                             loadTileImage(card);
                                             ///ImageView imageViewcurr = new ImageView();
-                                            setDragHandlers(imageView);
                                             insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
@@ -186,10 +182,9 @@ public class GameLoopController {
                                         if(maxInsertable<3){
                                            showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {
-                                            if(     GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
+                                            if(     this.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                                 loadTileImage(card);
                                                 //ImageView imageViewcurr = new ImageView();
-                                                setDragHandlers(imageView);
                                                 insertInGridPane(imageView, 50, 50, choosenCardsPane, choosenCardsDim, 0);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 choosenCardsDim++;
@@ -243,28 +238,27 @@ public class GameLoopController {
 
             }
         }
-
-        //inizializzazione dei common goals
-        System.out.println(SceneController.getInstance().getSharedGoal1Index());
-        System.out.println(SceneController.getInstance().getSharedGoal2Index());
-        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal1Index())+".jpg");
-        ImageView imageView = new ImageView();
-        insertInGridPane(imageView, 94, 62, goalsPane, 1, 0);
-        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal2Index())+".jpg");
-        ImageView imageView2 = new ImageView();
-        insertInGridPane(imageView2, 94, 62, goalsPane, 2, 0);
-
-        //inizializzazione del personal goal
-        image = new Image("/images/17_MyShelfie_BGA/personal_goal_cards/Personal_Goals"+(SceneController.getInstance().getPersonalGoalIndex()+1)+".png");
-        ImageView imageView4 = new ImageView();
-        insertInGridPane(imageView4, 62, 94, goalsPane,0, 0);
-
-
     }
     public void refreshScene(){
         initializeScene();
     }
+    private void initializeGoals(){
+        //inizializzazione dei common goals
+        System.out.println(SceneController.getInstance().getSharedGoal1Index());
+        System.out.println(SceneController.getInstance().getSharedGoal2Index());
+        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal1Index())+".jpg");
+        imageViewCommon1 = new ImageView();
+        insertInGridPane(imageViewCommon1, 94, 62, goalsPane, 1, 0);
+        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal2Index())+".jpg");
+        imageViewCommon2 = new ImageView();
+        insertInGridPane(imageViewCommon2, 94, 62, goalsPane, 2, 0);
 
+        //inizializzazione del personal goal
+        image = new Image("/images/17_MyShelfie_BGA/personal_goal_cards/Personal_Goals"+(SceneController.getInstance().getPersonalGoalIndex()+1)+".png");
+        imageViewPersonal = new ImageView();
+        insertInGridPane(imageViewPersonal, 62, 94, goalsPane,0, 0);
+
+    }
     public void showBookshelves() throws IOException {
         SceneController.getInstance().switchScenePopUp();
     }
@@ -273,11 +267,26 @@ public class GameLoopController {
         imageView.setImage(image);
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
+        /*Pane pane = new Pane();
+        pane.setOnMouseEntered(event -> {
+            pane.toFront();
+        });
+
+        pane.setOnMouseExited(event -> {
+            pane.toBack();
+        });*/
         Pane pane = new Pane();
+        Platform.runLater(() -> {
+            pane.setOnMouseEntered(event -> {
+                pane.toFront();
+            });
+
+            pane.setOnMouseExited(event -> {
+                pane.toBack();
+            });
+
+        });
         pane.getChildren().add(imageView);
-        /*if(gridp.getChildren()
-                .stream()
-                .noneMatch(child -> GridPane.getRowIndex(child) == y && GridPane.getColumnIndex(child) == x))*/
         gridp.add(pane, x, y);
     }
 
@@ -288,7 +297,6 @@ public class GameLoopController {
                 .findFirst()
                 .orElse(null);
     }
-
 
     private void showAlert(String alertinfo){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -342,7 +350,6 @@ public class GameLoopController {
                 }
             }
             choosenCardsPane.getChildren().clear();
-            choosenCardsDim=0;
         }
         else{
            showAlert("There's no more space in this column");
@@ -382,6 +389,7 @@ public class GameLoopController {
                     }
                 }
             }
+            this.checkLater = false;
             SceneController.getInstance().setChosencol(1);
             SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
             SceneController.getInstance().setChosenCards(list);
@@ -393,7 +401,6 @@ public class GameLoopController {
                 }
             }
             choosenCardsPane.getChildren().clear();
-            choosenCardsDim=0;
         }
         else{
             showAlert("There's no more space in this column");
@@ -433,6 +440,7 @@ public class GameLoopController {
                     }
                 }
             }
+            this.checkLater = false;
             SceneController.getInstance().setChosencol(2);
             SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
             SceneController.getInstance().setChosenCards(list);
@@ -444,7 +452,6 @@ public class GameLoopController {
                 }
             }
             choosenCardsPane.getChildren().clear();
-            choosenCardsDim=0;
         }
         else{
             showAlert("There's no more space in this column");
@@ -484,6 +491,7 @@ public class GameLoopController {
                     }
                 }
             }
+            this.checkLater = false;
             SceneController.getInstance().setChosencol(3);
             SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
             SceneController.getInstance().setChosenCards(list);
@@ -495,7 +503,6 @@ public class GameLoopController {
                 }
             }
             choosenCardsPane.getChildren().clear();
-            choosenCardsDim=0;
         }
         else{
             showAlert("There's no more space in this column");
@@ -535,6 +542,7 @@ public class GameLoopController {
                     }
                 }
             }
+            this.checkLater = false;
             SceneController.getInstance().setChosencol(4);
             SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
             SceneController.getInstance().setChosenCards(list);
@@ -546,7 +554,6 @@ public class GameLoopController {
                 }
             }
             choosenCardsPane.getChildren().clear();
-            choosenCardsDim=0;
         }
         else{
             showAlert("There's no more space in this column");
@@ -593,7 +600,7 @@ public class GameLoopController {
             this.checkLater = true;
         }
     }
-    private void setDragHandlers(ImageView imageView) {
+    /*private void setDragHandlers(ImageView imageView) {
         final ImageView sourceImageView = imageView;
 
         imageView.setOnDragDetected(event -> {
@@ -625,6 +632,7 @@ public class GameLoopController {
             event.consume();
         });
 
+
         imageView.setOnDragDropped(event -> {
             Dragboard dragboard = event.getDragboard();
             boolean success = false;
@@ -650,6 +658,7 @@ public class GameLoopController {
             event.consume();
         });
     }
+    */
     private void loadTileImage(Card card){
         switch (card.getColor()) {
             case CYAN -> {
@@ -704,18 +713,28 @@ public class GameLoopController {
     private void checkColumn(){
         if(bookshelves.get(myIndex).getInsertable(0) < choosenCardsDim){
             column0.setVisible(false);
+        }else{
+            column0.setVisible(true);
         }
         if(bookshelves.get(myIndex).getInsertable(1) < choosenCardsDim){
             column1.setVisible(false);
+            }else{
+            column1.setVisible(true);
         }
         if(bookshelves.get(myIndex).getInsertable(2) < choosenCardsDim){
             column2.setVisible(false);
+        }else{
+            column2.setVisible(true);
         }
         if(bookshelves.get(myIndex).getInsertable(3) < choosenCardsDim){
             column3.setVisible(false);
+        }else{
+            column3.setVisible(true);
         }
         if(bookshelves.get(myIndex).getInsertable(4) < choosenCardsDim){
             column4.setVisible(false);
+        }else{
+            column4.setVisible(true);
         }
     }
 
@@ -755,6 +774,12 @@ public class GameLoopController {
         tile0.setVisible(false);
         tile1.setVisible(false);
         tile2.setVisible(false);
+    }
+
+    private boolean areCoordinatesAligned(Coordinates c1, Coordinates c2, Coordinates c3){
+        return (GameRules.areCoordinatesAligned(c1,c2,c3) || GameRules.areCoordinatesAligned(c1,c3,c2) ||
+                GameRules.areCoordinatesAligned(c2,c1,c3) || GameRules.areCoordinatesAligned(c2,c3,c1) ||
+                GameRules.areCoordinatesAligned(c3,c1,c2) || GameRules.areCoordinatesAligned(c3,c2,c1));
     }
 
 }

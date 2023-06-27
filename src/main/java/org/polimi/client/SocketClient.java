@@ -1,11 +1,18 @@
 package org.polimi.client;
 
+import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
+import org.polimi.servernetwork.controller.InternalComunication;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SocketClient extends Client{
     private Socket socket;
@@ -13,9 +20,16 @@ public class SocketClient extends Client{
     private ObjectInputStream input;
     private final boolean guiMode;
     private ClientControllerInterface clientController;
+    private static Lock lock;
+    private static Condition flagCondition;
+
+    private boolean waitForusername;
     public SocketClient(int port, boolean guiMode) {
         super(port);
         this.guiMode = guiMode;
+        this.lock = new ReentrantLock();
+        this.flagCondition = lock.newCondition();
+        this.waitForusername = false;
     }
 
     public boolean connect () {
@@ -38,8 +52,38 @@ public class SocketClient extends Client{
             Message message = clientController.chooseUsername();
             this.username = message.getUsername();
             sendMessage(message);
+        }else{
+            createGuiClientController();
+            startListeningToMessages();
+            try {
+                this.waitForFlag();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            sendMessage(new Message(this.username, MessageType.USERNAME));
+            reset();
         }
         return true;
+    }
+
+    public void waitForFlag() throws InterruptedException {
+        lock.lock();
+        try {
+            while (!this.waitForusername) {
+                flagCondition.await(); // Wait until the flag is set
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void reset() {
+        lock.lock();
+        try {
+            waitForusername = false;
+        } finally {
+            lock.unlock();
+        }
     }
     private void createCliClientController() {
         this.clientController = new CliClientController(this);
@@ -124,6 +168,14 @@ public class SocketClient extends Client{
     }
 
 
+    public boolean isWaitForusername() {
+        return waitForusername;
+    }
+
+
+    public void setWaitForusername(boolean waitForusername) {
+        this.waitForusername = waitForusername;
+    }
     /*public static void main(String[] args) {
         int port = 8181;
         SocketClient socket = new SocketClient(port);

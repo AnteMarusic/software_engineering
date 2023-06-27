@@ -18,10 +18,7 @@ import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SceneController {
     private Stage stage;
@@ -63,6 +60,9 @@ public class SceneController {
     private GameLoopController gameLoopController;
     private BookshelvesViewController bookshelvesViewController;
 
+    private Map<String,Integer> ranking;
+
+    private boolean reconnected;
 
 
     public SceneController(){
@@ -74,7 +74,7 @@ public class SceneController {
         chosenCards = new ArrayList<>();
         otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
-
+        reconnected = false;
     }
     public static SceneController getInstance() {
         if (instance == null) {
@@ -322,5 +322,21 @@ public class SceneController {
 
     public List<String> getPlayers() {
         return players;
+    }
+
+    public Map<String, Integer> getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Map<String, Integer> ranking) {
+        this.ranking = ranking;
+    }
+
+    public boolean isReconnected() {
+        return reconnected;
+    }
+
+    public void setReconnected(boolean reconnected) {
+        this.reconnected = reconnected;
     }
 }
