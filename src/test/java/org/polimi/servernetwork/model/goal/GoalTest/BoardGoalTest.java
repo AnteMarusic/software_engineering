@@ -30,6 +30,7 @@ class BoardGoalTest {
         grid[2][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
         grid[3][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
         grid[4][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        //int score = boardGoal.getScore(grid);
         int score = boardGoal.getScore(grid);
         assertEquals(15,score );
     }
