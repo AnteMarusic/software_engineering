@@ -120,6 +120,7 @@ public class SceneController {
         this.root = loader.load();
 
         if (sceneName.equals("game_loop")) {
+            stage.setTitle("My_Shelfie");
             this.gameLoopController = loader.getController();
             GuiClientController.getNotified("createdgameloop");
         }
@@ -189,6 +190,7 @@ public class SceneController {
         else{
             newScene = new Scene(root);
         }
+        stage.setTitle("My Shelfie");
 
         // Switch scenes on the JavaFX Application Thread
         Scene finalNewScene = newScene;
