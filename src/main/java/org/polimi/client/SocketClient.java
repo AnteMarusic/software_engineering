@@ -20,7 +20,7 @@ public class SocketClient extends Client{
     private ObjectInputStream input;
     private final boolean guiMode;
     private ClientControllerInterface clientController;
-    private static Lock lock;
+    public static Lock locksocket;
     public static Condition flagCondition;
 
     private static volatile boolean waitForusername;
@@ -28,8 +28,8 @@ public class SocketClient extends Client{
         super(port);
         this.guiMode = guiMode;
         this.waitForusername = false;
-        this.lock = new ReentrantLock();
-        this.flagCondition = lock.newCondition();
+        this.locksocket = new ReentrantLock();
+        this.flagCondition = locksocket.newCondition();
     }
 
     public boolean connect () {
@@ -77,7 +77,7 @@ public class SocketClient extends Client{
 
     public void waitForFlag() throws InterruptedException {
         System.out.println("prima di lock.lock");
-        lock.lock();
+        locksocket.lock();
         System.out.println("dopo di lock.lock");
         try {
             System.out.println("prima del while in waitforflag");
@@ -86,16 +86,16 @@ public class SocketClient extends Client{
             }
             System.out.println("dopo while");
         } finally {
-            lock.unlock();
+            locksocket.unlock();
         }
     }
 
     public void reset() {
-        lock.lock();
+        locksocket.lock();
         try {
             waitForusername = false;
         } finally {
-            lock.unlock();
+            locksocket.unlock();
         }
     }
     private void createCliClientController() {

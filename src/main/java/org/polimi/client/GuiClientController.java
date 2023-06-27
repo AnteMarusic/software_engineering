@@ -143,11 +143,15 @@ public class GuiClientController implements ClientControllerInterface{
                 case "username" -> {
                     username = (String) messagges.get(0);
                     SceneController.getInstance().setMyUsername(username);
-                    ((SocketClient) client).setUsername(username);
+                    client.setUsername(username);
                     System.out.println("sto per unlockare lato guiclinetcontorller");
-                    //((SocketClient)client).flagCondition.signalAll();
-                    ((SocketClient) client).setWaitForusername(true);
-                    ((SocketClient)client).flagCondition.signalAll();
+                    SocketClient.locksocket.lock();
+                    try {
+                        ((SocketClient) client).setWaitForusername(true);
+                        SocketClient.flagCondition.signal();
+                    } finally {
+                        SocketClient.locksocket.unlock();
+                    }
                     System.out.println("unlockato lato guiclinetcontorller");
                     return true;
                 }
