@@ -437,7 +437,7 @@ public class GameController {
     public Game readFileAndDeserialize () throws RuntimeException{
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
             Game deserializedGame = (Game) ois.readObject();
-            System.out.println("(GameController readFileAndDeserialize) game object deserialized");
+            System.out.print("(GameController readFileAndDeserialize) game object deserialized");
             System.out.println(deserializedGame);
             return deserializedGame;
         } catch (IOException | ClassNotFoundException e) {

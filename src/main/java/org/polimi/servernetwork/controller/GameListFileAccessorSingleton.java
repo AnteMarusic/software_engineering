@@ -154,6 +154,13 @@ public class GameListFileAccessorSingleton {
                     System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) removed");
                     flag = true;
                     whole.remove(i);
+                    try (FileWriter writer = new FileWriter(this.file)) {
+                        writer.write(whole.toJSONString());
+                        writer.flush();
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                        System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) exception in file writing");
+                    }
                     break;
                 }
             }
