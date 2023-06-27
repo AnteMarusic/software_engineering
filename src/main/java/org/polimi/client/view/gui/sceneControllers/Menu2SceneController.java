@@ -7,6 +7,12 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class Menu2SceneController {
+    public void initialize(){
+        if(SceneController.getInstance().isReconnected()){
+            SceneController.getInstance().getStage().close();
+            SceneController.getInstance().setReconnected(false);
+        }
+    }
     public void privateGame(){
 
     }

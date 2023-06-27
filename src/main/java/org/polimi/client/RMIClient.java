@@ -1,5 +1,6 @@
 package org.polimi.client;
 
+import javafx.scene.Scene;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.Message;
 import org.polimi.messages.MessageType;
@@ -103,9 +104,11 @@ public class RMIClient extends Client implements RMICallback  {
             }
         }while(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME);
         if (internalComunication == InternalComunication.RECONNECTION) {
+            SceneController.getInstance().setReconnected(true);
             clientController.reconnectionSuccessful();
             RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
             server.reconnection(username, clientStub);
+            new Thread(new Decrementer(this)).start();
             return true;
         }
         if (internalComunication == InternalComunication.OK) {

@@ -62,6 +62,8 @@ public class SceneController {
 
     private Map<String,Integer> ranking;
 
+    private boolean reconnected;
+
 
     public SceneController(){
         board = null;
@@ -72,7 +74,7 @@ public class SceneController {
         chosenCards = new ArrayList<>();
         otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
-
+        reconnected = false;
     }
     public static SceneController getInstance() {
         if (instance == null) {
@@ -328,5 +330,13 @@ public class SceneController {
 
     public void setRanking(Map<String, Integer> ranking) {
         this.ranking = ranking;
+    }
+
+    public boolean isReconnected() {
+        return reconnected;
+    }
+
+    public void setReconnected(boolean reconnected) {
+        this.reconnected = reconnected;
     }
 }
