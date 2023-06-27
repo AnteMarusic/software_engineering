@@ -26,7 +26,7 @@ public class BoardGoal implements Goal {
         int number = 0;
         int score = 0;
         while (row < ROW && col < COL) {
-            if (!visited.contains(new Coordinates(row, col))) {
+            if (grid[row][col]!=null && !visited.contains(new Coordinates(row, col)) ) {
                 number = 1 + countSnake(row, col);
             }
             if (number == 3)
@@ -49,14 +49,14 @@ public class BoardGoal implements Goal {
     private int countSnake (int row, int col) {
         visited.add(new Coordinates(row, col));
         if (row == 5) {
-            if (!visited.contains(new Coordinates(row, col + 1)) &&
+            if (!visited.contains(new Coordinates(row, col + 1)) && grid[row][col+1]!= null &&
                     grid[row][col + 1].getColor() == grid[row][col].getColor()){
 
                 return 1 + countSnake(row, col + 1);
             }
         }
         else if (col == 4) {
-            if (!visited.contains(new Coordinates(row + 1, col)) &&
+            if (!visited.contains(new Coordinates(row + 1, col)) && grid[row+1][col]!= null &&
                     grid[row + 1][col].getColor() == grid[row][col].getColor()) {
                 return 1 + countSnake(row + 1, col);
             }
@@ -64,18 +64,18 @@ public class BoardGoal implements Goal {
         }
 
         else if (col < 4 && row < 5) {
-            if (!visited.contains(new Coordinates(row, col + 1)) &&
+            if (!visited.contains(new Coordinates(row, col + 1)) && grid[row][col+1]!= null && grid[row+1][col]!= null &&
                     grid[row][col + 1].getColor() == grid[row][col].getColor() &&
                     !visited.contains(new Coordinates(row + 1, col)) &&
                     grid[row + 1][col].getColor() == grid[row][col].getColor()) {
                 return 1 + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
-            if (!visited.contains(new Coordinates(row, col + 1)) &&
+            if (!visited.contains(new Coordinates(row, col + 1)) && grid[row][col+1]!= null &&
                     grid[row][col + 1].getColor() == grid[row][col].getColor()){
 
                 return 1 + countSnake(row, col + 1);
             }
-            if (!visited.contains(new Coordinates(row + 1, col)) &&
+            if (!visited.contains(new Coordinates(row + 1, col)) && grid[row+1][col]!= null &&
                     grid[row + 1][col].getColor() == grid[row][col].getColor()) {
                 return 1 + countSnake(row + 1, col);
             }
