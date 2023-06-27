@@ -45,6 +45,14 @@ public class BookshelvesViewController {
 
 
     public void initialize(){
+        initScene();
+    }
+
+    public void refreshScene(){
+        initScene();
+    }
+
+    private void initScene(){
         int me = SceneController.getInstance().getMyIndex();
         List<ClientBookshelf> bookshelves = SceneController.getInstance().getBookshelves();
         List<String> players = SceneController.getInstance().getPlayers();
@@ -156,7 +164,6 @@ public class BookshelvesViewController {
                 }
             }
         }
-
     }
 
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){

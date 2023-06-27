@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.io.Serializable;
 import java.lang.*;
 
 import java.io.File;
@@ -14,7 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class PersonalGoal implements Goal{
+public class PersonalGoal implements Goal, Serializable {
     private static final String FILENAME = "/src/main/resources/json/personal_goal.json";
     private static final int DIM = 6; //number of coordinates that is necessary to describe the personal goal
     private File file;

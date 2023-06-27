@@ -18,10 +18,7 @@ import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SceneController {
     private Stage stage;
@@ -61,7 +58,11 @@ public class SceneController {
     private boolean myTurn;
 
     private GameLoopController gameLoopController;
+    private BookshelvesViewController bookshelvesViewController;
 
+    private Map<String,Integer> ranking;
+
+    private boolean reconnected;
 
 
     public SceneController(){
@@ -73,7 +74,7 @@ public class SceneController {
         chosenCards = new ArrayList<>();
         otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
-
+        reconnected = false;
     }
     public static SceneController getInstance() {
         if (instance == null) {
@@ -86,6 +87,9 @@ public class SceneController {
         this.myTurn = myTurn;
         Platform.runLater(() -> {
             gameLoopController.refreshScene();
+            if(bookshelvesViewController!=null){
+                bookshelvesViewController.refreshScene();
+            }
         });
 
 
@@ -140,6 +144,7 @@ public class SceneController {
 
         // Create a new scene from the FXML file
         AnchorPane anchorPane = loader.load();
+        this.bookshelvesViewController = loader.getController();
         Scene popUpScene= new Scene(anchorPane);
         Stage popUpStage = new Stage();
 
@@ -309,7 +314,29 @@ public class SceneController {
     public void setGameLoopController(GameLoopController gameLoopController) {
         this.gameLoopController = gameLoopController;
     }
+
+    public void setBookshelvesViewController(BookshelvesViewController bookshelvesViewController) {
+        this.bookshelvesViewController = bookshelvesViewController;
+    }
+
+
     public List<String> getPlayers() {
         return players;
+    }
+
+    public Map<String, Integer> getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Map<String, Integer> ranking) {
+        this.ranking = ranking;
+    }
+
+    public boolean isReconnected() {
+        return reconnected;
+    }
+
+    public void setReconnected(boolean reconnected) {
+        this.reconnected = reconnected;
     }
 }

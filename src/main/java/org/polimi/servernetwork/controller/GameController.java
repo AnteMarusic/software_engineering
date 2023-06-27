@@ -1,11 +1,15 @@
 package org.polimi.servernetwork.controller;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 import org.polimi.servernetwork.model.Game;
-import org.polimi.servernetwork.saver.CountDown;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -13,19 +17,21 @@ public class GameController {
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private static final int COUNT_DOWN = 20;
     private int gameCode;
-    private final int numOfPlayers;
+    private int numOfPlayers;
     private int currentPlayer;
-    private final int firstPlayer;
+    private int firstPlayer;
     private Game game;
     private int countDown;
     private DecrementerGameController decrementer;
     private UsernameIssuer usernameIssuer;
     private GameCodeIssuer gameCodeIssuer;
+    private File file;
+    private static String path = "/src/main/resources/ser/";
 
 
     public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
         numOfPlayers = list.size();
-        gameCode = 0;
+        gameCode = 0; //temporarily set to zero. It will be set to a different value later on
         this.usernameIssuer = usernameIssuer;
         this. gameCodeIssuer = gameCodeIssuer;
         countDown = COUNT_DOWN;
@@ -34,7 +40,56 @@ public class GameController {
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
-        //save the goals
+    }
+
+    /**
+     * gameController constructor used in case of server disconnection
+     * @param usernameIssuer
+     * @param gameCodeIssuer
+     * @param gameCode
+     */
+    public GameController(UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, int gameCode) {
+        this.usernameIssuer = usernameIssuer;
+        this.gameCodeIssuer = gameCodeIssuer;
+        this.gameCode = gameCode;
+        firstPlayer = -1;
+        numOfPlayers = -1;
+    }
+
+    public void retrieveGameFromFile () throws FileNotFoundException {
+        try {
+            String filePath = new File("").getAbsolutePath();
+            this.file = new File(filePath.concat(path + gameCode + ".ser"));
+            this.game = readFileAndDeserialize();
+            countDown = COUNT_DOWN;
+            decrementer = null;
+            firstPlayer = game.getFirstPlayer();
+            numOfPlayers = game.getNumOfPlayers();
+            //setto a null tutti i client handler in modo che funzioni il metodo numOfConnectedPlayers
+            for (int i=0; i < numOfPlayers; i ++) {
+                players.add(null);
+            }
+        } catch (RuntimeException e) {
+            System.out.println("(GameController specialConstructor) error in game retrieving");
+            throw new FileNotFoundException();
+        }
+    }
+
+    public void initializeSaveFile() {
+        //save
+        String filePath = new File("").getAbsolutePath();
+        System.out.println("(GameController initializeSaveFile) model status will be saved here: " + filePath.concat(path + gameCode + ".ser"));
+        this.file = new File(filePath.concat(path + gameCode + ".ser"));
+        try {
+            this.file.createNewFile();
+        }catch(IOException e) {
+            System.out.println("(GameController initializeSaveFile) exception in file creation");
+        }
+        System.out.println("(GameController initializeSaveFile) registering gameCode in gameListFile");
+        GameListFileAccessorSingleton fileAccessor = GameListFileAccessorSingleton.getInstance();
+        List <String> usernames = new LinkedList<>();
+        players.forEach((clientHandler) -> usernames.add(clientHandler.getUsername()));
+        fileAccessor.addGameIdWithPlayers(this.gameCode, usernames);
     }
 
     public void setGameCode(int gameCode){
@@ -107,7 +162,7 @@ public class GameController {
             }
         }
         if(empty) {
-            System.out.println("la board è vuota, la riempio");
+            System.out.println("(GameController removeCards) board is empty, refilling it");
             game.fillBoard();
             //save staus
             for (ClientHandler c : players) {
@@ -147,9 +202,9 @@ public class GameController {
         // manda un messaggio a tutti dicendo chi è il giocatore successivo
         // manda un messaggio di richiesta carte al giocatore successivo
         else {
-            System.out.println("current player is: " + currentPlayer);
+            System.out.println("(GameController notifyNextPlayer) current player is: " + currentPlayer);
             nextPlayer();
-            System.out.println("next player is: " + currentPlayer);
+            System.out.println("(GameController notifyNextPlayer) next player is: " + currentPlayer);
             // faccio un controllo: se il giocatore successivo è l'unico presente non lo faccio giocare
             if(getNumOfConnectedPlayers()==1){
                 // gli comunico solamente che è rimasto da solo e parte il timer di 60 secondi
@@ -174,12 +229,13 @@ public class GameController {
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
-        System.out.println("il gioco è finito");
+        System.out.println("(GameController endGame) gameEnded");
         // fermo il thred 10 secodni per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
         try{
             Thread.sleep(1000);
         }catch (InterruptedException e){
-            System.out.println("eccezione lanciata in GameController nel metodo end game");
+            System.out.println("(GameController endGame) exception");
+            e.printStackTrace();
         }
 
         closeGame();
@@ -199,14 +255,18 @@ public class GameController {
         }while (players.get(currentPlayer)==null);
     }
 
+    /**
+     * TODO vedi commento sotto
+     * @param clientHandler
+     */
     public void reconnect (ClientHandler clientHandler){
-        System.out.println(clientHandler.getUsername() + " sta cercando di riconnettersi");
+        System.out.println("(GameController reconnect) " + clientHandler.getUsername() + " is trying to reconnect");
         // riinserisco il clienthandler nella lista di clienthanler del gameController
         int position = game.getPosition(clientHandler.getUsername());
-        System.out.println(clientHandler.getUsername() + " era in posizione " + position);
-        System.out.println("questa è la lista di clienthandler: " + players.toString());
+        System.out.println("(GameController reconnect) " + clientHandler.getUsername() + " was in position " + position);
+        System.out.println("(GameController reconnect) this is the clientHandler list before the insert of the new player: " + players.toString());
         players.set(position, clientHandler);
-        System.out.println("questa è la lista di clienthandler: " + players.toString());
+        System.out.println("(GameController reconnect) this is the clientHandler list after the insert of the new player: " + players.toString());
         resetGameEnv(position);
         for(ClientHandler c : players ) {
             if(c !=null && c != clientHandler)
@@ -215,12 +275,21 @@ public class GameController {
         clientHandler.sendMessage(new Message("server", MessageType.WAITING_FOR_YOUR_TURN));
         // faccio un controllo: se adesso il numero di giocatori connsessi è 2 significa che prima che io mi riconnettessi il giocatore era dentro da solo
         // quindi non stava giocando ma era solo in attesa
+
+        //per la riconnessione in caso di caduta del server ci vuole un if getNumOfConnectedPlayers() == 1
+        //in questo caso facciamo partire un count down in modo che se si riconnette solo un tizio il gioco non
+        //rimarrà per sempre aperto ma si chiuderà. Magari il countDown deve essere diverso da quello di fine gioco?
+        if (getNumOfConnectedPlayers() == 1) {
+            decrementer = new DecrementerGameController(this);
+            new Thread (decrementer).start();
+        }
+
         if(getNumOfConnectedPlayers()==2) {
             // in questo caso azzero il timer di decrementer
             // non è detto ch il decrementer sia partito
             if (countDown != COUNT_DOWN) {
                 decrementer.stop();
-                System.out.println("counter riportato a 60 e fermato per via di una riconnessione");
+                System.out.println("(GameController reconnect) someone reconnected. Counter is brought back to " + COUNT_DOWN);
 
                 // riporto coutDown a 60
                 countDown = COUNT_DOWN;
@@ -352,5 +421,28 @@ public class GameController {
     }
     public ArrayList<ClientHandler> returnClientHandlers(){
         return players;
+    }
+
+    public void save () {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file, false))) {
+            oos.writeObject(game);
+            System.out.println("(GameController save) game object serialized and saved");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("(GameController save) exception in file writing");
+        }
+    }
+
+    public Game readFileAndDeserialize () throws RuntimeException{
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            Game deserializedGame = (Game) ois.readObject();
+            System.out.println("(GameController readFileAndDeserialize) game object deserialized");
+            System.out.println(deserializedGame);
+            return deserializedGame;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("(GameController readFileAndDeserialize) exception in file reading");
+            throw new RuntimeException();
+        }
     }
 }
