@@ -22,6 +22,7 @@ public class Player implements Serializable {
      * score obtained with PersonalGoals
      */
     private int personalScore;
+    private int boardScore;
     private int winPoint;
     private PersonalGoal personalGoal;
     /**
@@ -75,6 +76,15 @@ public class Player implements Serializable {
     public int getPersonalScore(){
         return this.personalScore;
     }
+    /**
+     * @return int indicating player's board score
+     */
+    public int getBoardScore() {
+        return this.boardScore;
+    }
+    public void setBoardScore(int boardScore){
+        this.boardScore = boardScore;
+    }
 
     /**
      * @return boolean that is true if the first shared goal is achieved.
@@ -116,7 +126,7 @@ public class Player implements Serializable {
         this.personalGoal = pg;
     }
     public int getTotalScore(){
-        return personalScore + sharedScore + winPoint;
+        return personalScore + sharedScore + boardScore + winPoint;
     }
 
     public void setWinPoint () {

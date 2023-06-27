@@ -15,7 +15,6 @@ public class Game implements Serializable {
     private final Goal[] sharedGoal;
     private final Goal boardGoal;
     private int[] chosenSharedGoal;
-    //private final Goal boardGoal;
     private final int firstPlayer;
     private int ender;
     private List<Card> readyToInsert;
@@ -220,8 +219,12 @@ public class Game implements Serializable {
      */
     private void updateScore(int currentPlayer){
         System.out.println("(Game updateScore) old personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
+        // aggiorno il personaleScore
         players[currentPlayer].updatePersonalScore();
         System.out.println("(Game updateScore) updated personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
+        // aggiorno il boardScore
+        players[currentPlayer].setBoardScore(boardGoal.getScore(players[currentPlayer].getGrid()));
+
         if(!players[currentPlayer].getSharedGoal1Achieved())
         {
             int newPoint;
