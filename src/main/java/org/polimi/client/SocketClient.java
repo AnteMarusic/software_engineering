@@ -1,11 +1,18 @@
 package org.polimi.client;
 
+import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
+import org.polimi.servernetwork.controller.InternalComunication;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SocketClient extends Client{
     private Socket socket;
@@ -13,9 +20,16 @@ public class SocketClient extends Client{
     private ObjectInputStream input;
     private final boolean guiMode;
     private ClientControllerInterface clientController;
+    private static Lock lock;
+    public static Condition flagCondition;
+
+    private static volatile boolean waitForusername;
     public SocketClient(int port, boolean guiMode) {
         super(port);
         this.guiMode = guiMode;
+        this.waitForusername = false;
+        this.lock = new ReentrantLock();
+        this.flagCondition = lock.newCondition();
     }
 
     public boolean connect () {
@@ -38,8 +52,51 @@ public class SocketClient extends Client{
             Message message = clientController.chooseUsername();
             this.username = message.getUsername();
             sendMessage(message);
+        }else{
+            //gui
+            createGuiClientController();
+            System.out.println("prima di startlistineg");
+            startListeningToMessages();
+            System.out.println("prima di semaforo, dopo startlistineg");
+            new Thread(()->
+            {try {
+                System.out.println("entrato nel try");
+                this.waitForFlag();
+                System.out.println("dopo this.wait");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("dopo semaforo, prima di sendmessage username");
+            sendMessage(new Message(this.username, MessageType.USERNAME));
+            System.out.println("dopo  di sendmessage username");
+            reset();}
+            ).start();
         }
         return true;
+    }
+
+    public void waitForFlag() throws InterruptedException {
+        System.out.println("prima di lock.lock");
+        lock.lock();
+        System.out.println("dopo di lock.lock");
+        try {
+            System.out.println("prima del while in waitforflag");
+            while (!this.waitForusername) {
+                flagCondition.await(); // Wait until the flag is set
+            }
+            System.out.println("dopo while");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void reset() {
+        lock.lock();
+        try {
+            waitForusername = false;
+        } finally {
+            lock.unlock();
+        }
     }
     private void createCliClientController() {
         this.clientController = new CliClientController(this);
@@ -124,6 +181,14 @@ public class SocketClient extends Client{
     }
 
 
+    public boolean isWaitForusername() {
+        return waitForusername;
+    }
+
+
+    public void setWaitForusername(boolean waitForusername) {
+        this.waitForusername = waitForusername;
+    }
     /*public static void main(String[] args) {
         int port = 8181;
         SocketClient socket = new SocketClient(port);

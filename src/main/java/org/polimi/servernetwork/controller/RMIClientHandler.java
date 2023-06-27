@@ -76,7 +76,7 @@ public class RMIClientHandler extends ClientHandler{
     public void sendMessage (Message message) {
         synchronized (RMIMessagesLock) {
             RMIMessages.add(message);
-            System.out.println("(RMIClientHandler) added this message for " + username + " to read: " + message);
+            System.out.println("(RMIClientHandler username " + username + ") added this message to read: " + message);
             new Thread (()-> {
                 synchronized (taskLock) {
                     try {

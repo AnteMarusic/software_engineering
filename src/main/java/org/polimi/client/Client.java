@@ -16,6 +16,11 @@ public abstract class Client {
     public String getUsername(){
         return this.username;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public int getPort(){
         return this.port;
     }

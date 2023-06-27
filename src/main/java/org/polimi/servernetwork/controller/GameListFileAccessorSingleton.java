@@ -5,10 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,9 +70,11 @@ public class GameListFileAccessorSingleton {
             Object wholeObject = jsonParser.parse(reader);
             JSONArray whole = (JSONArray) wholeObject;
             if (whole.isEmpty()) {
+                System.out.println("(GameListFileAccessorSingleton isEmpty) empty file");
                 return true;
             }
             else {
+                System.out.println("(GameListFileAccessorSingleton isEmpty) not empty file");
                 return false;
             }
         } catch (IOException | ParseException e) {
@@ -137,6 +136,41 @@ public class GameListFileAccessorSingleton {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
             System.out.println("(GameListFileAccessorSingleton readFile) reading of the file failed");
+        }
+    }
+
+    public synchronized void removeGameIdWithPlayers (int gameCode) {
+        boolean flag = false;
+        try (FileReader reader = new FileReader(file)) {
+            JSONParser jsonParser = new JSONParser();
+            Object wholeObject = jsonParser.parse(reader);
+            JSONArray whole = (JSONArray) wholeObject;
+            System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) trying to remove " + gameCode);
+            for (int i = 0; i < whole.size(); i++) {
+                JSONObject obj = (JSONObject) whole.get(i);
+                Long temp = (long) obj.get("gameCode");
+                int gameCodeInFile = temp.intValue();
+                if (gameCodeInFile == gameCode) {
+                    System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) removed");
+                    flag = true;
+                    whole.remove(i);
+                    try (FileWriter writer = new FileWriter(this.file)) {
+                        writer.write(whole.toJSONString());
+                        writer.flush();
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                        System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) exception in file writing");
+                    }
+                    break;
+                }
+            }
+            if (!flag) {
+                System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) element " + gameCode + " not found.");
+            }
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) file not found");
+        }catch (IOException | ParseException e) {
+            System.out.println("(GameListFileAccessorSingleton removeGameIdWithPlayers) impossible to read file");
         }
     }
 }
