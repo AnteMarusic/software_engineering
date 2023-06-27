@@ -156,6 +156,46 @@ public class GuiClientController implements ClientControllerInterface{
                     return true;
                 }
 
+                case "RandomGameOf2" -> {
+                    System.out.println("(GuiController) inviato al server messaggio di join prima del while");
+                    while(!receivedgamemodemess){
+
+                    }
+                    System.out.println("(GuiController) inviato al server messaggio di join prima");
+                    ((SocketClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1));
+                    numOfPlayers=2;
+                    System.out.println("(GuiController) inviato al server messaggio di join dopo");
+                }
+                case "RandomGameOf3" -> {
+                    while(!receivedgamemodemess){
+
+                    }
+                    ((SocketClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1));
+                    numOfPlayers=3;
+                }
+                case "RandomGameOf4" -> {
+                    while(!receivedgamemodemess){
+
+                    }
+                    ((RMIClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1));
+                    numOfPlayers=4;
+                }
+                case "startgame"->{
+                    if(!startgame)
+                        return false;
+                    return true;
+                }
+                case "chosencards"-> {
+                    lock.lock();
+                    try {
+                        chosencards = true;
+                        flagCondition.signal(); // Signal the waiting thread
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+                case "createdgameloop" -> {createdgameloop=true;
+                    System.out.println("settato a true createdgameloop da guiclientcontroleer");}
                 default ->{
                     return false;
                 }
