@@ -158,6 +158,7 @@ public class UsernameIssuer {
     }
     public synchronized void createRow (String username) {
         this.map.put (username, new Object[3]);
+        System.out.println("(UsernameIssuer createRow) created row for " + username);
     }
 }
 

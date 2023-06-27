@@ -21,6 +21,7 @@ public class GameCodeIssuer {
     }
     public void createRow (int gameCode, GameController gameController) {
         associations.put(gameCode, gameController);
+        System.out.println("(GameCodeIssuer createRow) created row for " + gameCode);
     }
 
     public synchronized boolean containsIdCode (int idCode) {return associations.containsKey(idCode);}

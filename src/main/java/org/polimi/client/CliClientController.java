@@ -252,7 +252,7 @@ public class CliClientController implements ClientControllerInterface {
         String action;
 
         LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
-        System.out.println("type 'undo' to undo previous card, 'stop' to terminate choice or just write the next choice");
+        System.out.println("choose a card");
         while (counter < maxInsertable) {
             switch (counter) {
                 //you necessarily have to choose at least a card
@@ -316,7 +316,7 @@ public class CliClientController implements ClientControllerInterface {
                     normalFlag = false;
                     actionFlag = false;
                     do {
-                        System.out.println("Choose your next Card");
+                        System.out.println("Choose your next Card or type 'undo' to undo previous choice or 'stop' to terminate");
                         System.out.println("Type row number (0 to 8)");
                         if (scanner.hasNextInt()) {
                             row = scanner.nextInt();
@@ -378,7 +378,7 @@ public class CliClientController implements ClientControllerInterface {
                     normalFlag = false;
                     actionFlag = false;
                     do {
-                        System.out.println("Choose your next Card");
+                        System.out.println("Choose your next Card or type 'undo' to undo previous choice or 'stop' to terminate");
                         System.out.println("Type row number (0 to 8)");
                         if (scanner.hasNextInt()) {
                             row = scanner.nextInt();
