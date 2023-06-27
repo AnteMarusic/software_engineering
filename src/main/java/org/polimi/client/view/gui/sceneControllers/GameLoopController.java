@@ -1,5 +1,6 @@
 package org.polimi.client.view.gui.sceneControllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -107,6 +108,12 @@ public class GameLoopController {
     }
     private void initializeScene(){
         yourTurn = SceneController.getInstance().getMyTurn();
+        if(yourTurn){
+            if(!startTurnShown){
+                Platform.runLater(()-> showAlert("IT'S YOUR TURN " + SceneController.getInstance().getUsername()));
+                startTurnShown=true;
+            }
+        }
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
         resetColumnView();
@@ -123,15 +130,21 @@ public class GameLoopController {
                         imageView = new ImageView();
                         insertInGridPane(imageView, 50, 50, gridPane, j, i);
                     }else{
+                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + "in pos "+ "col ="+j+" row="+i);
+                        if(paneWithImageView.getChildren().size()==0){
+                            System.out.println("000000000" +
+                                    "" +
+                                    "" +
+                                    "" +
+                                    "" +
+                                    "");
+                        }
                         imageView = (ImageView) paneWithImageView.getChildren().get(0);
                     }
                     int row = i;
                     int col = j;
                     if(yourTurn){
-                        if(!startTurnShown){
-                            showAlert("IT'S YOUR TURN "+ SceneController.getInstance().getUsername());
-                            startTurnShown=true;
-                        }
+
                         //System.out.println("my turn è true, col "+ j+ "e row "+i);
                         int maxInsertable = bookshelves.get(myIndex).getMaxInsertable();
                         this.chosenCoordinates.clear();
@@ -254,18 +267,26 @@ public class GameLoopController {
         imageView.setImage(image);
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
-        Pane pane = new Pane();
+        /*Pane pane = new Pane();
         pane.setOnMouseEntered(event -> {
             pane.toFront();
         });
 
         pane.setOnMouseExited(event -> {
             pane.toBack();
+        });*/
+        Pane pane = new Pane();
+        Platform.runLater(() -> {
+            pane.setOnMouseEntered(event -> {
+                pane.toFront();
+            });
+
+            pane.setOnMouseExited(event -> {
+                pane.toBack();
+            });
+
         });
         pane.getChildren().add(imageView);
-        /*if(gridp.getChildren()
-                .stream()
-                .noneMatch(child -> GridPane.getRowIndex(child) == y && GridPane.getColumnIndex(child) == x))*/
         gridp.add(pane, x, y);
     }
 
