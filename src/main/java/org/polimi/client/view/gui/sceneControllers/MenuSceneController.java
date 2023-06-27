@@ -33,6 +33,7 @@ public class MenuSceneController implements Initializable {
     }
     public void chooseSocket(ActionEvent e) throws IOException {
         SocketClient socket = new SocketClient(8181, true);
+        socket.connect();
         SceneController.getInstance().switchScene(e, "login_scene");
     }
 

@@ -137,7 +137,21 @@ public class GuiClientController implements ClientControllerInterface{
                     return false;
                 }
 
-        }}
+            }
+        }else {
+            switch (notificationType) {
+                case "username" -> {
+                    username = (String) messagges.get(0);
+                    SceneController.getInstance().setMyUsername(username);
+                    ((SocketClient) client).setUsername(username);
+                    ((SocketClient) client).setWaitForusername(true);
+                }
+
+                default ->{
+                    return false;
+                }
+            }
+        }
         return false;
     }
 
