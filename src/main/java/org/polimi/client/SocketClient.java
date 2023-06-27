@@ -21,15 +21,15 @@ public class SocketClient extends Client{
     private final boolean guiMode;
     private ClientControllerInterface clientController;
     private static Lock lock;
-    private static Condition flagCondition;
+    public static Condition flagCondition;
 
-    private boolean waitForusername;
+    private static volatile boolean waitForusername;
     public SocketClient(int port, boolean guiMode) {
         super(port);
         this.guiMode = guiMode;
+        this.waitForusername = false;
         this.lock = new ReentrantLock();
         this.flagCondition = lock.newCondition();
-        this.waitForusername = false;
     }
 
     public boolean connect () {
@@ -53,25 +53,38 @@ public class SocketClient extends Client{
             this.username = message.getUsername();
             sendMessage(message);
         }else{
+            //gui
             createGuiClientController();
+            System.out.println("prima di startlistineg");
             startListeningToMessages();
-            try {
+            System.out.println("prima di semaforo, dopo startlistineg");
+            new Thread(()->
+            {try {
+                System.out.println("entrato nel try");
                 this.waitForFlag();
-            } catch (InterruptedException e) {
+                System.out.println("dopo this.wait");
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            System.out.println("dopo semaforo, prima di sendmessage username");
             sendMessage(new Message(this.username, MessageType.USERNAME));
-            reset();
+            System.out.println("dopo  di sendmessage username");
+            reset();}
+            ).start();
         }
         return true;
     }
 
     public void waitForFlag() throws InterruptedException {
+        System.out.println("prima di lock.lock");
         lock.lock();
+        System.out.println("dopo di lock.lock");
         try {
+            System.out.println("prima del while in waitforflag");
             while (!this.waitForusername) {
                 flagCondition.await(); // Wait until the flag is set
             }
+            System.out.println("dopo while");
         } finally {
             lock.unlock();
         }

@@ -130,7 +130,7 @@ public class GameLoopController {
                         imageView = new ImageView();
                         insertInGridPane(imageView, 50, 50, gridPane, j, i);
                     }else{
-                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + "in pos "+ "col ="+j+" row="+i);
+                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + " in pos "+ "col ="+j+" row="+i);
                         if(paneWithImageView.getChildren().size()==0){
                             System.out.println("000000000" +
                                     "" +
