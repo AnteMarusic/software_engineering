@@ -16,5 +16,6 @@ TODO
 - i file vengono bufferizzati. c'è un modo per togliere la bufferizzazione e vedere subito i cambiamenti sul file
 - rendere più carini i buffer di riordino delle carte della CLI
 - se un socketClient si disconnette (ad esermpio viene chiuso il server) mentre sta scegliendo le carte esce un'eccezione
+        soluzione: mettere una variabile "disconnesso ai clientHandler per evitare che la disconnessione venga fatta due volte"
 
 

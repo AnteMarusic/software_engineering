@@ -1,9 +1,5 @@
 package org.polimi.servernetwork.controller;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
@@ -25,7 +21,7 @@ public class GameController {
     private DecrementerGameController decrementer;
     private UsernameIssuer usernameIssuer;
     private GameCodeIssuer gameCodeIssuer;
-    private File file;
+    private File saveFile;
     private static String path = "/src/main/resources/ser/";
 
 
@@ -59,7 +55,7 @@ public class GameController {
     public void retrieveGameFromFile () throws FileNotFoundException {
         try {
             String filePath = new File("").getAbsolutePath();
-            this.file = new File(filePath.concat(path + gameCode + ".ser"));
+            this.saveFile = new File(filePath.concat(path + gameCode + ".ser"));
             this.game = readFileAndDeserialize();
             countDown = COUNT_DOWN;
             decrementer = null;
@@ -69,8 +65,9 @@ public class GameController {
             for (int i=0; i < numOfPlayers; i ++) {
                 players.add(null);
             }
+            System.out.println("(GameController retrieveGameFromFile) game successfully retrieved");
         } catch (RuntimeException e) {
-            System.out.println("(GameController specialConstructor) error in game retrieving");
+            System.out.println("(GameController retrieveGameFromFile) error in game retrieving");
             throw new FileNotFoundException();
         }
     }
@@ -79,9 +76,9 @@ public class GameController {
         //save
         String filePath = new File("").getAbsolutePath();
         System.out.println("(GameController initializeSaveFile) model status will be saved here: " + filePath.concat(path + gameCode + ".ser"));
-        this.file = new File(filePath.concat(path + gameCode + ".ser"));
+        this.saveFile = new File(filePath.concat(path + gameCode + ".ser"));
         try {
-            this.file.createNewFile();
+            this.saveFile.createNewFile();
         }catch(IOException e) {
             System.out.println("(GameController initializeSaveFile) exception in file creation");
         }
@@ -136,9 +133,8 @@ public class GameController {
          */
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         for (ClientHandler d : players) {
-            System.out.println("entrato nel for");
             if (d != players.get(currentPlayer) && d != null) {
-                System.out.println("entrato nel if");
+                System.out.println("(GameController startGameTurn) sending NotifyNextPlayerMessage to " + players.get(currentPlayer).getUsername());
                 d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername()));
             }
         }
@@ -155,6 +151,7 @@ public class GameController {
 
         boolean empty = game.remove(coordinates);
         //save status
+        this.save();
         for (ClientHandler c : players) {
             //ho rimosso dall'if la condizione per la quale il messaggio non lo inviava a quello che ha effettivamente rimosso le carte
             if (c != null) {
@@ -165,6 +162,7 @@ public class GameController {
             System.out.println("(GameController removeCards) board is empty, refilling it");
             game.fillBoard();
             //save staus
+            this.save();
             for (ClientHandler c : players) {
                 if (c != null) {
                     c.sendMessage(new BoardMessage(game.getBoardMap()));
@@ -176,6 +174,7 @@ public class GameController {
     public void insertInBookshelf(int column) {
         int currentPoints = game.insertInBookshelf(column, currentPlayer);
         //save status
+        this.save();
         // manda al giocatore corrente il punteggio attuale
         players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
         for (ClientHandler c : players) {
@@ -400,8 +399,10 @@ public class GameController {
                 c.closeEverything();
         }
         players.clear();
-        System.out.println("chiuso il gioco " + gameCode);
-        game = null;
+        System.out.println("(GameController closeGame) closed game with id: " + gameCode);
+        game = null; //sets reference to null so game can be collected by the garbage collector
+        //delete save file and remove game and usernames from gameList file
+        closeSaveFile();
     }
 
     public void decreaseCountDown () {
@@ -424,7 +425,7 @@ public class GameController {
     }
 
     public void save () {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file, false))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveFile, false))) {
             oos.writeObject(game);
             System.out.println("(GameController save) game object serialized and saved");
         } catch (IOException e) {
@@ -434,7 +435,7 @@ public class GameController {
     }
 
     public Game readFileAndDeserialize () throws RuntimeException{
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
             Game deserializedGame = (Game) ois.readObject();
             System.out.println("(GameController readFileAndDeserialize) game object deserialized");
             System.out.println(deserializedGame);
@@ -444,5 +445,20 @@ public class GameController {
             System.out.println("(GameController readFileAndDeserialize) exception in file reading");
             throw new RuntimeException();
         }
+    }
+
+    private void closeSaveFile () {
+        if (saveFile.exists()) {
+            boolean deleted = saveFile.delete();
+            if (deleted) {
+                System.out.println("(GameController closeSaveFile) File deleted successfully");
+            } else {
+                System.out.println("(GameController closeSaveFile) Failed to delete the file.");
+            }
+        } else {
+            System.out.println("(GameController closeSaveFile) File does not exist");
+        }
+        GameListFileAccessorSingleton fileAccessor = GameListFileAccessorSingleton.getInstance();
+        fileAccessor.removeGameIdWithPlayers(this.gameCode);
     }
 }

@@ -33,6 +33,7 @@ public class ServerStarter {
             Map <Integer, List<String>> gameIdWithPlayers = gameListFileAccessor.getGameIdsAndPlayers();
             for (Integer gameId : gameIdWithPlayers.keySet()) {
                 try {
+                    System.out.println("(ServerStarter) retrieving game " + gameId + " from file");
                     //calling special constructor maybe is better to do the special operations with separate method and not
                     //in the constructor
                     GameController gameController = new GameController(usernameIssuer, gameCodeIssuer, gameId);
