@@ -276,16 +276,33 @@ public class GameLoopController {
             pane.toBack();
         });*/
         Pane pane = new Pane();
-        Platform.runLater(() -> {
-            pane.setOnMouseEntered(event -> {
-                pane.toFront();
-            });
+        if(width == 94 || width==62){
+            Platform.runLater(() -> {
+                pane.setOnMouseEntered(event -> {
+                    pane.setScaleX(1.5);
+                    pane.setScaleY(1.5);
+                    pane.toFront();
+                });
 
-            pane.setOnMouseExited(event -> {
-                pane.toBack();
+                pane.setOnMouseExited(event -> {
+                    pane.setScaleX(1.0);
+                    pane.setScaleY(1.0);
+                    pane.toBack();
+                });
             });
+        }
+        else{
+            Platform.runLater(() -> {
+                pane.setOnMouseEntered(event -> {
+                    pane.toFront();
+                });
 
-        });
+                pane.setOnMouseExited(event -> {
+                    pane.toBack();
+                });
+
+            });
+        }
         pane.getChildren().add(imageView);
         gridp.add(pane, x, y);
     }

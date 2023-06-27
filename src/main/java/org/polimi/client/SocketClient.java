@@ -66,9 +66,7 @@ public class SocketClient extends Client{
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("dopo semaforo, prima di sendmessage username");
             sendMessage(new Message(this.username, MessageType.USERNAME));
-            System.out.println("dopo  di sendmessage username");
             reset();}
             ).start();
         }
