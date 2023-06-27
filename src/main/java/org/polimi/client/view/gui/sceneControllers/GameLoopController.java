@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GameLoopController {
+
     //gridpane è 450x450, ogni cella è 50x50 pixel
 
     @FXML
@@ -66,6 +67,14 @@ public class GameLoopController {
     @FXML
     private Label myScore;
 
+    @FXML
+    private ImageView imageViewCommon1;
+
+    @FXML
+    private ImageView imageViewCommon2;
+    @FXML
+    private ImageView imageViewPersonal;
+
 
     //usare 25x25 per le tiles nella bookshel
     @FXML
@@ -94,6 +103,7 @@ public class GameLoopController {
     @FXML
     public void initialize(){
         initializeScene();
+        initializeGoals();
     }
     private void initializeScene(){
         yourTurn = SceneController.getInstance().getMyTurn();
@@ -215,28 +225,27 @@ public class GameLoopController {
 
             }
         }
-
-        //inizializzazione dei common goals
-        System.out.println(SceneController.getInstance().getSharedGoal1Index());
-        System.out.println(SceneController.getInstance().getSharedGoal2Index());
-        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal1Index())+".jpg");
-        ImageView imageView = new ImageView();
-        insertInGridPane(imageView, 94, 62, goalsPane, 1, 0);
-        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal2Index())+".jpg");
-        ImageView imageView2 = new ImageView();
-        insertInGridPane(imageView2, 94, 62, goalsPane, 2, 0);
-
-        //inizializzazione del personal goal
-        image = new Image("/images/17_MyShelfie_BGA/personal_goal_cards/Personal_Goals"+(SceneController.getInstance().getPersonalGoalIndex()+1)+".png");
-        ImageView imageView4 = new ImageView();
-        insertInGridPane(imageView4, 62, 94, goalsPane,0, 0);
-
-
     }
     public void refreshScene(){
         initializeScene();
     }
+    private void initializeGoals(){
+        //inizializzazione dei common goals
+        System.out.println(SceneController.getInstance().getSharedGoal1Index());
+        System.out.println(SceneController.getInstance().getSharedGoal2Index());
+        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal1Index())+".jpg");
+        imageViewCommon1 = new ImageView();
+        insertInGridPane(imageViewCommon1, 94, 62, goalsPane, 1, 0);
+        image = new Image("/images/17_MyShelfie_BGA/common_goal_cards/"+(SceneController.getInstance().getSharedGoal2Index())+".jpg");
+        imageViewCommon2 = new ImageView();
+        insertInGridPane(imageViewCommon2, 94, 62, goalsPane, 2, 0);
 
+        //inizializzazione del personal goal
+        image = new Image("/images/17_MyShelfie_BGA/personal_goal_cards/Personal_Goals"+(SceneController.getInstance().getPersonalGoalIndex()+1)+".png");
+        imageViewPersonal = new ImageView();
+        insertInGridPane(imageViewPersonal, 62, 94, goalsPane,0, 0);
+
+    }
     public void showBookshelves() throws IOException {
         SceneController.getInstance().switchScenePopUp();
     }
@@ -246,6 +255,13 @@ public class GameLoopController {
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
         Pane pane = new Pane();
+        pane.setOnMouseEntered(event -> {
+            pane.toFront();
+        });
+
+        pane.setOnMouseExited(event -> {
+            pane.toBack();
+        });
         pane.getChildren().add(imageView);
         /*if(gridp.getChildren()
                 .stream()
@@ -260,7 +276,6 @@ public class GameLoopController {
                 .findFirst()
                 .orElse(null);
     }
-
 
     private void showAlert(String alertinfo){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
