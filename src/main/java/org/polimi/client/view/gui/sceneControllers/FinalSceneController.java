@@ -1,8 +1,10 @@
 package org.polimi.client.view.gui.sceneControllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,10 +44,22 @@ public class FinalSceneController {
         }
     }
 
+
+    public void newGame() throws IOException {
+        SceneController.getInstance().getStage().close();
+        SceneController.getInstance().switchScene3(SceneController.getInstance().getStage(), "menu2_scene", SceneController.getInstance().getStage().getScene().getRoot());
+    }
+
+
+    public void quitGame(){
+        SceneController.getInstance().getStage().close();
+    }
+
     public class RankCouple{
         private String name;
 
         private int points;
+
 
         public String getName() {
             return name;
