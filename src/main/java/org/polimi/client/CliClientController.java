@@ -24,6 +24,13 @@ public class CliClientController implements ClientControllerInterface {
     @Override
     public void setUsername (String username) {this.username = username;}
 
+
+    /**
+     * Handles incoming messages received from the server.
+     *
+     * @param message The message received from the server.
+     * @return The message to send back to the server, or null if no message needs to be sent.
+     */
     @Override
     public Message handleMessage (Message message) {
         switch (message.getMessageType()) {
@@ -178,6 +185,12 @@ public class CliClientController implements ClientControllerInterface {
     public void alreadyTakenUsername () {
         cli.alreadyTakenUsername();
     }
+
+    /**
+     * Allows the player to choose the game mode.
+     *
+     * @return The chosen game mode as a ChosenGameModeMessage.
+     */
     @Override
     public Message chooseGameMode () {
         ChosenGameModeMessage message = null;
@@ -457,7 +470,12 @@ public class CliClientController implements ClientControllerInterface {
         return new ChosenCardsMessage(username, chosenCoordinates);
     }
 
-    //the array contains coordinates, so CLI has to show the changes during this procedure
+    /**
+     * Orders the chosen cards based on the specified positions.
+     *
+     * @param chosenCoordinates The list of chosen coordinates.
+     * @return The ordered coordinates as a linked list.
+     */
     @Override
     public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         int position;
@@ -503,8 +521,12 @@ public class CliClientController implements ClientControllerInterface {
         cli.addNewPlayer(newPlayer);
     }
 
+    /**
+     * Allows the player to choose a column where to insert the cards.
+     *
+     * @return The chosen column as a ChosenColumnMessage.
+     */
     @Override
-
     public Message chooseColumn () {
         int input = -1;
         boolean flag = false;

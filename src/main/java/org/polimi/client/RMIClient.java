@@ -85,9 +85,6 @@ public class RMIClient extends Client implements RMICallback  {
     }
 
     /**
-     * TODO: gestire la riconnessione, cosa succede se usernameAlreadyTaken è NEVER_USED ma quando chiamo login qualcuno
-     *  me lo ha rubato?
-     *
      *  calls login method of the server. if the return value is ALREADY_USED, the client is asked to choose another
      *  if the return value is OK the RMI client object is created and given to the server using subscribe method
      *  in this case is also started the decrementer thread
@@ -141,6 +138,20 @@ public class RMIClient extends Client implements RMICallback  {
         }
     }
 
+
+    /**
+     * Performs the login process by choosing a username and communicating with the server.
+     * Throws a RemoteException if there is an error in the remote method invocation.
+     * Continues the login process until a unique username is chosen.
+     * If the chosen username is already taken, it notifies the client controller.
+     * If the internal communication indicates a reconnection, it notifies the client controller,
+     * exports the client object as an RMI callback stub, and invokes the server's reconnection method.
+     * If the internal communication indicates a successful login, it notifies the client controller,
+     * exports the client object as an RMI callback stub, subscribes to the server, and starts a new thread
+     * for decrementing the countDown value.
+     *
+     * @throws RemoteException if there is an error in the remote method invocation.
+     */
     @Override
     public void sendMessage(Message message) throws RemoteException {
         server.onMessage(message);
@@ -226,6 +237,12 @@ public class RMIClient extends Client implements RMICallback  {
         countDown = COUNTDOWN;
     }
 
+
+    /**
+     * Decrements the countDown value and checks if it reaches zero.
+     * If the countDown value reaches zero, it indicates lost communication with the server
+     * and calls the disconnect method to handle the disconnection.
+     */
     public void decrementCountDown() {
         countDown--;
         if(countDown == 0) {
@@ -237,27 +254,6 @@ public class RMIClient extends Client implements RMICallback  {
         System.out.println(message);
     }
 
-    public void startChatClient(){
-        new Thread(()->{
-            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
-            String userInput;
-            while (true) {
-                try {
-                    if (!((userInput = consoleInput.readLine()) != null)) break;
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    if(userInput.startsWith("$")){
-                        String cleanedMessage = userInput.substring(1).trim();
-                        server.sendChatMessage(username + ": "+ cleanedMessage);
-                    }
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
-    }
 }
 
 
