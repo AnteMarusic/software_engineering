@@ -257,6 +257,7 @@ public class SceneController {
             this.otherPlayerChosenCards = otherPlayerChosenCards;
         }
     }
+
     public List<Card> getOtherPlayerChosenCards() {
         System.out.println("chiamato getotherplayerchosencards, ");
         for(Card card : otherPlayerChosenCards){

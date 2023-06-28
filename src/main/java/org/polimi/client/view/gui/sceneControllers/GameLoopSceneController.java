@@ -97,7 +97,7 @@ public class GameLoopSceneController {
 
     /**
      * Method that initializes the whole game loop by adding images to the panes and updates the view of
-     * the model whenever the model has changed
+     * the model whenever the model has changed.
      */
     private void initializeScene(){
         yourTurn = SceneController.getInstance().getMyTurn();
@@ -116,7 +116,7 @@ public class GameLoopSceneController {
             for(int j=0; j<9; j++){
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
                 if(card!=null) {
-                    loadTileImage(card);
+                    this.image = loadTileImage(card);
                     ImageView imageView;
                     Pane paneWithImageView = retrievePane(gridPane, j, i);
                     if(paneWithImageView == null){
@@ -144,7 +144,7 @@ public class GameLoopSceneController {
                             if(card.getState() == Card.State.PICKABLE) {
                                 switch(choosenCardsDim){
                                     case 0 -> {
-                                        loadTileImage(card);
+                                        this.image = loadTileImage(card);
                                         insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim , 0);
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         choosenCardsDim++;
@@ -158,7 +158,7 @@ public class GameLoopSceneController {
                                             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col)) ) {
                                                 this.checkLater = true;
                                             }
-                                            loadTileImage(card);
+                                            this.image = loadTileImage(card);
                                             insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
@@ -172,7 +172,7 @@ public class GameLoopSceneController {
                                            showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {
                                             if(     this.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
-                                                loadTileImage(card);
+                                                this.image = loadTileImage(card);
                                                 insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 choosenCardsDim++;
@@ -214,7 +214,7 @@ public class GameLoopSceneController {
     }
 
     /**
-     * Method that load the goals images into the associated pane
+     * Method that loads the goals' images into the associated panes.
      */
     private void initializeGoals(){
         //inizializzazione dei common goals
@@ -234,9 +234,9 @@ public class GameLoopSceneController {
 
     }
 
-    /**It launches a new javafx thread and show a new panel showing other players' bookshelf
+    /**It launches a new javafx thread and show a new panel showing other players' bookshelf.
      *
-     * @throws IOException
+     * @throws IOException IOException if an I/O error occurs while switching the scene.
      */
     public void showBookshelves() throws IOException {
         SceneController.getInstance().switchScenePopUp();
@@ -307,8 +307,8 @@ public class GameLoopSceneController {
 
     /**
      * Method that shows an alert button showing a string which is
-     * passed as a parameter
-     * @param alertinfo
+     * passed as a parameter.
+     * @param alertinfo The string
      */
     private void showAlert(String alertinfo){
         Platform.runLater(()->{
@@ -323,8 +323,9 @@ public class GameLoopSceneController {
 
     /**
      * On action javafx method for inserting your chosen cards into
-     * the first column
-     * @throws RemoteException
+     * the first column.
+     *
+     * @throws RemoteException If a remote communication error occurs.
      */
     public void col0() throws RemoteException {
         if(this.checkLater && choosenCardsDim==2){
@@ -352,7 +353,7 @@ public class GameLoopSceneController {
                 for(int j= 0; j<6; j++){
                     Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
-                        loadTileImage(card);
+                        this.image = loadTileImage(card);
                         ImageView imageView3 = new ImageView();
                         insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
                     }
@@ -377,8 +378,8 @@ public class GameLoopSceneController {
 
     /**
      * On action javafx method for inserting your chosen cards into
-     * the second column
-     * @throws RemoteException
+     * the second column.
+     * @throws RemoteException If a remote communication error occurs.
      */
     public void col1() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
@@ -406,7 +407,7 @@ public class GameLoopSceneController {
                 for(int j= 0; j<6; j++){
                     Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
-                        loadTileImage(card);
+                        this.image = loadTileImage(card);
                         ImageView imageView3 = new ImageView();
                         insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
                     }
@@ -431,9 +432,9 @@ public class GameLoopSceneController {
     }
 
     /**
-     * On action javafx method for inserting your choosen cards into
-     * the third column
-     * @throws RemoteException
+     * On action javafx method for inserting your chosen cards into
+     * the third column.
+     * @throws RemoteException If a remote communication error occurs.
      */
     public void col2() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
@@ -461,7 +462,7 @@ public class GameLoopSceneController {
                 for(int j= 0; j<6; j++){
                     Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
-                        loadTileImage(card);
+                        this.image = loadTileImage(card);
                         ImageView imageView3 = new ImageView();
                         insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
                     }
@@ -486,9 +487,9 @@ public class GameLoopSceneController {
     }
 
     /**
-     * On action javafx method for inserting your choosen cards into
-     * the fourth column
-     * @throws RemoteException
+     * On action javafx method for inserting your chosen cards into
+     * the fourth column.
+     * @throws RemoteException If a remote communication error occurs.
      */
     public void col3() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
@@ -516,7 +517,7 @@ public class GameLoopSceneController {
                 for(int j= 0; j<6; j++){
                     Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
-                        loadTileImage(card);
+                        this.image = loadTileImage(card);
                         ImageView imageView3 = new ImageView();
                         insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
                     }
@@ -541,9 +542,9 @@ public class GameLoopSceneController {
     }
 
     /**
-     * On action javafx method for inserting your choosen cards into
-     * the fifth column
-     * @throws RemoteException
+     * On action javafx method for inserting your chosen cards into
+     * the fifth column.
+     * @throws RemoteException If a remote communication error occurs.
      */
     public void col4() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
@@ -571,7 +572,7 @@ public class GameLoopSceneController {
                 for(int j= 0; j<6; j++){
                     Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                     if(card!=null) {
-                        loadTileImage(card);
+                        this.image = loadTileImage(card);
                         ImageView imageView3 = new ImageView();
                         insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
                     }
@@ -597,7 +598,7 @@ public class GameLoopSceneController {
 
     /**
      * On action javafx method for deleting the first card you picked during
-     * you turn
+     * your turn.
      */
     public void deleteTile0(){
         Pane panewithimageView = retrievePane(chosenCardsPane,0,0);
@@ -613,7 +614,7 @@ public class GameLoopSceneController {
     }
     /**
      * On action javafx method for deleting the second card you picked during
-     * you turn
+     * your turn.
      */
     public void deleteTile1(){
         Pane panewithimageView = retrievePane(chosenCardsPane,1,0);
@@ -631,7 +632,7 @@ public class GameLoopSceneController {
     }
     /**
      * On action javafx method for deleting the third card you picked during
-     * you turn
+     * your turn.
      */
     public void deleteTile2(){
         Pane panewithimageView = retrievePane(chosenCardsPane,2,0);
@@ -645,68 +646,67 @@ public class GameLoopSceneController {
         tile2.setVisible(false);
         tile1.setVisible(true);
         checkColumn();
-        if(GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
-            this.checkLater = false;
-        }else{
-            this.checkLater = true;
-        }
+        this.checkLater = !GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1));
     }
 
     /**
-     * Method for getting right paths for every type of card in order
-     * to load the associated image
-     * @param card
+     * Loads and returns the corresponding Image for a given Card.
+     *
+     * @param card The Card for which to load the Image.
+     * @return The Image associated with the Card.
      */
-    private void loadTileImage(Card card){
+    public static Image loadTileImage(Card card){
+        Image imageToReturn = null;
         switch (card.getColor()) {
             case CYAN -> {
                 switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
+                    case 0 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.1.png");
+                    case 1 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.2.png");
+                    case 2 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Trofei1.3.png");
                 }
             }
             case WHITE -> {
                 switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
+                    case 0 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.1.png");
+                    case 1 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.2.png");
+                    case 2 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Libri1.3.png");
                 }
             }
             case PINK -> {
                 switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
+                    case 0 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.1.png");
+                    case 1 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.2.png");
+                    case 2 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Piante1.3.png");
                 }
             }
             case ORANGE -> {
                 switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
+                    case 0 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.1.png");
+                    case 1 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.2.png");
+                    case 2 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Giochi1.3.png");
                 }
             }
             case BLUE -> {
                 switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
+                    case 0 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.1.png");
+                    case 1 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.2.png");
+                    case 2 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Cornici1.3.png");
                 }
             }
             case GREEN -> {
                 switch(card.getType()){
-                    case 0 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1_1.png");
-                    case 1 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
-                    case 2 -> image = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
+                    case 0 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1_1.png");
+                    case 1 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.2.png");
+                    case 2 -> imageToReturn = new Image("/images/17_MyShelfie_BGA/item_tiles/Gatti1.3.png");
                 }
             }
         }
+        return imageToReturn;
     }
 
     /**
      * Method that sets to non-visible all undo buttons, it is called
-     * only when you play a valid insertion into a column
+     * only when you play a valid insertion into a column.
      */
     private void switchOffTiles(){
         tile0.setVisible(false);
@@ -714,78 +714,37 @@ public class GameLoopSceneController {
         tile2.setVisible(false);
     }
 
-    /**It checks if the cardinality of the choosen cards buffer is compatible
-     * with the columns, the buttons of non-compaatible columns will disappear
+    /**It checks if the cardinality of the chosen cards buffer is compatible
+     * with the columns, the buttons of non-compatible columns will disappear.
      *
      */
     private void checkColumn(){
-        if(bookshelves.get(myIndex).getInsertable(0) < choosenCardsDim){
-            column0.setVisible(false);
-        }else{
-            column0.setVisible(true);
-        }
-        if(bookshelves.get(myIndex).getInsertable(1) < choosenCardsDim){
-            column1.setVisible(false);
-            }else{
-            column1.setVisible(true);
-        }
-        if(bookshelves.get(myIndex).getInsertable(2) < choosenCardsDim){
-            column2.setVisible(false);
-        }else{
-            column2.setVisible(true);
-        }
-        if(bookshelves.get(myIndex).getInsertable(3) < choosenCardsDim){
-            column3.setVisible(false);
-        }else{
-            column3.setVisible(true);
-        }
-        if(bookshelves.get(myIndex).getInsertable(4) < choosenCardsDim){
-            column4.setVisible(false);
-        }else{
-            column4.setVisible(true);
-        }
+        column0.setVisible(bookshelves.get(myIndex).getInsertable(0) >= choosenCardsDim);
+        column1.setVisible(bookshelves.get(myIndex).getInsertable(1) >= choosenCardsDim);
+        column2.setVisible(bookshelves.get(myIndex).getInsertable(2) >= choosenCardsDim);
+        column3.setVisible(bookshelves.get(myIndex).getInsertable(3) >= choosenCardsDim);
+        column4.setVisible(bookshelves.get(myIndex).getInsertable(4) >= choosenCardsDim);
     }
 
     /**
-     * This method resets the view of the undo choice buttons, it is called
-     * at every refresh of the scene in order to disallow insert methods for
-     * invalid columns
+     * Resets the visibility of the undo choice buttons based on the insertable slots in the bookshelf.
+     * If a column has insertable slots, the button above it will be visible; otherwise, it will be hidden.
      */
     private void resetColumnView(){
-        if(bookshelves.get(myIndex).getInsertable(0)==0){
-            column0.setVisible(false);
-        }else{
-            column0.setVisible(true);
-        }
+        column0.setVisible(bookshelves.get(myIndex).getInsertable(0) != 0);
 
-        if(bookshelves.get(myIndex).getInsertable(1)==0){
-            column1.setVisible(false);
-        }else{
-            column1.setVisible(true);
-        }
+        column1.setVisible(bookshelves.get(myIndex).getInsertable(1) != 0);
 
-        if(bookshelves.get(myIndex).getInsertable(2)==0){
-            column2.setVisible(false);
-        }else{
-            column2.setVisible(true);
-        }
+        column2.setVisible(bookshelves.get(myIndex).getInsertable(2) != 0);
 
-        if(bookshelves.get(myIndex).getInsertable(3)==0){
-            column3.setVisible(false);
-        }else{
-            column3.setVisible(true);
-        }
+        column3.setVisible(bookshelves.get(myIndex).getInsertable(3) != 0);
 
-        if(bookshelves.get(myIndex).getInsertable(4)==0){
-            column4.setVisible(false);
-        }else{
-            column4.setVisible(true);
-        }
+        column4.setVisible(bookshelves.get(myIndex).getInsertable(4) != 0);
     }
 
 
     /**
-     * This method initialize to non-visible the undo choice for already choosen cards
+     * This method initialize to non-visible the undo choice for already chosen cards.
      */
     private void initDeleteTileButtons(){
         tile0.setVisible(false);
@@ -794,12 +753,12 @@ public class GameLoopSceneController {
     }
 
     /**
-     * New method for checking alignment of the choosen coordinates, it checks
-     * every permutation of the 3 coordinates
-     * @param c1
-     * @param c2
-     * @param c3
-     * @return
+     * Checks if three coordinates are aligned in a straight line.
+     *
+     * @param c1 The first coordinate.
+     * @param c2 The second coordinate.
+     * @param c3 The third coordinate.
+     * @return {@code true} if the coordinates are aligned, {@code false} otherwise.
      */
     private boolean areCoordinatesAligned(Coordinates c1, Coordinates c2, Coordinates c3){
         return (GameRules.areCoordinatesAligned(c1,c2,c3) || GameRules.areCoordinatesAligned(c1,c3,c2) ||

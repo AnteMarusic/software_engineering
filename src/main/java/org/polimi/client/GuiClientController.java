@@ -294,7 +294,7 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case CHOSEN_COLUMN_REPLY -> {
                 ChosenColumnMessage m = (ChosenColumnMessage) message;
-                insertInOtherPlayerBookshelf(m.getColumn());
+                insertInOtherPlayerBookshelf(m.getColumn(), m.getPlayer());
                 return null;
             }
 
@@ -419,16 +419,8 @@ public class GuiClientController implements ClientControllerInterface{
             j ++;
         }
     }
-    public void insertInOtherPlayerBookshelf (int col){
+    public void insertInOtherPlayerBookshelf (int col, int index){
         System.out.println("la size delle chosen cards dell'altro client è: "+SceneController.getInstance().getOtherPlayerChosenCards().size());
-        int index = SceneController.getInstance().getCurrentPlayer();
-        if(index == SceneController.getInstance().getMyIndex()){
-            if(index==0){
-                index = SceneController.getInstance().getPlayers().size()-1;
-            }else{
-                index--;
-            }
-        }
         SceneController.getInstance().getBookshelves().get(index).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
         //SceneController.getInstance().getOtherPlayerChosenCards().clear();
     }
@@ -452,7 +444,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public Message chooseColumn() {
-        return new ChosenColumnMessage(username, SceneController.getInstance().getChosencol());
+        return new ChosenColumnMessage(username, SceneController.getInstance().getChosencol(), SceneController.getInstance().getMyIndex());
     }
 
     @Override

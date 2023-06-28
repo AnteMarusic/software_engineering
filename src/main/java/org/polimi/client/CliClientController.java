@@ -2,6 +2,7 @@ package org.polimi.client;
 
 import org.polimi.GameRules;
 import org.polimi.client.view.Cli;
+import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
@@ -532,7 +533,7 @@ public class CliClientController implements ClientControllerInterface {
         } while (!GameRules.bookshelfColInBound(input) || !flag);
         cli.printRoutine();
         cli.clearChosenCard();
-        return new ChosenColumnMessage(username, input);
+        return new ChosenColumnMessage(username, input, cli.getMyIndex());
 
     }
 

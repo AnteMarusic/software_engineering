@@ -118,6 +118,10 @@ public class Cli {
         }
     }
 
+    public int getMyIndex() {
+        return me;
+    }
+
     public void setChosenCards (List<Card> chosenCards) {
         this.chosenCards = chosenCards;
     }
