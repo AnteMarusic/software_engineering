@@ -30,7 +30,7 @@ public class ClientPersonalGoal {
 
 
     public void print() {
-        for (int i = ROW - 1; i >= 0; i--) {
+        for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
                 if (this.personalGoal[i][j] == null) {
                     System.out.print("N");
