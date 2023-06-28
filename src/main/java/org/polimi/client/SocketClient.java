@@ -130,7 +130,7 @@ public class SocketClient extends Client{
             try {
                 while (socket.isConnected()) {
                     message = input.readObject();
-                    System.out.println(message);
+                    System.out.println("received this message " + message);
                     if (!(message instanceof Message)) {
                         handleProtocolDisruption();
                     } else {
