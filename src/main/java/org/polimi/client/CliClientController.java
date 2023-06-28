@@ -90,7 +90,8 @@ public class CliClientController implements ClientControllerInterface {
 
             case CARD_TO_REMOVE -> {
                 CardToRemoveMessage m = (CardToRemoveMessage) message;
-                cli.removeOtherPlayerCards(m.getCoordinates());
+                if(!cli.ifCurrentPlayer())
+                    cli.removeOtherPlayerCards(m.getCoordinates());
                 cli.printRoutine();
                 return null;
             }

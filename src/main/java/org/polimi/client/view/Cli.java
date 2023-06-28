@@ -6,7 +6,9 @@ import org.polimi.client.ClientPersonalGoal;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static org.polimi.GameRules.boardRowColInBound;
 
@@ -163,7 +165,7 @@ public class Cli {
     }
     public void insertInOtherPlayerBookshelf (int col){
         this.bookshelves.get(currentPlayer).insert(this.otherPlayerChosenCards, col);
-        otherPlayerChosenCards.clear();
+        this.otherPlayerChosenCards.clear();
     }
 
     public void removeCards (List<Coordinates> toRemove){
@@ -187,15 +189,24 @@ public class Cli {
             j ++;
         }
     }
-
+    public boolean ifCurrentPlayer(){
+        return me == currentPlayer;
+    }
     public void removeOtherPlayerCards(List<Coordinates> toRemove){
         Coordinates temp;
         Card card;
         Coordinates[] AdjacentCoordinates = new Coordinates[4];
         int j = 0;
+        System.out.println("size di otherplayercards prima while è"+ otherPlayerChosenCards.size());
+        otherPlayerChosenCards.clear();
         while (j < toRemove.size()) {
             temp = toRemove.get(j);
             card = this.board.removeCardAtCoordinates(temp);
+            if(card == null){
+                System.out.println("la carta che ho rimosso con removeother player cards è null, ");
+            }else{
+                System.out.println("la carta in removeotherplaeyercards è "+ card);
+            }
             this.otherPlayerChosenCards.add(card);
             AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
             AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
@@ -208,6 +219,7 @@ public class Cli {
             }
             j ++;
         }
+        System.out.println("size di otherplayercards dopo while è"+ otherPlayerChosenCards.size());
     }
     public void printRoutine(){
         //delete all?
