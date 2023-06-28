@@ -29,6 +29,11 @@ public class ClientPersonalGoal {
     }
 
 
+    /**
+     * Prints the personal goal grid.
+     * Each cell in the grid represents a colored square.
+     * If a cell is empty (null), it is represented as 'N'.
+     */
     public void print() {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {

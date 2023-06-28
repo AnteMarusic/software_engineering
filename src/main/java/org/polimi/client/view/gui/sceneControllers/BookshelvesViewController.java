@@ -52,6 +52,10 @@ public class BookshelvesViewController {
         initScene();
     }
 
+    /**
+     * Initializes the scene by setting up the bookshelves and players based on the current state.
+     * This method is called when the scene is first loaded.
+     */
     private void initScene(){
         int me = SceneController.getInstance().getMyIndex();
         List<ClientBookshelf> bookshelves = SceneController.getInstance().getBookshelves();
@@ -166,6 +170,16 @@ public class BookshelvesViewController {
         }
     }
 
+    /**
+     * Inserts an ImageView into a GridPane at the specified position.
+     *
+     * @param imageView The ImageView to be inserted.
+     * @param width     The desired width of the ImageView.
+     * @param height    The desired height of the ImageView.
+     * @param gridp     The GridPane to which the ImageView will be added.
+     * @param x         The column index where the ImageView will be inserted.
+     * @param y         The row index where the ImageView will be inserted.
+     */
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){
         imageView.setImage(this.image);
         imageView.setFitWidth(width);
@@ -177,6 +191,12 @@ public class BookshelvesViewController {
                 .noneMatch(child -> GridPane.getRowIndex(child) == y && GridPane.getColumnIndex(child) == x))*/
         gridp.add(pane, x, y);
     }
+
+    /**
+     * Loads the image of a card and sets it as the current image in the scene.
+     *
+     * @param card The card for which to load the image.
+     */
     private void loadTileImage(Card card){
         this.image=GameLoopSceneController.loadTileImage(card);
     }

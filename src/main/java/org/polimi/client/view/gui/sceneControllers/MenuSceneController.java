@@ -26,11 +26,26 @@ public class MenuSceneController implements Initializable {
     private Slider slider;
 
     private double num=0;
+
+    /**
+     * Handles the event when the "Choose RMI" button is clicked.
+     *
+     * @param e The action event triggered by the button click.
+     * @throws IOException        If an I/O error occurs while switching the scene.
+     * @throws NotBoundException  If the remote object is not bound in the registry.
+     */
     public void chooseRMI(ActionEvent e) throws IOException, NotBoundException {
         RMIClient rmiClient = new RMIClient(1099, true);
         rmiClient.startConnection();
         SceneController.getInstance().switchScene(e, "login_scene");
     }
+
+    /**
+     * Handles the event when the "Choose Socket" button is clicked.
+     *
+     * @param e The action event triggered by the button click.
+     * @throws IOException If an I/O error occurs while switching the scene.
+     */
     public void chooseSocket(ActionEvent e) throws IOException {
         SocketClient socket = new SocketClient(8181, true);
         socket.connect();

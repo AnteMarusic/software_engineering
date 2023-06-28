@@ -66,6 +66,15 @@ public class ClientBookshelf {
         return maxInsertable;
     }
 
+
+    /**
+     * Inserts a list of cards into a specific column of the bookshelf grid.
+     * The cards are inserted from the top of the column downwards.
+     * The index of the column is updated accordingly.
+     *
+     * @param cards The list of cards to be inserted.
+     * @param col   The index of the column where the cards should be inserted.
+     */
     public void insert(List<Card> cards, int col) {
         int j = 0;
         //index parte da 6
@@ -76,6 +85,13 @@ public class ClientBookshelf {
         }
         this.index[col] = index[col] - cards.size();
     }
+
+    /**
+     * Prints the player's bookshelf grid.
+     * Each cell of the grid is represented by a colored square symbol.
+     * If a cell is empty (null), it is represented by "N".
+     * The colors of the squares correspond to the colors of the cards in the grid.
+     */
     public void print() {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j ++) {
@@ -108,6 +124,13 @@ public class ClientBookshelf {
             System.out.println(" ");
         }
     }
+
+    /**
+     * Prints the cards on the player's bookshelf.
+     * The method prints the player's bookshelf grid, displaying the cards and their colors.
+     * Empty spaces are represented by "|" characters.
+     * Each card is represented by a colored square.
+     */
     public void printMyBookshelf(){
         for (int i = 0; i < ROW; i++) {
             for(int k=0 ; k<COL ; k++) {
@@ -163,6 +186,11 @@ public class ClientBookshelf {
         System.out.println();
     }
 
+    /**
+     * Updates the maximum number of insertable cards in a column.
+     * The method iterates over each column of the bookshelf grid, calculates the number of insertable cards in the column,
+     * and updates the maximum insertable value accordingly. The maximum insertable value is capped at 3.
+     */
     private void updateMaxInsertable () {
         int max = 0;
         int insertable;
@@ -177,6 +205,8 @@ public class ClientBookshelf {
         }
         this.maxInsertable = max;
     }
+
+
     public Card seeCardAtCoordinates(Coordinates coor){
         return this.grid[coor.getRow()][coor.getCol()];
     }

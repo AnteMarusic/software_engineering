@@ -32,6 +32,11 @@ public class SocketClient extends Client{
         this.flagCondition = locksocket.newCondition();
     }
 
+    /**
+     * Establishes a connection with the server.
+     *
+     * @return true if the connection is successful, false otherwise.
+     */
     public boolean connect () {
         try{
             this.socket = new Socket("localhost", this.getPort());
@@ -73,6 +78,7 @@ public class SocketClient extends Client{
         return true;
     }
 
+
     public void waitForFlag() throws InterruptedException {
         System.out.println("prima di lock.lock");
         locksocket.lock();
@@ -103,6 +109,12 @@ public class SocketClient extends Client{
     private void createGuiClientController() {
         this.clientController = new GuiClientController(this, false);
     }
+
+    /**
+     * Sends a message to the server.
+     *
+     * @param message the message to send
+     */
     public void sendMessage(Message message) {
         try {
             if (socket.isConnected()) {
@@ -148,6 +160,10 @@ public class SocketClient extends Client{
             }
         }).start();
     }
+
+    /**
+     * Closes all the connections and streams associated with the client.
+     */
     private void closeEverything() {
         System.out.println("closeEverything");
         try {

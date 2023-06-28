@@ -17,6 +17,11 @@ public class Menu2SceneController {
 
     }
 
+    /**
+     * Handles the event when the "Random Game of 2" button is clicked.
+     * It is going to ask for a 2 players public game
+     * @param a The action event triggered by the button click.
+     */
     public void randomOf2(ActionEvent a){
         try {
             GuiClientController.getNotified("RandomGameOf2");
@@ -28,6 +33,11 @@ public class Menu2SceneController {
         }
     }
 
+    /**
+     * Handles the event when the "Random Game of 3" button is clicked.
+     * It is going to ask for a 3 players public game
+     * @param a The action event triggered by the button click.
+     */
     public void randomOf3(ActionEvent a){
         try {
             GuiClientController.getNotified("RandomGameOf3");
@@ -40,6 +50,11 @@ public class Menu2SceneController {
 
     }
 
+    /**
+     * Handles the event when the "Random Game of 4" button is clicked.
+     * It is going to ask for a 4 players public game
+     * @param a The action event triggered by the button click.
+     */
     public void randomOf4(ActionEvent a){
         try {
             GuiClientController.getNotified("RandomGameOf4");
