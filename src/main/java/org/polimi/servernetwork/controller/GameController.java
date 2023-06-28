@@ -360,6 +360,9 @@ public class GameController {
                 }
             }
         }
+        else {
+            System.out.println("(Game Controller disconnect) il game si sta distruggendo, ho notato una disconnesione del giocatore" + clientHandler.getUsername() + "ma non la lavoro siccome era ovvia e voluta");
+        }
 
     }
 

@@ -121,6 +121,9 @@ public abstract class ClientHandler{
             }
             closeEverything();
         }
+        else {
+            System.out.println("(ClientHandler disconnect) il game si sta distruggendo, ho notato una disconnesione di " + username + "ma non la lavoro siccome era ovvia e voluta");
+        }
     }
 
     protected abstract void closeEverything();
