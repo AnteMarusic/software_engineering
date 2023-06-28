@@ -62,7 +62,6 @@ public class SceneController {
 
     private boolean reconnected;
 
-
     public SceneController(){
         board = null;
         bookshelves = new ArrayList<ClientBookshelf>();
@@ -81,6 +80,12 @@ public class SceneController {
         return instance;
     }
 
+    /**
+     * Method that takes as parameter a boolean (true if it is your turn, false otherwise); it
+     * refreshes the Game Loop scene with visible game buttons if it is your turn and locks them
+     * if it is not your turn
+     * @param myTurn
+     */
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
         Platform.runLater(() -> {
@@ -112,6 +117,14 @@ public class SceneController {
     public int getMyIndex(){
         return this.players.indexOf(myUsername);
     }
+
+    /**
+     * Method that launch a new javafx scene taken as second parameter (String sceneName), this method
+     * is going to be called only if the change of the scene it is triggered by a button
+     * @param event
+     * @param sceneName
+     * @throws IOException
+     */
     public void switchScene(ActionEvent event, String sceneName) throws IOException {
         String ref = "/scenesfxml/" + sceneName + ".fxml";
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
@@ -136,6 +149,12 @@ public class SceneController {
         stage.show();
     }
 
+    /**
+     * Method that launch a new javafx scene, without closing the previous one, it is
+     * used for showing other players'bookshelf
+     *
+     * @throws IOException
+     */
     public void switchScenePopUp() throws IOException {
         String sceneName = "bookshelves_view_scene";
         String ref = "/scenesfxml/" + sceneName + ".fxml";
@@ -177,6 +196,15 @@ public class SceneController {
         return myUsername;
     }
 
+    /**
+     * Main switch scene method, it is used if the change of the scene is not triggered by a javafx action.
+     * It takes as parameters the main stage and Parent of the scene in order to take the main stage and show the
+     * new scene. The second parameter is the name of the scene
+     * @param stage
+     * @param sceneName
+     * @param root
+     * @throws IOException
+     */
     public void switchScene3(Stage stage, String sceneName, Parent root) throws IOException {
         this.root = root;
 
