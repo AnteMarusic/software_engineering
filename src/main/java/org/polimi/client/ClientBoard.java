@@ -37,7 +37,6 @@ public class ClientBoard {
     public Card seeCardAtCoordinates(Coordinates coordinates) {
         return this.board.get(coordinates);
     }
-
     public void printBoard() {
         int start, length;
         int[] temp;

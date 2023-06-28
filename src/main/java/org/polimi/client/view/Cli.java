@@ -209,7 +209,6 @@ public class Cli {
             j ++;
         }
     }
-
     public void printRoutine(){
         //delete all?
         System.out.print("\033[H\033[2J");
