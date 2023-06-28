@@ -533,7 +533,7 @@ public class CliClientController implements ClientControllerInterface {
         } while (!GameRules.bookshelfColInBound(input) || !flag);
         cli.printRoutine();
         cli.clearChosenCard();
-        return new ChosenColumnMessage(username, input, cli.getMyIndex());
+        return new ChosenColumnMessage(username, input);
 
     }
 
