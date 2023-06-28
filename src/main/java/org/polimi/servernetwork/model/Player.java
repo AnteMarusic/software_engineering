@@ -212,4 +212,8 @@ public class Player implements Serializable {
     public Card[][] getGrid () {
         return bookshelf.getGrid();
     }
+
+    public void printBookshelf(){
+        bookshelf.printbookshelf();
+    }
 }

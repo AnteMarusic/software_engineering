@@ -221,6 +221,8 @@ public class Game implements Serializable {
      * @param currentPlayer is the player that inserted in bookshelf
      */
     private void updateScore(int currentPlayer){
+        System.out.println("(Game updateScore) stampo la bookshlef del giocatore corrente");
+        players[currentPlayer].printBookshelf();
         System.out.println("(Game updateScore) old personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
         // aggiorno il personaleScore
         players[currentPlayer].updatePersonalScore();
