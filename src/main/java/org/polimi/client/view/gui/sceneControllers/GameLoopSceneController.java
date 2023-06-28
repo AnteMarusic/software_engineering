@@ -388,6 +388,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
            showAlert("There's no more space in this column");
@@ -443,6 +444,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -498,6 +500,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -553,6 +556,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -608,6 +612,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
