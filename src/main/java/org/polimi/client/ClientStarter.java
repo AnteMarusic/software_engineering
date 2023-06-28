@@ -16,6 +16,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+/**
+ * Access point to the client application, it starts with a first choice through the command
+ * line interface for choosing in which view mode you are going to play.
+ * If you choose to play with the CLI, it asks for connection mode (RMI or Socket), otherwise it launches
+ * the first GUI scene
+ */
+
 public class ClientStarter {
     private static final int rmiPort = 1099;
     private static final int socketPort = 8181;

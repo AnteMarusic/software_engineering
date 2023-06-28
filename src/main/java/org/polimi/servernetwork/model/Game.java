@@ -153,7 +153,10 @@ public class Game implements Serializable {
         // players[i].setTotalScore(players[i].getSharedScore() + players[i].getPersonalScore());
         // e lo ritorna
 
+
         updateScore(currentPlayer);
+        System.out.println("sto mandando al giocatore: " + currentPlayer + " i suoi punteggi, e sono: personale score: " + players[currentPlayer].getPersonalScore() +
+                ", shared score: " + players[currentPlayer].getSharedScore() + ", boardScore: " + players[currentPlayer].getBoardScore() + ", winpoint: " + players[currentPlayer].getWinPoint());
         return players[currentPlayer].getTotalScore();
     }
 
@@ -218,6 +221,8 @@ public class Game implements Serializable {
      * @param currentPlayer is the player that inserted in bookshelf
      */
     private void updateScore(int currentPlayer){
+        System.out.println("(Game updateScore) stampo la bookshlef del giocatore corrente");
+        players[currentPlayer].printBookshelf();
         System.out.println("(Game updateScore) old personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
         // aggiorno il personaleScore
         players[currentPlayer].updatePersonalScore();

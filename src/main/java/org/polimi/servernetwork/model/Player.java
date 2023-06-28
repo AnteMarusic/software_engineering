@@ -48,6 +48,7 @@ public class Player implements Serializable {
      */
     public Player(String playerName) {
         this.name = playerName;
+        this.boardScore = 0 ;
         this.sharedScore = 0;
         this.personalScore= 0;
         this.winPoint = 0;
@@ -84,6 +85,10 @@ public class Player implements Serializable {
     }
     public void setBoardScore(int boardScore){
         this.boardScore = boardScore;
+    }
+
+    public int getWinPoint(){
+        return this.winPoint;
     }
 
     /**
@@ -206,5 +211,9 @@ public class Player implements Serializable {
 
     public Card[][] getGrid () {
         return bookshelf.getGrid();
+    }
+
+    public void printBookshelf(){
+        bookshelf.printbookshelf();
     }
 }

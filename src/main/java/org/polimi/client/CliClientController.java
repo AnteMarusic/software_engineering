@@ -139,6 +139,10 @@ public class CliClientController implements ClientControllerInterface {
                 Map<String,Integer> ranking = m.getRanking();
                 cli.printRanking(ranking);
             }
+            case CURRENT_SCORE -> {
+                CurrentScore m = (CurrentScore) message;
+                cli.printCurrentScore(m.getCurrentScore());
+            }
         }
         return null;
     }

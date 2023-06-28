@@ -6,4 +6,8 @@ public class CurrentScore extends Message{
         super(username, MessageType.CURRENT_SCORE);
         this.currentScore = currentScore;
     }
+
+    public int getCurrentScore(){
+        return this.currentScore;
+    }
 }

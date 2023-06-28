@@ -349,4 +349,7 @@ public class Cli {
     public void printRanking(Map<String,Integer> ranking){
         System.out.println("Il gioco è concluso, la classifica finale è: " + ranking.toString());
     }
+    public void printCurrentScore(int currentScore){
+        System.out.println("il punteggio attuale è di: " + currentScore);
+    }
 }
