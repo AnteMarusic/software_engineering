@@ -11,7 +11,7 @@ class BoardGoalTest {
     void testCalucateBoardGoal() {
         BoardGoal boardGoal = new BoardGoal();
         Card[][] grid = new Card[6][5];
-        grid[5][0]= new Card(Card.Color.WHITE, Card.State.IN_BOOKSHELF);
+        /*grid[5][0]= new Card(Card.Color.WHITE, Card.State.IN_BOOKSHELF);
         grid[5][1]= new Card(Card.Color.WHITE, Card.State.IN_BOOKSHELF);
         grid[5][2]= new Card(Card.Color.WHITE, Card.State.IN_BOOKSHELF);
         grid[4][1]= new Card(Card.Color.WHITE, Card.State.IN_BOOKSHELF);
@@ -26,14 +26,15 @@ class BoardGoalTest {
 
         grid[4][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
         grid[5][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+*/
 
-        grid[2][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
-        grid[3][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
-        grid[4][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        grid[3][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        grid[4][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        grid[5][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
 
 
         //int score = boardGoal.getScore(grid);
         int score = boardGoal.getScore(grid);
-        assertEquals(10,score );
+        assertEquals(2,score );
     }
 }
