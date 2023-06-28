@@ -85,12 +85,20 @@ public class GameLoopSceneController {
         this.startTurnShown=false;
     }
 
-
+    /**
+     * Javafx initialization method for the game loop scene, it calls 2 inner methods. One that deals
+     * with board and bookshelves, the other one with the goals.
+     */
     @FXML
     public void initialize(){
         initializeScene();
         initializeGoals();
     }
+
+    /**
+     * Method that initializes the whole game loop by adding images to the panes and updates the view of
+     * the model whenever the model has changed
+     */
     private void initializeScene(){
         yourTurn = SceneController.getInstance().getMyTurn();
         if(yourTurn){

@@ -55,17 +55,27 @@ public class GuiClientController implements ClientControllerInterface{
         this.flagCondition = lock.newCondition();
     }
 
+
+    /**
+     * Method that locks a thread and let it waits until a certain condition is
+     * fullfilled
+     * @throws InterruptedException
+     */
     public void waitForFlag() throws InterruptedException {
         lock.lock();
         try {
             while (!this.chosencards) {
-                flagCondition.await(); // Wait until the flag is set
+                flagCondition.await();
             }
         } finally {
             lock.unlock();
         }
     }
 
+    /**
+     * Methods that restores the initial state of the lock, it is going to be
+     * called just after the sleeping thread is unlocked
+     */
     public void reset() {
         lock.lock();
         try {
@@ -75,7 +85,13 @@ public class GuiClientController implements ClientControllerInterface{
         }
     }
 
-    //viene chiamato ogni volta che il controller di una scena vuole passare parametri a questa classe
+    /**
+     * Method that let us deal with specific internal notification, used to synchronize
+     * procedures that need notifies from a thread to antoher one
+     * @param notificationType
+     * @return
+     * @throws RemoteException
+     */
     public static boolean getNotified(String notificationType) throws RemoteException {
         if(rmi){
             switch(notificationType){
@@ -205,6 +221,12 @@ public class GuiClientController implements ClientControllerInterface{
         this.username = username;
     }
 
+    /**Override method of upper class "Client" used to deal with messages received from
+     * the server
+     * @param message
+     * @return
+     * @throws IOException
+     */
     @Override
     public Message handleMessage(Message message) throws IOException {
         switch (message.getMessageType()) {
@@ -360,11 +382,21 @@ public class GuiClientController implements ClientControllerInterface{
         return null;
     }
 
+    /**
+     * Method that construct the choosen cards message
+     * @return
+     */
     @Override
     public Message chooseCards(){
         System.out.println("sto inviando una lista di coordinate di dimensione "+ SceneController.getInstance().getChosenCards().size());
         return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCardsCoords(), SceneController.getInstance().getChosenCards());
     }
+
+    /**
+     * Method that take cards choosed by another players as parameters and update client model
+     * consequentially
+     * @param toRemove
+     */
     public void removeOtherPlayerCards(List<Coordinates> toRemove){
         Coordinates temp;
         Card card;
@@ -435,6 +467,19 @@ public class GuiClientController implements ClientControllerInterface{
 
     }
 
+
+    /**
+     * Metrhod that take the whole model status ad parameter and update the Client rappresentation of the
+     * model
+     * @param board
+     * @param bookshelves
+     * @param sharedGoal1
+     * @param sharedGoal2
+     * @param personalGoalCoordinates
+     * @param personalGoalColors
+     * @param usernames
+     * @param personalGoal
+     */
     @Override
     public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
