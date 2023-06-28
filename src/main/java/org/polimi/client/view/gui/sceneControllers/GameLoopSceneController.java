@@ -99,17 +99,6 @@ public class GameLoopSceneController {
         initializeScene();
         initializeGoals();
     }
-    private void countPanesInCell(GridPane gridPane, int columnIndex, int rowIndex) {
-        int count = 0;
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == columnIndex && GridPane.getRowIndex(node) == rowIndex) {
-                if (node instanceof Pane) {
-                    count++;
-                }
-            }
-        }
-        System.out.println("questo è il count di pane in questa cella "+ count+ ", in col="+columnIndex+"row"+rowIndex);
-    }
 
     /**
      * Method that initializes the whole game loop by adding images to the panes and updates the view of
@@ -144,28 +133,12 @@ public class GameLoopSceneController {
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
                 if(card!=null) {
                     this.image = loadTileImage(card);
-                    countPanesInCell(gridPane,j, i);
                     ImageView imageView;
-                    System.out.println("gridpane has children ="+ gridPane.getChildren().size());
                     Pane paneWithImageView = retrievePane(gridPane, j, i);
                     if(paneWithImageView == null){
                         imageView = new ImageView();
                         insertInGridPane(imageView, 50, 50, gridPane, j, i);
-                        System.out.println("ora è");
-                        countPanesInCell(gridPane,j, i);
                     }else{
-
-                        //System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() +" in pos "+ "col ="+j+" row="+i);
-
-                        //System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + " in pos "+ "col ="+j+" row="+i);
-                        if(paneWithImageView.getChildren().size()==0){
-                            System.out.println("000000000" +
-                                    "" +
-                                    "" +
-                                    "" +
-                                    "" +
-                                    "");
-                        }
                         imageView = (ImageView) paneWithImageView.getChildren().get(0);
                     }
                     int row = i;
@@ -180,10 +153,6 @@ public class GameLoopSceneController {
                                     case 0 -> {
                                         this.image = loadTileImage(card);
                                         insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim , 0);
-                                        /*int index = gridPane.getChildren().indexOf(paneWithImageView);
-                                        if (index != -1) {
-                                            gridPane.getChildren().remove(index);
-                                        }*/
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         chosenCards.add(card);
                                         choosenCardsDim++;
@@ -199,7 +168,6 @@ public class GameLoopSceneController {
                                             }
                                             this.image = loadTileImage(card);
                                             insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
-                                            //gridPane.getChildren().remove(paneWithImageView);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             chosenCards.add(card);
                                             choosenCardsDim++;
@@ -215,7 +183,6 @@ public class GameLoopSceneController {
                                             if(     this.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                                 this.image = loadTileImage(card);
                                                 insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
-                                                //gridPane.getChildren().remove(paneWithImageView);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 chosenCards.add(card);
                                                 choosenCardsDim++;
@@ -238,7 +205,6 @@ public class GameLoopSceneController {
                     }
                     else{
                         startTurnShown=false;
-                        System.out.println("my turn è false, col "+ j+ "e row "+i);
                         imageView.setOnMouseClicked(null);
                     }
                 }
@@ -303,7 +269,6 @@ public class GameLoopSceneController {
 
         Pane pane = retrievePane(gridp, x, y);
         if (pane == null) {
-            System.out.println("pane è null");
             pane = new Pane();
 
             if (width == 94 || width == 62) {
@@ -335,11 +300,10 @@ public class GameLoopSceneController {
                 });
             }
             pane.getChildren().add(imageView);
-            gridp.add(pane, x, y); // Add the new pane to the gridPane
+            gridp.add(pane, x, y);
         }
         else {
-            System.out.println("sto settando perchè c'è già un pane qui");
-            pane.getChildren().setAll(imageView); // Replace the existing child with the new imageView
+            pane.getChildren().setAll(imageView);
         }
     }
 
@@ -415,9 +379,7 @@ public class GameLoopSceneController {
             }
             SceneController.getInstance().setChosencol(0);
             SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
-            System.out.println("COORDINATE SCELTE"+ chosenCoordinates);
             SceneController.getInstance().setChosenCards(list);
-            System.out.println("CARTE SCELTE"+list);
             GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());
@@ -426,6 +388,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
            showAlert("There's no more space in this column");
@@ -481,6 +444,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -536,6 +500,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -591,6 +556,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -646,6 +612,7 @@ public class GameLoopSceneController {
                 }
             }
             chosenCardsPane.getChildren().clear();
+            chosenCards.clear();
         }
         else{
             showAlert("There's no more space in this column");
@@ -656,21 +623,8 @@ public class GameLoopSceneController {
      * On action javafx method for deleting the first card you picked during
      * your turn.
      */
-    private Pane getPaneInCell(GridPane gridPane, int columnIndex, int rowIndex) {
-        for (Node child : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(child) == columnIndex && GridPane.getRowIndex(child) == rowIndex) {
-                if (child instanceof Pane) {
-                    return (Pane) child;  // Found the Pane in the desired cell
-                }
-            }
-        }
-        return null;  // No Pane found in the desired cell
-    }
     public void deleteTile0(){
         Pane paneWithImageView = retrievePane(chosenCardsPane,0,0);
-        if(paneWithImageView.getChildren().size()==0){
-            System.out.println("sto rimuovendo un pane senza figli");
-        }
         chosenCardsPane.getChildren().remove(paneWithImageView);
         image = loadTileImage(chosenCards.remove(0));
         insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow() );
@@ -686,9 +640,6 @@ public class GameLoopSceneController {
      */
     public void deleteTile1(){
         Pane paneWithImageView = retrievePane(chosenCardsPane,1,0);
-        if(paneWithImageView.getChildren().size()==0){
-            System.out.println("sto rimuovendo un pane senza figli");
-        }
         chosenCardsPane.getChildren().remove(paneWithImageView);
         image = loadTileImage(chosenCards.remove(1));
         insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow() );
@@ -705,9 +656,6 @@ public class GameLoopSceneController {
      */
     public void deleteTile2(){
         Pane paneWithImageView = retrievePane(chosenCardsPane,2,0);
-        if(paneWithImageView.getChildren().size()==0){
-            System.out.println("sto rimuovendo un pane senza figli");
-        }
         chosenCardsPane.getChildren().remove(paneWithImageView);
         image = loadTileImage(chosenCards.remove(2));
         insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow() );
