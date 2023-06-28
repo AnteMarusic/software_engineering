@@ -115,16 +115,6 @@ public class GameLoopSceneController {
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
-        for(int i = 0; i<5; i++){
-            for(int j= 0; j<6; j++){
-                Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
-                if(card!=null) {
-                    this.image = loadTileImage(card);
-                    ImageView imageView3 = new ImageView();
-                    insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
-                }
-            }
-        }
         resetColumnView();
         initDeleteTileButtons();
         choosenCardsDim = 0;
