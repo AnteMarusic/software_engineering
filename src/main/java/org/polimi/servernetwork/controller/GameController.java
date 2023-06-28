@@ -471,4 +471,8 @@ public class GameController {
         GameListFileAccessorSingleton fileAccessor = GameListFileAccessorSingleton.getInstance();
         fileAccessor.removeGameIdWithPlayers(this.gameCode);
     }
+
+    public boolean getDestruction(){
+        return destruction;
+    }
 }

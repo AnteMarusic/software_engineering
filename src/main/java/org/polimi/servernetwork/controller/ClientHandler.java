@@ -96,29 +96,31 @@ public abstract class ClientHandler{
      * if the ClientHandler is not logged (this happens only in Socket) we just call closeEverything method
      */
     public void disconnect () {
-        if (isLogged) {
-            System.out.println("(ClientHandler) " + this.username + " disconnected");
+        if(!gameController.getDestruction()){
+            if (isLogged) {
+                System.out.println("(ClientHandler) " + this.username + " disconnected");
 
-            if (lobbyController == null) {
-                System.out.println("(ClientHandler username: " + this.username + ") sistemic failure. for some reason lobbyController attribute is null");
-                throw new NullPointerException();
-            }
+                if (lobbyController == null) {
+                    System.out.println("(ClientHandler username: " + this.username + ") sistemic failure. for some reason lobbyController attribute is null");
+                    throw new NullPointerException();
+                }
 
-            //if game controller is null you are either in a lobby or waiting to get in one
-            //so, you should disconnect from it
-            if (gameController == null) {
-                lobbyController.disconnect(this);
-                usernameIssuer.removeUsername(this.username);
+                //if game controller is null you are either in a lobby or waiting to get in one
+                //so, you should disconnect from it
+                if (gameController == null) {
+                    lobbyController.disconnect(this);
+                    usernameIssuer.removeUsername(this.username);
+                }
+                //if you are in a game you have to be disconnected from it
+                if (gameController != null) {
+                    System.out.println("(ClientHandler) " + this.username + " is in a game");
+                    usernameIssuer.setDisconnect(this.username);
+                    gameController.disconnection(this);
+                }
+                //closes the socket and the I/O streams
             }
-            //if you are in a game you have to be disconnected from it
-            if (gameController != null) {
-                System.out.println("(ClientHandler) " + this.username + " is in a game");
-                usernameIssuer.setDisconnect(this.username);
-                gameController.disconnection(this);
-            }
-            //closes the socket and the I/O streams
+            closeEverything();
         }
-        closeEverything();
     }
 
     protected abstract void closeEverything();
