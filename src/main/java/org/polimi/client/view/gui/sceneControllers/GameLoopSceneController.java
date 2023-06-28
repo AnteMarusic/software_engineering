@@ -242,6 +242,17 @@ public class GameLoopSceneController {
         SceneController.getInstance().switchScenePopUp();
     }
 
+    /**
+     * Inserts an ImageView into a GridPane at the specified column and row indices. Also gives each pane containing an
+     * ImageView an OnMouseEntered effect.
+     *
+     * @param imageView The ImageView to be inserted.
+     * @param width     The desired width of the ImageView.
+     * @param height    The desired height of the ImageView.
+     * @param gridp     The GridPane in which to insert the ImageView.
+     * @param x         The column index where the ImageView should be inserted.
+     * @param y         The row index where the ImageView should be inserted.
+     */
     private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){
         imageView.setImage(image);
         imageView.setFitWidth(width);
@@ -278,7 +289,14 @@ public class GameLoopSceneController {
         gridp.add(pane, x, y);
     }
 
-
+    /**
+     * Retrieves a specific Pane from a GridPane based on the specified column and row indices.
+     *
+     * @param gridPane The GridPane from which to retrieve the Pane.
+     * @param j        The column index of the desired Pane.
+     * @param i        The row index of the desired Pane.
+     * @return The Pane at the specified column and row indices, or null if not found.
+     */
     private Pane retrievePane(GridPane gridPane, int j, int i){
          return (Pane) gridPane.getChildren().stream()
                 .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
@@ -304,7 +322,7 @@ public class GameLoopSceneController {
     }
 
     /**
-     * On action javafx method for inserting your choosen cards into
+     * On action javafx method for inserting your chosen cards into
      * the first column
      * @throws RemoteException
      */
@@ -358,7 +376,7 @@ public class GameLoopSceneController {
     }
 
     /**
-     * On action javafx method for inserting your choosen cards into
+     * On action javafx method for inserting your chosen cards into
      * the second column
      * @throws RemoteException
      */
