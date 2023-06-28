@@ -34,9 +34,20 @@ public class ClientBoard {
         this.board = board;
     }
 
+
+    /**
+     * Retrieves the card at the specified coordinates on the game board.
+     *
+     * @param coordinates the coordinates of the card
+     * @return the card at the specified coordinates, or null if no card is found
+     */
     public Card seeCardAtCoordinates(Coordinates coordinates) {
         return this.board.get(coordinates);
     }
+
+    /**
+     * Prints the game board to the console.
+     */
     public void printBoard() {
         int start, length;
         int[] temp;

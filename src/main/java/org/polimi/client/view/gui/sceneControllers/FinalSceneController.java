@@ -45,10 +45,6 @@ public class FinalSceneController {
     }
 
 
-    public void newGame() throws IOException {
-        SceneController.getInstance().getStage().close();
-        SceneController.getInstance().switchScene3(SceneController.getInstance().getStage(), "menu2_scene", SceneController.getInstance().getStage().getScene().getRoot());
-    }
 
 
     public void quitGame(){

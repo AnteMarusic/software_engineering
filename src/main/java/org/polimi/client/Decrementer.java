@@ -7,6 +7,13 @@ public class Decrementer implements Runnable {
         this.client = client;
     }
 
+
+    /**
+     * Overrides the run method of the Thread class.
+     * Decrements the countDown value of the associated client continuously until interrupted.
+     * Sleeps for 1000 milliseconds (1 second) between each decrement.
+     * If interrupted, it prints a message indicating the interrupted exception.
+     */
     @Override
     public void run () {
         while (true) {

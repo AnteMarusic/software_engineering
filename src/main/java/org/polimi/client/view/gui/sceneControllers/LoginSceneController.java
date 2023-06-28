@@ -22,6 +22,13 @@ public class LoginSceneController {
     @FXML
     public void initialize() {
     }
+
+    /**
+     * Handles the event when the join button is clicked.
+     *
+     * @param event The action event triggered by the join button.
+     * @throws IOException if an I/O error occurs while switching scenes.
+     */
     @FXML
     private void onJoinBtnClick(ActionEvent event) throws IOException {
         joinBtn.setDisable(true);
