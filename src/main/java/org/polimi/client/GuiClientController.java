@@ -1,15 +1,10 @@
 package org.polimi.client;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.polimi.client.view.gui.sceneControllers.GameLoopController;
-import org.polimi.client.view.gui.sceneControllers.LobbySceneController;
+import org.polimi.client.view.gui.sceneControllers.GameLoopSceneController;
 import org.polimi.client.view.gui.sceneControllers.SceneController;
 import org.polimi.messages.*;
 import org.polimi.servernetwork.model.Card;
@@ -249,9 +244,9 @@ public class GuiClientController implements ClientControllerInterface{
                 }else{
                     System.out.println("il controller non é null");
                 }
-                GameLoopController gameLoopController = loader.getController();
-                gameLoopController.gameLoopInit();
-                SceneController.getInstance().setGameLoopController(gameLoopController);
+                GameLoopSceneController gameLoopSceneController = loader.getController();
+                gameLoopSceneController.gameLoopInit();
+                SceneController.getInstance().setGameLoopController(gameLoopSceneController);
                 if(usernames.get(currentPlayer).equals(username)){
                     SceneController.getInstance().setMyTurn(true);
                 }else{

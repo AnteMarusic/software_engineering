@@ -7,13 +7,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
 import org.polimi.client.ClientPersonalGoal;
 import org.polimi.client.GuiClientController;
-import org.polimi.client.view.gui.Gui;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
@@ -57,7 +55,7 @@ public class SceneController {
 
     private boolean myTurn;
 
-    private GameLoopController gameLoopController;
+    private GameLoopSceneController gameLoopSceneController;
     private BookshelvesViewController bookshelvesViewController;
 
     private Map<String,Integer> ranking;
@@ -86,7 +84,7 @@ public class SceneController {
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
         Platform.runLater(() -> {
-            gameLoopController.refreshScene();
+            gameLoopSceneController.refreshScene();
             if(bookshelvesViewController!=null){
                 bookshelvesViewController.refreshScene();
             }
@@ -121,7 +119,7 @@ public class SceneController {
 
         if (sceneName.equals("game_loop")) {
             stage.setTitle("My_Shelfie");
-            this.gameLoopController = loader.getController();
+            this.gameLoopSceneController = loader.getController();
             GuiClientController.getNotified("createdgameloop");
         }
 
@@ -313,8 +311,8 @@ public class SceneController {
         return currentPlayer;
     }
 
-    public void setGameLoopController(GameLoopController gameLoopController) {
-        this.gameLoopController = gameLoopController;
+    public void setGameLoopController(GameLoopSceneController gameLoopSceneController) {
+        this.gameLoopSceneController = gameLoopSceneController;
     }
 
     public void setBookshelvesViewController(BookshelvesViewController bookshelvesViewController) {
