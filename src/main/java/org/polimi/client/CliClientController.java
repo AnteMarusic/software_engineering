@@ -84,6 +84,7 @@ public class CliClientController implements ClientControllerInterface {
             // nuovo messaggio aggiunto
             case BOARDMESSAGE -> {
                 BoardMessage m = (BoardMessage) message;
+                System.out.println("ho ricevuto il messaggio di riempire di nuovo la board");
                 Map<Coordinates, Card> board = m.getBoard();
                 newBoardRefill(board);
                 cli.printRoutine();

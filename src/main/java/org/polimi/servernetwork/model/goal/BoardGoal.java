@@ -24,12 +24,14 @@ public class BoardGoal implements Goal, Serializable {
     @Override
     public int getScore(Card[][] grid2) {
         this.grid=grid2;
+        visited.clear();
         int row = 0 , col = 0;
         int number = 0;
         int score = 0;
         while (row < ROW && col < COL) {
             number=0;
             if (grid[row][col]!=null && !visited.contains(new Coordinates(row, col)) ) {
+                visited.add(new Coordinates(row, col));
                 number = 1 + countSnake(row, col);
             }
             if (number == 3)
@@ -40,7 +42,7 @@ public class BoardGoal implements Goal, Serializable {
                 score += 5;
             if (number >= 6)
                 score += 8;
-            
+
             if (col == 4) {
                 row += 1;
             }
@@ -50,189 +52,282 @@ public class BoardGoal implements Goal, Serializable {
     }
 
     private int countSnake (int row, int col) {
-        visited.add(new Coordinates(row, col));
-
         if (row == 0 && col == 0){ // giù, dx
             if (check_down(row, col) && check_right(row, col)) {    // giù e dx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
             if (check_right(row,col)){     // solo dx
+                visited.add(new Coordinates(row, col+1));
                 return 1 + countSnake(row, col + 1);
             }
             if (check_down(row,col)){   // solo giù
+                visited.add(new Coordinates(row+1, col));
                 return 1 + countSnake(row + 1, col);
             }
         }
         if (row == 0 && col == 4){ // giù, sx
             if( check_down(row,col) && check_left(row,col)){  // giù e sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row+1, col));
                 return 2 + countSnake(row, col-1) + countSnake(row + 1, col);
             }
             if (check_down(row,col)) {  // solo giù
+                visited.add(new Coordinates(row+1, col));
                 return 1 + countSnake(row + 1, col);
             }
             if (check_left(row,col)) {  // solo sx
+                visited.add(new Coordinates(row, col-1));
                 return 1 + countSnake(row, col - 1);
             }
         }
         if (row == 5 && col == 0){ // su, dx
             if (check_up(row,col) && check_right(row,col)) {    // su e dx
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row-1, col));
                 return 2 + countSnake(row, col + 1) + countSnake(row - 1, col);
             }
             if (check_right(row,col)){     // solo dx
+                visited.add(new Coordinates(row, col+1));
                 return 1 + countSnake(row, col + 1);
             }
             if (check_up(row,col)){   // solo giù
+                visited.add(new Coordinates(row-1, col));
                 return 1 + countSnake(row - 1, col);
             }
         }
         if (row == 5 && col == 4){ // su, sx
             if(check_up(row,col) && check_left(row,col)){  // su e sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row-1, col));
                 return 2 + countSnake(row, col-1) + countSnake(row - 1, col);
             }
             if (check_up(row,col)) {  // solo su
+                visited.add(new Coordinates(row-1, col));
                 return 1 + countSnake(row - 1, col);
             }
             if (check_left(row,col)) {  // solo sx
+                visited.add(new Coordinates(row, col-1));
                 return 1 + countSnake(row, col - 1);
             }
         }
         if (row == 0 && col > 0 && col < 4){ // giù, dx, sx
             if (check_down(row,col) && check_right(row,col) && check_left(row,col)){    // giù, dx che sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row+1, col));
                 return 3 + countSnake(row, col-1) + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
             if (check_down(row,col) && check_right(row,col)) {    // giù e dx
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row+1, col));
                 return 2 + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
             if(check_down(row,col) && check_left(row,col)){  // giù e sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row+1, col));
                 return 2 + countSnake(row, col-1) + countSnake(row + 1, col);
             }
             if (check_left(row,col) && check_right(row,col)) { // controllo dx e sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col-1) + countSnake(row, col + 1);
             }
             if (check_down(row,col)){   // solo giù
+                visited.add(new Coordinates(row+1, col));
                 return 1 + countSnake(row + 1, col);
             }
             if (check_left(row,col)) {  // solo sx
+                visited.add(new Coordinates(row, col-1));
                 return 1 + countSnake(row, col - 1);
             }
             if (check_right(row,col)) {     // solo dx
+                visited.add(new Coordinates(row, col+1));
                 return 1 + countSnake(row, col + 1);
             }
         }
         if (row == 5 && col > 0 && col < 4){ // su, dx, sx
             if (check_up(row,col) && check_right(row,col) && check_left(row,col)){    // su dx che sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row-1, col));
                 return 3 + countSnake(row, col-1) + countSnake(row, col + 1) + countSnake(row - 1, col);
             }
             if (check_up(row,col) && check_right(row,col)) {    // su e dx
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row-1, col));
                 return 2 + countSnake(row, col + 1) + countSnake(row - 1, col);
             }
             if(check_up(row,col) && check_left(row,col)){  // su e sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row-1, col));
                 return 2 + countSnake(row, col-1) + countSnake(row - 1, col);
             }
             if (check_left(row,col) && check_right(row,col)) { // controllo dx e sx
+                visited.add(new Coordinates(row, col-1));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col-1) + countSnake(row, col + 1);
             }
             if (check_up(row,col)) {  // solo su
+                visited.add(new Coordinates(row-1, col));
                 return 1 + countSnake(row - 1, col);
             }
             if (check_left(row,col)) {  // solo sx
+                visited.add(new Coordinates(row, col-1));
                 return 1 + countSnake(row, col - 1);
             }
-
             if (check_right(row,col)){     // solo dx
+                visited.add(new Coordinates(row, col+1));
                 return 1 + countSnake(row, col + 1);
             }
         }
         if (col == 0 && row > 0 && row < 5){ // giù, su, dx
             if( check_up(row,col) && check_down(row,col) && check_right(row,col)){ // giù, su, dx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 3 + countSnake(row-1, col) + countSnake( row+1, col) + countSnake( row, col+1);
             }
             if (check_down(row,col) && check_up(row,col)) {    // giù e su
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row+1, col));
                 return 2 + countSnake(row-1, col) + countSnake(row + 1, col);
             }
             if (check_down(row,col) && check_right(row,col)) {    // giù e dx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
             if (check_up(row,col) && check_right(row,col)) {    // su e dx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col + 1) + countSnake(row - 1, col);
             }
             if (check_up(row,col)) {  // solo su
+                visited.add(new Coordinates(row-1, col));
                 return 1 + countSnake(row - 1, col);
             }
             if (check_down(row,col)){   // solo giù
+                visited.add(new Coordinates(row+1, col));
                 return 1 + countSnake(row + 1, col);
             }
             if (check_right(row,col)){     // solo dx
+                visited.add(new Coordinates(row, col+1));
                 return 1 + countSnake(row, col + 1);
             }
         }
         if (col == 4 && row > 0 && row < 5){ // giù, su, sx
             if( check_up(row,col) && check_down(row,col) && check_left(row,col)){ // giù, su, sx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col-1));
                 return 3 + countSnake(row-1, col) + countSnake( row+1, col) + countSnake( row, col-1);
             }
             if (check_down(row,col) && check_up(row,col)) {    // giù e su
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row+1, col));
                 return 2 + countSnake(row-1, col) + countSnake(row + 1, col);
             }
             if(check_down(row,col) && check_left(row,col)){  // giù e sx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col-1));
                 return 2 + countSnake(row, col-1) + countSnake(row + 1, col);
             }
             if(check_up(row,col) && check_left(row,col)){  // su e sx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col-1));
                 return 2 + countSnake(row, col-1) + countSnake(row - 1, col);
             }
             if (check_up(row,col)) {  // solo su
+                visited.add(new Coordinates(row-1, col));
                 return 1 + countSnake(row - 1, col);
             }
             if (check_down(row,col)){   // solo giù
+                visited.add(new Coordinates(row+1, col));
                 return 1 + countSnake(row + 1, col);
             }
             if (check_left(row,col)){     // solo sx
+                visited.add(new Coordinates(row, col-1));
                 return 1 + countSnake(row, col - 1);
             }
         }
         if (row > 0 && row <5 && col>0 && col<4){ // giù, su, sx, dx
             if(check_up(row,col) && check_down(row,col) && check_right(row,col) && check_left(row,col)){ // giù, su, sx, dx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row, col-1));
                 return 4 + countSnake(row-1, col) + countSnake( row+1, col) + countSnake( row, col-1) + countSnake(row, col+1);
             }
             if( check_up(row,col) && check_down(row,col) && check_left(row,col)){ // giù, su, sx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col-1));
                 return 3 + countSnake(row-1, col) + countSnake( row+1, col) + countSnake( row, col-1);
             }
             if( check_up(row,col) && check_down(row,col) && check_right(row,col)){ // giù, su, dx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 3 + countSnake(row-1, col) + countSnake( row+1, col) + countSnake( row, col+1);
             }
             if (check_up(row,col) && check_right(row,col) && check_left(row,col)){    // su dx  sx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row, col-1));
                 return 3 + countSnake(row, col-1) + countSnake(row, col + 1) + countSnake(row - 1, col);
             }
             if (check_down(row,col) && check_right(row,col) && check_left(row,col)){    // giù, dx che sx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row, col-1));
                 return 3 + countSnake(row, col-1) + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
             if (check_down(row,col) && check_up(row,col)) {    // giù e su
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row-1, col));
                 return 2 + countSnake(row-1, col) + countSnake(row + 1, col);
             }
             if(check_down(row,col) && check_left(row,col)){  // giù e sx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col-1));
                 return 2 + countSnake(row, col-1) + countSnake(row + 1, col);
             }
             if(check_up(row,col) && check_left(row,col)){  // su e sx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col-1));
                 return 2 + countSnake(row, col-1) + countSnake(row - 1, col);
             }
             if (check_left(row,col) && check_right(row,col)) { // dx e sx
+                visited.add(new Coordinates(row, col+1));
+                visited.add(new Coordinates(row, col-1));
                 return 2 + countSnake(row, col-1) + countSnake(row, col + 1);
             }
             if (check_up(row,col) && check_right(row,col)) {    // su e dx
+                visited.add(new Coordinates(row-1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col + 1) + countSnake(row - 1, col);
             }
             if (check_down(row,col) && check_right(row,col)) {    // giù e dx
+                visited.add(new Coordinates(row+1, col));
+                visited.add(new Coordinates(row, col+1));
                 return 2 + countSnake(row, col + 1) + countSnake(row + 1, col);
             }
             if (check_up(row,col)) {  // solo su
+                visited.add(new Coordinates(row-1, col));
                 return 1 + countSnake(row - 1, col);
             }
             if (check_down(row,col)){   // solo giù
+                visited.add(new Coordinates(row+1, col));
                 return 1 + countSnake(row + 1, col);
             }
             if (check_left(row,col)){     // solo sx
+                visited.add(new Coordinates(row, col-1));
                 return 1 + countSnake(row, col - 1);
             }
             if (check_right(row,col)){     // solo dx
+                visited.add(new Coordinates(row, col+1));
                 return 1 + countSnake(row, col + 1);
             }
         }
@@ -269,6 +364,4 @@ public class BoardGoal implements Goal, Serializable {
         else
             return false;
     }
-
-
 }

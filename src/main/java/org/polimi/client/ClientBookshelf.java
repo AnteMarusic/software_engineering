@@ -72,7 +72,6 @@ public class ClientBookshelf {
         System.out.println("(ClientBookshelf insert)sto inserendo questo numero di carte: " + cards.size());
         for (int i = index[col]-1; i > index[col] - cards.size()-1; i--) {
             this.grid[i][col] = cards.get(j);
-
             j ++;
         }
         this.index[col] = index[col] - cards.size();
