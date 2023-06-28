@@ -28,13 +28,13 @@ class BoardGoalTest {
         grid[5][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
 */
 
-        grid[3][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
-        grid[4][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
-        grid[5][4]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
-
+        grid[4][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        grid[4][1]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        grid[5][0]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
+        grid[5][1]= new Card(Card.Color.CYAN, Card.State.IN_BOOKSHELF);
 
         //int score = boardGoal.getScore(grid);
         int score = boardGoal.getScore(grid);
-        assertEquals(2,score );
+        assertEquals(3,score );
     }
 }

@@ -18,4 +18,6 @@ TODO
 - se un socketClient si disconnette (ad esermpio viene chiuso il server) mentre sta scegliendo le carte esce un'eccezione
         soluzione: mettere una variabile "disconnesso ai clientHandler per evitare che la disconnessione venga fatta due volte"
 -RMI si accorge correttamente se il server si disconnette, socket no
+- non mi ha fatto fare undo alla seconda scelta della carta sulla cli
+- verifica che con la riconessione del primo giocatore di una partita che ricomincia viene assegnato il giocatore corrente
 

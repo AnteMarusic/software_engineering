@@ -228,7 +228,8 @@ public class Game implements Serializable {
         players[currentPlayer].updatePersonalScore();
         System.out.println("(Game updateScore) updated personal score for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getPersonalScore());
         // aggiorno il boardScore
-        players[currentPlayer].setBoardScore(boardGoal.getScore(players[currentPlayer].getGrid()));
+        int boardScore = boardGoal.getScore(players[currentPlayer].getGrid());
+        players[currentPlayer].setBoardScore(boardScore);
 
         if(!players[currentPlayer].getSharedGoal1Achieved())
         {

@@ -122,6 +122,17 @@ public class GameLoopSceneController {
         }
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        for(int i = 0; i<5; i++){
+            for(int j= 0; j<6; j++){
+                Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
+                if(card!=null) {
+                    this.image = loadTileImage(card);
+                    ImageView imageView3 = new ImageView();
+                    insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                }
+            }
+        }
         resetColumnView();
         initDeleteTileButtons();
         choosenCardsDim = 0;
@@ -140,8 +151,11 @@ public class GameLoopSceneController {
                         System.out.println("ora è");
                         countPanesInCell(gridPane,j, i);
                     }else{
-                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() +
-                                " in pos "+ "col ="+j+" row="+i);
+<<<<<<< HEAD
+                        //System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() +" in pos "+ "col ="+j+" row="+i);
+=======
+                        //System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + " in pos "+ "col ="+j+" row="+i);
+>>>>>>> 724bdd2ce7187c5a28297cc80ba0878bc630f292
                         if(paneWithImageView.getChildren().size()==0){
                             System.out.println("000000000" +
                                     "" +
@@ -396,7 +410,9 @@ public class GameLoopSceneController {
             }
             SceneController.getInstance().setChosencol(0);
             SceneController.getInstance().setChosenCardsCoords(chosenCoordinates);
+            System.out.println("COORDINATE SCELTE"+ chosenCoordinates);
             SceneController.getInstance().setChosenCards(list);
+            System.out.println("CARTE SCELTE"+list);
             GuiClientController.getNotified("chosencards");
             for(Coordinates coor: chosenCoordinates){
                 Pane panewithimageView = retrievePane(gridPane,coor.getCol(),coor.getRow());

@@ -165,6 +165,7 @@ public class GameController {
             this.save();
             for (ClientHandler c : players) {
                 if (c != null) {
+                    System.out.println("(GameController removeCards) " + BoardMessage.mapToString(game.getBoardMap()));
                     c.sendMessage(new BoardMessage(game.getBoardMap()));
                 }
             }
@@ -179,7 +180,7 @@ public class GameController {
         players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
         for (ClientHandler c : players) {
             if (c!=null && !c.equals(players.get(currentPlayer))) {
-                c.sendMessage(new ChosenColumnMessage("server", column, currentPlayer));
+                c.sendMessage(new ChosenColumnMessage("server", column));
             }
         }
     }
@@ -281,6 +282,8 @@ public class GameController {
         if (getNumOfConnectedPlayers() == 1) {
             decrementer = new DecrementerGameController(this);
             new Thread (decrementer).start();
+            this.currentPlayer = game.getPosition(clientHandler.getUsername());
+            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         }
 
         if(getNumOfConnectedPlayers()==2) {

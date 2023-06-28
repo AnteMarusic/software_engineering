@@ -225,7 +225,6 @@ public class Cli {
         }
         System.out.println("size di otherplayercards dopo while è"+ otherPlayerChosenCards.size());
     }
-
     public void printRoutine(){
         //delete all?
         System.out.print("\033[H\033[2J");

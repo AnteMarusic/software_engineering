@@ -106,6 +106,8 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
         try{
             System.out.println("(SocketClientHandler username: " + this.username + ") send message: " + message);
             output.writeObject(message);
+            output.flush();
+            output.reset();
         } catch(IOException IOe) {
             IOe.printStackTrace();
             closeEverything();
