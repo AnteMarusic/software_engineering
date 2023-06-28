@@ -38,7 +38,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     private static boolean chosencards;
     private static boolean createdgameloop;
-
+    private static GameLoopSceneController gameLoopSceneController;
     private static Lock lock;
     private static Condition flagCondition;
 
@@ -266,7 +266,7 @@ public class GuiClientController implements ClientControllerInterface{
                 }else{
                     System.out.println("il controller non é null");
                 }
-                GameLoopSceneController gameLoopSceneController = loader.getController();
+                gameLoopSceneController = loader.getController();
                 gameLoopSceneController.gameLoopInit();
                 SceneController.getInstance().setGameLoopController(gameLoopSceneController);
                 if(usernames.get(currentPlayer).equals(username)){
@@ -297,8 +297,6 @@ public class GuiClientController implements ClientControllerInterface{
                 insertInOtherPlayerBookshelf(m.getColumn());
                 return null;
             }
-
-            //first message that is sent when is your turn, best wway should be that upon receiving this message the scene changes
             case CHOOSE_CARDS_REQUEST -> {
                 System.out.println("sto per settare a true");
                 SceneController.getInstance().setMyTurn(true);
@@ -350,6 +348,9 @@ public class GuiClientController implements ClientControllerInterface{
                         e.printStackTrace();
                     }
                 });
+            }
+            case WAITING_FOR_YOUR_TURN ->{
+                gameLoopSceneController.reconnect();
             }
             /*
             // nuovo messaggio aggiunto

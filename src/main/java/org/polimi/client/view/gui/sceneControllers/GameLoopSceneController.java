@@ -73,6 +73,7 @@ public class GameLoopSceneController {
 
     private ClientBoard board;
     private List<ClientBookshelf> bookshelves;
+    private ClientBookshelf myBookshelf;
     private LinkedList<Coordinates> chosenCoordinates;
 
     private LinkedList<Card> chosenCards;
@@ -114,7 +115,6 @@ public class GameLoopSceneController {
         }
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
-        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         resetColumnView();
         initDeleteTileButtons();
         choosenCardsDim = 0;
@@ -345,13 +345,10 @@ public class GameLoopSceneController {
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Choose at least one card");
-            alert.showAndWait();
+            showAlert("Choose at least one card");
         }
         else if(myBookshelf.getInsertable(0) >= choosenCardsDim){
+            System.out.println(" col0 insertable"+ myBookshelf.getInsertable(0));
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));
@@ -400,11 +397,7 @@ public class GameLoopSceneController {
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Choose at least one card");
-            alert.showAndWait();
+            showAlert("Choose at least one card");
         }
         else if(myBookshelf.getInsertable(1) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
@@ -456,11 +449,7 @@ public class GameLoopSceneController {
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Choose at least one card");
-            alert.showAndWait();
+            showAlert("Choose at least one card");
         }
         else if(myBookshelf.getInsertable(2) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
@@ -512,11 +501,7 @@ public class GameLoopSceneController {
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Choose at least one card");
-            alert.showAndWait();
+            showAlert("Choose at least one card");
         }
         else if(myBookshelf.getInsertable(3) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
@@ -568,11 +553,7 @@ public class GameLoopSceneController {
         switchOffTiles();
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         if(choosenCardsDim==0){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Choose at least one card");
-            alert.showAndWait();
+            showAlert("Choose at least one card");
         }
         else if(myBookshelf.getInsertable(4) >= choosenCardsDim){
             List<Card> list = new LinkedList<Card>();
@@ -772,6 +753,23 @@ public class GameLoopSceneController {
         return (GameRules.areCoordinatesAligned(c1,c2,c3) || GameRules.areCoordinatesAligned(c1,c3,c2) ||
                 GameRules.areCoordinatesAligned(c2,c1,c3) || GameRules.areCoordinatesAligned(c2,c3,c1) ||
                 GameRules.areCoordinatesAligned(c3,c1,c2) || GameRules.areCoordinatesAligned(c3,c2,c1));
+    }
+
+    public void reconnect(){
+        ClientBookshelf myBookshelf = bookshelves.get(myIndex);
+        System.out.println("this is it \n");
+        myBookshelf.print();
+        for(int i = 0; i<5; i++){
+            System.out.println(" reconnect insertable"+ myBookshelf.getInsertable(i));
+            for(int j= 0; j<6; j++){
+                Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
+                if(card!=null) {
+                    this.image = loadTileImage(card);
+                    ImageView imageView3 = new ImageView();
+                    insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                }
+            }
+        }
     }
 
 }

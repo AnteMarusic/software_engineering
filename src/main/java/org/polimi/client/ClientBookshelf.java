@@ -35,11 +35,11 @@ public class ClientBookshelf {
         this.index = new int[COL];
         System.out.println("print index:");
         for (int i = 0; i < COL; i ++) {
-            for (int j = ROW - 1; j > 0; j --) {
+            this.index[i]=0;
+            for (int j = ROW - 1; j >= 0; j --) {
                 if (grid[j][i] == null) {
-                    this.index[i] = ROW;
-                    System.out.println("valore di index in clientbookshelf: "+index[i]+ "in posizione" + i);
-                    break;
+                    this.index[i]++;
+                    System.out.println("valore di index in clientbookshelf: "+index[i]+ "per colonna: " + i);
                 }
             }
         }
