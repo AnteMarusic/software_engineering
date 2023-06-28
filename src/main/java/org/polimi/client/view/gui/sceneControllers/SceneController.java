@@ -90,12 +90,10 @@ public class SceneController {
         this.myTurn = myTurn;
         Platform.runLater(() -> {
             gameLoopSceneController.refreshScene();
-            if(bookshelvesViewController!=null){
+        if(bookshelvesViewController!=null){
                 bookshelvesViewController.refreshScene();
-            }
+        }
         });
-
-
     }
 
     public boolean getMyTurn(){

@@ -76,7 +76,6 @@ public class ClientBookshelf {
         }
         this.index[col] = index[col] - cards.size();
     }
-
     public void print() {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j ++) {
