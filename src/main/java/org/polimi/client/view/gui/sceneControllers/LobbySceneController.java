@@ -13,10 +13,5 @@ public class LobbySceneController {
     @FXML
     public void initialize() {
     }
-    public void onBtnClick(ActionEvent event) throws IOException {
-        while(!GuiClientController.getNotified("startgame")){
-        }
-        SceneController.getInstance().switchScene(event, "game_loop");
-    }
 
 }

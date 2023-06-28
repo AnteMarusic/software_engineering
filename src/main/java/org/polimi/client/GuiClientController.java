@@ -255,7 +255,7 @@ public class GuiClientController implements ClientControllerInterface{
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
                 int currentPlayer = m.getCurrentPlayer();
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal,currentPlayer);
                 String ref = "/scenesfxml/game_loop.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
                 System.out.println("prima di loader.load");
@@ -421,15 +421,7 @@ public class GuiClientController implements ClientControllerInterface{
     }
     public void insertInOtherPlayerBookshelf (int col){
         System.out.println("la size delle chosen cards dell'altro client è: "+SceneController.getInstance().getOtherPlayerChosenCards().size());
-        int index = SceneController.getInstance().getCurrentPlayer();
-        if(index == SceneController.getInstance().getMyIndex()){
-            if(index==0){
-                index = SceneController.getInstance().getPlayers().size()-1;
-            }else{
-                index--;
-            }
-        }
-        SceneController.getInstance().getBookshelves().get(index).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
+        SceneController.getInstance().getBookshelves().get(SceneController.getInstance().getCurrentPlayer()).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
         //SceneController.getInstance().getOtherPlayerChosenCards().clear();
     }
 
@@ -489,7 +481,7 @@ public class GuiClientController implements ClientControllerInterface{
      * @param personalGoal
      */
     @Override
-    public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal) {
+    public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal,int currPlayer) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         for(int i=0 ; i<usernames.size() ; i++) {
             l.add (new ClientBookshelf(bookshelves.get(i)));
@@ -497,6 +489,7 @@ public class GuiClientController implements ClientControllerInterface{
         ClientBoard clientBoard = new ClientBoard(board, numOfPlayers );
         SceneController.getInstance().setPlayers(usernames);
         SceneController.getInstance().setBookshelves(l);
+        SceneController.getInstance().setCurrentPlayer(SceneController.getInstance().getPlayers().get(currPlayer));
         SceneController.getInstance().setBoard(clientBoard);
         SceneController.getInstance().setPersonalGoal(personalGoalCoordinates, personalGoalColors);
         SceneController.getInstance().setSharedGoal1(sharedGoal1);

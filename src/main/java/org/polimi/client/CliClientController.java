@@ -71,12 +71,12 @@ public class CliClientController implements ClientControllerInterface {
                 List<Card[][]> bookshelves = m.getBookshelves();
                 int sharedGoal1 = m.getSharedGoal1();
                 int sharedGoal2 = m.getSharedGoal2();
+                int currPlayer = m.getCurrentPlayer();
                 Coordinates[] personalGoalCoordinates = m.getPersonalGoalCoordinates();
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
                 int personalGoal = m.getPersonalGoalIndex();
-                cli.setIntCurrentPlayer(m.getCurrentPlayer());
-                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
+                modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal, currPlayer);
                 cli.printRoutine();
                 return null;
             }
@@ -579,13 +579,14 @@ public class CliClientController implements ClientControllerInterface {
      */
 
     @Override
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal) {
+    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal, int currentPlayer) {
         List <ClientBookshelf> l = new ArrayList<>(bookshelves.size());
         if (this.cli == null)
             throw new NullPointerException();
         for(int i=0 ; i<usernames.size() ; i++) {
             l.add (new ClientBookshelf(bookshelves.get(i)));
         }
+        cli.setIntCurrentPlayer(currentPlayer);
         cli.setPlayers(usernames);
         cli.setBookshelves(l);
         cli.setBoard(board);
