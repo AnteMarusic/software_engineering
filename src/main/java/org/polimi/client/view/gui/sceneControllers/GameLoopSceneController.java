@@ -531,10 +531,8 @@ public class GameLoopSceneController {
         if(panewithimageView.getChildren().size()==0){
             System.out.println("sto rimuovendo un pane senza figli");
         }
-        if(panewithimageView!=null) {
-            chosenCardsPane.getChildren().remove(panewithimageView);
-        }
-        gridPane.add(panewithimageView, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow());
+        chosenCardsPane.getChildren().remove(panewithimageView);
+        Platform.runLater(()-> gridPane.add(panewithimageView, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow()));
         chosenCoordinates.remove(0);
         choosenCardsDim--;
         tile0.setVisible(false);
@@ -545,10 +543,8 @@ public class GameLoopSceneController {
         if(panewithimageView.getChildren().size()==0){
             System.out.println("sto rimuovendo un pane senza figli");
         }
-        if(panewithimageView!=null) {
-            chosenCardsPane.getChildren().remove(panewithimageView);
-        }
-        gridPane.add(panewithimageView, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow());
+        chosenCardsPane.getChildren().remove(panewithimageView);
+        Platform.runLater(()-> gridPane.add(panewithimageView, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow()));
         chosenCoordinates.remove(1);
         choosenCardsDim--;
         tile1.setVisible(false);
@@ -561,10 +557,8 @@ public class GameLoopSceneController {
         if(panewithimageView.getChildren().size()==0){
             System.out.println("sto rimuovendo un pane senza figli");
         }
-        if(panewithimageView!=null) {
-            chosenCardsPane.getChildren().remove(panewithimageView);
-        }
-        gridPane.add(panewithimageView, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow());
+        chosenCardsPane.getChildren().remove(panewithimageView);
+        Platform.runLater(()-> gridPane.add(panewithimageView, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow()));
         chosenCoordinates.remove(2);
         choosenCardsDim--;
         tile2.setVisible(false);
