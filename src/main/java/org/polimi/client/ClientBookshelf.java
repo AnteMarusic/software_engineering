@@ -69,15 +69,9 @@ public class ClientBookshelf {
     public void insert(List<Card> cards, int col) {
         int j = 0;
         //index parte da 6
-<<<<<<< HEAD
-        System.out.println("sto inserendo questo numero di carte: " + cards.size());
-        for (int k = index[col]-1; k > index[col] - cards.size()-1; k--) {
-            this.grid[k][col] = cards.get(j);
-=======
         System.out.println("(ClientBookshelf insert)sto inserendo questo numero di carte: " + cards.size());
         for (int i = index[col]-1; i > index[col] - cards.size()-1; i--) {
             this.grid[i][col] = cards.get(j);
->>>>>>> 357e9fe0f60a215b962f5a69f733ebdaca230463
             j ++;
         }
         this.index[col] = index[col] - cards.size();
