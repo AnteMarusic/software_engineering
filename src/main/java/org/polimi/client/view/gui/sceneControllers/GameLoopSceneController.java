@@ -2,6 +2,7 @@ package org.polimi.client.view.gui.sceneControllers;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import org.jetbrains.annotations.NotNull;
 import org.polimi.GameRules;
 import org.polimi.client.ClientBoard;
 import org.polimi.client.ClientBookshelf;
@@ -94,6 +96,17 @@ public class GameLoopSceneController {
         initializeScene();
         initializeGoals();
     }
+    private void countPanesInCell(GridPane gridPane, int columnIndex, int rowIndex) {
+        int count = 0;
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == columnIndex && GridPane.getRowIndex(node) == rowIndex) {
+                if (node instanceof Pane) {
+                    count++;
+                }
+            }
+        }
+        System.out.println("questo è il count di pane in questa cella "+ count+ ", in col="+columnIndex+"row"+rowIndex);
+    }
 
     /**
      * Method that initializes the whole game loop by adding images to the panes and updates the view of
@@ -117,13 +130,18 @@ public class GameLoopSceneController {
                 Card card = board.seeCardAtCoordinates(new Coordinates(i,j));
                 if(card!=null) {
                     this.image = loadTileImage(card);
+                    countPanesInCell(gridPane,j, i);
                     ImageView imageView;
+                    System.out.println("gridpane has children ="+ gridPane.getChildren().size());
                     Pane paneWithImageView = retrievePane(gridPane, j, i);
                     if(paneWithImageView == null){
                         imageView = new ImageView();
                         insertInGridPane(imageView, 50, 50, gridPane, j, i);
+                        System.out.println("ora è");
+                        countPanesInCell(gridPane,j, i);
                     }else{
-                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + " in pos "+ "col ="+j+" row="+i);
+                        System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() +
+                                " in pos "+ "col ="+j+" row="+i);
                         if(paneWithImageView.getChildren().size()==0){
                             System.out.println("000000000" +
                                     "" +
@@ -146,6 +164,10 @@ public class GameLoopSceneController {
                                     case 0 -> {
                                         this.image = loadTileImage(card);
                                         insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim , 0);
+                                        /*int index = gridPane.getChildren().indexOf(paneWithImageView);
+                                        if (index != -1) {
+                                            gridPane.getChildren().remove(index);
+                                        }*/
                                         chosenCoordinates.add(new Coordinates(row,col));
                                         choosenCardsDim++;
                                         checkColumn();
@@ -160,6 +182,7 @@ public class GameLoopSceneController {
                                             }
                                             this.image = loadTileImage(card);
                                             insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
+                                            //gridPane.getChildren().remove(paneWithImageView);
                                             chosenCoordinates.add(new Coordinates(row,col));
                                             choosenCardsDim++;
                                             checkColumn();
@@ -174,6 +197,7 @@ public class GameLoopSceneController {
                                             if(     this.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1) , new Coordinates(row, col))){
                                                 this.image = loadTileImage(card);
                                                 insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
+                                                //gridPane.getChildren().remove(paneWithImageView);
                                                 chosenCoordinates.add(new Coordinates(row,col));
                                                 choosenCardsDim++;
                                                 checkColumn();
@@ -253,40 +277,51 @@ public class GameLoopSceneController {
      * @param x         The column index where the ImageView should be inserted.
      * @param y         The row index where the ImageView should be inserted.
      */
-    private void insertInGridPane(ImageView imageView, int width, int height, GridPane gridp, int x, int y){
+    private void insertInGridPane(@NotNull ImageView imageView, int width, int height, GridPane gridp, int x, int y) {
         imageView.setImage(image);
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
-        Pane pane = new Pane();
-        if(width == 94 || width==62){
-            Platform.runLater(() -> {
-                pane.setOnMouseEntered(event -> {
-                    pane.setScaleX(1.5);
-                    pane.setScaleY(1.5);
-                    pane.toFront();
-                });
 
-                pane.setOnMouseExited(event -> {
-                    pane.setScaleX(1.0);
-                    pane.setScaleY(1.0);
-                    pane.toBack();
+        Pane pane = retrievePane(gridp, x, y);
+        if (pane == null) {
+            System.out.println("pane è null");
+            pane = new Pane();
+
+            if (width == 94 || width == 62) {
+                Pane finalPane = pane;
+                Platform.runLater(() -> {
+                    finalPane.setOnMouseEntered(event -> {
+                        finalPane.setScaleX(1.5);
+                        finalPane.setScaleY(1.5);
+                        finalPane.toFront();
+                    });
+
+                    finalPane.setOnMouseExited(event -> {
+                        finalPane.setScaleX(1.0);
+                        finalPane.setScaleY(1.0);
+                        finalPane.toBack();
+                    });
                 });
-            });
+            } else {
+                Pane finalPane1 = pane;
+                Platform.runLater(() -> {
+                    finalPane1.setOnMouseEntered(event -> {
+                        finalPane1.toFront();
+                    });
+
+                    finalPane1.setOnMouseExited(event -> {
+                        finalPane1.toBack();
+                    });
+
+                });
+            }
+            pane.getChildren().add(imageView);
+            gridp.add(pane, x, y); // Add the new pane to the gridPane
         }
-        else{
-            Platform.runLater(() -> {
-                pane.setOnMouseEntered(event -> {
-                    pane.toFront();
-                });
-
-                pane.setOnMouseExited(event -> {
-                    pane.toBack();
-                });
-
-            });
+        else {
+            System.out.println("sto settando perchè c'è già un pane qui");
+            pane.getChildren().setAll(imageView); // Replace the existing child with the new imageView
         }
-        pane.getChildren().add(imageView);
-        gridp.add(pane, x, y);
     }
 
     /**
@@ -295,9 +330,9 @@ public class GameLoopSceneController {
      * @param gridPane The GridPane from which to retrieve the Pane.
      * @param j        The column index of the desired Pane.
      * @param i        The row index of the desired Pane.
-     * @return The Pane at the specified column and row indices, or null if not found.
+     * @return The Pane at the specified column and row indices, or {@code null}  if not found.
      */
-    private Pane retrievePane(GridPane gridPane, int j, int i){
+    private Pane retrievePane(@NotNull GridPane gridPane, int j, int i){
          return (Pane) gridPane.getChildren().stream()
                 .filter(child -> GridPane.getRowIndex(child) == i && GridPane.getColumnIndex(child) == j)
                 .findFirst()
@@ -600,29 +635,41 @@ public class GameLoopSceneController {
      * On action javafx method for deleting the first card you picked during
      * your turn.
      */
+    private Pane getPaneInCell(GridPane gridPane, int columnIndex, int rowIndex) {
+        for (Node child : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(child) == columnIndex && GridPane.getRowIndex(child) == rowIndex) {
+                if (child instanceof Pane) {
+                    return (Pane) child;  // Found the Pane in the desired cell
+                }
+            }
+        }
+        return null;  // No Pane found in the desired cell
+    }
     public void deleteTile0(){
-        Pane panewithimageView = retrievePane(chosenCardsPane,0,0);
-        if(panewithimageView.getChildren().size()==0){
+        Pane paneWithImageView = retrievePane(chosenCardsPane,0,0);
+        if(paneWithImageView.getChildren().size()==0){
             System.out.println("sto rimuovendo un pane senza figli");
         }
-        chosenCardsPane.getChildren().remove(panewithimageView);
-        gridPane.add(panewithimageView, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow());
+        chosenCardsPane.getChildren().remove(paneWithImageView);
+        insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow() );
         chosenCoordinates.remove(0);
         choosenCardsDim--;
         tile0.setVisible(false);
         checkColumn();
     }
+
     /**
      * On action javafx method for deleting the second card you picked during
      * your turn.
      */
     public void deleteTile1(){
-        Pane panewithimageView = retrievePane(chosenCardsPane,1,0);
-        if(panewithimageView.getChildren().size()==0){
+        Pane paneWithImageView = retrievePane(chosenCardsPane,1,0);
+        if(paneWithImageView.getChildren().size()==0){
             System.out.println("sto rimuovendo un pane senza figli");
         }
-        chosenCardsPane.getChildren().remove(panewithimageView);
-        gridPane.add(panewithimageView, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow());
+        chosenCardsPane.getChildren().remove(paneWithImageView);
+        insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow() );
+
         chosenCoordinates.remove(1);
         choosenCardsDim--;
         tile1.setVisible(false);
@@ -635,12 +682,12 @@ public class GameLoopSceneController {
      * your turn.
      */
     public void deleteTile2(){
-        Pane panewithimageView = retrievePane(chosenCardsPane,2,0);
-        if(panewithimageView.getChildren().size()==0){
+        Pane paneWithImageView = retrievePane(chosenCardsPane,2,0);
+        if(paneWithImageView.getChildren().size()==0){
             System.out.println("sto rimuovendo un pane senza figli");
         }
-        chosenCardsPane.getChildren().remove(panewithimageView);
-        gridPane.add(panewithimageView, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow());
+        chosenCardsPane.getChildren().remove(paneWithImageView);
+        insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow() );
         chosenCoordinates.remove(2);
         choosenCardsDim--;
         tile2.setVisible(false);
