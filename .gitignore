@@ -13,5 +13,6 @@ target/
 
 # game status saving files
 **/gameList.json
-src/main/resources/ser/*
+*.ser
+
 

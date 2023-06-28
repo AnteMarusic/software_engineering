@@ -21,6 +21,7 @@ import java.util.Map;
  * register the gameController in gameCodeIssuer and register each player as disconnected in usernameIssuer;
  * otherwise we discard it
  */
+
 public class ServerStarter {
     private static final int socketPort = 8181;
     private static final int rmiPort = 1099;
@@ -30,7 +31,7 @@ public class ServerStarter {
         LobbyController lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
         GameListFileAccessorSingleton gameListFileAccessor = GameListFileAccessorSingleton.getInstance();
         if (!gameListFileAccessor.isEmpty()) {
-            Map <Integer, List<String>> gameIdWithPlayers = gameListFileAccessor.getGameIdsAndPlayers();
+            Map<Integer, List<String>> gameIdWithPlayers = gameListFileAccessor.getGameIdsAndPlayers();
             for (Integer gameId : gameIdWithPlayers.keySet()) {
                 try {
                     System.out.println("(ServerStarter) retrieving game " + gameId + " from file");
@@ -58,3 +59,4 @@ public class ServerStarter {
         RMIServer rmiServer = new RMIServer(rmiPort, gameCodeIssuer, usernameIssuer, lobby);
     }
 }
+

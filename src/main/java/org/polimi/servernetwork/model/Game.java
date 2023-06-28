@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Game implements Serializable {
     private boolean endGame = false;
-    private final Board board;
     private final Player[] players;
+    private final Board board;
     private final Goal[] sharedGoal;
     private final Goal boardGoal;
     private int[] chosenSharedGoal;
@@ -20,7 +20,7 @@ public class Game implements Serializable {
     private List<Card> readyToInsert;
 
     public Game(int numOfPlayer, int firstPlayer, List<String> playerName) {
-        this.board = new Board(numOfPlayer);
+        this.board = new Board (numOfPlayer);
         this.players = new Player[numOfPlayer];
         this.readyToInsert = new LinkedList<>();
         for (int j=0; j<numOfPlayer; j++){

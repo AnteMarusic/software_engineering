@@ -260,7 +260,7 @@ public class GameController {
      */
     public void reconnect (ClientHandler clientHandler){
         System.out.println("(GameController reconnect) " + clientHandler.getUsername() + " is trying to reconnect");
-        // riinserisco il clienthandler nella lista di clienthanler del gameController
+        // reinserisco il client handler nella lista di chanticleer del gameController
         int position = game.getPosition(clientHandler.getUsername());
         System.out.println("(GameController reconnect) " + clientHandler.getUsername() + " was in position " + position);
         System.out.println("(GameController reconnect) this is the clientHandler list before the insert of the new player: " + players.toString());
