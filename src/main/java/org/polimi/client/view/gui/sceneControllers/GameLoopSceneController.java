@@ -75,6 +75,8 @@ public class GameLoopSceneController {
     private List<ClientBookshelf> bookshelves;
     private LinkedList<Coordinates> chosenCoordinates;
 
+    private LinkedList<Card> chosenCards;
+
     private boolean checkLater = false;
     private boolean startTurnShown;
     private boolean yourTurn;
@@ -83,6 +85,7 @@ public class GameLoopSceneController {
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
         this.myIndex = SceneController.getInstance().getMyIndex();
+        this.chosenCards = new LinkedList<>();
         this.yourTurn=false;
         this.startTurnShown=false;
     }
@@ -151,11 +154,10 @@ public class GameLoopSceneController {
                         System.out.println("ora è");
                         countPanesInCell(gridPane,j, i);
                     }else{
-<<<<<<< HEAD
+
                         //System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() +" in pos "+ "col ="+j+" row="+i);
-=======
+
                         //System.out.println("questo pane ha figli in numero "+ paneWithImageView.getChildren().size() + " in pos "+ "col ="+j+" row="+i);
->>>>>>> 724bdd2ce7187c5a28297cc80ba0878bc630f292
                         if(paneWithImageView.getChildren().size()==0){
                             System.out.println("000000000" +
                                     "" +
@@ -183,6 +185,7 @@ public class GameLoopSceneController {
                                             gridPane.getChildren().remove(index);
                                         }*/
                                         chosenCoordinates.add(new Coordinates(row,col));
+                                        chosenCards.add(card);
                                         choosenCardsDim++;
                                         checkColumn();
                                         tile0.setVisible(true);
@@ -198,6 +201,7 @@ public class GameLoopSceneController {
                                             insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
                                             //gridPane.getChildren().remove(paneWithImageView);
                                             chosenCoordinates.add(new Coordinates(row,col));
+                                            chosenCards.add(card);
                                             choosenCardsDim++;
                                             checkColumn();
                                             tile0.setVisible(false);
@@ -213,6 +217,7 @@ public class GameLoopSceneController {
                                                 insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
                                                 //gridPane.getChildren().remove(paneWithImageView);
                                                 chosenCoordinates.add(new Coordinates(row,col));
+                                                chosenCards.add(card);
                                                 choosenCardsDim++;
                                                 checkColumn();
                                                 tile1.setVisible(false);
@@ -667,6 +672,7 @@ public class GameLoopSceneController {
             System.out.println("sto rimuovendo un pane senza figli");
         }
         chosenCardsPane.getChildren().remove(paneWithImageView);
+        image = loadTileImage(chosenCards.remove(0));
         insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(0).getCol(),chosenCoordinates.get(0).getRow() );
         chosenCoordinates.remove(0);
         choosenCardsDim--;
@@ -684,8 +690,8 @@ public class GameLoopSceneController {
             System.out.println("sto rimuovendo un pane senza figli");
         }
         chosenCardsPane.getChildren().remove(paneWithImageView);
+        image = loadTileImage(chosenCards.remove(1));
         insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(1).getCol(),chosenCoordinates.get(1).getRow() );
-
         chosenCoordinates.remove(1);
         choosenCardsDim--;
         tile1.setVisible(false);
@@ -703,6 +709,7 @@ public class GameLoopSceneController {
             System.out.println("sto rimuovendo un pane senza figli");
         }
         chosenCardsPane.getChildren().remove(paneWithImageView);
+        image = loadTileImage(chosenCards.remove(2));
         insertInGridPane((ImageView) paneWithImageView.getChildren().get(0), 50, 50, gridPane, chosenCoordinates.get(2).getCol(),chosenCoordinates.get(2).getRow() );
         chosenCoordinates.remove(2);
         choosenCardsDim--;
