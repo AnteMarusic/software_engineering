@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class GameController {
+    private boolean destruction;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
     private static final int COUNT_DOWN = 20;
     private int gameCode;
@@ -26,6 +27,7 @@ public class GameController {
 
 
     public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
+        destruction = false;
         numOfPlayers = list.size();
         gameCode = 0; //temporarily set to zero. It will be set to a different value later on
         this.usernameIssuer = usernameIssuer;
@@ -302,59 +304,63 @@ public class GameController {
         }
     }
     public void disconnection(ClientHandler clientHandler){
-        System.out.println("(GameController) disconnect " + clientHandler.getUsername());
-        String username = clientHandler.getUsername();
-        // setto nella lista di clientHandler il client che è uscito a null
-        System.out.println("questa è la lista di clienthandler: " + players.toString());
-        players.set(players.indexOf(clientHandler), null);
-        if(getNumOfConnectedPlayers()==0){
-            if (countDown != COUNT_DOWN)
-                decrementer.stop();
-            closeGame();
-        }
-        else if(players.get(currentPlayer) == null){   // se il giocatore che si è disconnesso è il currentPlayer
-            if(getNumOfConnectedPlayers()==1){      // non ho messo questa condizione fuori dal if sopra siccome se chi esce non è il current player per correttezza voglio lasciare finire il currentplayer
-                                                    // e quando ha finito il turno in caso gli dico di essere rimasto da solo
-
-                decrementer = new DecrementerGameController(this);
-                new Thread (decrementer).start();
-
-                //passo il turno al successivo (l'unico giocatore rimasto)
-                nextPlayer();
-                // ma non lo faccio giocare, gli comunico di essere rimasto da solo
-                players.get(currentPlayer).sendMessage(new Message("server", MessageType.AREALONE));
-                // ora ho finito e vado in attesa di messaggi
-                // intanto parte il timer di 60 secondi, se nessuno si riconnette in questi 60 secondi il gioco finisce e il giocatore rimasto è il vincitore
-                // come mi accorgo se qualcuno si è riconnesso? nella reconnection controllo se il giocatore era rimasto da solo, se era rimasto da solo riprendo il gioco
-                // come?
-                // quando un si riconnette e c'era un solo giocatore fin'ora nella reconnection azzero il timer e passo il tunro all'unico giocatore che c'era già
-                // così riprende il flusso di gioco
+        // se la distrucction è a TRUE non devo gestire le disconnesioni, siccome il gioco si è chiuso
+        if(!destruction){
+            System.out.println("(GameController) disconnect " + clientHandler.getUsername());
+            String username = clientHandler.getUsername();
+            // setto nella lista di clientHandler il client che è uscito a null
+            System.out.println("questa è la lista di clienthandler: " + players.toString());
+            players.set(players.indexOf(clientHandler), null);
+            if(getNumOfConnectedPlayers()==0){
+                if (countDown != COUNT_DOWN)
+                    decrementer.stop();
+                closeGame();
             }
-            else {
-                // entro qui se il giocatore disconneso era il giocatore corrente, e con lui fuori siamo ancora in almeno in due
-                nextPlayer();
-                // comunico ai gicatori chi è uscito e
-                // comunico ai giocatori chi è il giocatore successivi (tranne al giocatore successivo che se ne accorgerà)
-                for (ClientHandler c : players) {
-                    if (c != players.get(currentPlayer) && c!=null) {
-                        c.sendMessage(new DisconnectionAlert("server", username));
-                        c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
-                    }
+            else if(players.get(currentPlayer) == null){   // se il giocatore che si è disconnesso è il currentPlayer
+                if(getNumOfConnectedPlayers()==1){      // non ho messo questa condizione fuori dal if sopra siccome se chi esce non è il current player per correttezza voglio lasciare finire il currentplayer
+                    // e quando ha finito il turno in caso gli dico di essere rimasto da solo
+
+                    decrementer = new DecrementerGameController(this);
+                    new Thread (decrementer).start();
+
+                    //passo il turno al successivo (l'unico giocatore rimasto)
+                    nextPlayer();
+                    // ma non lo faccio giocare, gli comunico di essere rimasto da solo
+                    players.get(currentPlayer).sendMessage(new Message("server", MessageType.AREALONE));
+                    // ora ho finito e vado in attesa di messaggi
+                    // intanto parte il timer di 60 secondi, se nessuno si riconnette in questi 60 secondi il gioco finisce e il giocatore rimasto è il vincitore
+                    // come mi accorgo se qualcuno si è riconnesso? nella reconnection controllo se il giocatore era rimasto da solo, se era rimasto da solo riprendo il gioco
+                    // come?
+                    // quando un si riconnette e c'era un solo giocatore fin'ora nella reconnection azzero il timer e passo il tunro all'unico giocatore che c'era già
+                    // così riprende il flusso di gioco
                 }
-                // comunico al giocatore successivo di giocare
-                players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+                else {
+                    // entro qui se il giocatore disconneso era il giocatore corrente, e con lui fuori siamo ancora in almeno in due
+                    nextPlayer();
+                    // comunico ai gicatori chi è uscito e
+                    // comunico ai giocatori chi è il giocatore successivi (tranne al giocatore successivo che se ne accorgerà)
+                    for (ClientHandler c : players) {
+                        if (c != players.get(currentPlayer) && c!=null) {
+                            c.sendMessage(new DisconnectionAlert("server", username));
+                            c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+                        }
+                    }
+                    // comunico al giocatore successivo di giocare
+                    players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+                }
             }
-        }
-        else{   // entro qui se il giocatore disconnesso non era il currentPlayer e se c'è almeno un giocatore dentro
-            // non gestisco qui la situazione se è rimasto un solo giocatore, la devo gestire nella funzione che comunica al giocatore successivo di giocare (nel ciclo fi gioco principale), non giocherà se è rimasto da solo
-            // non posso gestirla qui siccome il client che entra cui se non è il currentplayer non è il nostro "thread principale" se mandasse messaggi creerebbe casino
+            else{   // entro qui se il giocatore disconnesso non era il currentPlayer e se c'è almeno un giocatore dentro
+                // non gestisco qui la situazione se è rimasto un solo giocatore, la devo gestire nella funzione che comunica al giocatore successivo di giocare (nel ciclo fi gioco principale), non giocherà se è rimasto da solo
+                // non posso gestirla qui siccome il client che entra cui se non è il currentplayer non è il nostro "thread principale" se mandasse messaggi creerebbe casino
 
-            //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
-            for (ClientHandler c : players) {
-                if (c!=null)
-                    c.sendMessage(new DisconnectionAlert("server", username));
+                //comunico a tutti i giocatori che clieentHandler.getUsername è uscito
+                for (ClientHandler c : players) {
+                    if (c!=null)
+                        c.sendMessage(new DisconnectionAlert("server", username));
+                }
             }
         }
+
     }
 
     private int setFirstPlayer(int numOfPlayer){
@@ -387,11 +393,12 @@ public class GameController {
         return counter;
     }
 
-    private void closeGame(){
+    private void closeGame() {
         /*
         toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
         distruggo tutte le strutture create
         */
+        destruction = true;
         List<String> playersUsername = game.getPlayersUsername();
         for(int i=0; i<numOfPlayers; i++){
             usernameIssuer.removeUsername(playersUsername.get(i));
