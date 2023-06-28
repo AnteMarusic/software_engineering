@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ChosenColumnMessage extends Message implements Serializable {
     private int column;
     private int player;
-    public ChosenColumnMessage(String username, int column, int player){
+    public ChosenColumnMessage(String username, int column){
         super(username, MessageType.CHOSEN_COLUMN_REPLY);
         this.column = column;
         this.player = player;
