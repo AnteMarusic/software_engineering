@@ -179,7 +179,7 @@ public class GameController {
         players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
         for (ClientHandler c : players) {
             if (c!=null && !c.equals(players.get(currentPlayer))) {
-                c.sendMessage(new ChosenColumnMessage("server", column));
+                c.sendMessage(new ChosenColumnMessage("server", column, currentPlayer));
             }
         }
     }
