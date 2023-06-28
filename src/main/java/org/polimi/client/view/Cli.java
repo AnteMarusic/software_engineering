@@ -149,7 +149,9 @@ public class Cli {
     public void setCurrentPlayer(String currentPlayer){
         this.currentPlayer = players.indexOf(currentPlayer);
     }
-    
+    public void setIntCurrentPlayer(int currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
     public void addNewPlayer (String newPlayer) {
         this.players.set(lastPlayerInserted+1, newPlayer);
         lastPlayerInserted ++;

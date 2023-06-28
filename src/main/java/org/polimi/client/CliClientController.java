@@ -75,6 +75,7 @@ public class CliClientController implements ClientControllerInterface {
                 Card.Color[] personalGoalColors = m.getPersonalGoalColors();
                 List <String> usernames = m.getUsernames();
                 int personalGoal = m.getPersonalGoalIndex();
+                cli.setIntCurrentPlayer(m.getCurrentPlayer());
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal);
                 cli.printRoutine();
                 return null;
