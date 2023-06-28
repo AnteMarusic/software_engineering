@@ -421,7 +421,15 @@ public class GuiClientController implements ClientControllerInterface{
     }
     public void insertInOtherPlayerBookshelf (int col){
         System.out.println("la size delle chosen cards dell'altro client è: "+SceneController.getInstance().getOtherPlayerChosenCards().size());
-        SceneController.getInstance().getBookshelves().get(SceneController.getInstance().getCurrentPlayer()).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
+        int index = SceneController.getInstance().getCurrentPlayer();
+        if(index == SceneController.getInstance().getMyIndex()){
+            if(index==0){
+                index = SceneController.getInstance().getPlayers().size()-1;
+            }else{
+                index--;
+            }
+        }
+        SceneController.getInstance().getBookshelves().get(index).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
         //SceneController.getInstance().getOtherPlayerChosenCards().clear();
     }
 
