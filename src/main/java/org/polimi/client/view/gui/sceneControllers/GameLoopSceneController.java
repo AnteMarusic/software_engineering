@@ -85,6 +85,7 @@ public class GameLoopSceneController {
         this.startTurnShown=false;
     }
 
+
     @FXML
     public void initialize(){
         initializeScene();
@@ -203,6 +204,10 @@ public class GameLoopSceneController {
     public void refreshScene(){
         initializeScene();
     }
+
+    /**
+     * Method that load the goals images into the associated pane
+     */
     private void initializeGoals(){
         //inizializzazione dei common goals
         System.out.println(SceneController.getInstance().getSharedGoal1Index());
@@ -220,6 +225,11 @@ public class GameLoopSceneController {
         insertInGridPane(imageViewPersonal, 62, 94, goalsPane,0, 0);
 
     }
+
+    /**It launches a new javafx thread and show a new panel showing other players' bookshelf
+     *
+     * @throws IOException
+     */
     public void showBookshelves() throws IOException {
         SceneController.getInstance().switchScenePopUp();
     }
@@ -268,6 +278,12 @@ public class GameLoopSceneController {
                 .orElse(null);
     }
 
+
+    /**
+     * Method that shows an alert button showing a string which is
+     * passed as a parameter
+     * @param alertinfo
+     */
     private void showAlert(String alertinfo){
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -278,6 +294,12 @@ public class GameLoopSceneController {
             }
         );
     }
+
+    /**
+     * On action javafx method for inserting your choosen cards into
+     * the first column
+     * @throws RemoteException
+     */
     public void col0() throws RemoteException {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -327,6 +349,11 @@ public class GameLoopSceneController {
         }
     }
 
+    /**
+     * On action javafx method for inserting your choosen cards into
+     * the second column
+     * @throws RemoteException
+     */
     public void col1() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -377,6 +404,11 @@ public class GameLoopSceneController {
         }
     }
 
+    /**
+     * On action javafx method for inserting your choosen cards into
+     * the third column
+     * @throws RemoteException
+     */
     public void col2() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -427,6 +459,11 @@ public class GameLoopSceneController {
         }
     }
 
+    /**
+     * On action javafx method for inserting your choosen cards into
+     * the fourth column
+     * @throws RemoteException
+     */
     public void col3() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -477,6 +514,11 @@ public class GameLoopSceneController {
         }
     }
 
+    /**
+     * On action javafx method for inserting your choosen cards into
+     * the fifth column
+     * @throws RemoteException
+     */
     public void col4() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -526,6 +568,11 @@ public class GameLoopSceneController {
             showAlert("There's no more space in this column");
         }
     }
+
+    /**
+     * On action javafx method for deleting the first card you picked during
+     * you turn
+     */
     public void deleteTile0(){
         Pane panewithimageView = retrievePane(chosenCardsPane,0,0);
         if(panewithimageView.getChildren().size()==0){
@@ -538,6 +585,10 @@ public class GameLoopSceneController {
         tile0.setVisible(false);
         checkColumn();
     }
+    /**
+     * On action javafx method for deleting the second card you picked during
+     * you turn
+     */
     public void deleteTile1(){
         Pane panewithimageView = retrievePane(chosenCardsPane,1,0);
         if(panewithimageView.getChildren().size()==0){
@@ -552,6 +603,10 @@ public class GameLoopSceneController {
         checkColumn();
         this.checkLater = false;
     }
+    /**
+     * On action javafx method for deleting the third card you picked during
+     * you turn
+     */
     public void deleteTile2(){
         Pane panewithimageView = retrievePane(chosenCardsPane,2,0);
         if(panewithimageView.getChildren().size()==0){
@@ -570,6 +625,12 @@ public class GameLoopSceneController {
             this.checkLater = true;
         }
     }
+
+    /**
+     * Method for getting right paths for every type of card in order
+     * to load the associated image
+     * @param card
+     */
     private void loadTileImage(Card card){
         switch (card.getColor()) {
             case CYAN -> {
@@ -616,11 +677,21 @@ public class GameLoopSceneController {
             }
         }
     }
+
+    /**
+     * Method that sets to non-visible all undo buttons, it is called
+     * only when you play a valid insertion into a column
+     */
     private void switchOffTiles(){
         tile0.setVisible(false);
         tile1.setVisible(false);
         tile2.setVisible(false);
     }
+
+    /**It checks if the cardinality of the choosen cards buffer is compatible
+     * with the columns, the buttons of non-compaatible columns will disappear
+     *
+     */
     private void checkColumn(){
         if(bookshelves.get(myIndex).getInsertable(0) < choosenCardsDim){
             column0.setVisible(false);
@@ -649,6 +720,11 @@ public class GameLoopSceneController {
         }
     }
 
+    /**
+     * This method resets the view of the undo choice buttons, it is called
+     * at every refresh of the scene in order to disallow insert methods for
+     * invalid columns
+     */
     private void resetColumnView(){
         if(bookshelves.get(myIndex).getInsertable(0)==0){
             column0.setVisible(false);
@@ -681,12 +757,24 @@ public class GameLoopSceneController {
         }
     }
 
+
+    /**
+     * This method initialize to non-visible the undo choice for already choosen cards
+     */
     private void initDeleteTileButtons(){
         tile0.setVisible(false);
         tile1.setVisible(false);
         tile2.setVisible(false);
     }
 
+    /**
+     * New method for checking alignment of the choosen coordinates, it checks
+     * every permutation of the 3 coordinates
+     * @param c1
+     * @param c2
+     * @param c3
+     * @return
+     */
     private boolean areCoordinatesAligned(Coordinates c1, Coordinates c2, Coordinates c3){
         return (GameRules.areCoordinatesAligned(c1,c2,c3) || GameRules.areCoordinatesAligned(c1,c3,c2) ||
                 GameRules.areCoordinatesAligned(c2,c1,c3) || GameRules.areCoordinatesAligned(c2,c3,c1) ||
