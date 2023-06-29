@@ -33,6 +33,26 @@ public class BookshelvesViewController {
 
     @FXML
     private ImageView shelfie3;
+    //shown under shelfie1
+    @FXML
+    private ImageView shared1Player1;
+
+    @FXML
+    private ImageView shared2Player1;
+    //shownb under shelfie2
+    @FXML
+    private ImageView shared1Player2;
+
+    @FXML
+    private ImageView shared2Player2;
+    //shown under shelfie3
+    @FXML
+    private ImageView shared1Player3;
+
+    @FXML
+    private ImageView shared2Player3;
+
+
 
     @FXML
     private GridPane bookshelfGridPane1;
@@ -73,6 +93,15 @@ public class BookshelvesViewController {
                         player2 = i;
                     }
                 }
+                for(int i=0 ; i<players.size() ; i++){
+                    if(i!=me){
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint1(i));
+                        shared1Player2 = new ImageView(this.image);
+
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint2(i));
+                        shared2Player2 = new ImageView(this.image);
+                    }
+                }
 
                 for(int i = 0; i<5; i++){
                     for(int j= 0; j<6; j++){
@@ -93,10 +122,28 @@ public class BookshelvesViewController {
                         if(player1 == -1){
                             user1.setText(players.get(i));
                             player1 = i;
+
                         }else{
                             user3.setText(players.get(i));
                             player3 = i;
                         }
+                    }
+                }
+                for(int i=0 ; i<players.size() ; i++){
+                    if(i==player1){
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint1(i));
+                        shared1Player1 = new ImageView(this.image);
+
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint2(i));
+                        shared2Player1 = new ImageView(this.image);
+                    }
+
+                    if(i==player3){
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint1(i));
+                        shared1Player3 = new ImageView(this.image);
+
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint2(i));
+                        shared2Player3 = new ImageView(this.image);
                     }
                 }
                 for(int i = 0; i<5; i++){
@@ -166,6 +213,32 @@ public class BookshelvesViewController {
                         }
                     }
                 }
+
+                for(int i=0 ; i<players.size() ; i++){
+                    if(i==player1){
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint1(i));
+                        shared1Player1 = new ImageView(this.image);
+
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint2(i));
+                        shared2Player1 = new ImageView(this.image);
+                    }
+
+                    if(i==player2){
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint1(i));
+                        shared1Player2 = new ImageView(this.image);
+
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint2(i));
+                        shared2Player2 = new ImageView(this.image);
+                    }
+
+                    if(i==player3){
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint1(i));
+                        shared1Player3 = new ImageView(this.image);
+
+                        this.image = loadPointImage(SceneController.getInstance().getLastSharedPoint2(i));
+                        shared2Player3 = new ImageView(this.image);
+                    }
+                }
             }
         }
     }
@@ -197,4 +270,14 @@ public class BookshelvesViewController {
     private void loadTileImage(Card card){
         this.image=GameLoopSceneController.loadTileImage(card);
     }
+
+    private Image loadPointImage(int point){
+            if(point==0){
+                return null;
+            }
+            Image imageToReturn;
+            imageToReturn = new Image("/images/17_MyShelfie_BGA/scoring_tokens/scoring_"+point+".jpg");
+            return imageToReturn;
+    }
+
 }

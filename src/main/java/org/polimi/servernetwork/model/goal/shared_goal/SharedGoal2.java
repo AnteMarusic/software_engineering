@@ -22,8 +22,8 @@ public class SharedGoal2 extends AbstractSharedGoal{
                     tmpGrid[0][0].getColor() == tmpGrid[0][COL - 1].getColor() &&
                     tmpGrid[0][0].getColor() == tmpGrid[ROW - 1][0].getColor()
             );
-        }else{
-            return false;
         }
+        return false;
+
     }
 }

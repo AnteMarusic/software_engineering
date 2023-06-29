@@ -1,6 +1,8 @@
 package org.polimi.servernetwork.model.goal.GoalTest;
 
 import org.junit.jupiter.api.Test;
+import org.polimi.client.ClientBoard;
+import org.polimi.client.ClientBookshelf;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.goal.Goal;
 import org.polimi.servernetwork.model.goal.shared_goal.SharedGoal9;
@@ -26,7 +28,9 @@ public class SharedGoal9Test {
         grid[0][2] = new Card(Card.Color.GREEN, Card.State.PICKABLE);
 
         Goal goal = new SharedGoal9(2);
-        assertEquals(4, goal.getScore(grid));
+        assertEquals(8, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf(grid);
+        bookshelf.printMyBookshelf();
     }
 
     @Test
@@ -48,5 +52,7 @@ public class SharedGoal9Test {
 
         Goal goal = new SharedGoal9(2);
         assertEquals(0, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf(grid);
+        bookshelf.printMyBookshelf();
     }
 }

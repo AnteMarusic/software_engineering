@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import java.net.URL?>
 <AnchorPane fx:id="basement" prefHeight="376.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.polimi.client.view.gui.sceneControllers.BookshelvesViewController">
    <children>
       <ImageView fx:id="shelfie1" fitHeight="202.0" fitWidth="206.0" layoutX="6.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
@@ -79,8 +80,14 @@
       <Label fx:id="user1" layoutX="92.0" layoutY="46.0" />
       <Label fx:id="user2" layoutX="304.0" layoutY="46.0" />
       <Label fx:id="user3" layoutX="518.0" layoutY="46.0" />
+      <ImageView fx:id="shared1Player1" fitHeight="50.0" fitWidth="50.0" layoutX="48.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shared2Player1" fitHeight="50.0" fitWidth="50.0" layoutX="116.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shared1Player2" fitHeight="50.0" fitWidth="50.0" layoutX="261.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shared2Player2" fitHeight="50.0" fitWidth="50.0" layoutX="329.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shared1Player3" fitHeight="50.0" fitWidth="50.0" layoutX="474.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shared2Player3" fitHeight="50.0" fitWidth="50.0" layoutX="542.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true" />
    </children>
    <stylesheets>
-      <URL value="@../css/style_all.css"/>
+      <URL value="@../css/style_all.css" />
    </stylesheets>
 </AnchorPane>

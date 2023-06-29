@@ -304,6 +304,23 @@ public class GuiClientController implements ClientControllerInterface{
                 CurrentScore m = (CurrentScore) message;
                 SceneController.getInstance().setMyScore(m.getCurrentScore());
             }
+
+            case SHAREDSCOREACHIEVE_MESSAGE -> {
+                SharedScoreAchieveMessage m = (SharedScoreAchieveMessage) message;
+                int index = m.getIndex();
+                int newPoints = m.getNewPoints();
+                switch (index){
+                    case 1->{
+                        System.out.println(" e stato achieved il primo shared goal");
+                        SceneController.getInstance().setLastSharedPoint1(newPoints);
+                    }
+
+                    case 2->{
+                        System.out.println(" e stato achieved il secondo shared goal");
+                        SceneController.getInstance().setLastSharedPoint2(newPoints);
+                    }
+                }
+            }
         }
         return null;
     }

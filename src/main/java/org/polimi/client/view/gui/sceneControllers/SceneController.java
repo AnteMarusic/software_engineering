@@ -30,6 +30,7 @@ public class SceneController {
     private List<String> players;
     private String myUsername;
 
+
     private List<ClientBookshelf> bookshelves;
     private int me; //my player index
     private int currentPlayer;
@@ -63,6 +64,9 @@ public class SceneController {
     private boolean reconnected;
 
     private int myScore;
+
+    private int[] lastSharedPoint1;
+    private int[] lastSharedPoint2;
 
     public SceneController(){
         board = null;
@@ -230,6 +234,8 @@ public class SceneController {
         this.players = players;
         this.numOfPlayers = players.size();
         this.me = this.players.indexOf(myUsername);
+        this.lastSharedPoint1 = new int [this.numOfPlayers];
+        this.lastSharedPoint2 = new int [this.numOfPlayers];
     }
 
     public List<Card> getChosenCards() {
@@ -372,6 +378,26 @@ public class SceneController {
 
     public int getMyScore() {
         return myScore;
+    }
+
+    public int getLastSharedPoint1(int i) {
+        return lastSharedPoint1[i];
+    }
+
+    public int getLastSharedPoint2(int i) {
+        return lastSharedPoint2[i];
+    }
+
+    public void setLastSharedPoint1(int points) {
+        System.out.println("sto settando i punti a currentplayer il primo shared a="+ currentPlayer+" io sono "+getMyIndex());
+        lastSharedPoint1[currentPlayer] = points;
+    }
+
+
+    public void setLastSharedPoint2(int points) {
+        System.out.println("sto settando i punti a currentplayer il secondo shared a="+ currentPlayer+"io sono "+getMyIndex());
+
+        lastSharedPoint2[currentPlayer] = points;
     }
 
     public void setMyScore(int score) {
