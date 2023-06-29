@@ -1,13 +1,10 @@
 package org.polimi.servernetwork.server;
 
-import org.polimi.client.Decrementer;
 import org.polimi.servernetwork.controller.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.rmi.AlreadyBoundException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +26,21 @@ public class ServerStarter {
         GameCodeIssuer gameCodeIssuer = new GameCodeIssuer();
         UsernameIssuer usernameIssuer = new UsernameIssuer();
         LobbyController lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
+        if (args.length == 0) {
+            System.out.println("(ServerStarter) path missing");
+            return;
+        }
+        String folderPath = args[0];
+        System.out.println("(ServerStarter) folder provided as argument " + folderPath);
+        File folder = new File(folderPath);
+        if (folder.exists() && folder.isDirectory()) {
+            System.out.println("(ServerStarter) The folder provided as argument exists.");
+        } else {
+            System.out.println("(ServerStarter) The folder provided as argument does not exist.");
+            return;
+        }
+        GameListFileAccessorSingleton.setFolderPath(folderPath);
+        GameController.setFolderPath(folderPath);
         GameListFileAccessorSingleton gameListFileAccessor = GameListFileAccessorSingleton.getInstance();
         if (!gameListFileAccessor.isEmpty()) {
             Map<Integer, List<String>> gameIdWithPlayers = gameListFileAccessor.getGameIdsAndPlayers();
