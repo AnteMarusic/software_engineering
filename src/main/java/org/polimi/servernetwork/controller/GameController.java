@@ -441,7 +441,8 @@ public class GameController {
         */
         destruction = true;
         for (ClientHandler c : players){
-            c.setDestructionTrue();
+            if(c!=null)
+                c.setDestructionTrue();
         }
         List<String> playersUsername = game.getPlayersUsername();
         for(int i=0; i<numOfPlayers; i++){
@@ -516,7 +517,4 @@ public class GameController {
         fileAccessor.removeGameIdWithPlayers(this.gameCode);
     }
 
-    public boolean getDestruction(){
-        return destruction;
-    }
 }
