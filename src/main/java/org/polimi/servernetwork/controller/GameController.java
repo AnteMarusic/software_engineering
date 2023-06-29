@@ -59,6 +59,13 @@ public class GameController {
         numOfPlayers = -1;
     }
 
+    /**
+     * Retrieves the game data from a file and initializes the game state.
+     * This method reads the serialized game object from the file, sets the necessary variables,
+     * and prepares the game environment.
+     *
+     * @throws FileNotFoundException If the file containing the game data is not found.
+     */
     public void retrieveGameFromFile () throws FileNotFoundException {
         try {
             this.saveFile = new File(folderPath + gameCode + ".ser");
@@ -78,6 +85,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Initializes the save file for the game.
+     * This method creates a new save file with the appropriate file path and registers the game code in the game list file.
+     * The save file is used to store the model status of the game.
+     */
     public void initializeSaveFile() {
         //save
         System.out.println("(GameController initializeSaveFile) model status will be saved here: " + folderPath + gameCode + ".ser");
@@ -98,6 +110,11 @@ public class GameController {
         this.gameCode = gameCode;
     }
 
+    /**
+     * Initializes the game environment.
+     * This method sends messages to all client handlers, informing them that the game is starting and
+     * providing them with the necessary game information, such as the board, shared goals, and private goals.
+     */
     public void initGameEnv() {
         // manda a tutti clientHandler un messaggio in cui dice che il gioco sta iniziando e con chi sta giocando
         // manda a tutti la bord gli shared goal e a ogni client il proprio private goal
@@ -111,9 +128,14 @@ public class GameController {
         for (i = 0; i < players.size(); i++) {
             players.get(i).sendMessage(new ModelStatusAllMessage(players.get(i).getUsername(),currentPlayer, game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(i),game.getPersonalGoalColors(i), game.getPersonalGoalIndex(i), usernames));
         }
-
     }
 
+    /**
+     * Resets the game environment for a player at the specified position.
+     * Sends relevant game information and status to the player.
+     *
+     * @param position The position of the player in the game.
+     */
     public void resetGameEnv(int position){
         List<String> usernames;
         int i;
@@ -125,6 +147,11 @@ public class GameController {
         players.get(position).sendMessage(new Message("server", MessageType.USERNAME));
         players.get(position).sendMessage(new ModelStatusAllMessage(players.get(position).getUsername(),currentPlayer, game.getBoardMap(), bookshelves, game.getIndexSharedGoal1(), game.getIndexSharedGoal2(), game.getPersonalGoalCoordinates(position),game.getPersonalGoalColors(position), game.getPersonalGoalIndex(position), usernames));
     }
+
+    /**
+     * Starts a new game turn by notifying the current player to choose cards to remove from the board.
+     * Notifies other players about the next player's turn.
+     */
     //questo metodo non viene chiamato nel caso di client rmi
     public void startGameTurn() {
         System.out.println("(GameController startGameTurn)");
@@ -176,7 +203,13 @@ public class GameController {
             }
         }
     }
-
+    /**
+     * Inserts a player's move into the bookshelf at the specified column.
+     * Updates the game state and communicates the changes to the players.
+     * Saves the game status.
+     *
+     * @param column The column where the player's move is inserted.
+     */
     public void insertInBookshelf(int column) {
         boolean before1 = game.getAchievementOfSG1(currentPlayer);
         boolean before2 = game.getAchievementOfSG2(currentPlayer);
@@ -341,6 +374,13 @@ public class GameController {
             }
         }
     }
+
+    /**
+     * Handles the disconnection of a client represented by the provided `clientHandler` object.
+     * If `destruction` is set to `true`, no disconnections are handled as the game has already closed.
+     *
+     * @param clientHandler The `ClientHandler` object representing the disconnected client.
+     */
     public void disconnection(ClientHandler clientHandler){
         // se la distrucction è a TRUE non devo gestire le disconnesioni, siccome il gioco si è chiuso
         if(!destruction){
@@ -403,11 +443,21 @@ public class GameController {
         }
 
     }
-
+    /**
+     * Sets the first player randomly among the given number of players.
+     *
+     * @param numOfPlayer The number of players in the game.
+     * @return The index of the randomly selected first player.
+     */
     private int setFirstPlayer(int numOfPlayer){
         Random random = new Random();
         return random.nextInt(numOfPlayer);
     }
+    /**
+     * Retrieves the usernames of all the players in the game.
+     *
+     * @return A list containing the usernames of the players.
+     */
     private List<String> getPlayersUsername(){
         List<String> playersUsername = new ArrayList<>(numOfPlayers);
         for(int i=0; i<players.size(); i++){
@@ -416,14 +466,11 @@ public class GameController {
         return playersUsername;
     }
 
-    public ClientHandler getClienthandlerfromGC(String name){
-        Optional<ClientHandler> clienthandler = Stream.of(players)
-                .flatMap(ArrayList::stream)
-                .filter(clientHandler -> clientHandler.getUsername().equals(name))
-                .findFirst();
-        return clienthandler.orElse(null);
-    }
-
+    /**
+     * Returns the number of currently connected players in the game.
+     *
+     * @return The number of connected players.
+     */
     private int getNumOfConnectedPlayers(){
         int counter=0;
         for(int i=0; i<numOfPlayers;i++){
@@ -433,7 +480,11 @@ public class GameController {
         }
         return counter;
     }
-
+    /**
+     * Closes the game and performs cleanup operations.
+     * Removes the game from `gameIdIssuer` and releases the usernames from `usernameIssuer`.
+     * Destroys all the related data structures and resources.
+     */
     private void closeGame() {
         /*
         toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
@@ -460,6 +511,11 @@ public class GameController {
         closeSaveFile();
     }
 
+    /**
+     * Decreases the countDown value by 1. If the countDown value becomes equal to COUNT_DOWN - 1,
+     * it prints a message indicating that the countdown has started. If the countDown value reaches 0,
+     * it stops the decrementer, declares the winner, sends a end game message, and closes the game.
+     */
     public void decreaseCountDown () {
         countDown--;
         if(countDown==COUNT_DOWN - 1){
@@ -475,10 +531,11 @@ public class GameController {
             endGame();
         }
     }
-    public ArrayList<ClientHandler> returnClientHandlers(){
-        return players;
-    }
-
+    /**
+     * Saves the current game state by serializing and writing the game object to the save file.
+     * If the save file already exists, its contents will be overwritten.
+     * If an exception occurs during file writing, it will be printed to the console.
+     */
     public void save () {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveFile, false))) {
             oos.writeObject(game);
@@ -488,7 +545,12 @@ public class GameController {
             System.out.println("(GameController save) exception in file writing");
         }
     }
-
+    /**
+     * Reads and deserializes the saved game object from the save file.
+     *
+     * @return The deserialized Game object.
+     * @throws RuntimeException If an exception occurs during file reading or deserialization.
+     */
     public Game readFileAndDeserialize () throws RuntimeException{
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
             Game deserializedGame = (Game) ois.readObject();
@@ -501,7 +563,11 @@ public class GameController {
             throw new RuntimeException();
         }
     }
-
+    /**
+     * Closes the save file associated with the game.
+     * If the save file exists, it is deleted.
+     * Also removes the game ID with players from the game list file.
+     */
     private void closeSaveFile () {
         if (saveFile.exists()) {
             boolean deleted = saveFile.delete();

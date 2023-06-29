@@ -157,13 +157,6 @@ public class CliClientController implements ClientControllerInterface {
                 SharedScoreAchieveMessage m = (SharedScoreAchieveMessage) message;
                 cli.printAchieveMessage(m.getIndex(), m.getNewPoints());
             }
-            /*
-            case SHAREDPOINTQUEUETOPMESSAGE -> {
-                SharedPointQueueTOPMessage m = (SharedPointQueueTOPMessage) message;
-                cli.printSharedPointQueue(m.getSharedPoint());
-            }
-
-             */
         }
         return null;
     }
@@ -283,8 +276,7 @@ public class CliClientController implements ClientControllerInterface {
         boolean actionFlag;
         String action;
 
-        LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
-        System.out.println("choose a card");
+        List<Coordinates> chosenCoordinates = new ArrayList<>();
         while (counter < maxInsertable) {
             switch (counter) {
                 //you necessarily have to choose at least a card
@@ -394,7 +386,7 @@ public class CliClientController implements ClientControllerInterface {
                                 actionFlag = true;
                             } else if (Objects.equals(action, "redo")) {
                                 System.out.println("ok, going back to previous step");
-                                chosenCoordinates.removeLast();
+                                chosenCoordinates.remove(chosenCoordinates.size()-1);
                                 counter--;
                                 actionFlag = true;
                             } else {
@@ -457,7 +449,7 @@ public class CliClientController implements ClientControllerInterface {
                                 actionFlag = true;
                             } else if (Objects.equals(action, "redo")) {
                                 System.out.println("ok, going back to previous step");
-                                chosenCoordinates.removeLast();
+                                chosenCoordinates.remove(chosenCoordinates.size()-1);
                                 counter--;
                                 actionFlag = true;
                             } else {
@@ -478,7 +470,9 @@ public class CliClientController implements ClientControllerInterface {
             System.out.println("order");
             chosenCoordinates = orderChosenCards(chosenCoordinates);
         }
-        return new ChosenCardsMessage(username, chosenCoordinates);
+        List<Coordinates> currChosenCoordinates = new ArrayList<>();
+        currChosenCoordinates = chosenCoordinates;
+        return new ChosenCardsMessage(username, currChosenCoordinates);
     }
 
     /**
@@ -488,10 +482,10 @@ public class CliClientController implements ClientControllerInterface {
      * @return The ordered coordinates as a linked list.
      */
     @Override
-    public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
+    public ArrayList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         int position;
         int i = 0;
-        LinkedList<Coordinates>  orderedCoordinates = new LinkedList<Coordinates>();
+        ArrayList<Coordinates>  orderedCoordinates = new ArrayList<>();
         for(int k=0; k<chosenCoordinates.size(); k++){
             orderedCoordinates.add(null);
         }

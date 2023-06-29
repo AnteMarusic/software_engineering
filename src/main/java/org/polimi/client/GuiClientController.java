@@ -246,7 +246,13 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case CARD_TO_REMOVE -> {
                 CardToRemoveMessage m = (CardToRemoveMessage) message;
-                SceneController.getInstance().setOtherPlayerChosenCards(m.getCards());
+                Coordinates currCoor;
+                List<Card> currCards = new ArrayList();
+                for(int i=0 ; i<m.getCoordinates().size() ; i++) {
+                    currCoor = m.getCoordinates().get(i);
+                    currCards.add(SceneController.getInstance().getBoard().seeCardAtCoordinates(currCoor));
+                }
+                SceneController.getInstance().setOtherPlayerChosenCards(currCards);
                 removeOtherPlayerCards(m.getCoordinates());
                 return null;
             }
@@ -381,7 +387,7 @@ public class GuiClientController implements ClientControllerInterface{
 
 
     @Override
-    public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
+    public ArrayList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         return null;
     }
 

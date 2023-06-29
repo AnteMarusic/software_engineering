@@ -49,7 +49,7 @@ public class Cli {
         me = 0;
         chosenCards = new ArrayList<>();
         otherPlayerChosenCards = new ArrayList<>();
-        orderedChosenCards = new LinkedList<>();
+        orderedChosenCards = new ArrayList<>();
     }
 
     public void setPersonalGoal (Coordinates[] coordinates, Card.Color[] colors) {
@@ -150,8 +150,8 @@ public class Cli {
     }
     public void setCurrentPlayer(int currentPlayerInt, String currentPlayer){
         this.currentPlayer = currentPlayerInt;
-        System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayerInt);
-        System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayer);
+        System.out.println("(Cli setCurrentPlayer) the current player is: " + currentPlayerInt);
+        System.out.println("(Cli setCurrentPlayer) the current player is: " + currentPlayer);
     }
     public void setIntCurrentPlayer(int currentPlayer){
         this.currentPlayer = currentPlayer;
@@ -331,13 +331,13 @@ public class Cli {
         chosenCards.clear();
     }
     public void chooseNumberOfPlayer(){
-        System.out.println("how many players do you want in your game");
+        System.out.println("how many players do you want in your game?");
     }
     public void chooseGameCode(){
         System.out.println("choose game code, tha number must be bigger then 1000 and smaller then 2000");
     }
     public void waitForTheOtherPlayer(){
-        System.out.println("you are wating for the other player");
+        System.out.println("you are waiting for the other player");
     }
     public void alreadyTakenGameCode(){
         System.out.println("this game code is already user in another game");
@@ -347,29 +347,29 @@ public class Cli {
         System.out.println("an error occurred, you disconnected from the server");
     }
     public void youAreAlone() {
-        System.out.println("you are alone in the game, timer started, if nobody enter in 60second you are the winner");
+        System.out.println("you are alone in the game, timer started, if nobody enters in 60 seconds you are the winner");
     }
     public void disconnectionAlert(String username){
         System.out.println(username + " left the game");
     }
     public void printGameCode(int gameCode){
-        System.out.println("il game code private è: " + gameCode + "condividilo con i tuoi amici per giocare");
+        System.out.println("your private game code is: " + gameCode + "share it with your friends to play with them");
     }
     public void printRanking(Map<String,Integer> ranking){
-        System.out.println("Il gioco è concluso, la classifica finale è: " + ranking.toString());
+        System.out.println("the game has ended: the final ranking is: " + ranking.toString());
     }
     public void printCurrentScore(int currentScore){
-        System.out.println("il punteggio attuale è di: " + currentScore);
+        System.out.println("your current points are: " + currentScore);
     }
     public void printAchieveMessage(int index, int points){
         System.out.println("(Cli setPlayers) stampo la lista di palyers" + this.players.toString());
         System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayer);
         System.out.println("(Cli setCurrentPlayer) stampo me che vale: " + me);
         if(currentPlayer == me){
-            System.out.println("hai completato lo shared goal numero: " + index + "ottenendo: " + points+ "punti");
+            System.out.println("you achieved the shared goal: " + index + "obtaining: " + points+ "points");
         }
         else{
-            System.out.println("un giocatore ha completato lo shared goal numero: " + index + "ottenendo: " + points+ "punti");
+            System.out.println("a player has achieved the shared goal number: " + index + "obtaining: " + points+ "points");
         }
 
     }
