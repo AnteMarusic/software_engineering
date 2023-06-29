@@ -381,7 +381,7 @@ public class GuiClientController implements ClientControllerInterface{
 
 
     @Override
-    public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
+    public ArrayList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         return null;
     }
 

@@ -5,6 +5,7 @@ import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public interface ClientControllerInterface {
     void alreadyTakenUsername ();
     Message chooseGameMode ();
     Message chooseCards();
-    LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates);
+    ArrayList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates);
     Message chooseColumn ();
     void errorMessage ();
     void newPlayerJoinedLobby (String newPlayer);
