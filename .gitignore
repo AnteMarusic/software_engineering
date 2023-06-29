@@ -15,4 +15,7 @@ target/
 **/gameList.json
 *.ser
 
+#deliverables
+out/
+
 

@@ -8,10 +8,17 @@ import java.util.Scanner;
 
 public abstract class Client {
     public String username;
+    private static String serverIp;
     private int port;
 
     Client(int port){
         this.port = port;
+    }
+    public static void setServerIp (String ip) {
+        serverIp = ip;
+    }
+    public String getServerIp () {
+        return serverIp;
     }
     public String getUsername(){
         return this.username;
