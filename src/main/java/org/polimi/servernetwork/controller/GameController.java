@@ -341,6 +341,13 @@ public class GameController {
             }
         }
     }
+
+    /**
+     * Handles the disconnection of a client represented by the provided `clientHandler` object.
+     * If `destruction` is set to `true`, no disconnections are handled as the game has already closed.
+     *
+     * @param clientHandler The `ClientHandler` object representing the disconnected client.
+     */
     public void disconnection(ClientHandler clientHandler){
         // se la distrucction è a TRUE non devo gestire le disconnesioni, siccome il gioco si è chiuso
         if(!destruction){
@@ -423,7 +430,11 @@ public class GameController {
                 .findFirst();
         return clienthandler.orElse(null);
     }
-
+    /**
+     * Returns the number of currently connected players in the game.
+     *
+     * @return The number of connected players.
+     */
     private int getNumOfConnectedPlayers(){
         int counter=0;
         for(int i=0; i<numOfPlayers;i++){
@@ -433,7 +444,11 @@ public class GameController {
         }
         return counter;
     }
-
+    /**
+     * Closes the game and performs cleanup operations.
+     * Removes the game from `gameIdIssuer` and releases the usernames from `usernameIssuer`.
+     * Destroys all the related data structures and resources.
+     */
     private void closeGame() {
         /*
         toglie il game da gameIdIssuer, libera i nomi da usernameIssuer
@@ -460,6 +475,11 @@ public class GameController {
         closeSaveFile();
     }
 
+    /**
+     * Decreases the countDown value by 1. If the countDown value becomes equal to COUNT_DOWN - 1,
+     * it prints a message indicating that the countdown has started. If the countDown value reaches 0,
+     * it stops the decrementer, declares the winner, sends a end game message, and closes the game.
+     */
     public void decreaseCountDown () {
         countDown--;
         if(countDown==COUNT_DOWN - 1){

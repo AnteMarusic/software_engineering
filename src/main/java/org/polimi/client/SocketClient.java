@@ -39,7 +39,7 @@ public class SocketClient extends Client{
      */
     public boolean connect () {
         try{
-            this.socket = new Socket("192.168.244.63", this.getPort());
+            this.socket = new Socket("localhost", this.getPort());
         }
         catch(IOException e){
             return false;
