@@ -352,6 +352,11 @@ public class GuiClientController implements ClientControllerInterface{
             case WAITING_FOR_YOUR_TURN ->{
                 gameLoopSceneController.reconnect();
             }
+
+            case CURRENT_SCORE -> {
+                CurrentScore m = (CurrentScore) message;
+                SceneController.getInstance().setMyScore(m.getCurrentScore());
+            }
             /*
             // nuovo messaggio aggiunto
 

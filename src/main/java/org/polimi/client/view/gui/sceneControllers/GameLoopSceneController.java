@@ -2,7 +2,6 @@ package org.polimi.client.view.gui.sceneControllers;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -82,6 +81,8 @@ public class GameLoopSceneController {
     private boolean startTurnShown;
     private boolean yourTurn;
 
+    private int myPointScore;
+
     public void gameLoopInit(){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
@@ -113,6 +114,8 @@ public class GameLoopSceneController {
                 startTurnShown=true;
             }
         }
+        myPointScore = SceneController.getInstance().getMyScore();
+        myScore.setText(String.valueOf(myPointScore));
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
         resetColumnView();
@@ -774,14 +777,25 @@ public class GameLoopSceneController {
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
         for(int i = 0; i<5; i++){
             for(int j= 0; j<6; j++){
+                int row = i;
+                int col = j;
                 Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                 if(card!=null) {
                     this.image = loadTileImage(card);
                     ImageView imageView3 = new ImageView();
-                    insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    Platform.runLater(()->{
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, row, col);
+                    });
                 }
             }
         }
     }
 
+    public void setMyPointScore(int myPointScore) {
+        this.myPointScore = myPointScore;
+    }
+
+    public int getMyPointScore() {
+        return myPointScore;
+    }
 }
