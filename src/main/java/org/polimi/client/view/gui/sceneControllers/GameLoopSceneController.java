@@ -2,7 +2,6 @@ package org.polimi.client.view.gui.sceneControllers;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -82,6 +81,8 @@ public class GameLoopSceneController {
     private boolean startTurnShown;
     private boolean yourTurn;
 
+    private int myPointScore;
+
     public void gameLoopInit(){
         this.chosenCoordinates = new LinkedList<>();
         this.bookshelves = new ArrayList<>();
@@ -113,6 +114,8 @@ public class GameLoopSceneController {
                 startTurnShown=true;
             }
         }
+        myPointScore = SceneController.getInstance().getMyScore();
+        myScore.setText(String.valueOf(myPointScore));
         board = SceneController.getInstance().getBoard();
         bookshelves = SceneController.getInstance().getBookshelves();
         resetColumnView();
@@ -237,6 +240,7 @@ public class GameLoopSceneController {
      *
      * @throws IOException IOException if an I/O error occurs while switching the scene.
      */
+    @FXML
     public void showBookshelves() throws IOException {
         SceneController.getInstance().switchScenePopUp();
     }
@@ -318,6 +322,7 @@ public class GameLoopSceneController {
      * passed as a parameter.
      * @param alertinfo The string
      */
+    @FXML
     private void showAlert(String alertinfo){
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -335,6 +340,7 @@ public class GameLoopSceneController {
      *
      * @throws RemoteException If a remote communication error occurs.
      */
+    @FXML
     public void col0() throws RemoteException {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -387,6 +393,7 @@ public class GameLoopSceneController {
      * the second column.
      * @throws RemoteException If a remote communication error occurs.
      */
+    @FXML
     public void col1() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -439,6 +446,7 @@ public class GameLoopSceneController {
      * the third column.
      * @throws RemoteException If a remote communication error occurs.
      */
+    @FXML
     public void col2() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -491,6 +499,7 @@ public class GameLoopSceneController {
      * the fourth column.
      * @throws RemoteException If a remote communication error occurs.
      */
+    @FXML
     public void col3() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -543,6 +552,7 @@ public class GameLoopSceneController {
      * the fifth column.
      * @throws RemoteException If a remote communication error occurs.
      */
+    @FXML
     public void col4() throws RemoteException{
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
@@ -594,6 +604,7 @@ public class GameLoopSceneController {
      * On action javafx method for deleting the first card you picked during
      * your turn.
      */
+    @FXML
     public void deleteTile0(){
         Pane paneWithImageView = retrievePane(chosenCardsPane,0,0);
         chosenCardsPane.getChildren().remove(paneWithImageView);
@@ -609,6 +620,7 @@ public class GameLoopSceneController {
      * On action javafx method for deleting the second card you picked during
      * your turn.
      */
+    @FXML
     public void deleteTile1(){
         Pane paneWithImageView = retrievePane(chosenCardsPane,1,0);
         chosenCardsPane.getChildren().remove(paneWithImageView);
@@ -625,6 +637,7 @@ public class GameLoopSceneController {
      * On action javafx method for deleting the third card you picked during
      * your turn.
      */
+    @FXML
     public void deleteTile2(){
         Pane paneWithImageView = retrievePane(chosenCardsPane,2,0);
         chosenCardsPane.getChildren().remove(paneWithImageView);
@@ -754,22 +767,35 @@ public class GameLoopSceneController {
                 GameRules.areCoordinatesAligned(c2,c1,c3) || GameRules.areCoordinatesAligned(c2,c3,c1) ||
                 GameRules.areCoordinatesAligned(c3,c1,c2) || GameRules.areCoordinatesAligned(c3,c2,c1));
     }
-
+    /**
+     * Refills the client's bookshelf with the cards that were previously stored.
+     * This method retrieves the client's bookshelf and inserts the cards into the bookshelf grid.
+     * Each non-null card is represented by an ImageView and inserted into the bookshelf grid at the corresponding coordinates.
+     * This method is called when a client reconnects to the game.
+     */
     public void reconnect(){
         ClientBookshelf myBookshelf = bookshelves.get(myIndex);
-        System.out.println("this is it \n");
-        myBookshelf.print();
         for(int i = 0; i<5; i++){
-            System.out.println(" reconnect insertable"+ myBookshelf.getInsertable(i));
             for(int j= 0; j<6; j++){
+                int row = i;
+                int col = j;
                 Card card = myBookshelf.seeCardAtCoordinates(new Coordinates(j,i));
                 if(card!=null) {
                     this.image = loadTileImage(card);
                     ImageView imageView3 = new ImageView();
-                    insertInGridPane(imageView3, 25, 25, bookshelfGridPane, i, j);
+                    Platform.runLater(()->{
+                        insertInGridPane(imageView3, 25, 25, bookshelfGridPane, row, col);
+                    });
                 }
             }
         }
     }
 
+    public void setMyPointScore(int myPointScore) {
+        this.myPointScore = myPointScore;
+    }
+
+    public int getMyPointScore() {
+        return myPointScore;
+    }
 }

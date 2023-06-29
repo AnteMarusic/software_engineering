@@ -19,13 +19,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class MenuSceneController implements Initializable {
-    boolean bool;
-    @FXML
-    private Box box;
-    @FXML
-    private Slider slider;
 
-    private double num=0;
 
     /**
      * Handles the event when the "Choose RMI" button is clicked.
@@ -55,12 +49,6 @@ public class MenuSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                num=slider.getValue();
-                box.setLayoutX((num*60)%1180);
-            }
-        });
+
     }
 }

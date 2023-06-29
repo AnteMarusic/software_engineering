@@ -62,6 +62,8 @@ public class SceneController {
 
     private boolean reconnected;
 
+    private int myScore;
+
     public SceneController(){
         board = null;
         bookshelves = new ArrayList<ClientBookshelf>();
@@ -72,6 +74,7 @@ public class SceneController {
         otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
         reconnected = false;
+        myScore = 0;
     }
     public static SceneController getInstance() {
         if (instance == null) {
@@ -366,4 +369,13 @@ public class SceneController {
     public void setReconnected(boolean reconnected) {
         this.reconnected = reconnected;
     }
+
+    public int getMyScore() {
+        return myScore;
+    }
+
+    public void setMyScore(int score) {
+        this.myScore = score;
+    }
+
 }

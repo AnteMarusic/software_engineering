@@ -24,47 +24,42 @@ import static org.polimi.GameRules.boardRowColInBound;
 
 public class GuiClientController implements ClientControllerInterface{
     private static Client client;
-    private static String username;
-
-    public static List<Object> messagges;
+    public static String username;
 
     private static boolean rmi;
 
     private static int numOfPlayers;
 
-    private static boolean receivedgamemodemess;
+    private static volatile boolean receivedgamemodemess;
 
     private static boolean startgame;
 
     private static boolean chosencards;
-    private static boolean createdgameloop;
     private static GameLoopSceneController gameLoopSceneController;
     private static Lock lock;
     private static Condition flagCondition;
 
 
     public GuiClientController(Client client, boolean rmi) {
-        this.client = client;
-        this.messagges = new LinkedList<Object>();
-        this.rmi=rmi;
-        this.receivedgamemodemess=false;
-        this.startgame=false;
-        this.chosencards = false;
-        this.createdgameloop = false;
-        this.lock = new ReentrantLock();
-        this.flagCondition = lock.newCondition();
+        GuiClientController.client = client;
+        GuiClientController.rmi =rmi;
+        receivedgamemodemess=false;
+        startgame=false;
+        chosencards = false;
+        lock = new ReentrantLock();
+        flagCondition = lock.newCondition();
     }
 
 
     /**
      * Method that locks a thread and let it waits until a certain condition is
-     * fullfilled
-     * @throws InterruptedException
+     * fulfilled.
+     * @throws InterruptedException if the thread is interrupted while waiting
      */
     public void waitForFlag() throws InterruptedException {
         lock.lock();
         try {
-            while (!this.chosencards) {
+            while (!chosencards) {
                 flagCondition.await();
             }
         } finally {
@@ -74,7 +69,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     /**
      * Methods that restores the initial state of the lock, it is going to be
-     * called just after the sleeping thread is unlocked
+     * called just after the sleeping thread is unlocked.
      */
     public void reset() {
         lock.lock();
@@ -87,16 +82,15 @@ public class GuiClientController implements ClientControllerInterface{
 
     /**
      * Method that let us deal with specific internal notification, used to synchronize
-     * procedures that need notifies from a thread to antoher one
-     * @param notificationType
-     * @return
-     * @throws RemoteException
+     * procedures that need notifies from a thread to another one.
+     * @param notificationType The type of notification.
+     * @return Returns a boolean value based on the notification type and the performed actions.
+     * @throws RemoteException if a remote communication error occurs.
      */
     public static boolean getNotified(String notificationType) throws RemoteException {
         if(rmi){
             switch(notificationType){
                 case "username" ->{
-                    username = (String) messagges.get(0);
                     SceneController.getInstance().setMyUsername(username);
                     try {
                         return ((RMIClient) client).loginGui(username);
@@ -105,45 +99,39 @@ public class GuiClientController implements ClientControllerInterface{
                     }
                 }
                 case "RandomGameOf2" -> {
-                    System.out.println("(GuiController) inviato al server messaggio di join prima del while");
-                    while(!receivedgamemodemess){
-
+                    while (!receivedgamemodemess) {
+                        Thread.onSpinWait();
                     }
-                    System.out.println("(GuiController) inviato al server messaggio di join prima");
                     ((RMIClient) client).getServer().onMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1));
                     numOfPlayers=2;
-                    System.out.println("(GuiController) inviato al server messaggio di join dopo");
                 }
                 case "RandomGameOf3" -> {
-                    while(!receivedgamemodemess){
+                    while (!receivedgamemodemess) {
+                        Thread.onSpinWait();
 
                     }
                     ((RMIClient) client).getServer().onMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1));
                     numOfPlayers=3;
                 }
                 case "RandomGameOf4" -> {
-                    while(!receivedgamemodemess){
-
+                    while (!receivedgamemodemess) {
+                        Thread.onSpinWait();
                     }
                     ((RMIClient) client).getServer().onMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1));
                     numOfPlayers=4;
                 }
                 case "startgame"->{
-                    if(!startgame)
-                        return false;
-                    return true;
+                    return startgame;
                 }
                 case "chosencards"-> {
                     lock.lock();
                     try {
                         chosencards = true;
-                        flagCondition.signal(); // Signal the waiting thread
+                        flagCondition.signal();
                     } finally {
                         lock.unlock();
                     }
                 }
-                case "createdgameloop" -> {createdgameloop=true;
-                System.out.println("settato a true createdgameloop da guiclientcontroleer");}
                 default ->{
                     return false;
                 }
@@ -152,10 +140,8 @@ public class GuiClientController implements ClientControllerInterface{
         }else {
             switch (notificationType) {
                 case "username" -> {
-                    username = (String) messagges.get(0);
                     SceneController.getInstance().setMyUsername(username);
                     client.setUsername(username);
-                    System.out.println("sto per unlockare lato guiclinetcontorller");
                     SocketClient.locksocket.lock();
                     try {
                         ((SocketClient) client).setWaitForusername(true);
@@ -163,50 +149,43 @@ public class GuiClientController implements ClientControllerInterface{
                     } finally {
                         SocketClient.locksocket.unlock();
                     }
-                    System.out.println("unlockato lato guiclinetcontorller");
                     return true;
                 }
 
                 case "RandomGameOf2" -> {
-                    System.out.println("(GuiController) inviato al server messaggio di join prima del while");
-                    while(!receivedgamemodemess){
-
+                    while (!receivedgamemodemess) {
+                        Thread.onSpinWait();
                     }
-                    System.out.println("(GuiController) inviato al server messaggio di join prima");
                     ((SocketClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_2_PLAYER, -1));
                     numOfPlayers=2;
-                    System.out.println("(GuiController) inviato al server messaggio di join dopo");
                 }
                 case "RandomGameOf3" -> {
-                    while(!receivedgamemodemess){
+                    while (!receivedgamemodemess) {
+                        Thread.onSpinWait();
 
                     }
                     ((SocketClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1));
                     numOfPlayers=3;
                 }
                 case "RandomGameOf4" -> {
-                    while(!receivedgamemodemess){
-
+                    while (!receivedgamemodemess) {
+                        Thread.onSpinWait();
                     }
                     ((RMIClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1));
                     numOfPlayers=4;
                 }
                 case "startgame"->{
-                    if(!startgame)
-                        return false;
-                    return true;
+                    return startgame;
                 }
                 case "chosencards"-> {
                     lock.lock();
                     try {
                         chosencards = true;
-                        flagCondition.signal(); // Signal the waiting thread
+                        flagCondition.signal();
                     } finally {
                         lock.unlock();
                     }
                 }
-                case "createdgameloop" -> {createdgameloop=true;
-                    System.out.println("settato a true createdgameloop da guiclientcontroleer");}
                 default ->{
                     return false;
                 }
@@ -218,33 +197,25 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public void setUsername(String username) {
-        this.username = username;
+        GuiClientController.username = username;
     }
 
     /**Override method of upper class "Client" used to deal with messages received from
      * the server
-     * @param message
-     * @return
-     * @throws IOException
+     *
+     * @param message The message to be handled.
+     * @return Returns a response message or null depending on the message type.
+     * @throws IOException if an I/O error occurs during message handling.
+
      */
     @Override
     public Message handleMessage(Message message) throws IOException {
         switch (message.getMessageType()) {
-            case CHOOSE_GAME_MODE -> {
-                System.out.println("setto a true");
-                receivedgamemodemess=true;
-            }
+            case CHOOSE_GAME_MODE -> receivedgamemodemess=true;
             case START_GAME_MESSAGE -> {
-                ///cambiare scena in qualche modo
                 return null;
             }
-
-            //this message is sent
-            //if the server recognises that this client is reconnecting, so it has to send the whole model status,
-            //otherwise, it is sent at the beginning of the match
             case MODEL_STATUS_ALL -> {
-
-                //in case of status all message the client doesn't have to send any message
                 ModelStatusAllMessage m = (ModelStatusAllMessage) message;
                 Map<Coordinates, Card> board = m.getBoard();
                 List<Card[][]> bookshelves = m.getBookshelves();
@@ -258,22 +229,11 @@ public class GuiClientController implements ClientControllerInterface{
                 modelAllMessage(board, bookshelves, sharedGoal1, sharedGoal2, personalGoalCoordinates, personalGoalColors, usernames, personalGoal,currentPlayer);
                 String ref = "/scenesfxml/game_loop.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
-                System.out.println("prima di loader.load");
                 Parent root = loader.load();
-                System.out.println("dopo di loader.load");
-                if(loader.getController()==null){
-                    System.out.println("il controller é null");
-                }else{
-                    System.out.println("il controller non é null");
-                }
                 gameLoopSceneController = loader.getController();
                 gameLoopSceneController.gameLoopInit();
                 SceneController.getInstance().setGameLoopController(gameLoopSceneController);
-                if(usernames.get(currentPlayer).equals(username)){
-                    SceneController.getInstance().setMyTurn(true);
-                }else{
-                    SceneController.getInstance().setMyTurn(false);
-                }
+                SceneController.getInstance().setMyTurn(usernames.get(currentPlayer).equals(username));
                 startgame=true;
                 Stage stage = SceneController.getInstance().getStage();
                 Platform.runLater(() -> {
@@ -287,7 +247,6 @@ public class GuiClientController implements ClientControllerInterface{
             }
             case CARD_TO_REMOVE -> {
                 CardToRemoveMessage m = (CardToRemoveMessage) message;
-                System.out.println("il server mi dice di togliere "+ m.getCards().size() + " carte");
                 SceneController.getInstance().setOtherPlayerChosenCards(m.getCards());
                 removeOtherPlayerCards(m.getCoordinates());
                 return null;
@@ -298,30 +257,21 @@ public class GuiClientController implements ClientControllerInterface{
                 return null;
             }
             case CHOOSE_CARDS_REQUEST -> {
-                System.out.println("sto per settare a true");
                 SceneController.getInstance().setMyTurn(true);
-                System.out.println("ho settato a true");
                 try {
                     this.waitForFlag();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println("dopo try, prima di reset, finito wait del chosencards");
                 this.reset();
                 return chooseCards();
             }
-
-            //message that should be received subsequently to the choice and the sorting of the cards.
             case CHOOSE_COLUMN_REQUEST -> {
                 SceneController.getInstance().setChosenCards(null);
                 return chooseColumn();
             }
-
-            //message received when is not your turn and the server notifies you of the next client playing
             case NOTIFY_NEXT_PLAYER -> {
-                System.out.println("sto per settare a false");
                 SceneController.getInstance().setMyTurn(false);
-                System.out.println("ho settato a false");
                 NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
                 SceneController.getInstance().setCurrentPlayer(m.getNextPlayer());
                 return null;
@@ -349,31 +299,11 @@ public class GuiClientController implements ClientControllerInterface{
                     }
                 });
             }
-            case WAITING_FOR_YOUR_TURN ->{
-                gameLoopSceneController.reconnect();
+            case WAITING_FOR_YOUR_TURN -> gameLoopSceneController.reconnect();
+            case CURRENT_SCORE -> {
+                CurrentScore m = (CurrentScore) message;
+                SceneController.getInstance().setMyScore(m.getCurrentScore());
             }
-            /*
-            // nuovo messaggio aggiunto
-
-
-
-            case ALREADYTAKENGAMECODEMESSAGE -> {
-                cli.alreadyTakenGameCode();
-                return null;
-            }
-            case AREALONE -> {
-                cli.youAreAlone();
-            }
-            case DISCONNECTION_ALLERT -> {
-                DisconnectionAlert m = (DisconnectionAlert) message;
-                cli.disconnectionAlert(m.getUsernameDisconnected());
-            }
-            case NOTIFY_GOAL_COMPLETION -> {
-            }
-            case NOTIFY_GAME_END -> {
-            }
-            case RANKING_MESSAGE -> {
-            }*/
         }
         return null;
     }
@@ -384,30 +314,29 @@ public class GuiClientController implements ClientControllerInterface{
     }
 
     /**
-     * Method that construct the choosen cards message
-     * @return
+     * Allows the player to choose cards and returns a message containing the chosen cards.
+     *
+     * @return A message containing the player's chosen cards.
      */
     @Override
     public Message chooseCards(){
-        System.out.println("sto inviando una lista di coordinate di dimensione "+ SceneController.getInstance().getChosenCards().size());
         return new ChosenCardsMessage(username,SceneController.getInstance().getChosenCardsCoords(), SceneController.getInstance().getChosenCards());
     }
 
     /**
-     * Method that take cards choosed by another players as parameters and update client model
+     * Method that take cards chosen by another players as parameters and update client model
      * consequentially
-     * @param toRemove
+     * @param toRemove The list of coordinates for the cards to be removed.
+     *
      */
     public void removeOtherPlayerCards(List<Coordinates> toRemove){
         Coordinates temp;
-        Card card;
         ClientBoard board= SceneController.getInstance().getBoard();
         Coordinates[] AdjacentCoordinates = new Coordinates[4];
         int j = 0;
         while (j < toRemove.size()) {
             temp = toRemove.get(j);
             board.removeCardAtCoordinates(temp);
-            //SceneController.getInstance().getOtherPlayerChosenCards().add(card);
             AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
             AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
             AdjacentCoordinates[2] = new Coordinates(temp.getRow(), temp.getCol() - 1);
@@ -421,9 +350,7 @@ public class GuiClientController implements ClientControllerInterface{
         }
     }
     public void insertInOtherPlayerBookshelf (int col){
-        System.out.println("la size delle chosen cards dell'altro client è: "+SceneController.getInstance().getOtherPlayerChosenCards().size());
         SceneController.getInstance().getBookshelves().get(SceneController.getInstance().getCurrentPlayer()).insert(SceneController.getInstance().getOtherPlayerChosenCards(), col);
-        //SceneController.getInstance().getOtherPlayerChosenCards().clear();
     }
 
     @Override
@@ -433,7 +360,6 @@ public class GuiClientController implements ClientControllerInterface{
 
     @Override
     public Message chooseGameMode() {
-        System.out.println("arrivati a choose game mode");
         return null;
     }
 
@@ -470,16 +396,17 @@ public class GuiClientController implements ClientControllerInterface{
 
 
     /**
-     * Metrhod that take the whole model status ad parameter and update the Client rappresentation of the
-     * model
-     * @param board
-     * @param bookshelves
-     * @param sharedGoal1
-     * @param sharedGoal2
-     * @param personalGoalCoordinates
-     * @param personalGoalColors
-     * @param usernames
-     * @param personalGoal
+     * Updates the model with the received game state information.
+     *
+     * @param board                 The map of coordinates to cards representing the game board.
+     * @param bookshelves           The list of bookshelves for each player.
+     * @param sharedGoal1           The value of the first shared goal.
+     * @param sharedGoal2           The value of the second shared goal.
+     * @param personalGoalCoordinates The array of coordinates for the personal goal cards.
+     * @param personalGoalColors    The array of colors for the personal goal cards.
+     * @param usernames             The list of usernames for each player.
+     * @param personalGoal          The index of the personal goal card.
+     * @param currPlayer            The index of the current player.
      */
     @Override
     public void modelAllMessage(Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal,int currPlayer) {

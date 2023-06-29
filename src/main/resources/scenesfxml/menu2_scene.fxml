@@ -29,4 +29,7 @@
    <effect>
       <InnerShadow />
    </effect>
+   <stylesheets>
+      <URL value="@../css/style_all.css"/>
+   </stylesheets>
 </AnchorPane>
