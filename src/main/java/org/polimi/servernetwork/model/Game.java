@@ -96,12 +96,12 @@ public class Game implements Serializable {
 
     private void handOutGoalsSG(int numOfPlayers) {
         Random random = new Random();
-
         int i = random.nextInt(12);
         int j;
         do {
             j = random.nextInt(12);
         } while (j == i);
+
         chosenSharedGoal = new int[2];
         chosenSharedGoal[0]=i;
         chosenSharedGoal[1]=j;

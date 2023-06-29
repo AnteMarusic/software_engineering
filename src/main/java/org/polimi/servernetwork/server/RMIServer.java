@@ -75,7 +75,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     @Override
     public void onMessage(Message message) throws RemoteException{
         ClientHandler clientHandler = usernameIssuer.getClientHandler(message.getUsername());
-        clientHandler.onMessage(message);
+        if(clientHandler != null)
+            clientHandler.onMessage(message);
     }
 
     public Message getMessage(String username)throws RemoteException{
