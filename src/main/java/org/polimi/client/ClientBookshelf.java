@@ -84,6 +84,7 @@ public class ClientBookshelf {
             j ++;
         }
         this.index[col] = index[col] - cards.size();
+        updateMaxInsertable();
     }
 
     /**
@@ -195,11 +196,11 @@ public class ClientBookshelf {
         int max = 0;
         int insertable;
         for (int i = 0; i < COL; i ++) {
-            insertable = getInsertable(i);
-            if (insertable > 3) {
-                insertable = 3;
+            insertable = index[i];
+            if (insertable >= 3) {
+                max = 3;
             }
-            if (insertable > max) {
+            else if(insertable > max) {
                 max = insertable;
             }
         }
