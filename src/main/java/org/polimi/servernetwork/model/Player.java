@@ -18,6 +18,8 @@ public class Player implements Serializable {
      * score obtained with SharedGoals
      */
     private int sharedScore;
+    private int sharedScore1;
+    private int sharedScore2;
     /**
      * score obtained with PersonalGoals
      */
@@ -69,6 +71,12 @@ public class Player implements Serializable {
      */
     public int getSharedScore(){
         return this.sharedScore;
+    }
+    public int getSharedScore1(){
+        return this.sharedScore1;
+    }
+    public int getSharedScore2(){
+        return this.sharedScore2;
     }
 
     /**
@@ -128,6 +136,13 @@ public class Player implements Serializable {
     public void increaseSharedScore(int newPoints){
         this.sharedScore  += newPoints;
     }
+    public void setSharedScore1(int points){
+        sharedScore1 = points;
+    }
+    public void setSharedScore2(int points){
+        sharedScore2 = points;
+    }
+
 
     public void setPersonalGoal(PersonalGoal pg){
         this.personalGoal = pg;
