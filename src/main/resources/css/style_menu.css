@@ -1,3 +1,13 @@
 .root {
-    -fx-background-color: "black";
+    -fx-background-image: url("../images/17_MyShelfie_BGA/Publisher_material/Display_1.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+.label {
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+    -fx-font-family: "Baskerville", serif;
 }
