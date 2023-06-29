@@ -440,6 +440,9 @@ public class GameController {
         distruggo tutte le strutture create
         */
         destruction = true;
+        for (ClientHandler c : players){
+            c.setDestructionTrue();
+        }
         List<String> playersUsername = game.getPlayersUsername();
         for(int i=0; i<numOfPlayers; i++){
             usernameIssuer.removeUsername(playersUsername.get(i));
