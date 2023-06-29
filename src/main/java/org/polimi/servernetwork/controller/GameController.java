@@ -50,6 +50,7 @@ public class GameController {
      * @param gameCodeIssuer
      * @param gameCode
      */
+
     public GameController(UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, int gameCode) {
         this.usernameIssuer = usernameIssuer;
         this.gameCodeIssuer = gameCodeIssuer;
@@ -255,6 +256,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Ends the game, performs game ranking and awards players.
+     * Prints a message indicating that the game has ended.
+     * Pauses the thread for 10 seconds to allow clients to read messages, and then closes all client handlers.
+     */
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
@@ -270,6 +276,11 @@ public class GameController {
         closeGame();
     }
 
+    /**
+     * Sends a ranking message to all players containing the game ranking.
+     *
+     * @param ranking the map representing the game ranking with player names as keys and scores as values
+     */
     private void gameAwarding (Map<String,Integer> ranking){
         // mando a tutti un messaggio contenente la classifica
         for(ClientHandler player : players ){

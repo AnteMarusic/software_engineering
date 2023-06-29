@@ -108,7 +108,6 @@ public class GuiClientController implements ClientControllerInterface{
                 case "RandomGameOf3" -> {
                     while (!receivedgamemodemess) {
                         Thread.onSpinWait();
-
                     }
                     ((RMIClient) client).getServer().onMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_3_PLAYER, -1));
                     numOfPlayers=3;
@@ -447,4 +446,7 @@ public class GuiClientController implements ClientControllerInterface{
 
     }
 
+    public boolean isReceivedGameModeMess() {
+        return receivedgamemodemess;
+    }
 }
