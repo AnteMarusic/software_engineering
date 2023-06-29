@@ -75,7 +75,7 @@ public class SceneController {
         lastPlayerInserted = 0;
         me = 0;
         chosenCards = new ArrayList<>();
-        otherPlayerChosenCards = new LinkedList<>();
+        otherPlayerChosenCards = new ArrayList<>();
         orderedChosenCards = new LinkedList<>();
         reconnected = false;
         myScore = 0;

@@ -488,10 +488,10 @@ public class CliClientController implements ClientControllerInterface {
      * @return The ordered coordinates as a linked list.
      */
     @Override
-    public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
+    public ArrayList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates) {
         int position;
         int i = 0;
-        LinkedList<Coordinates>  orderedCoordinates = new LinkedList<Coordinates>();
+        ArrayList<Coordinates>  orderedCoordinates = new ArrayList<>();
         for(int k=0; k<chosenCoordinates.size(); k++){
             orderedCoordinates.add(null);
         }
