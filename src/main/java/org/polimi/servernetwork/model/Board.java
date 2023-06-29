@@ -143,28 +143,6 @@ public class Board implements Serializable {
         return true;
     }
 
-    public void printBoard() {
-        int start, length;
-        int[] temp;
-        Card card;
-        for (int row = 0; row < ROW; row ++) {
-            temp = GameRules.getCorrectStartAndLength(row, numOfPlayers);
-            start = temp [0];
-            length = temp[1];
-            for (int i = 0; i < start; i ++) {
-                System.out.print(" ");
-            }
-            for (int col = start; col < length + start; col ++) {
-                card = seeCardAtCoordinates(new Coordinates(row, col));
-                if(card == null)
-                    System.out.print("N");
-                else
-                    System.out.print(card.convertColorToChar());
-            }
-            System.out.println(" ");
-        }
-    }
-
     public void print() {
         int start, length;
         int[] temp;

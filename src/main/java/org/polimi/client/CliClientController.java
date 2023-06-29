@@ -157,6 +157,9 @@ public class CliClientController implements ClientControllerInterface {
                 SharedScoreAchieveMessage m = (SharedScoreAchieveMessage) message;
                 cli.printAchieveMessage(m.getIndex(), m.getNewPoints());
             }
+            case WINNER_MESSAGE -> {
+                cli.printWinnerMessage();
+            }
         }
         return null;
     }
