@@ -1,6 +1,8 @@
 package org.polimi.servernetwork.model.goal.GoalTest;
 
 import org.junit.jupiter.api.Test;
+import org.polimi.client.ClientBookshelf;
+import org.polimi.servernetwork.model.Bookshelf;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.goal.Goal;
 import org.polimi.servernetwork.model.goal.shared_goal.SharedGoal12;
@@ -37,6 +39,10 @@ public class SharedGoal12Test {
         grid[4][0] = new Card(Card.Color.ORANGE, Card.State.PICKABLE, 0);
         Goal goal = new SharedGoal12(2);
         assertEquals(4, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf();
+        bookshelf.setGrid(grid);
+        bookshelf.printMyBookshelf();
+        System.out.println("1");
     }
 
     @Test
@@ -64,6 +70,9 @@ public class SharedGoal12Test {
 
         Goal goal = new SharedGoal12(2);
         assertEquals(4, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf();
+        bookshelf.setGrid(grid);
+        bookshelf.printMyBookshelf();
     }
 
     @Test
@@ -91,6 +100,9 @@ public class SharedGoal12Test {
 
         Goal goal = new SharedGoal12(2);
         assertEquals(4, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf();
+        bookshelf.setGrid(grid);
+        bookshelf.printMyBookshelf();
     }
 
     @Test
@@ -123,6 +135,9 @@ public class SharedGoal12Test {
 
         Goal goal = new SharedGoal12(2);
         assertEquals(4, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf();
+        bookshelf.setGrid(grid);
+        bookshelf.printMyBookshelf();
     }
 
     @Test
@@ -156,5 +171,8 @@ public class SharedGoal12Test {
 
         Goal goal = new SharedGoal12(2);
         assertEquals(0, goal.getScore(grid));
+        ClientBookshelf bookshelf = new ClientBookshelf();
+        bookshelf.setGrid(grid);
+        bookshelf.printMyBookshelf();
     }
 }
