@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class GameController {
     private boolean destruction;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
-    private static final int COUNT_DOWN = 20;
+    private static final int COUNT_DOWN = 60;
     private int gameCode;
     private int numOfPlayers;
     private int currentPlayer;
@@ -187,6 +187,9 @@ public class GameController {
         for (ClientHandler c : players) {
             //ho rimosso dall'if la condizione per la quale il messaggio non lo inviava a quello che ha effettivamente rimosso le carte
             if (c != null) {
+                if(cards == null){
+                    System.out.println("(Game controller removeCards) sto inviando la lista di carte null \n\n\n\n");
+                }
                 c.sendMessage(new CardToRemoveMessage("server", coordinates, cards));
             }
         }
@@ -204,11 +207,13 @@ public class GameController {
         }
     }
     /**
-     * Inserts a player's move into the bookshelf at the specified column.
+     * Inserts player's card into the bookshelf at the specified column.
+     * Communicates if a sharedGoal is achieved,
+     * Calculate points, and send it.
      * Updates the game state and communicates the changes to the players.
      * Saves the game status.
      *
-     * @param column The column where the player's move is inserted.
+     * @param column The column where the player's card is inserted.
      */
     public void insertInBookshelf(int column) {
         boolean before1 = game.getAchievementOfSG1(currentPlayer);
@@ -297,10 +302,14 @@ public class GameController {
     private void endGame(){
         Map<String,Integer> gameRanking = game.endGame();
         gameAwarding(gameRanking);
+        for(ClientHandler c : players){
+            if(c != null && Objects.equals(game.getWinner(), c.getUsername()))
+                c.sendMessage(new Message("server", MessageType.WINNER_MESSAGE));
+        }
         System.out.println("(GameController endGame) gameEnded");
-        // fermo il thred 10 secodni per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
+        // fermo il thred DUE secondi per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
         try{
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         }catch (InterruptedException e){
             System.out.println("(GameController endGame) exception");
             e.printStackTrace();
@@ -525,7 +534,14 @@ public class GameController {
             System.out.println("sono dentro al metodo decreaseCountDown e countDown è uguale a 0");
             // fermo il Decrementer
             decrementer.stop();
+
             // decreto il vincitore
+            for(ClientHandler c : players){
+                if(c!=null){
+                    c.sendMessage(new Message("server", MessageType.WINNER_MESSAGE));
+                }
+
+            }
             // mando messaggio di fine partita
             // chiudo il gioco
             endGame();

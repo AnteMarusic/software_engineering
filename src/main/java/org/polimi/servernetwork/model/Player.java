@@ -162,6 +162,10 @@ public class Player implements Serializable {
         this.personalScore  += newPoints;
     }
 
+    /**
+     * Updates the personal score based on the current state of the bookshelf and personal goal.
+     * If the calculated score is higher than the current personal score, it increases the personal score.
+     */
     public void updatePersonalScore(){
         int score = personalGoal.getScore(bookshelf.getGrid());
         if(score > personalScore) {
@@ -184,33 +188,6 @@ public class Player implements Serializable {
     public Card.Color[] getPersonalGoalColors() {
         return personalGoal.getColors();
     }
-
-
-
-    private void getCoordinatesFromSTDInput (boolean b, int x, int y, int previousX, int previousY, Board board, ArrayList<Card> chosenCards) {
-        Scanner scanner = new Scanner(System.in);
-        Coordinates coordinates;
-        Card tempCard;
-
-
-        System.out.println("Choose your next Card\n");
-        System.out.println("Type row number (0 to 8)\n");
-        x = scanner.nextInt();
-        System.out.println("Type col number (0 to 8)\n");
-        y = scanner.nextInt();
-        coordinates = new Coordinates(x, y);
-        if (b) {
-            tempCard = board.seeCardAtCoordinates(coordinates);
-            if (tempCard == null)
-                System.out.println("There's no card at that position, please choose another...\n");
-            else {
-                chosenCards.add(board.getCardAtCoordinates(coordinates));
-                System.out.println("You chose a card in position (" + x + "," + y + "\n");
-            }
-        } else
-            System.out.println("These coordinates are not valid, choose again... \n");
-    }
-
 
     public boolean getIsBookshelfFull(){
         return this.IsBookshelfFull;

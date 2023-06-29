@@ -18,11 +18,13 @@ public class Game implements Serializable {
     private final int firstPlayer;
     private int ender;
     private List<Card> readyToInsert;
+    private String winner;
 
     public Game(int numOfPlayer, int firstPlayer, List<String> playerName) {
         this.board = new Board (numOfPlayer);
         this.players = new Player[numOfPlayer];
         this.readyToInsert = new LinkedList<>();
+        this.winner = null;
         for (int j=0; j<numOfPlayer; j++){
             players[j] = new Player(playerName.get(j));
             System.out.println("(Game) " + j + "° giocatore è " + players[j].getName());
@@ -133,8 +135,8 @@ public class Game implements Serializable {
     public boolean remove(List<Coordinates> coordinates){
         // salvo le carte e le rimuovo, metto la prima che mi manda in posizione 0
         readyToInsert.clear();
-        for(int i=0; i<coordinates.size(); i++) {
-            readyToInsert.add(board.getCardAtCoordinates(coordinates.get(i)));   // va corretta getCardAtCoordinates siccome fa controlli inutili
+        for (Coordinates coordinate : coordinates) {
+            readyToInsert.add(board.getCardAtCoordinates(coordinate));   // va corretta getCardAtCoordinates siccome fa controlli inutili
         }
         return board.refillCheck();
     }
@@ -165,6 +167,13 @@ public class Game implements Serializable {
         return players[currentPlayer].getTotalScore();
     }
 
+    /**
+     * Ends the game and calculates the final ranking based on the players' total scores.
+     * If there is someone managed to fill his bookshelf, the win point is assigned to the winning player.
+     * Returns a map representing the ranking with players' names as keys and their total scores as values.
+     *
+     * @return A map representing the ranking with players' names as keys and their total scores as values.
+     */
     public Map<String,Integer> endGame(){
 
         if(endGame){
@@ -178,6 +187,7 @@ public class Game implements Serializable {
             }
 
         });
+        winner = players[0].getName();
         HashMap<String,Integer> ranking = new HashMap<String,Integer>();
         for(int i=0; i<players.length; i++){
             ranking.put(players[i].getName(), players[i].getTotalScore());
@@ -201,10 +211,6 @@ public class Game implements Serializable {
     }
     public int getPersonalGoalIndex(int position){
         return players[position].getPersonalGoalIndex();
-    }
-
-    public Player[] getPlayers() {
-        return players;
     }
 
     public boolean getEndGame(){
@@ -284,5 +290,8 @@ public class Game implements Serializable {
     }
     public int getSharedScore2(int currentPlayer){
         return players[currentPlayer].getSharedScore2();
+    }
+    public String getWinner(){
+        return winner;
     }
 }

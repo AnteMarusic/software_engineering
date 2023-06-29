@@ -78,12 +78,6 @@ public class Bookshelf implements Serializable {
         }
     }
 
-    public Bookshelf(Card[][] grid, int[] index, int maxInsertable) {
-        this.grid = grid;
-        this.index = index;
-        this.maxInsertable = maxInsertable;
-    }
-
     public int getMaxInsertable() {
         return maxInsertable;
     }
@@ -96,8 +90,8 @@ public class Bookshelf implements Serializable {
         return grid;
     }
 
-    /*
-     * @requires 0 <= col <= COL - 1
+    /**
+     *
      * @return the number of cards insertable in col
      */
     public int getInsertable (int col) {
@@ -107,6 +101,12 @@ public class Bookshelf implements Serializable {
         return this.maxInsertable == 0;
     }
 
+    /**
+     * Updates the maximum number of cards that can be inserted into any column in the game board.
+     * It iterates over each column and calculates the number of insertable cards using the getInsertable() method.
+     * The maximum insertable value is capped at 3, following the game rules.
+     * Finally, it sets the maximum insertable value as the new value for maxInsertable.
+     */
     private void updateMaxInsertable () {
         int max = 0;
         int insertable;
@@ -124,9 +124,14 @@ public class Bookshelf implements Serializable {
 
 
 
-    /*
-     * @requires 0 <= col <= COL - 1 && b != null && getMaxInsertable >= b.length
-     * && getInsertable (col) >= b.length
+    /**
+     * Inserts a list of cards into the specified column of the game board.
+     *
+     * @param cards The list of cards to be inserted.
+     * @param col   The column index where the cards should be inserted.
+     * @throws IndexOutOfBoundsException if the column index is out of bounds.
+     * @throws IllegalArgumentException  if the list of cards is too long or too short.
+     * @throws IndexOutOfBoundsException if attempting to insert too many cards or there are insufficient insertable slots.
      */
     public void insert(@NotNull List<Card> cards, int col) {
         int j = 0;
