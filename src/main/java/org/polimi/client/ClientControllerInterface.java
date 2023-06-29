@@ -10,18 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 public interface ClientControllerInterface {
-    public void setUsername (String username);
-    public Message handleMessage (Message message) throws IOException;
-    public Message chooseUsername ();
-    public void alreadyTakenUsername ();
-    public Message chooseGameMode ();
-    public Message chooseCards();
-    public LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates);
-    public Message chooseColumn ();
-    public void errorMessage ();
-    public void newPlayerJoinedLobby (String newPlayer);
-    public void loginSuccessful ();
-    public void reconnectionSuccessful ();
-    public void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal, int currPlayer);
-    public void disconnect();
+    void setUsername (String username);
+    Message handleMessage (Message message) throws IOException;
+    Message chooseUsername ();
+    void alreadyTakenUsername ();
+    Message chooseGameMode ();
+    Message chooseCards();
+    LinkedList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates);
+    Message chooseColumn ();
+    void errorMessage ();
+    void newPlayerJoinedLobby (String newPlayer);
+    void loginSuccessful ();
+    void reconnectionSuccessful ();
+    void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal, int currPlayer);
+    void disconnect();
 }
