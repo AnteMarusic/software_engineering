@@ -64,24 +64,30 @@ public class Game implements Serializable {
         int[] personalCode = new int[numOfPlayers];
         randomAssignment(random, personalCode, numOfPlayers, players);
     }
+    /**
+     * Performs a random assignment of personal goals to players.
+     *
+     * @param random        The Random object used for generating random numbers.
+     * @param personalCode  An array to store the assigned personal goal codes.
+     * @param numOfPlayers  The number of players in the game.
+     * @param players       An array of Player objects representing the players in the game.
+     */
     private static void randomAssignment(Random random, int[] personalCode, int numOfPlayers, Player[] players) {
         personalCode[0] = random.nextInt(12);
         do {
             personalCode[1] = random.nextInt(12);
-        } while (personalCode[0]==personalCode[1]);
-        if(numOfPlayers > 2) {
+        } while (personalCode[0] == personalCode[1]);
+        if (numOfPlayers > 2) {
             do {
                 personalCode[2] = random.nextInt(12);
             } while (personalCode[1] == personalCode[2] || personalCode[0] == personalCode[2]);
         }
-        if(numOfPlayers > 3) {
+        if (numOfPlayers > 3) {
             do {
                 personalCode[3] = random.nextInt(12);
-            } while (personalCode[2]==personalCode[3] || personalCode[1] == personalCode[3] || personalCode[0] == personalCode[3]);
+            } while (personalCode[2] == personalCode[3] || personalCode[1] == personalCode[3] || personalCode[0] == personalCode[3]);
         }
-
-
-        for (int k = 0; k< numOfPlayers; k++){
+        for (int k = 0; k < numOfPlayers; k++) {
             players[k].setPersonalGoal(new PersonalGoal(personalCode[k]));
         }
     }
@@ -133,15 +139,14 @@ public class Game implements Serializable {
         return board.refillCheck();
     }
 
-    public List<Coordinates> geToUpdateToPickable () {
-        return board.getToUpdateToPickable();
-    }
 
     /**
+     * Inserts a tile in the bookshelf of the specified player at the given column.
+     * It updates the player's score, checks for end game conditions, and returns the player's total score.
      *
-     * @param column
-     * @param currentPlayer
-     * @return
+     * @param column        The column in which to insert the tile.
+     * @param currentPlayer The index of the current player.
+     * @return The total score of the player after the tile insertion.
      */
     public int insertInBookshelf( int column, int currentPlayer){
         players[currentPlayer].insertInBookshelf(readyToInsert, column);
@@ -179,8 +184,6 @@ public class Game implements Serializable {
         }
         return ranking;
     }
-
-
     public Board getBoard() {
         return board;
     }
@@ -204,14 +207,6 @@ public class Game implements Serializable {
         return players;
     }
 
-    /*public Goal[] getPersonalGoal() {
-        return personalGoal;
-    }
-     */
-
-    public Goal[] getSharedGoal() {
-        return sharedGoal;
-    }
     public boolean getEndGame(){
         return endGame;
     }
@@ -277,16 +272,6 @@ public class Game implements Serializable {
     public void fillBoard(){
         board.fill();
     }
-
-
-    /*
-    public int[] getSharedPointQueueTOP(){
-        int[] sharedpoint = new int[2];
-        sharedpoint[0] = sharedGoal[0].getTop();
-        sharedpoint[1] = sharedGoal[1].getTop();
-        return sharedpoint;
-    }
-     */
 
     public boolean getAchievementOfSG1(int currentPlayer){
         return players[currentPlayer].getSharedGoal1Achieved();

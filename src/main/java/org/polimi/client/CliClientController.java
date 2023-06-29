@@ -157,13 +157,6 @@ public class CliClientController implements ClientControllerInterface {
                 SharedScoreAchieveMessage m = (SharedScoreAchieveMessage) message;
                 cli.printAchieveMessage(m.getIndex(), m.getNewPoints());
             }
-            /*
-            case SHAREDPOINTQUEUETOPMESSAGE -> {
-                SharedPointQueueTOPMessage m = (SharedPointQueueTOPMessage) message;
-                cli.printSharedPointQueue(m.getSharedPoint());
-            }
-
-             */
         }
         return null;
     }
