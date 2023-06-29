@@ -276,7 +276,7 @@ public class CliClientController implements ClientControllerInterface {
         boolean actionFlag;
         String action;
 
-        LinkedList<Coordinates> chosenCoordinates = new LinkedList<>();
+        List<Coordinates> chosenCoordinates = new ArrayList<>();
         System.out.println("choose a card");
         while (counter < maxInsertable) {
             switch (counter) {
@@ -387,7 +387,7 @@ public class CliClientController implements ClientControllerInterface {
                                 actionFlag = true;
                             } else if (Objects.equals(action, "redo")) {
                                 System.out.println("ok, going back to previous step");
-                                chosenCoordinates.removeLast();
+                                chosenCoordinates.remove(chosenCoordinates.size()-1);
                                 counter--;
                                 actionFlag = true;
                             } else {
@@ -450,7 +450,7 @@ public class CliClientController implements ClientControllerInterface {
                                 actionFlag = true;
                             } else if (Objects.equals(action, "redo")) {
                                 System.out.println("ok, going back to previous step");
-                                chosenCoordinates.removeLast();
+                                chosenCoordinates.remove(chosenCoordinates.size()-1);
                                 counter--;
                                 actionFlag = true;
                             } else {
