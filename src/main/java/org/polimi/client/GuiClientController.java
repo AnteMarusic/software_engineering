@@ -24,9 +24,7 @@ import static org.polimi.GameRules.boardRowColInBound;
 
 public class GuiClientController implements ClientControllerInterface{
     private static Client client;
-    private static String username;
-
-    public static List<Object> messagges;
+    public static String username;
 
     private static boolean rmi;
 
@@ -44,7 +42,6 @@ public class GuiClientController implements ClientControllerInterface{
 
     public GuiClientController(Client client, boolean rmi) {
         GuiClientController.client = client;
-        messagges = new LinkedList<>();
         GuiClientController.rmi =rmi;
         receivedgamemodemess=false;
         startgame=false;
@@ -94,7 +91,6 @@ public class GuiClientController implements ClientControllerInterface{
         if(rmi){
             switch(notificationType){
                 case "username" ->{
-                    username = (String) messagges.get(0);
                     SceneController.getInstance().setMyUsername(username);
                     try {
                         return ((RMIClient) client).loginGui(username);
@@ -131,7 +127,7 @@ public class GuiClientController implements ClientControllerInterface{
                     lock.lock();
                     try {
                         chosencards = true;
-                        flagCondition.signal(); // Signal the waiting thread
+                        flagCondition.signal();
                     } finally {
                         lock.unlock();
                     }
@@ -144,7 +140,6 @@ public class GuiClientController implements ClientControllerInterface{
         }else {
             switch (notificationType) {
                 case "username" -> {
-                    username = (String) messagges.get(0);
                     SceneController.getInstance().setMyUsername(username);
                     client.setUsername(username);
                     SocketClient.locksocket.lock();
@@ -216,9 +211,7 @@ public class GuiClientController implements ClientControllerInterface{
     @Override
     public Message handleMessage(Message message) throws IOException {
         switch (message.getMessageType()) {
-            case CHOOSE_GAME_MODE -> {
-                receivedgamemodemess=true;
-            }
+            case CHOOSE_GAME_MODE -> receivedgamemodemess=true;
             case START_GAME_MESSAGE -> {
                 return null;
             }
@@ -306,10 +299,7 @@ public class GuiClientController implements ClientControllerInterface{
                     }
                 });
             }
-            case WAITING_FOR_YOUR_TURN ->{
-                gameLoopSceneController.reconnect();
-            }
-
+            case WAITING_FOR_YOUR_TURN -> gameLoopSceneController.reconnect();
             case CURRENT_SCORE -> {
                 CurrentScore m = (CurrentScore) message;
                 SceneController.getInstance().setMyScore(m.getCurrentScore());

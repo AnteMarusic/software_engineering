@@ -32,8 +32,7 @@ public class LoginSceneController {
     @FXML
     private void onJoinBtnClick(ActionEvent event) throws IOException {
         joinBtn.setDisable(true);
-        String nickname = nicknameField.getText();
-        GuiClientController.messagges.add(nickname);
+        GuiClientController.username= nicknameField.getText();
         if(GuiClientController.getNotified("username")){
             SceneController.getInstance().switchScene(event, "menu2_scene");
         }else{
