@@ -464,7 +464,6 @@ public class CliClientController implements ClientControllerInterface {
                 }
             }
         }
-        System.out.println(chosenCoordinates);
         cli.removeCards(chosenCoordinates);
         if (chosenCoordinates.size() > 1) {
             System.out.println("order");
@@ -496,7 +495,6 @@ public class CliClientController implements ClientControllerInterface {
         }
         cli.setOrderedChosenCards(ordered);
         cli.setChosenCards(toOrder);
-        System.out.println("initialization of ordered " + ordered);
 
         while (i < toOrder.size()) {
             int size = toOrder.size();

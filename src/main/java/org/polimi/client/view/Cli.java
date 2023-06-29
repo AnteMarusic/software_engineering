@@ -249,12 +249,51 @@ public class Cli {
                 }
             }
         }
-        System.out.println("chosenCards = " + chosenCards);
-        System.out.println("orderedChosenCards = " + orderedChosenCards);
+        //System.out.println("chosenCards = " + chosenCards);
+        System.out.print("chosenCards = ");
+        printCardBuffer(chosenCards);
+
+
+
+        //System.out.println("orderedChosenCards = " + orderedChosenCards);
+        System.out.print("orderedChosenCards = ");
+        printCardBuffer(orderedChosenCards);
         System.out.println("shared goal 1: " + this.sharedGoal1);
         System.out.println("shared goal 2: " + this.sharedGoal2);
         System.out.println("my personal goal:");
         personalGoal.print();
+    }
+
+    private void printCardBuffer (List <Card> buffer) {
+        System.out.print("[ ");
+        for (Card c : buffer) {
+            if (c == null) {
+                System.out.print("NULL ");
+            }
+            else {
+                switch(c.getColor()) {
+                    case WHITE -> {
+                        System.out.print(ANSI_WHITE + "□ " + ANSI_RESET);
+                    }
+                    case BLUE -> {
+                        System.out.print(ANSI_BLUE + "□ " + ANSI_RESET);
+                    }
+                    case ORANGE -> {
+                        System.out.print(ANSI_ORANGE + "□ " + ANSI_RESET);
+                    }
+                    case PINK -> {
+                        System.out.print(ANSI_PINK + "□ " + ANSI_RESET);
+                    }
+                    case CYAN -> {
+                        System.out.print(ANSI_CYAN + "□ " + ANSI_RESET);
+                    }
+                    case GREEN -> {
+                        System.out.print(ANSI_GREEN + "□ " + ANSI_RESET);
+                    }
+                }
+            }
+        }
+        System.out.println("]");
     }
 
     public void printLobby(){

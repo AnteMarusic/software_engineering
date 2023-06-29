@@ -182,7 +182,7 @@ public class SocketClient extends Client{
                 output = null;
             }
         } catch (IOException IOe) {
-            IOe.printStackTrace();
+            //IOe.printStackTrace();
             System.out.println("exception in closeEverything client side");
         }
     }
