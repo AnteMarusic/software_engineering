@@ -277,7 +277,6 @@ public class CliClientController implements ClientControllerInterface {
         String action;
 
         List<Coordinates> chosenCoordinates = new ArrayList<>();
-        System.out.println("choose a card");
         while (counter < maxInsertable) {
             switch (counter) {
                 //you necessarily have to choose at least a card

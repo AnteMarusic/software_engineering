@@ -23,49 +23,6 @@ public class RMIClientHandler extends ClientHandler{
         RMIMessagesLock = new Object();
         isLogged = true;
     }
-    /*
-    public void onMessage(Message message){
-        switch (message.getMessageType()){
-
-            case USERNAME -> {
-                this.username = message.getUsername();
-                sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-
-            }
-
-            case CHOOSE_GAME_MODE -> {
-                ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
-                switch (chosenGameModeMessage.getGameMode()) {
-                    case JOIN_RANDOM_GAME_2_PLAYER -> lobbyController.insertPlayer(this, 2);
-                    case JOIN_RANDOM_GAME_3_PLAYER -> lobbyController.insertPlayer(this, 3);
-                    case JOIN_RANDOM_GAME_4_PLAYER -> lobbyController.insertPlayer(this , 4);
-                    case JOIN_PRIVATE_GAME -> lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
-                    case CREATE_PRIVATE_GAME -> {
-                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
-                            sendMessage(new Message(this.username, MessageType.ALREADYTAKENGAMECODEMESSAGE ));
-                            sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-                        }
-                        else{
-                            lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this, chosenGameModeMessage.getNumOfPlayer());
-                        }
-                    }
-                    default-> System.out.println("errore nella ricezione del messaggio gamemode");
-                }
-
-            }
-            case CHOSEN_CARDS_REPLY -> {
-                ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
-                gameController.removeCards(chosenCards.getCoordinates());
-                sendMessage(new Message(this.username, MessageType.CHOOSE_COLUMN_REQUEST));
-            }
-            case CHOSEN_COLUMN_REPLY -> {
-                ChosenColumnMessage chosenColumn = (ChosenColumnMessage) message;
-                gameController.insertInBookshelf(chosenColumn.getColumn());
-                gameController.notifyNextPlayer();
-            }
-        }
-    }
-    */
 
     /**
      * this method waits for RMIMessageLock to be free and then enqueue the message.
@@ -81,14 +38,7 @@ public class RMIClientHandler extends ClientHandler{
                 synchronized (taskLock) {
                     try {
                         rmistub.getNotified();
-                    } catch (UnmarshalException e) {
-                        System.out.println("(RMIClientHandler username: " + this.username + ") disconnection");
-                        closeEverything();
                     } catch (RemoteException e) {
-                        System.out.println("(RMIClientHandler username: " + this.username + ") disconnection");
-                        closeEverything();
-                    }
-                    catch (IOException IOe) {
                         System.out.println("(RMIClientHandler username: " + this.username + ") disconnection");
                         closeEverything();
                     }
@@ -106,6 +56,13 @@ public class RMIClientHandler extends ClientHandler{
             return RMIMessages.remove();
         }
     }
+
+    /**
+     * Handles the reconnection of a client to a game session.
+     * This method is called when a client attempts to reconnect to a game.
+     * It associates the client handler with the corresponding game controller and updates the username and connection status.
+     * Finally, it triggers the game controller's reconnect method to resume the game for the reconnected client.
+     */
 
     public void reconnection(){
         int gameId = usernameIssuer.getGameID(username);
