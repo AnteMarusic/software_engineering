@@ -238,9 +238,10 @@ public class Game implements Serializable {
             newPoint = sharedGoal[0].getScore(players[currentPlayer].getGrid());
             players[currentPlayer].increaseSharedScore(newPoint);
             System.out.println("(Game updateScore goal 1) new shared score for goal 1 for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
-            if (newPoint != 0)
+            if (newPoint != 0) {
                 players[currentPlayer].setSharedScore1(newPoint);
                 players[currentPlayer].setSharedGoal1AchievedToTrue();
+            }
         }
 
         // controllo se ha raggiunto il secondo sharedGoal
@@ -251,9 +252,10 @@ public class Game implements Serializable {
             newPoint = sharedGoal[1].getScore(players[currentPlayer].getGrid());
             players[currentPlayer].increaseSharedScore(newPoint);
             System.out.println("(Game updateScore goal 2) new shared score for goal 1 for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
-            if (newPoint != 0)
+            if (newPoint != 0) {
                 players[currentPlayer].setSharedScore2(newPoint);
                 players[currentPlayer].setSharedGoal2AchievedToTrue();
+            }
         }
     }
     public int getPosition(String username){

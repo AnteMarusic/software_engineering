@@ -358,11 +358,21 @@ public class Cli {
         System.out.println("il punteggio attuale è di: " + currentScore);
     }
     public void printAchieveMessage(int index, int points){
-        System.out.println("hai completato lo shared goal numero: " + index + "ottenendo: " + points+ "punti");
+        if(currentPlayer == me){
+            System.out.println("hai completato lo shared goal numero: " + index + "ottenendo: " + points+ "punti");
+        }
+        else{
+            System.out.println("un giocatore ha completato lo shared goal numero: " + index + "ottenendo: " + points+ "punti");
+        }
+
     }
+
+    /*
     public void printSharedPointQueue(int[] sharedPoint){
         System.out.println("Gli shared point mettono in pali i seguenti punti: ");
         System.out.println("Shared goal numero 1: " + sharedPoint[0]);
         System.out.println("Shared goal numero 2: " + sharedPoint[0]);
     }
+
+     */
 }
