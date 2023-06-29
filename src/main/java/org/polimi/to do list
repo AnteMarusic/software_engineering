@@ -23,3 +23,4 @@ TODO
 
 - in una partita da 3 giocatori gli shared score sono 6,4,2 dovrebbero essere 8,6,4
 - se nella mia bookshlef ho al massimo uno spazio per 2 caselle il gioco me ne fa prendere anche 3
+- non va l'undo

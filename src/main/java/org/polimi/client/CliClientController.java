@@ -473,7 +473,9 @@ public class CliClientController implements ClientControllerInterface {
             System.out.println("order");
             chosenCoordinates = orderChosenCards(chosenCoordinates);
         }
-        return new ChosenCardsMessage(username, chosenCoordinates);
+        List<Coordinates> currChosenCoordinates = new ArrayList<>();
+        currChosenCoordinates = chosenCoordinates;
+        return new ChosenCardsMessage(username, currChosenCoordinates);
     }
 
     /**
