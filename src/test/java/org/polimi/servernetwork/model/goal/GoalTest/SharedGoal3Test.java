@@ -152,4 +152,30 @@ class SharedGoal3Test {
         SharedGoal3 goal = new SharedGoal3(2);
         assertEquals(0, goal.getScore(grid));
     }
+    @Test
+    void achievedTrue4(){
+        Card[][] grid = new Card[6][5];;
+        grid[5][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[4][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[3][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[2][0] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[5][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[4][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[3][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+        grid[2][1] = new Card(Card.Color.WHITE, Card.State.PICKABLE);
+
+
+        grid[5][4] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[4][4] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[3][4] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[2][4] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[5][3] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[4][3] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[3][3] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+        grid[2][3] = new Card(Card.Color.CYAN, Card.State.PICKABLE);
+
+        SharedGoal3 goal = new SharedGoal3(2);
+        assertEquals(8, goal.getScore(grid));
+
+    }
 }
