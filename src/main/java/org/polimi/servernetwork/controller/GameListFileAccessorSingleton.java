@@ -15,6 +15,8 @@ public class GameListFileAccessorSingleton {
     private static GameListFileAccessorSingleton instance;
     private static final Object lock = new Object();
     private final File file;
+    private static String path;
+    private static String folderPath;
 
     /**
      * Private constructor to prevent direct instantiation
@@ -22,9 +24,14 @@ public class GameListFileAccessorSingleton {
      */
     private GameListFileAccessorSingleton() {
         instance = this;
+        /*
         String filePath = new File("").getAbsolutePath();
         this.file = new File(filePath.concat("/src/main/resources/json/gameList.json"));
         System.out.println("(GameListFileAccessorSingleton) " + filePath.concat("/src/main/resources/json/gameList.json"));
+
+         */
+        System.out.println("(GameListFileAccessorSingleton) file path: " + path);
+        this.file = new File (path);
         if (file.exists()) {
             System.out.println("(GameListFileAccessorSingleton) gameListFile found");
             //il server si era disconnesso e deve ricaricare i salvataggi vecchi (potrebbe pure essere che il file è vuoto e quindi non deve fare niente)
@@ -39,6 +46,11 @@ public class GameListFileAccessorSingleton {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void setFolderPath(String arg) {
+        folderPath = arg;
+        path = arg+"gameList.json";
     }
 
     private void initializeFile () {

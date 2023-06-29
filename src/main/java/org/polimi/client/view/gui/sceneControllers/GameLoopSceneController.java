@@ -153,6 +153,7 @@ public class GameLoopSceneController {
                                         tile0.setVisible(true);
                                     }
                                     case 1 ->  {
+                                        System.out.println("this is maxinsertable fater choosing 2 cards"+ maxInsertable);
                                         if(maxInsertable<2){
                                             showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {
@@ -170,6 +171,7 @@ public class GameLoopSceneController {
                                             }
                                         }
                                     case 2 ->{
+                                        System.out.println("this is maxinsertable after choosing 3 cards"+ maxInsertable);
                                         if(maxInsertable<3){
                                            showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {

@@ -126,7 +126,7 @@ public class CliClientController implements ClientControllerInterface {
             case NOTIFY_NEXT_PLAYER -> {
                 NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
                 System.out.println(m.getNextPlayer() + " is now playing");
-                cli.setCurrentPlayer(m.getNextPlayer());
+                cli.setCurrentPlayer(m.getNextPlayerInt(), m.getNextPlayer());
                 return null;
             }
             case ALREADYTAKENGAMECODEMESSAGE -> {
@@ -505,7 +505,7 @@ public class CliClientController implements ClientControllerInterface {
         System.out.println("initialization of ordered " + ordered);
 
         while (i < toOrder.size()) {
-
+            int size = toOrder.size();
             do {
                 System.out.println("Where do you want to put the card in position " + i + " ?\n type the index (indexing start from 0)");
                 position = scanner.nextInt();
@@ -515,7 +515,7 @@ public class CliClientController implements ClientControllerInterface {
                 else if (ordered.get(position) != null) {
                     System.out.println("There's already a card in position " + position + ", choose another...");
                 }
-            } while (position > toOrder.size() - 1 || position < 0 || (position < toOrder.size() - 1 && position > 0 && ordered.get(position) != null));
+            } while (position > size - 1 || position < 0 || (position <= size - 1 && position >= 0 && ordered.get(position) != null));
 
             orderedCoordinates.set(position, chosenCoordinates.get(i));
             ordered.set(position, toOrder.get(i));

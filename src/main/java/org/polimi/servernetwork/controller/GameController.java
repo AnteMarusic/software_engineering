@@ -23,7 +23,7 @@ public class GameController {
     private UsernameIssuer usernameIssuer;
     private GameCodeIssuer gameCodeIssuer;
     private File saveFile;
-    private static String path = "/src/main/resources/ser/";
+    private static String folderPath;
 
 
     public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
@@ -40,6 +40,17 @@ public class GameController {
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
     }
 
+    public static void setFolderPath (String fp) {
+        folderPath = fp;
+    }
+
+    /**
+     * gameController constructor used in case of server disconnection
+     * @param usernameIssuer
+     * @param gameCodeIssuer
+     * @param gameCode
+     */
+
     public GameController(UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, int gameCode) {
         this.usernameIssuer = usernameIssuer;
         this.gameCodeIssuer = gameCodeIssuer;
@@ -50,8 +61,7 @@ public class GameController {
 
     public void retrieveGameFromFile () throws FileNotFoundException {
         try {
-            String filePath = new File("").getAbsolutePath();
-            this.saveFile = new File(filePath.concat(path + gameCode + ".ser"));
+            this.saveFile = new File(folderPath + gameCode + ".ser");
             this.game = readFileAndDeserialize();
             countDown = COUNT_DOWN;
             decrementer = null;
@@ -70,9 +80,8 @@ public class GameController {
 
     public void initializeSaveFile() {
         //save
-        String filePath = new File("").getAbsolutePath();
-        System.out.println("(GameController initializeSaveFile) model status will be saved here: " + filePath.concat(path + gameCode + ".ser"));
-        this.saveFile = new File(filePath.concat(path + gameCode + ".ser"));
+        System.out.println("(GameController initializeSaveFile) model status will be saved here: " + folderPath + gameCode + ".ser");
+        this.saveFile = new File(folderPath + gameCode + ".ser");
         try {
             this.saveFile.createNewFile();
         }catch(IOException e) {
@@ -131,7 +140,7 @@ public class GameController {
         for (ClientHandler d : players) {
             if (d != players.get(currentPlayer) && d != null) {
                 System.out.println("(GameController startGameTurn) sending NotifyNextPlayerMessage to " + players.get(currentPlayer).getUsername());
-                d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername()));
+                d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername(), currentPlayer));
             }
         }
     }
@@ -176,12 +185,14 @@ public class GameController {
         if(before1 != game.getAchievementOfSG1(currentPlayer)) {
             int newPoints = game.getSharedScore1(currentPlayer);
             for (ClientHandler c : players) {
-                c.sendMessage(new SharedScoreAchieveMessage(1, newPoints));
+                if(c!=null)
+                    c.sendMessage(new SharedScoreAchieveMessage(1, newPoints));
             }
         }
         if(before2 != game.getAchievementOfSG2(currentPlayer)){
             int newPoints = game.getSharedScore2(currentPlayer);
             for (ClientHandler c : players) {
+                if(c!=null)
                 c.sendMessage(new SharedScoreAchieveMessage(2, newPoints));
             }
         }
@@ -237,8 +248,8 @@ public class GameController {
             // se invece ci sono almeno due giocatori collegati:
             // comunico a tutti chi sarà il prossimo giocatore
             for (ClientHandler c : players) {
-                if (c != players.get(currentPlayer) && c!=null)
-                    c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+                if (c!=null)
+                    c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername(), currentPlayer)); // messaggio in cui dice chi sarà il prossimo giocatore));
             }
             // mando al prossimo giocatore la card request
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
@@ -369,7 +380,7 @@ public class GameController {
                     for (ClientHandler c : players) {
                         if (c != players.get(currentPlayer) && c!=null) {
                             c.sendMessage(new DisconnectionAlert("server", username));
-                            c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+                            c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername(), currentPlayer)); // messaggio in cui dice chi sarà il prossimo giocatore));
                         }
                     }
                     // comunico al giocatore successivo di giocare

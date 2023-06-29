@@ -71,6 +71,8 @@ public class Cli {
         this.players = players;
         this.numOfPlayers = players.size();
         this.me = this.players.indexOf(myUsername);
+        System.out.println("(Cli setPlayers) stampo la lista di palyers" + this.players.toString());
+        System.out.println("(cli setPlayers) il mio indice è: " + me);
     }
 
     public void createBookshelf(String name, Card[][] grid){
@@ -146,8 +148,10 @@ public class Cli {
     public int getNumOfPlayers() {
         return numOfPlayers;
     }
-    public void setCurrentPlayer(String currentPlayer){
-        this.currentPlayer = players.indexOf(currentPlayer);
+    public void setCurrentPlayer(int currentPlayerInt, String currentPlayer){
+        this.currentPlayer = currentPlayerInt;
+        System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayerInt);
+        System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayer);
     }
     public void setIntCurrentPlayer(int currentPlayer){
         this.currentPlayer = currentPlayer;
@@ -358,6 +362,9 @@ public class Cli {
         System.out.println("il punteggio attuale è di: " + currentScore);
     }
     public void printAchieveMessage(int index, int points){
+        System.out.println("(Cli setPlayers) stampo la lista di palyers" + this.players.toString());
+        System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayer);
+        System.out.println("(Cli setCurrentPlayer) stampo me che vale: " + me);
         if(currentPlayer == me){
             System.out.println("hai completato lo shared goal numero: " + index + "ottenendo: " + points+ "punti");
         }
