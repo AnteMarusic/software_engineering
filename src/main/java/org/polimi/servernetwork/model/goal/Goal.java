@@ -3,6 +3,4 @@ import org.polimi.servernetwork.model.Card;
 
 public interface Goal {
     int getScore(Card[][] grid);
-
-    //int getTop();
 }

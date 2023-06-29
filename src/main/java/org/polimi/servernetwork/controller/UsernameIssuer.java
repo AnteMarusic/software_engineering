@@ -132,14 +132,6 @@ public class UsernameIssuer {
         map.put(username, object);
     }
 
-    public synchronized boolean containsUsername (String username) throws NullPointerException{
-        if (username != null) {
-            return map.containsKey(username);
-        }
-        else {
-            throw new NullPointerException();
-        }
-    }
     public synchronized void setConnect(String username){
         Object[] object = map.get(username);
         object[0]=ConnectionStatus.CONNECTED;
