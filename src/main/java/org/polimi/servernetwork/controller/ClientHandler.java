@@ -36,32 +36,13 @@ public abstract class ClientHandler{
         return this.username;
     }
 
+    /**
+     * Handles incoming messages from the client.
+     *
+     * @param message The Message object representing the incoming message.
+     */
     public void onMessage(Message message){
         switch (message.getMessageType()){
-            /*
-            case USERNAME -> {
-
-                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
-                if(internalComunication == InternalComunication.OK) {
-                    usernameIssuer.setClientHandler(this, message.getUsername());
-                    this.username = message.getUsername();
-                    sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-                }
-                if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                    sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
-                }
-                //to test
-                if(internalComunication == InternalComunication.RECONNECTION){
-                    this.username = message.getUsername();
-                    int gameId = usernameIssuer.getGameID(message.getUsername());
-                    GameController gameController = gameCodeIssuer.getGameController(gameId);
-                    usernameIssuer.setClientHandler(this, message.getUsername());
-                    setGameController(gameController);
-                    usernameIssuer.setConnect(this.getUsername());
-                    gameController.reconnect(this);
-                }
-            }
-             */
             case CHOOSE_GAME_MODE -> {
                 ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
                 switch (chosenGameModeMessage.getGameMode()) {
@@ -76,7 +57,6 @@ public abstract class ClientHandler{
                     }
                     default-> System.out.println("(ClientHandler) received unknown value of GameMode");
                 }
-
             }
             case CHOSEN_CARDS_REPLY -> {
                 ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
