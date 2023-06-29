@@ -146,8 +146,9 @@ public class Cli {
     public int getNumOfPlayers() {
         return numOfPlayers;
     }
-    public void setCurrentPlayer(String currentPlayer){
-        this.currentPlayer = players.indexOf(currentPlayer);
+    public void setCurrentPlayer(int currentPlayerInt, String currentPlayer){
+        this.currentPlayer = currentPlayerInt;
+        System.out.println("il current player è il giocatore: " + currentPlayer);
     }
     public void setIntCurrentPlayer(int currentPlayer){
         this.currentPlayer = currentPlayer;

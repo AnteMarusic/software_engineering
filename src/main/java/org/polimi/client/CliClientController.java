@@ -126,7 +126,7 @@ public class CliClientController implements ClientControllerInterface {
             case NOTIFY_NEXT_PLAYER -> {
                 NotifyNextPlayerMessage m = (NotifyNextPlayerMessage) message;
                 System.out.println(m.getNextPlayer() + " is now playing");
-                cli.setCurrentPlayer(m.getNextPlayer());
+                cli.setCurrentPlayer(m.getNextPlayerInt(), m.getNextPlayer());
                 return null;
             }
             case ALREADYTAKENGAMECODEMESSAGE -> {

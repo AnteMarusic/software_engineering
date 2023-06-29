@@ -137,7 +137,7 @@ public class GameController {
         for (ClientHandler d : players) {
             if (d != players.get(currentPlayer) && d != null) {
                 System.out.println("(GameController startGameTurn) sending NotifyNextPlayerMessage to " + players.get(currentPlayer).getUsername());
-                d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername()));
+                d.sendMessage(new NotifyNextPlayerMessage(d.getUsername(), players.get(currentPlayer).getUsername(), currentPlayer));
             }
         }
     }
@@ -244,7 +244,7 @@ public class GameController {
             // comunico a tutti chi sarà il prossimo giocatore
             for (ClientHandler c : players) {
                 if (c != players.get(currentPlayer) && c!=null)
-                    c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+                    c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername(), currentPlayer)); // messaggio in cui dice chi sarà il prossimo giocatore));
             }
             // mando al prossimo giocatore la card request
             players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
@@ -365,7 +365,7 @@ public class GameController {
                     for (ClientHandler c : players) {
                         if (c != players.get(currentPlayer) && c!=null) {
                             c.sendMessage(new DisconnectionAlert("server", username));
-                            c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername())); // messaggio in cui dice chi sarà il prossimo giocatore));
+                            c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername(), currentPlayer)); // messaggio in cui dice chi sarà il prossimo giocatore));
                         }
                     }
                     // comunico al giocatore successivo di giocare
