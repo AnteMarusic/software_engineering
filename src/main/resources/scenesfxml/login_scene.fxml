@@ -37,6 +37,7 @@
         </Group>
     </children>
      <stylesheets>
+         <URL value="@../css/style_all.css"/>
         <URL value="@../css/style_login.css" />
      </stylesheets>
 </StackPane>

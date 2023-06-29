@@ -80,4 +80,7 @@
       <Label fx:id="user2" layoutX="304.0" layoutY="46.0" />
       <Label fx:id="user3" layoutX="518.0" layoutY="46.0" />
    </children>
+   <stylesheets>
+      <URL value="@../css/style_all.css"/>
+   </stylesheets>
 </AnchorPane>

@@ -15,13 +15,6 @@
          <image>
             <Image url="@../images/17_MyShelfie_BGA/Publisher_material/Display_1.jpg" />
          </image>
-         <effect>
-            <Lighting bumpInput="$null" diffuseConstant="0.88">
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
       </ImageView>
       <Label layoutY="184.0" prefHeight="17.0" prefWidth="601.0" text="WAITING IN LOBBY...">
          <effect>
@@ -29,6 +22,7 @@
          </effect></Label>
    </children>
    <stylesheets>
+      <URL value="@../css/style_all.css"/>
       <URL value="@../css/style_lobby.css" />
    </stylesheets>
 </AnchorPane>

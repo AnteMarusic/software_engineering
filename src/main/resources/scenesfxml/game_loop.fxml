@@ -131,5 +131,6 @@
    </children>
     <stylesheets>
         <URL value="@../css/style_game_loop.css" />
+        <URL value="@../css/style_all.css"/>
     </stylesheets>
 </AnchorPane>
