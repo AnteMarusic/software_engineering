@@ -1,11 +1,8 @@
 package org.polimi.client.view.gui.sceneControllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import java.io.IOException;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,28 +16,25 @@ public class FinalSceneController {
     @FXML
     private Label user3;
 
-    private List<RankCouple> classifier;
-    private List<String> usernames;
-
 
     @FXML
     public void initialize(){
-        this.classifier = new LinkedList<>();
-        this.usernames = SceneController.getInstance().getPlayers();
-        for(int i=0 ; i<usernames.size() ; i++) {
+        List<RankCouple> classifier = new LinkedList<>();
+        List<String> usernames = SceneController.getInstance().getPlayers();
+        for (String username : usernames) {
             RankCouple currCouple = new RankCouple();
-            currCouple.setName(usernames.get(i));
-            currCouple.setPoints(SceneController.getInstance().getRanking().get(usernames.get(i)));
+            currCouple.setName(username);
+            currCouple.setPoints(SceneController.getInstance().getRanking().get(username));
             classifier.add(currCouple);
         }
         classifier.sort((couple1, couple2) -> couple2.getPoints() - couple1.getPoints());
-        user0.setText("1. "+classifier.get(0).getName()+" scored "+classifier.get(0).getPoints()+" points");
-        user1.setText("2. "+classifier.get(1).getName()+" scored "+classifier.get(1).getPoints()+" points");
+        user0.setText("1. "+ classifier.get(0).getName()+" scored "+ classifier.get(0).getPoints()+" points");
+        user1.setText("2. "+ classifier.get(1).getName()+" scored "+ classifier.get(1).getPoints()+" points");
         if(usernames.size()==3) {
-            user2.setText("3. "+classifier.get(2).getName()+" scored "+classifier.get(2).getPoints()+" points");
+            user2.setText("3. "+ classifier.get(2).getName()+" scored "+ classifier.get(2).getPoints()+" points");
         }else if(usernames.size()==4){
-            user2.setText("3. "+classifier.get(2).getName()+" scored "+classifier.get(2).getPoints()+" points");
-            user3.setText("4. "+classifier.get(3).getName()+" scored "+classifier.get(3).getPoints()+" points");
+            user2.setText("3. "+ classifier.get(2).getName()+" scored "+ classifier.get(2).getPoints()+" points");
+            user3.setText("4. "+ classifier.get(3).getName()+" scored "+ classifier.get(3).getPoints()+" points");
         }
     }
 
@@ -51,7 +45,7 @@ public class FinalSceneController {
         SceneController.getInstance().getStage().close();
     }
 
-    public class RankCouple{
+    public static class RankCouple{
         private String name;
 
         private int points;

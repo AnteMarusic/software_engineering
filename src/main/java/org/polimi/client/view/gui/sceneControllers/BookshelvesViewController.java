@@ -186,9 +186,6 @@ public class BookshelvesViewController {
         imageView.setFitHeight(height);
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
-        /*if(gridp.getChildren()
-                .stream()
-                .noneMatch(child -> GridPane.getRowIndex(child) == y && GridPane.getColumnIndex(child) == x))*/
         gridp.add(pane, x, y);
     }
 

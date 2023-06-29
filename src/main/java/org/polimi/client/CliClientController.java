@@ -496,7 +496,7 @@ public class CliClientController implements ClientControllerInterface {
         while (i < toOrder.size()) {
 
             do {
-                System.out.println("Where do you want to put the card in position " + i + " ?\n type the index (indexing start from 0)git ");
+                System.out.println("Where do you want to put the card in position " + i + " ?\n type the index (indexing start from 0)");
                 position = scanner.nextInt();
                 if (position > toOrder.size() - 1 || position < 0) {
                     System.out.println("position not in bound, choose again");
