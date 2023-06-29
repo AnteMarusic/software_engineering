@@ -175,15 +175,38 @@ public class GameController {
     }
 
     public void insertInBookshelf(int column) {
+        boolean before1 = game.getAchievementOfSG1(currentPlayer);
+        boolean before2 = game.getAchievementOfSG2(currentPlayer);
         int currentPoints = game.insertInBookshelf(column, currentPlayer);
+        // vuol dire che ho completato lo shared goal 1 in questo turno
+        if(before1 != game.getAchievementOfSG1(currentPlayer)) {
+            int newPoints = game.getSharedScore1(currentPlayer);
+            for (ClientHandler c : players) {
+                c.sendMessage(new SharedScoreAchieveMessage(1, newPoints));
+            }
+        }
+        if(before2 != game.getAchievementOfSG2(currentPlayer)){
+            int newPoints = game.getSharedScore2(currentPlayer);
+            for (ClientHandler c : players) {
+                c.sendMessage(new SharedScoreAchieveMessage(2, newPoints));
+            }
+        }
         //save status
         this.save();
         // manda al giocatore corrente il punteggio attuale
         players.get(currentPlayer).sendMessage(new CurrentScore("server", currentPoints));
         for (ClientHandler c : players) {
+
             if (c!=null && !c.equals(players.get(currentPlayer))) {
                 c.sendMessage(new ChosenColumnMessage("server", column));
             }
+            /*
+            // mando a tutti il punto più in alto nella queue dei punti shared
+            if(c!=null){
+                c.sendMessage(new SharedPointQueueTOPMessage("serve", game.getSharedPointQueueTOP()));
+            }
+
+             */
         }
     }
 

@@ -238,8 +238,10 @@ public class Game implements Serializable {
             newPoint = sharedGoal[0].getScore(players[currentPlayer].getGrid());
             players[currentPlayer].increaseSharedScore(newPoint);
             System.out.println("(Game updateScore goal 1) new shared score for goal 1 for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
-            if (newPoint != 0)
+            if (newPoint != 0) {
+                players[currentPlayer].setSharedScore1(newPoint);
                 players[currentPlayer].setSharedGoal1AchievedToTrue();
+            }
         }
 
         // controllo se ha raggiunto il secondo sharedGoal
@@ -250,9 +252,10 @@ public class Game implements Serializable {
             newPoint = sharedGoal[1].getScore(players[currentPlayer].getGrid());
             players[currentPlayer].increaseSharedScore(newPoint);
             System.out.println("(Game updateScore goal 2) new shared score for goal 1 for player " + players[currentPlayer].getName() + " is " + players[currentPlayer].getSharedScore());
-
-            if (newPoint != 0)
+            if (newPoint != 0) {
+                players[currentPlayer].setSharedScore2(newPoint);
                 players[currentPlayer].setSharedGoal2AchievedToTrue();
+            }
         }
     }
     public int getPosition(String username){
@@ -273,5 +276,28 @@ public class Game implements Serializable {
     }
     public void fillBoard(){
         board.fill();
+    }
+
+
+    /*
+    public int[] getSharedPointQueueTOP(){
+        int[] sharedpoint = new int[2];
+        sharedpoint[0] = sharedGoal[0].getTop();
+        sharedpoint[1] = sharedGoal[1].getTop();
+        return sharedpoint;
+    }
+     */
+
+    public boolean getAchievementOfSG1(int currentPlayer){
+        return players[currentPlayer].getSharedGoal1Achieved();
+    }
+    public boolean getAchievementOfSG2(int currentPlayer){
+        return players[currentPlayer].getSharedGoal2Achieved();
+    }
+    public int getSharedScore1(int currentPlayer){
+        return players[currentPlayer].getSharedScore1();
+    }
+    public int getSharedScore2(int currentPlayer){
+        return players[currentPlayer].getSharedScore2();
     }
 }

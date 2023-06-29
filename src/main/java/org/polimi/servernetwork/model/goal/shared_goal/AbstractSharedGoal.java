@@ -58,6 +58,14 @@ public abstract class AbstractSharedGoal implements Goal, Serializable {
         }
     }
 
+    /*
+    @Override
+    public int getTop(){
+        return pointStack.get(pointStack.size()-1);
+    }
+
+     */
+
 }
 
 
