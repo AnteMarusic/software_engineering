@@ -182,12 +182,14 @@ public class GameController {
         if(before1 != game.getAchievementOfSG1(currentPlayer)) {
             int newPoints = game.getSharedScore1(currentPlayer);
             for (ClientHandler c : players) {
-                c.sendMessage(new SharedScoreAchieveMessage(1, newPoints));
+                if(c!=null)
+                    c.sendMessage(new SharedScoreAchieveMessage(1, newPoints));
             }
         }
         if(before2 != game.getAchievementOfSG2(currentPlayer)){
             int newPoints = game.getSharedScore2(currentPlayer);
             for (ClientHandler c : players) {
+                if(c!=null)
                 c.sendMessage(new SharedScoreAchieveMessage(2, newPoints));
             }
         }
@@ -243,7 +245,7 @@ public class GameController {
             // se invece ci sono almeno due giocatori collegati:
             // comunico a tutti chi sarà il prossimo giocatore
             for (ClientHandler c : players) {
-                if (c != players.get(currentPlayer) && c!=null)
+                if (c!=null)
                     c.sendMessage(new NotifyNextPlayerMessage("server", players.get(currentPlayer).getUsername(), currentPlayer)); // messaggio in cui dice chi sarà il prossimo giocatore));
             }
             // mando al prossimo giocatore la card request
