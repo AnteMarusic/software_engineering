@@ -276,12 +276,15 @@ public class Game implements Serializable {
         board.fill();
     }
 
+
+    /*
     public int[] getSharedPointQueueTOP(){
         int[] sharedpoint = new int[2];
         sharedpoint[0] = sharedGoal[0].getTop();
         sharedpoint[1] = sharedGoal[1].getTop();
         return sharedpoint;
     }
+     */
 
     public boolean getAchievementOfSG1(int currentPlayer){
         return players[currentPlayer].getSharedGoal1Achieved();
