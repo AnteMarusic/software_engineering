@@ -71,7 +71,11 @@ public class RMIClient extends Client implements RMICallback  {
      */
     public boolean startConnection() {
         try {
+<<<<<<< HEAD
             Registry registry = LocateRegistry.getRegistry("192.168.244.63",port);
+=======
+            Registry registry = LocateRegistry.getRegistry(getServerIp(), port);
+>>>>>>> 035d1e34505e68a92e16766c4deb0e321a40ce88
             server = (RMIinterface) registry.lookup("server");
         }catch (IOException | NotBoundException e) {
             return false;

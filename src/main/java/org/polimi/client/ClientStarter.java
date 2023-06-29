@@ -34,6 +34,13 @@ public class ClientStarter {
         boolean firstWhile = true;
         boolean secondWhile = true;
         int numberOfTries = NUMBER_OF_TRIES;
+
+        if (args.length == 0) {
+            System.out.println("invalid parameters");
+            return;
+        }
+        System.out.println("ip: " + args[0]);
+        Client.setServerIp(args[0]);
         while (firstWhile) {
             System.out.println("choose cli or gui");
             System.out.println("(1) cli");
