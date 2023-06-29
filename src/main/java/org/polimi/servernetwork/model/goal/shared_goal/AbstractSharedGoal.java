@@ -24,15 +24,20 @@ public abstract class AbstractSharedGoal implements Goal, Serializable {
      */
     public AbstractSharedGoal(int numOfPlayer){
         pointStack = new Stack<Integer>();
-        if(numOfPlayer >= 2){
+        if(numOfPlayer == 2) {
+            pointStack.push(4);
+            pointStack.push(8);
+        }
+        else if(numOfPlayer ==3){
+            pointStack.push(4);
+            pointStack.push(6);
+            pointStack.push(8);
+        }
+        else if(numOfPlayer == 4){
             pointStack.push(2);
             pointStack.push(4);
-            if(numOfPlayer >=3){
-                pointStack.push(6);
-            }
-            if(numOfPlayer == 4){
-                pointStack.push(8);
-            }
+            pointStack.push(6);
+            pointStack.push(8);
         }
     }
 

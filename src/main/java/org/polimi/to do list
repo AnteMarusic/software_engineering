@@ -21,3 +21,5 @@ TODO
 - non mi ha fatto fare undo alla seconda scelta della carta sulla cli
 - verifica che con la riconessione del primo giocatore di una partita che ricomincia viene assegnato il giocatore corrente
 
+- in una partita da 3 giocatori gli shared score sono 6,4,2 dovrebbero essere 8,6,4
+- se nella mia bookshlef ho al massimo uno spazio per 2 caselle il gioco me ne fa prendere anche 3

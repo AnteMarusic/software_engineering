@@ -109,6 +109,7 @@ public class Player implements Serializable {
      * game will use this functions if and only if shared goal 1 is achieved from the player
      */
     public void setSharedGoal1AchievedToTrue(){
+        System.out.println("(Player setSharedGoal1) setto che ho fatto lo shared goal 1");
         this.sharedGoal1Achieved = true;
     }
 
@@ -116,6 +117,7 @@ public class Player implements Serializable {
      * game will use this functions if and only if shared goal 2 is achieved from the player
      */
     public void setSharedGoal2AchievedToTrue(){
+        System.out.println("(Player setSharedGoal2) setto che ho fatto lo shared goal 2");
         this.sharedGoal2Achieved = true;
     }
 
