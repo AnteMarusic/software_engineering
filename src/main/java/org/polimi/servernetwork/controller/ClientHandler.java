@@ -12,6 +12,7 @@ public abstract class ClientHandler{
     protected GameCodeIssuer gameCodeIssuer;
     protected LobbyController lobbyController;
     protected GameController gameController;
+    private boolean destruction;
     /**
      * this attribute is used to identify a socket client handler that belongs to a client
      * that hasn't successfully logged in yet. By default, is set to true on RMIClientHandlers because those are created
@@ -21,6 +22,7 @@ public abstract class ClientHandler{
 
 
     public ClientHandler(UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
+        destruction = false;
         this.usernameIssuer = usernameIssuer;
         this.gameCodeIssuer = gameCodeIssuer;
         this.lobbyController = lobbyController;
@@ -96,7 +98,7 @@ public abstract class ClientHandler{
      * if the ClientHandler is not logged (this happens only in Socket) we just call closeEverything method
      */
     public void disconnect () {
-        if(!gameController.getDestruction()){
+        if(!destruction){
             if (isLogged) {
                 System.out.println("(ClientHandler) " + this.username + " disconnected");
 
@@ -138,5 +140,9 @@ public abstract class ClientHandler{
 
     public boolean isLogged () {
         return isLogged;
+    }
+
+    public void setDestructionTrue(){
+        this.destruction = true;
     }
 }
