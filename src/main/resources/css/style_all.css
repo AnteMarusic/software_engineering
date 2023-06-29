@@ -1,0 +1,7 @@
+@font-face {
+    -fx-font-family: "Baskerville";
+    src: url("../font/BASKE1.ttf");
+}
+.label{
+    -fx-font-family: 'Baskerville';
+}
