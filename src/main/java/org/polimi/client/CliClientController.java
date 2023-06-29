@@ -316,8 +316,8 @@ public class CliClientController implements ClientControllerInterface {
                                 if (Objects.equals(action, "stop")) {
                                     System.out.println("you can't stop here");
                                 }
-                                else if (Objects.equals(action, "redo")) {
-                                    System.out.println("you can't redo here");
+                                else if (Objects.equals(action, "undo")) {
+                                    System.out.println("you can't undo here");
                                 }
                                 else {
                                     System.out.println("invalid input");
@@ -329,8 +329,8 @@ public class CliClientController implements ClientControllerInterface {
                             if (Objects.equals(action, "stop")) {
                                 System.out.println("you can't stop here");
                             }
-                            else if (Objects.equals(action, "redo")) {
-                                System.out.println("you can't redo here");
+                            else if (Objects.equals(action, "undo")) {
+                                System.out.println("you can't undo here");
                             }
                             else {
                                 System.out.println("invalid input");
@@ -374,8 +374,8 @@ public class CliClientController implements ClientControllerInterface {
                                 action = scanner.next();
                                 if (Objects.equals(action, "stop")) {
                                     System.out.println("you can't stop here");
-                                } else if (Objects.equals(action, "redo")) {
-                                    System.out.println("you can't redo here");
+                                } else if (Objects.equals(action, "undo")) {
+                                    System.out.println("you can't undo here");
                                 } else {
                                     System.out.println("invalid input");
                                 }
@@ -387,7 +387,7 @@ public class CliClientController implements ClientControllerInterface {
                                 System.out.println("ok, you stopped card selection");
                                 counter = maxInsertable;
                                 actionFlag = true;
-                            } else if (Objects.equals(action, "redo")) {
+                            } else if (Objects.equals(action, "undo")) {
                                 System.out.println("ok, going back to previous step");
                                 chosenCoordinates.remove(chosenCoordinates.size()-1);
                                 counter--;
@@ -437,8 +437,8 @@ public class CliClientController implements ClientControllerInterface {
                                 action = scanner.next();
                                 if (Objects.equals(action, "stop")) {
                                     System.out.println("you can't stop here");
-                                } else if (Objects.equals(action, "redo")) {
-                                    System.out.println("you can't redo here");
+                                } else if (Objects.equals(action, "undo")) {
+                                    System.out.println("you can't undo here");
                                 } else {
                                     System.out.println("invalid input");
                                 }
@@ -450,7 +450,7 @@ public class CliClientController implements ClientControllerInterface {
                                 System.out.println("ok, you stopped card selection");
                                 counter = maxInsertable;
                                 actionFlag = true;
-                            } else if (Objects.equals(action, "redo")) {
+                            } else if (Objects.equals(action, "undo")) {
                                 System.out.println("ok, going back to previous step");
                                 chosenCoordinates.remove(chosenCoordinates.size()-1);
                                 counter--;
@@ -467,7 +467,6 @@ public class CliClientController implements ClientControllerInterface {
                 }
             }
         }
-        System.out.println(chosenCoordinates);
         cli.removeCards(chosenCoordinates);
         if (chosenCoordinates.size() > 1) {
             System.out.println("order");
@@ -499,7 +498,6 @@ public class CliClientController implements ClientControllerInterface {
         }
         cli.setOrderedChosenCards(ordered);
         cli.setChosenCards(toOrder);
-        System.out.println("initialization of ordered " + ordered);
 
         while (i < toOrder.size()) {
             int size = toOrder.size();
