@@ -23,7 +23,7 @@ public class GameController {
     private UsernameIssuer usernameIssuer;
     private GameCodeIssuer gameCodeIssuer;
     private File saveFile;
-    private static String path = "/src/main/resources/ser/";
+    private static String folderPath;
 
 
     public GameController(ArrayList<ClientHandler> list, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer) {
@@ -38,6 +38,10 @@ public class GameController {
         firstPlayer = setFirstPlayer(numOfPlayers);
         currentPlayer = firstPlayer;
         game = new Game(numOfPlayers, firstPlayer, getPlayersUsername());
+    }
+
+    public static void setFolderPath (String fp) {
+        folderPath = fp;
     }
 
     /**
@@ -56,8 +60,7 @@ public class GameController {
 
     public void retrieveGameFromFile () throws FileNotFoundException {
         try {
-            String filePath = new File("").getAbsolutePath();
-            this.saveFile = new File(filePath.concat(path + gameCode + ".ser"));
+            this.saveFile = new File(folderPath + gameCode + ".ser");
             this.game = readFileAndDeserialize();
             countDown = COUNT_DOWN;
             decrementer = null;
@@ -76,9 +79,8 @@ public class GameController {
 
     public void initializeSaveFile() {
         //save
-        String filePath = new File("").getAbsolutePath();
-        System.out.println("(GameController initializeSaveFile) model status will be saved here: " + filePath.concat(path + gameCode + ".ser"));
-        this.saveFile = new File(filePath.concat(path + gameCode + ".ser"));
+        System.out.println("(GameController initializeSaveFile) model status will be saved here: " + folderPath + gameCode + ".ser");
+        this.saveFile = new File(folderPath + gameCode + ".ser");
         try {
             this.saveFile.createNewFile();
         }catch(IOException e) {
