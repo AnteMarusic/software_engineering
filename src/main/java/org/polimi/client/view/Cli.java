@@ -49,7 +49,7 @@ public class Cli {
         me = 0;
         chosenCards = new ArrayList<>();
         otherPlayerChosenCards = new ArrayList<>();
-        orderedChosenCards = new LinkedList<>();
+        orderedChosenCards = new ArrayList<>();
     }
 
     public void setPersonalGoal (Coordinates[] coordinates, Card.Color[] colors) {
