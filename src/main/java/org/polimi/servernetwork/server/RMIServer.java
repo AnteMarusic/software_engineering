@@ -106,7 +106,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.usernameIssuer.setClientHandler(clientHandler, username);
         //onMessage(usernameMessage);
         clientHandler.sendMessage (new Message(username, MessageType.CHOOSE_GAME_MODE ));
-        createPinger(username, rmiclient);
+        createPinger(username, (RMIClientHandler) clientHandler , rmiclient);
     }
 
     public void subscribe2(String username) throws NotBoundException, RemoteException {
