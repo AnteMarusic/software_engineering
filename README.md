@@ -18,7 +18,7 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 <ul>
     <li><span style="font-size: 17px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/derivables/UML">UML</a></span></li>
 </ul>
-<p><span style="font-size: 28px;">Sequence Diagram</span></p>
+<h2><span style="font-size: 28px;">Sequence Diagram</span></h2>
 <p><span style="font-size: 16px;">I seguenti diagrammi mostrano uno schema semplificato del flusso di comunicazione tra le varie componenti del progetto nelle diverse fasi di gioco.</span></p>
 <ul>
     <li><span style="font-size: 22px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/derivables/Sequence_diagrams">Sequence Diagram</a></span></li>
@@ -48,9 +48,9 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
         </tr>
     </tbody>
 </table>
-<p><span style="font-size: 28px;">Jars</span></p>
-<p><span style="font-size: 16px;">I seguenti jar sono stati utilizzati per la consegna del progetto, permettono quindi il lancio del gioco secondo le funzionalit&agrave; descritte nell&apos;introduzione.</span></p>
-<p><span style="font-size: 30px;">Funzionalit&agrave;</span></p>
+
+
+<h2><span style="font-size: 30px;">Funzionalit&agrave;</span></h2>
 <ul>
     <li><span style="font-size: 16px;">Regole complete</span></li>
     <li><span style="font-size: 16px;">CLI</span></li>
@@ -62,7 +62,8 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
     <li><span style="font-size: 16px;">Resilienza alle disconnessioni</span></li>
 </ul>
 
-<h1><span style="font-size: 36px;">JAR</span></h1>
+<h2><span style="font-size: 36px;">JAR</span></h2>
+<p><span style="font-size: 16px;">I seguenti jar sono stati utilizzati per la consegna del progetto, permettono quindi il lancio del gioco secondo le funzionalit&agrave; descritte nell&apos;introduzione.</span></p>
 <p><span style="font-size: 30px;">come far partire il jar lato server:</span></p>
 <p><a>java -jar your/path/to/jar/server.jar path/in/which/you/want/to/put/the/game/files serverIp</a></p>
 <p><span style="font-size: 30px;">come far partire il jar lato client:</span></p>
