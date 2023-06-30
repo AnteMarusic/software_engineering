@@ -1,5 +1,4 @@
 TODO
-- riconnessione del client disconnesso
 - se chiudi il server e mandi un messaggio da un socket client connesso in una partita esce un'eccezione "socket closed"
 -togliere print da RMIclient e SocketClient
 -print della CLI accazzo a causa del multithreading di RMI non ci saranno nella versione finale (sono cose di debug)
