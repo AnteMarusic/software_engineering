@@ -28,6 +28,8 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 <ul>
     <li style="font-size: 22px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/javadoc">JavaDoc</a></li>
 </ul>
+
+<h2>Plug-in</h2>
 <table style="width: 100%;">
     <tbody>
         <tr>
