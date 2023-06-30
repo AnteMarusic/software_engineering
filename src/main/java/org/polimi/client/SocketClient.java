@@ -24,7 +24,7 @@ public class SocketClient extends Client{
     public static Condition flagCondition;
 
     private static volatile boolean waitForusername;
-    public SocketClient(int port, boolean guiMode) {
+    public SocketClient(int port, boolean guiMode) throws RemoteException {
         super(port);
         this.guiMode = guiMode;
         this.waitForusername = false;

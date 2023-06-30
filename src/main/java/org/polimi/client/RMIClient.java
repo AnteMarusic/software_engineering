@@ -10,6 +10,7 @@ import org.polimi.servernetwork.server.RMIinterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -34,6 +35,7 @@ public class RMIClient extends Client implements RMICallback  {
     private final Object messageQueueLock;
 
     private final boolean guiMode;
+    private Registry registry;
     public RMIClient(int port, boolean guiMode) throws IOException, NotBoundException {
         super(port);
         this.guiMode = guiMode;
@@ -71,7 +73,7 @@ public class RMIClient extends Client implements RMICallback  {
      */
     public boolean startConnection() {
         try {
-            Registry registry = LocateRegistry.getRegistry(this.getServerIp() ,port);
+            registry = LocateRegistry.getRegistry(this.getServerIp() ,port);
             server = (RMIinterface) registry.lookup("server");
         }catch (IOException | NotBoundException e) {
             return false;
@@ -109,14 +111,14 @@ public class RMIClient extends Client implements RMICallback  {
             return true;
         }
         if (internalComunication == InternalComunication.OK) {
-            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
+            RMIClient clientStub = (RMIClient) UnicastRemoteObject.exportObject(this, 0);
             server.subscribe(this.username, clientStub);
             new Thread(new Decrementer(this)).start();
             return true;
         }
         return false;
     }
-    public void login() throws RemoteException {
+    public void login() throws RemoteException, AlreadyBoundException, NotBoundException {
         InternalComunication internalComunication;
         do{
             chooseUsername();
@@ -133,7 +135,7 @@ public class RMIClient extends Client implements RMICallback  {
         }
         if (internalComunication == InternalComunication.OK) {
             clientController.loginSuccessful();
-            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
+            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 1099);
             server.subscribe(username, clientStub);
             new Thread(new Decrementer(this)).start();
         }

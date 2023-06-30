@@ -4,6 +4,8 @@ import org.polimi.messages.Message;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public abstract class Client {
@@ -11,7 +13,8 @@ public abstract class Client {
     private static String serverIp;
     private int port;
 
-    Client(int port){
+    Client(int port) throws RemoteException {
+        super();
         this.port = port;
     }
     public static void setServerIp (String ip) {

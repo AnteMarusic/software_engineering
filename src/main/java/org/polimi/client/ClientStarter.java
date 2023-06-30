@@ -10,6 +10,7 @@ import org.polimi.messages.UsernameStatus;
 import org.polimi.servernetwork.server.RMIinterface;
 
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -27,7 +28,7 @@ public class ClientStarter {
     private static final int rmiPort = 1099;
     private static final int socketPort = 8181;
     private static final int NUMBER_OF_TRIES = 1000;
-    public static void main(String[] args) throws IOException, NotBoundException {
+    public static void main(String[] args) throws IOException, NotBoundException, AlreadyBoundException {
         Scanner scanner = new Scanner(System.in);
         int input;
         boolean bool;
