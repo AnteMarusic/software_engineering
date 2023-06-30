@@ -131,7 +131,7 @@ public class GameController {
     }
 
     /**
-     * Resets the game environment for a player at the specified position.
+     * Resets the game environment for a reconnected player .
      * Sends relevant game information and status to the player.
      *
      * @param position The position of the player in the game.
@@ -149,8 +149,8 @@ public class GameController {
     }
 
     /**
-     * Starts a new game turn by notifying the current player to choose cards to remove from the board.
-     * Notifies other players about the next player's turn.
+     * Starts game turn by notifying the current player to choose cards to remove from the board.
+     * Notifies other players about who is the currentPlayer.
      */
     //questo metodo non viene chiamato nel caso di client rmi
     public void startGameTurn() {
@@ -365,7 +365,7 @@ public class GameController {
             decrementer = new DecrementerGameController(this);
             new Thread (decrementer).start();
             this.currentPlayer = game.getPosition(clientHandler.getUsername());
-            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
+            players.get(currentPlayer).sendMessage(new Message("server", MessageType.AREALONE));
         }
 
         if(getNumOfConnectedPlayers()==2) {
