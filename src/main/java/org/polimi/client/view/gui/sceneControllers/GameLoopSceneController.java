@@ -160,14 +160,18 @@ public class GameLoopSceneController {
                                             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), new Coordinates(row, col)) ) {
                                                 this.checkLater = true;
                                             }
-                                            this.image = loadTileImage(card);
-                                            insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
-                                            chosenCoordinates.add(new Coordinates(row,col));
-                                            chosenCards.add(card);
-                                            choosenCardsDim++;
-                                            checkColumn();
-                                            tile0.setVisible(false);
-                                            tile1.setVisible(true);
+                                            if(areNotAligned(chosenCoordinates.get(0), new Coordinates(row, col))){
+                                                showAlert("Cards are not aligned");
+                                            }else {
+                                                this.image = loadTileImage(card);
+                                                insertInGridPane(imageView, 50, 50, chosenCardsPane, choosenCardsDim, 0);
+                                                chosenCoordinates.add(new Coordinates(row, col));
+                                                chosenCards.add(card);
+                                                choosenCardsDim++;
+                                                checkColumn();
+                                                tile0.setVisible(false);
+                                                tile1.setVisible(true);
+                                            }
                                             }
                                         }
                                     case 2 ->{
@@ -753,6 +757,13 @@ public class GameLoopSceneController {
         return (GameRules.areCoordinatesAligned(c1,c2,c3) || GameRules.areCoordinatesAligned(c1,c3,c2) ||
                 GameRules.areCoordinatesAligned(c2,c1,c3) || GameRules.areCoordinatesAligned(c2,c3,c1) ||
                 GameRules.areCoordinatesAligned(c3,c1,c2) || GameRules.areCoordinatesAligned(c3,c2,c1));
+    }
+    public boolean areNotAligned(Coordinates coor1, Coordinates coor2){
+        if((coor1.getCol()!=coor2.getCol() && (coor1.getRow()!=coor2.getRow()))){
+            return true;
+        }else{
+            return false;
+        }
     }
     /**
      * Refills the client's bookshelf with the cards that were previously stored.

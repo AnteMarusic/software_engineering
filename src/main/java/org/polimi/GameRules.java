@@ -128,4 +128,5 @@ public class GameRules {
                 (c2.getCol() == c1.getCol() && c3.getCol() == c2.getCol () &&
                         ((c2.getRow() == c1.getRow() + 1 && c3.getRow() == c1.getRow() + 2)||c2.getRow() == c1.getRow() - 1 && c3.getRow() == c1.getRow() - 2));
     }
+
 }
