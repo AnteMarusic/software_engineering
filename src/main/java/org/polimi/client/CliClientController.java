@@ -522,10 +522,7 @@ public class CliClientController implements ClientControllerInterface {
         cli.setChosenCards(ordered);
         return orderedCoordinates;
     }
-    @Override
-    public void newPlayerJoinedLobby (String newPlayer) {
-        cli.addNewPlayer(newPlayer);
-    }
+
 
     /**
      * Allows the player to choose a column where to insert the cards.
@@ -569,10 +566,6 @@ public class CliClientController implements ClientControllerInterface {
     /**
      * calls the correspondent method of CLI
      */
-    @Override
-    public void errorMessage () {
-
-    }
 
     /**
      * should call the correspondent method of CLI
