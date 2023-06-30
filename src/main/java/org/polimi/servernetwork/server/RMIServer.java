@@ -33,7 +33,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
             this.registry = LocateRegistry.createRegistry(rmiPort);
             //Decrementer decrementer = new Decrementer(usernameIssuer);
             registry.bind("server", this);
-            RMIinterface stub = (RMIinterface) UnicastRemoteObject.exportObject(this, 1099);
             //new Thread(decrementer).start();
             System.out.println("RMI server is up");
         } catch (IOException | AlreadyBoundException e) {
