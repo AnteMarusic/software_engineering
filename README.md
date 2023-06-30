@@ -73,8 +73,9 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 
 <p><span style="font-size: 30px;">come far partire il jar lato server:</span></p>
 <code>java -jar your/path/to/jar/server.jar path/in/which/you/want/to/put/the/game/files serverIp</code>
+
 <p><span style="font-size: 30px;">come far partire il jar lato client:</span></p>
-<p><a>java -jar your/path/to/jar/client.jar serverIp</a></p>
+<code>java -jar your/path/to/jar/client.jar serverIp</code>
 
 <h2><span style="font-size: 30px;">Componenti del gruppo:</span></h2>
 <ul>
