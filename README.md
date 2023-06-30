@@ -12,8 +12,8 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
     <li>fare in modo che il server salvi periodicamente lo stato della partita su disco, in modo che l&apos;esecuzione possa riprendere da dove si &egrave; interrotta anche a seguito del crash del server stesso; &nbsp;</li>
     <li>I giocatori disconnessi a seguito della caduta della rete o del crash del client, possono ricollegarsi e continuare la partita. &nbsp;&nbsp;</li>
 </ul>
-<p><span style="font-size: 30px;">Documentazione</span></p>
-<p><span style="font-size: 28px;">UML</span></p>
+<h1><span style="font-size: 30px;">Documentazione</span></h1>
+<h2><span style="font-size: 28px;">UML</span></h2>
 <p><span style="font-size: 16px;">I seguenti diagrammi rappresentano uno schema basico della relazione che intercorre tra le varie classi</span></p>
 <ul>
     <li><span style="font-size: 17px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/derivables/UML">UML</a></span></li>
@@ -23,7 +23,7 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 <ul>
     <li><span style="font-size: 22px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/derivables/Sequence_diagrams">Sequence Diagram</a></span></li>
 </ul>
-<p><span style="font-size: 28px;">JavaDoc</span></p>
+<h2><span style="font-size: 28px;">JavaDoc</span></h2>
 <p><span style="font-size: 16px;">La seguente documentazione offre un breve commento dei metodi pi&ugrave; complessi&nbsp;</span></p>
 <ul>
     <li style="font-size: 22px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/javadoc">JavaDoc</a></li>
