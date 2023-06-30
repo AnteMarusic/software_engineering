@@ -29,7 +29,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.subscribers = new HashMap<>();
 
         try {
-            System.setProperty("java.rmi.server.hostname", "192.168.244.63");
+            System.setProperty("java.rmi.server.hostname", "localhost");
             this.registry = LocateRegistry.createRegistry(rmiPort);
             //Decrementer decrementer = new Decrementer(usernameIssuer);
             registry.bind("server", this);

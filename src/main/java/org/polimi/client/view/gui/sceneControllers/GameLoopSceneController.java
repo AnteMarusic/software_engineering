@@ -282,18 +282,6 @@ public class GameLoopSceneController {
                         finalPane.toBack();
                     });
                 });
-            } else {
-                Pane finalPane1 = pane;
-                Platform.runLater(() -> {
-                    finalPane1.setOnMouseEntered(event -> {
-                        finalPane1.toFront();
-                    });
-
-                    finalPane1.setOnMouseExited(event -> {
-                        finalPane1.toBack();
-                    });
-
-                });
             }
             pane.getChildren().add(imageView);
             gridp.add(pane, x, y);
@@ -326,14 +314,11 @@ public class GameLoopSceneController {
      */
     @FXML
     private void showAlert(String alertinfo){
-        Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText(alertinfo);
             alert.showAndWait();
-            }
-        );
     }
 
     /**
