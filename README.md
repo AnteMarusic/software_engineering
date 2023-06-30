@@ -65,7 +65,7 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 </ul>
 
 <h2><span style="font-size: 36px;">JAR</span></h2>
-<p><span style="font-size: 16px;">I seguenti jar sono stati utilizzati per la consegna del progetto, permettono quindi il lancio del gioco secondo le funzionalit&agrave; descritte nell&apos;introduzione. I file Jar sono stati testati su un computer con MacOS e processore intel x86.</span></p>
+<p><span style="font-size: 16px;">I seguenti jar sono stati utilizzati per la consegna del progetto, permettono quindi il lancio del gioco secondo le funzionalit&agrave; <p>descritte nell&apos;introduzione. I file Jar sono stati testati su un computer con MacOS e processore intel x86.</p></span></p>
 
 <ul>
     <li style="font-size: 22px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/derivables/JAR">JAR</a></li>
