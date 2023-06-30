@@ -18,5 +18,8 @@ public interface RMIinterface extends Remote {
     /*RMIAvailability messagesAvailable(String username)throws RemoteException;*/
     //UsernameStatus isUsernameAlreadyTaken(String username) throws RemoteException;
     void subscribe(String username, RMICallback rmiClient) throws RemoteException;
+
+    void subscribe2(String username) throws NotBoundException, RemoteException;
+
     void sendChatMessage(String message) throws RemoteException;
 }
