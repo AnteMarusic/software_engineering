@@ -28,7 +28,7 @@ public class MenuSceneController implements Initializable {
      * @throws IOException        If an I/O error occurs while switching the scene.
      * @throws NotBoundException  If the remote object is not bound in the registry.
      */
-    public void chooseRMI(ActionEvent e) throws IOException, NotBoundException {
+    public void chooseRMI(ActionEvent e) throws Exception {
         RMIClient rmiClient = new RMIClient(1099, true);
         rmiClient.startConnection();
         SceneController.getInstance().switchScene(e, "login_scene");
@@ -40,7 +40,7 @@ public class MenuSceneController implements Initializable {
      * @param e The action event triggered by the button click.
      * @throws IOException If an I/O error occurs while switching the scene.
      */
-    public void chooseSocket(ActionEvent e) throws IOException {
+    public void chooseSocket(ActionEvent e) throws Exception {
         SocketClient socket = new SocketClient(8181, true);
         socket.connect();
         SceneController.getInstance().switchScene(e, "login_scene");

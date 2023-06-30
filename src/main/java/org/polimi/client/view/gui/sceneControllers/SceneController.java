@@ -130,7 +130,7 @@ public class SceneController {
      * @param sceneName
      * @throws IOException
      */
-    public void switchScene(ActionEvent event, String sceneName) throws IOException {
+    public void switchScene(ActionEvent event, String sceneName) throws Exception {
         String ref = "/scenesfxml/" + sceneName + ".fxml";
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ref));
         this.root = loader.load();

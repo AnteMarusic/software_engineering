@@ -30,7 +30,7 @@ public class LoginSceneController {
      * @throws IOException if an I/O error occurs while switching scenes.
      */
     @FXML
-    private void onJoinBtnClick(ActionEvent event) throws IOException {
+    private void onJoinBtnClick(ActionEvent event) throws Exception {
         joinBtn.setDisable(true);
         GuiClientController.username= nicknameField.getText();
         if(GuiClientController.getNotified("username")){

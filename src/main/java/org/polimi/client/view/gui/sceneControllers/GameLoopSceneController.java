@@ -332,7 +332,7 @@ public class GameLoopSceneController {
      * @throws RemoteException If a remote communication error occurs.
      */
     @FXML
-    public void col0() throws RemoteException {
+    public void col0() throws Exception {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
                 showAlert("Cards are not aligned");
@@ -385,7 +385,7 @@ public class GameLoopSceneController {
      * @throws RemoteException If a remote communication error occurs.
      */
     @FXML
-    public void col1() throws RemoteException{
+    public void col1() throws Exception {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
                 showAlert("Cards are not aligned");
@@ -438,7 +438,7 @@ public class GameLoopSceneController {
      * @throws RemoteException If a remote communication error occurs.
      */
     @FXML
-    public void col2() throws RemoteException{
+    public void col2() throws Exception {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
                 showAlert("Cards are not aligned");
@@ -491,7 +491,7 @@ public class GameLoopSceneController {
      * @throws RemoteException If a remote communication error occurs.
      */
     @FXML
-    public void col3() throws RemoteException{
+    public void col3() throws Exception {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
                 showAlert("Cards are not aligned");
@@ -544,7 +544,7 @@ public class GameLoopSceneController {
      * @throws RemoteException If a remote communication error occurs.
      */
     @FXML
-    public void col4() throws RemoteException{
+    public void col4() throws Exception {
         if(this.checkLater && choosenCardsDim==2){
             if(!GameRules.areCoordinatesAligned(chosenCoordinates.get(0), chosenCoordinates.get(1))){
                 showAlert("Cards are not aligned");
