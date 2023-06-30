@@ -6,19 +6,17 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
+import org.polimi.servernetwork.server.ServerStarter;
 
-import java.io.Serializable;
+import java.io.*;
 import java.lang.*;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 
 public class PersonalGoal implements Goal, Serializable {
-    private static final String FILENAME = "/src/main/resources/json/personal_goal.json";
+    private static final String FILENAME = "json/personal_goal.json";
     private static final int DIM = 6; //number of coordinates that is necessary to describe the personal goal
-    private File file;
+    transient private InputStream file;
     private final Coordinates[] coordinates;
     private final Card.Color[] colors;
     /**
@@ -27,8 +25,12 @@ public class PersonalGoal implements Goal, Serializable {
     private final int index;
 
     public PersonalGoal(int index) {
+        this.file = toInputStream(FILENAME);
+        /*
         String filePath = new File("").getAbsolutePath();
         file = new File(filePath.concat(FILENAME));
+
+         */
         coordinates = new Coordinates[DIM];
         colors = new Card.Color[DIM];
         readFileAndPickRandomPersonalGoal(index);
@@ -56,7 +58,7 @@ public class PersonalGoal implements Goal, Serializable {
         JSONParser jsonParser = new JSONParser();
         Object obj;
 
-        try (FileReader reader = new FileReader(this.file)) {
+        try (InputStreamReader reader = new InputStreamReader(this.file)) {
             //Read JSON file
             obj = jsonParser.parse(reader);
 
@@ -125,5 +127,11 @@ public class PersonalGoal implements Goal, Serializable {
     public int getIndex(){
         return index;
     }
-
+    private InputStream toInputStream(String filePath) {
+        InputStream inputStream = ServerStarter.class.getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            throw new RuntimeException("No such file: " + filePath);
+        }
+        return inputStream;
+    }
 }

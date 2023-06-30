@@ -3,9 +3,10 @@ package org.polimi.messages;
 import org.polimi.servernetwork.model.Card;
 import org.polimi.servernetwork.model.Coordinates;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CardToRemoveMessage extends Message{
+public class CardToRemoveMessage extends Message implements Serializable {
     private List<Coordinates> coordinates;
 
     private  List<Card> cards;

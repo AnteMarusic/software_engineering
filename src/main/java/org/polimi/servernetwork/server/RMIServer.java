@@ -91,6 +91,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     public Message getMessage(String username)throws RemoteException{
         System.out.println("funziona");
         RMIClientHandler clientHandler = (RMIClientHandler) usernameIssuer.getClientHandler(username);
+        System.out.println("RMIServer " + clientHandler);
         return clientHandler.popMessageRMI();
     }
     /**
