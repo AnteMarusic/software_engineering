@@ -1,8 +1,6 @@
 TODO
-- se chiudi il server e mandi un messaggio da un socket client connesso in una partita esce un'eccezione "socket closed"
 -togliere print da RMIclient e SocketClient
 -print della CLI accazzo a causa del multithreading di RMI non ci saranno nella versione finale (sono cose di debug)
--se finisce la partita manca la parte in cui si tolgono gli username dei player da username issuer
 - CLI: stampare la bookshelf personale accanto alla board e le bookshelf degli altri una accanto all'altra
        migliorare l'aspetto dell'array di carte scelte
 - il codice delle partite private va scelto dal server
