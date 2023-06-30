@@ -26,7 +26,7 @@ public class ServerStarter {
         GameCodeIssuer gameCodeIssuer = new GameCodeIssuer();
         UsernameIssuer usernameIssuer = new UsernameIssuer();
         LobbyController lobby = new LobbyController(gameCodeIssuer, usernameIssuer);
-        if (args.length == 0) {
+        if (args.length < 2) {
             System.out.println("(ServerStarter) path missing");
             return;
         }
@@ -39,6 +39,8 @@ public class ServerStarter {
             System.out.println("(ServerStarter) The folder provided as argument does not exist.");
             return;
         }
+        String serverIP = args[1];
+        System.out.println("(ServerStarter) serverIP " + serverIP);
         GameListFileAccessorSingleton.setFolderPath(folderPath);
         GameController.setFolderPath(folderPath);
         GameListFileAccessorSingleton gameListFileAccessor = GameListFileAccessorSingleton.getInstance();
@@ -67,6 +69,7 @@ public class ServerStarter {
 
         }
         //RMIMessagesHub messagesHub = new RMIMessagesHub();
+        RMIServer.setServerIP(serverIP);
         SocketServer serverSocket = new SocketServer(socketPort, gameCodeIssuer, usernameIssuer, lobby);
         RMIServer rmiServer = new RMIServer(rmiPort, gameCodeIssuer, usernameIssuer, lobby);
     }

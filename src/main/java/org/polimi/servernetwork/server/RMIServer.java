@@ -20,6 +20,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private UsernameIssuer usernameIssuer;
     private LobbyController lobbyController;
     private Map<String, RMICallback> subscribers;
+    private static String serverIP;
 
     private Registry registry;
     public RMIServer(int rmiPort, GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
@@ -29,7 +30,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.subscribers = new HashMap<>();
 
         try {
-            System.setProperty("java.rmi.server.hostname", "localhost");
+            System.setProperty("java.rmi.server.hostname", serverIP);
             this.registry = LocateRegistry.createRegistry(rmiPort);
             //Decrementer decrementer = new Decrementer(usernameIssuer);
             registry.bind("server", this);
@@ -39,6 +40,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
             System.out.println("errore rmi server, l'errore è:" + e);
         }
     }
+    public static void setServerIP (String ip) {
+        serverIP = ip;
+    }
+
     /**
      * this method reserves a line in the table of usernames in username issuer if the username provided as argument is not already taken
      * differently, it returns the status of the username
