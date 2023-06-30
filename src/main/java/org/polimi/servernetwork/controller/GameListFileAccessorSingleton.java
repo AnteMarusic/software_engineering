@@ -20,16 +20,11 @@ public class GameListFileAccessorSingleton {
 
     /**
      * Private constructor to prevent direct instantiation
-     * TODO vedi commento nel codice
+     *
      */
     private GameListFileAccessorSingleton() {
         instance = this;
-        /*
-        String filePath = new File("").getAbsolutePath();
-        this.file = new File(filePath.concat("/src/main/resources/json/gameList.json"));
-        System.out.println("(GameListFileAccessorSingleton) " + filePath.concat("/src/main/resources/json/gameList.json"));
 
-         */
         System.out.println("(GameListFileAccessorSingleton) file path: " + path);
         this.file = new File (path);
         if (file.exists()) {

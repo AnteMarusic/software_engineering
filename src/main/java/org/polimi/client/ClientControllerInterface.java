@@ -19,8 +19,6 @@ public interface ClientControllerInterface {
     Message chooseCards();
     ArrayList<Coordinates> orderChosenCards(List<Coordinates> chosenCoordinates);
     Message chooseColumn ();
-    void errorMessage ();
-    void newPlayerJoinedLobby (String newPlayer);
     void loginSuccessful ();
     void reconnectionSuccessful ();
     void modelAllMessage (Map<Coordinates, Card> board, List<Card[][]> bookshelves, int sharedGoal1, int sharedGoal2, Coordinates[] personalGoalCoordinates, Card.Color[] personalGoalColors, List<String> usernames, int personalGoal, int currPlayer);

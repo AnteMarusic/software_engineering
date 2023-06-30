@@ -110,27 +110,4 @@ public class  ClientStarter {
 
     }
 
-     /*while (rmiClient.ifConnected()) {
-                // messagefromserver potrebbe essere null
-                RMIAvailability status = RMIAvailability.NOT_AVAILABLE;
-                try{
-                    status = rmiClient.getServer().messagesAvailable(rmiClient.getUsername());
-                }
-                catch ( RemoteException e){
-                    // gestire la disconnessione del server
-                }
-                //System.out.println(status);
-                if(status == RMIAvailability.AVAILABLE){
-                    try{
-                        messageFromServer=rmiClient.getServer().getMessage(rmiClient.getUsername());
-                    }
-                    catch ( RemoteException e){
-                        // gestire la disconnessione del server
-                    }
-                    message = rmiClient.handleMessage(messageFromServer);
-                    if (message != null)
-                        rmiClient.sendMessage(message);
-                }
-
-            }*/
 }

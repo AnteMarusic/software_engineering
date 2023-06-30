@@ -71,8 +71,6 @@ public class Cli {
         this.players = players;
         this.numOfPlayers = players.size();
         this.me = this.players.indexOf(myUsername);
-        System.out.println("(Cli setPlayers) stampo la lista di palyers" + this.players.toString());
-        System.out.println("(cli setPlayers) il mio indice è: " + me);
     }
 
     public void createBookshelf(String name, Card[][] grid){
@@ -150,8 +148,6 @@ public class Cli {
     }
     public void setCurrentPlayer(int currentPlayerInt, String currentPlayer){
         this.currentPlayer = currentPlayerInt;
-        System.out.println("(Cli setCurrentPlayer) the current player is: " + currentPlayerInt);
-        System.out.println("(Cli setCurrentPlayer) the current player is: " + currentPlayer);
     }
     public void setIntCurrentPlayer(int currentPlayer){
         this.currentPlayer = currentPlayer;
@@ -207,16 +203,10 @@ public class Cli {
         Card card;
         Coordinates[] AdjacentCoordinates = new Coordinates[4];
         int j = 0;
-        System.out.println("size di otherplayercards prima while è"+ otherPlayerChosenCards.size());
         otherPlayerChosenCards.clear();
         while (j < toRemove.size()) {
             temp = toRemove.get(j);
             card = this.board.removeCardAtCoordinates(temp);
-            if(card == null){
-                System.out.println("la carta che ho rimosso con removeother player cards è null, ");
-            }else{
-                System.out.println("la carta in removeotherplaeyercards è "+ card);
-            }
             this.otherPlayerChosenCards.add(card);
             AdjacentCoordinates[0] = new Coordinates(temp.getRow(), temp.getCol() + 1);
             AdjacentCoordinates[1] = new Coordinates(temp.getRow() + 1, temp.getCol());
@@ -229,7 +219,6 @@ public class Cli {
             }
             j ++;
         }
-        System.out.println("size di otherplayercards dopo while è"+ otherPlayerChosenCards.size());
     }
     public void printRoutine(){
         //delete all?
@@ -401,9 +390,6 @@ public class Cli {
         System.out.println("your current points are: " + currentScore);
     }
     public void printAchieveMessage(int index, int points){
-        System.out.println("(Cli setPlayers) stampo la lista di palyers" + this.players.toString());
-        System.out.println("(Cli setCurrentPlayer) il current player è il giocatore: " + currentPlayer);
-        System.out.println("(Cli setCurrentPlayer) stampo me che vale: " + me);
         if(currentPlayer == me){
             System.out.println("you achieved the shared goal: " + index + "obtaining: " + points+ "points");
         }

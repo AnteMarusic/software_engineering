@@ -36,20 +36,6 @@ public class UsernameIssuer {
         printMap();
     }
 
-    /**
-     * sinchronized even if it is called only by the decrementer
-     * @return a list of all the active clientHandlers
-     */
-    public synchronized List <ClientHandler> getActiveClientHandlers () {
-        List <ClientHandler> list = new ArrayList<>();
-        for (String s : map.keySet()) {
-            if ((map.get(s))[0]== ConnectionStatus.CONNECTED) {
-                list.add((ClientHandler)map.get(s)[2]);
-            }
-        }
-        return list;
-    }
-
     public synchronized void removeUsername (String username) throws NoSuchElementException {
         if (username != null && map.containsKey(username)) {
             map.remove(username);
@@ -136,11 +122,6 @@ public class UsernameIssuer {
         Object[] object = map.get(username);
         object[0]=ConnectionStatus.CONNECTED;
         map.put(username, object);
-    }
-    public synchronized ConnectionStatus getConnectionStatus(String username){
-        Object [] object;
-        object = map.get(username);
-        return (ConnectionStatus)object[0];
     }
 
     public synchronized void setDisconnect(String username){

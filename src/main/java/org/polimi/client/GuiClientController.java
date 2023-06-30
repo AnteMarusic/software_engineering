@@ -316,12 +316,10 @@ public class GuiClientController implements ClientControllerInterface{
                 int newPoints = m.getNewPoints();
                 switch (index){
                     case 1->{
-                        System.out.println(" e stato achieved il primo shared goal");
                         SceneController.getInstance().setLastSharedPoint1(newPoints);
                     }
 
                     case 2->{
-                        System.out.println(" e stato achieved il secondo shared goal");
                         SceneController.getInstance().setLastSharedPoint2(newPoints);
                     }
                 }
@@ -394,16 +392,6 @@ public class GuiClientController implements ClientControllerInterface{
     @Override
     public Message chooseColumn() {
         return new ChosenColumnMessage(username, SceneController.getInstance().getChosencol());
-    }
-
-    @Override
-    public void errorMessage() {
-
-    }
-
-    @Override
-    public void newPlayerJoinedLobby(String newPlayer) {
-
     }
 
     @Override

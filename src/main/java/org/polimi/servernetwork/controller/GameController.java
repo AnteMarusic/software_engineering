@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class GameController {
     private boolean destruction;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
-    private static final int COUNT_DOWN = 20;
+    private static final int COUNT_DOWN = 60;
     private int gameCode;
     private int numOfPlayers;
     private int currentPlayer;
@@ -155,14 +155,6 @@ public class GameController {
     //questo metodo non viene chiamato nel caso di client rmi
     public void startGameTurn() {
         System.out.println("(GameController startGameTurn)");
-        // comunica al primo giocatore d'iniziare scegliendo le carte da rimuovere dalla board
-        /*
-        new Thread(() -> {
-
-            players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
-        }).start();
-
-         */
         players.get(currentPlayer).sendMessage(new Message("server", MessageType.CHOOSE_CARDS_REQUEST));
         for (ClientHandler d : players) {
             if (d != players.get(currentPlayer) && d != null) {
@@ -240,13 +232,7 @@ public class GameController {
             if (c!=null && !c.equals(players.get(currentPlayer))) {
                 c.sendMessage(new ChosenColumnMessage("server", column));
             }
-            /*
-            // mando a tutti il punto più in alto nella queue dei punti shared
-            if(c!=null){
-                c.sendMessage(new SharedPointQueueTOPMessage("serve", game.getSharedPointQueueTOP()));
-            }
 
-             */
         }
     }
 
@@ -304,7 +290,7 @@ public class GameController {
                 c.sendMessage(new Message("server", MessageType.WINNER_MESSAGE));
         }
         System.out.println("(GameController endGame) gameEnded");
-        // fermo il thred DUE secondi per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
+        // fermo il thread DUE secondi per dare il tempo ai client di leggersi i messaggi e poi elimino tutti i client handler
         try{
             Thread.sleep(2000);
         }catch (InterruptedException e){
@@ -335,7 +321,7 @@ public class GameController {
     }
 
     /**
-     * TODO vedi commento sotto
+     *
      * @param clientHandler
      */
     public void reconnect (ClientHandler clientHandler){
@@ -388,7 +374,7 @@ public class GameController {
      * @param clientHandler The `ClientHandler` object representing the disconnected client.
      */
     public void disconnection(ClientHandler clientHandler){
-        // se la distrucction è a TRUE non devo gestire le disconnesioni, siccome il gioco si è chiuso
+        // se la destruction è a TRUE non devo gestire le disconnesioni, siccome il gioco si è chiuso
         if(!destruction){
             System.out.println("(GameController) disconnect " + clientHandler.getUsername());
             String username = clientHandler.getUsername();
@@ -412,9 +398,6 @@ public class GameController {
                     // ma non lo faccio giocare, gli comunico di essere rimasto da solo
                     players.get(currentPlayer).sendMessage(new Message("server", MessageType.AREALONE));
                     // ora ho finito e vado in attesa di messaggi
-                    // intanto parte il timer di 60 secondi, se nessuno si riconnette in questi 60 secondi il gioco finisce e il giocatore rimasto è il vincitore
-                    // come mi accorgo se qualcuno si è riconnesso? nella reconnection controllo se il giocatore era rimasto da solo, se era rimasto da solo riprendo il gioco
-                    // come?
                     // quando un si riconnette e c'era un solo giocatore fin'ora nella reconnection azzero il timer e passo il tunro all'unico giocatore che c'era già
                     // così riprende il flusso di gioco
                 }

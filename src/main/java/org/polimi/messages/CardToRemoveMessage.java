@@ -9,7 +9,6 @@ import java.util.List;
 public class CardToRemoveMessage extends Message implements Serializable {
     private List<Coordinates> coordinates;
 
-    private  List<Card> cards;
     public CardToRemoveMessage(String username, List<Coordinates> coordinates){
         super(username, MessageType.CARD_TO_REMOVE);
         this.coordinates = coordinates;

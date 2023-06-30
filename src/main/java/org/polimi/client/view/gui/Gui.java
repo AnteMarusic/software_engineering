@@ -15,13 +15,7 @@ public class Gui extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("login");
         stage.setScene(scene);
-        //stage.setResizable(false);
-        //stage.getIcons().add(icon);
         stage.show();
     }
-
-    /*public static void main(String[] args) {
-        launch(args);
-    }*/
 }
 

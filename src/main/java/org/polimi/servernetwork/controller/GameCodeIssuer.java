@@ -12,19 +12,11 @@ public class GameCodeIssuer {
         this.freedIdCodes = new LinkedList<>();
         this.currentHighestCode = 0;
     }
-    public void createRow (int gameCode) {
-        associations.put(gameCode, null);
-    }
-    public void setGameController (int gameCode, GameController gameController) {
-        associations.remove(gameCode);
-        associations.put(gameCode, gameController);
-    }
+
     public void createRow (int gameCode, GameController gameController) {
         associations.put(gameCode, gameController);
         System.out.println("(GameCodeIssuer createRow) created row for " + gameCode);
     }
-
-    public synchronized boolean containsIdCode (int idCode) {return associations.containsKey(idCode);}
     public synchronized GameController getGameController(int idCode) throws NoSuchElementException {
         if (!associations.containsKey(idCode))
             throw new NoSuchElementException();
@@ -75,14 +67,6 @@ public class GameCodeIssuer {
         }
     }
 
-    public synchronized boolean alreadyExistGameCode(int gameCode){  // metodo che controlla se esiste già un privateGAME con lo stesso gameCode
-        if(associations.get(gameCode) == null){
-            return false;
-        }
-        else
-            return true;
-
-    }
     public void removeGame(int gameCode){
         associations.remove(gameCode);
         freedIdCodes.add(gameCode);

@@ -268,10 +268,6 @@ public class SceneController {
     }
 
     public List<Card> getOtherPlayerChosenCards() {
-        System.out.println("chiamato getotherplayerchosencards, ");
-        for(Card card : otherPlayerChosenCards){
-            System.out.println("eccola dell'altro client : "+ card);
-        }
         return otherPlayerChosenCards;
     }
     public void setOrderedChosenCards(List<Coordinates> orderedChosenCards) {
@@ -389,14 +385,11 @@ public class SceneController {
     }
 
     public void setLastSharedPoint1(int points) {
-        System.out.println("sto settando i punti a currentplayer il primo shared a="+ currentPlayer+" io sono "+getMyIndex());
         lastSharedPoint1[currentPlayer] = points;
     }
 
 
     public void setLastSharedPoint2(int points) {
-        System.out.println("sto settando i punti a currentplayer il secondo shared a="+ currentPlayer+"io sono "+getMyIndex());
-
         lastSharedPoint2[currentPlayer] = points;
     }
 

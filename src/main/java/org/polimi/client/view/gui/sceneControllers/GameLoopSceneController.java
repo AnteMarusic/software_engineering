@@ -153,7 +153,6 @@ public class GameLoopSceneController {
                                         tile0.setVisible(true);
                                     }
                                     case 1 ->  {
-                                        System.out.println("this is maxinsertable fater choosing 2 cards"+ maxInsertable);
                                         if(maxInsertable<2){
                                             showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {
@@ -175,7 +174,6 @@ public class GameLoopSceneController {
                                             }
                                         }
                                     case 2 ->{
-                                        System.out.println("this is maxinsertable after choosing 3 cards"+ maxInsertable);
                                         if(maxInsertable<3){
                                            showAlert("You can't choose that many cards, as there's not enough space in your bookshelf");
                                         } else {
@@ -345,7 +343,6 @@ public class GameLoopSceneController {
             showAlert("Choose at least one card");
         }
         else if(myBookshelf.getInsertable(0) >= choosenCardsDim){
-            System.out.println(" col0 insertable"+ myBookshelf.getInsertable(0));
             List<Card> list = new LinkedList<Card>();
             for(int i=0 ; i<choosenCardsDim ; i++){
                 list.add(board.seeCardAtCoordinates(chosenCoordinates.get(i)));

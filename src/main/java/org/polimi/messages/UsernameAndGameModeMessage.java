@@ -11,13 +11,11 @@ public class UsernameAndGameModeMessage extends Message implements Serializable 
         this.gameMode = gameMode;
         this.code = code;
     }
-
     public GameMode getGameMode(){
         return this.gameMode;
     }
     public int getCode() {return this.code;
     }
-
     @Override
     public String toString() {
         return super.toString() + "ChooseGameModeMessage{" +

@@ -35,7 +35,6 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
                        login(messageFromClient);
                     }
                 } else {
-                    //message == null. we suppose that this happens because you disconnected
                     System.out.println("(SocketClientHandler) received a null message from client " + username);
                     disconnect();
                 }

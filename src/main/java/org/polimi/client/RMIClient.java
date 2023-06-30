@@ -200,12 +200,7 @@ public class RMIClient extends Client implements RMICallback  {
         Message message, messageFromServer=null;
         do{
             messageFromServer = server.getMessage(username);
-            if(messageFromServer == null)
-                System.out.println("(RMIClient getNotified) cercando di leggere....");
         }while(messageFromServer==null);
-        if(messageFromServer!=null){
-            System.out.println("(RMIClient getNotified) appena ricevuto questo dal server: "+ messageFromServer);
-        }
         //message = handleMessage(messageFromServer);
         synchronized (messageQueueLock) {
             messageQueue.add(messageFromServer);
@@ -216,8 +211,6 @@ public class RMIClient extends Client implements RMICallback  {
             synchronized (taskLock) {
                 synchronized (messageQueueLock) {
                     message1 = messageQueue.poll();
-                    System.out.println("(RMIClient getNotified) letto questo dal server "+ message1);
-
                 }
                 try {
                     answer = handleMessage(message1);
@@ -226,11 +219,10 @@ public class RMIClient extends Client implements RMICallback  {
                 }
             }
             if (answer != null){
-                System.out.println("(RMIclient getNotified) inviando questo al server: "+ answer +"\n in risposta a "+ message1);
                 try {
                     server.onMessage(answer);
                 } catch (RemoteException e) {
-                    System.out.println("(RMIclient getNotified) error sending message to server");
+                    System.out.println("error sending message to server");
                 }
             }
         }).start();

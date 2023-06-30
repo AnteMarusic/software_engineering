@@ -590,17 +590,6 @@ public class CliClientController implements ClientControllerInterface {
         System.out.println("reconnection successful");
     }
 
-    /**
-     * calls the correspondent method of CLI
-     */
-
-    public void startGameMessage () {}
-
-    /**
-     * handles the message modelStatusMessage
-     */
-    public void modelUpdateMessage () {
-    }
 
     /**
      * handles ModelStatusAllMessage

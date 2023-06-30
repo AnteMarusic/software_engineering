@@ -33,13 +33,11 @@ public class ClientBookshelf {
         this.grid = grid;
         this.maxInsertable = 0;
         this.index = new int[COL];
-        System.out.println("print index:");
         for (int i = 0; i < COL; i ++) {
             this.index[i]=0;
             for (int j = ROW - 1; j >= 0; j --) {
                 if (grid[j][i] == null) {
                     this.index[i]++;
-                    System.out.println("valore di index in clientbookshelf: "+index[i]+ "per colonna: " + i);
                 }
             }
         }
@@ -78,7 +76,6 @@ public class ClientBookshelf {
     public void insert(List<Card> cards, int col) {
         int j = 0;
         //index parte da 6
-        System.out.println("(ClientBookshelf insert)sto inserendo questo numero di carte: " + cards.size());
         for (int i = index[col]-1; i > index[col] - cards.size()-1; i--) {
             this.grid[i][col] = cards.get(j);
             j ++;

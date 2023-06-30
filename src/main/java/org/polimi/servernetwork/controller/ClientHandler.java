@@ -55,7 +55,6 @@ public abstract class ClientHandler{
                         lobbyController.addPrivateGameCode(privateCode, this, chosenGameModeMessage.getNumOfPlayer());
                         sendMessage(new GameCodeMessage(privateCode));
                     }
-                    default-> System.out.println("(ClientHandler) received unknown value of GameMode");
                 }
             }
             case CHOSEN_CARDS_REPLY -> {
@@ -81,12 +80,10 @@ public abstract class ClientHandler{
         if(!destruction){
             if (isLogged) {
                 System.out.println("(ClientHandler) " + this.username + " disconnected");
-
                 if (lobbyController == null) {
                     System.out.println("(ClientHandler username: " + this.username + ") sistemic failure. for some reason lobbyController attribute is null");
                     throw new NullPointerException();
                 }
-
                 //if game controller is null you are either in a lobby or waiting to get in one
                 //so, you should disconnect from it
                 if (gameController == null) {

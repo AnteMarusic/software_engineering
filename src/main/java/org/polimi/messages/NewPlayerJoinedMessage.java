@@ -9,7 +9,4 @@ public class NewPlayerJoinedMessage extends Message implements Serializable {
         this.players = players;
     }
 
-    public String[] getNewPlayer() {
-        return this.players;
-    }
 }

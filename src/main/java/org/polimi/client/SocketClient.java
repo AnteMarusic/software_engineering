@@ -60,14 +60,10 @@ public class SocketClient extends Client{
         }else{
             //gui
             createGuiClientController();
-            System.out.println("prima di startlistineg");
             startListeningToMessages();
-            System.out.println("prima di semaforo, dopo startlistineg");
             new Thread(()->
             {try {
-                System.out.println("entrato nel try");
                 this.waitForFlag();
-                System.out.println("dopo this.wait");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -80,15 +76,11 @@ public class SocketClient extends Client{
 
 
     public void waitForFlag() throws InterruptedException {
-        System.out.println("prima di lock.lock");
         locksocket.lock();
-        System.out.println("dopo di lock.lock");
         try {
-            System.out.println("prima del while in waitforflag");
             while (!this.waitForusername) {
                 flagCondition.await(); // Wait until the flag is set
             }
-            System.out.println("dopo while");
         } finally {
             locksocket.unlock();
         }
@@ -142,7 +134,6 @@ public class SocketClient extends Client{
             try {
                 while (socket.isConnected()) {
                     message = input.readObject();
-                    System.out.println("received this message " + message);
                     if (!(message instanceof Message)) {
                         handleProtocolDisruption();
                     } else {
@@ -165,7 +156,6 @@ public class SocketClient extends Client{
      * Closes all the connections and streams associated with the client.
      */
     private void closeEverything() {
-        System.out.println("closeEverything");
         try {
             if (socket != null) {
                 socket.close();
@@ -195,17 +185,11 @@ public class SocketClient extends Client{
     }
 
 
-    public boolean isWaitForusername() {
-        return waitForusername;
-    }
 
 
     public void setWaitForusername(boolean waitForusername) {
         this.waitForusername = waitForusername;
     }
-    /*public static void main(String[] args) {
-        int port = 8181;
-        SocketClient socket = new SocketClient(port);
-    }*/
+
 }
 
