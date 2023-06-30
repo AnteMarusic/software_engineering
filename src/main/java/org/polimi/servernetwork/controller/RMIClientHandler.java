@@ -2,6 +2,7 @@ package org.polimi.servernetwork.controller;
 
 import org.polimi.client.RMICallback;
 import org.polimi.messages.*;
+import org.polimi.servernetwork.server.Pinger;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -14,6 +15,7 @@ public class RMIClientHandler extends ClientHandler{
     private RMICallback rmistub;
     private final Object taskLock;
     private final Object RMIMessagesLock;
+    private Pinger pinger;
 
     public RMIClientHandler(RMICallback rmistub, UsernameIssuer usernameIssuer, GameCodeIssuer gameCodeIssuer, LobbyController lobbyController) {
         super(usernameIssuer, gameCodeIssuer, lobbyController);
@@ -48,7 +50,11 @@ public class RMIClientHandler extends ClientHandler{
     }
 
     public void closeEverything() {
+        pinger.setConditionFalse();
+    }
 
+    public void setPinger (Pinger p) {
+        this.pinger = p;
     }
 
     public Message popMessageRMI(){

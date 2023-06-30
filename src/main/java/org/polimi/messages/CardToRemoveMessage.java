@@ -13,14 +13,8 @@ public class CardToRemoveMessage extends Message{
         super(username, MessageType.CARD_TO_REMOVE);
         this.coordinates = coordinates;
     }
-    public CardToRemoveMessage(String username, List<Coordinates> coordinates, List<Card> cards){
-        super(username, MessageType.CARD_TO_REMOVE);
-        this.coordinates = coordinates;
-        this.cards = cards;
-    }
     public List<Coordinates> getCoordinates(){
         return coordinates;
     }
 
-    public List<Card> getCards(){return cards;}
 }

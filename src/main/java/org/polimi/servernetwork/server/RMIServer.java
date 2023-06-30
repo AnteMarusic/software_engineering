@@ -55,8 +55,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         }
         return internalComunication;
     }
-    private void createPinger(String username, RMICallback rmiClient){
-            new Thread(new Pinger(rmiClient, this, username)).start();
+    private void createPinger(String username, RMIClientHandler clientHandler, RMICallback rmiClient){
+        Pinger p = new Pinger(rmiClient, this, username);
+        clientHandler.setPinger(p);
+        new Thread(p).start();
     }
 
     /**
@@ -69,7 +71,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         if(usernameIssuer.getClientHandler(username)!=null){
             usernameIssuer.getClientHandler(username).disconnect();
         }
-
     }
 
     @Override
@@ -98,14 +99,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.usernameIssuer.setClientHandler(clientHandler, username);
         //onMessage(usernameMessage);
         clientHandler.sendMessage (new Message(username, MessageType.CHOOSE_GAME_MODE ));
-        createPinger(username, rmiclient);
+        createPinger(username, (RMIClientHandler) clientHandler, rmiclient);
     }
 
     public void reconnection(String username, RMICallback rmiclient) throws RemoteException {
         subscribers.put(username, rmiclient);
         ClientHandler clientHandler = new RMIClientHandler(rmiclient, usernameIssuer, gameCodeIssuer, lobbyController);
         clientHandler.setUsername(username);
-        createPinger(username, rmiclient);
+        createPinger(username, (RMIClientHandler) clientHandler, rmiclient);
         clientHandler.reconnection();
     }
     public void sendChatMessage(String message) throws RemoteException{

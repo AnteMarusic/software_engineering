@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class GameController {
     private boolean destruction;
     private final ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();
-    private static final int COUNT_DOWN = 60;
+    private static final int COUNT_DOWN = 20;
     private int gameCode;
     private int numOfPlayers;
     private int currentPlayer;
@@ -187,10 +187,7 @@ public class GameController {
         for (ClientHandler c : players) {
             //ho rimosso dall'if la condizione per la quale il messaggio non lo inviava a quello che ha effettivamente rimosso le carte
             if (c != null) {
-                if(cards == null){
-                    System.out.println("(Game controller removeCards) sto inviando la lista di carte null \n\n\n\n");
-                }
-                c.sendMessage(new CardToRemoveMessage("server", coordinates, cards));
+                c.sendMessage(new CardToRemoveMessage("server", coordinates));
             }
         }
         if(empty) {
