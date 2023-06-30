@@ -1,5 +1,7 @@
 package org.polimi.servernetwork.model;
 
+
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

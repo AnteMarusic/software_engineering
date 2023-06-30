@@ -20,7 +20,7 @@
                                 <Font size="17.0" />
                             </font>
                         </Text>
-                        <TextField id="nicknameField" fx:id="nicknameField" alignment="CENTER" layoutX="372.0" layoutY="108.0" prefHeight="23.0" prefWidth="176.0" promptText="dajeroma" styleClass="customText">
+                        <TextField id="nicknameField" fx:id="nicknameField" alignment="CENTER" layoutX="372.0" layoutY="108.0" prefHeight="23.0" prefWidth="176.0" styleClass="customText">
                             <font>
                                 <Font size="16.0" />
                             </font>
