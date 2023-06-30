@@ -64,12 +64,17 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
 
 <h2><span style="font-size: 36px;">JAR</span></h2>
 <p><span style="font-size: 16px;">I seguenti jar sono stati utilizzati per la consegna del progetto, permettono quindi il lancio del gioco secondo le funzionalit&agrave; descritte nell&apos;introduzione.</span></p>
+
+<ul>
+    <li style="font-size: 22px;"><a href="https://github.com/FilippoGarofalo/ing-sw-2023-Garofalo-Lazzaretto-Kalupahana-Marusic/tree/main/derivables/JAR">JAR</a></li>
+</ul>
+
 <p><span style="font-size: 30px;">come far partire il jar lato server:</span></p>
 <p><a>java -jar your/path/to/jar/server.jar path/in/which/you/want/to/put/the/game/files serverIp</a></p>
 <p><span style="font-size: 30px;">come far partire il jar lato client:</span></p>
 <p><a>java -jar your/path/to/jar/client.jar serverIp</a></p>
 
-<p><span style="font-size: 30px;">Componenti del gruppo:</span></p>
+<h2><span style="font-size: 30px;">Componenti del gruppo:</span></h2>
 <ul>
     <li><span style="font-size: 18px;"><a href="https://github.com/FilippoGarofalo">Filippo Garofalo</a></span></li>
     <li><a href="https://github.com/andrealazzaretto">Andrea Lazzaretto</a></li>
