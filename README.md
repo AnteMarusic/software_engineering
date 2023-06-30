@@ -62,7 +62,7 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
     <li><span style="font-size: 16px;">Resilienza alle disconnessioni</span></li>
 </ul>
 
-<p><span style="font-size: 36px;">JAR</span></p>
+<h1><span style="font-size: 36px;">JAR</span></h1>
 <p><span style="font-size: 30px;">come far partire il jar lato server:</span></p>
 <p><a>java -jar your/path/to/jar/server.jar path/in/which/you/want/to/put/the/game/files serverIp</a></p>
 <p><span style="font-size: 30px;">come far partire il jar lato client:</span></p>
