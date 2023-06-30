@@ -61,6 +61,13 @@ Autori: Antonio Marusic, Filippo Garofalo, Andrea Lazzaretto, Kalana Kalupahana.
     <li><span style="font-size: 16px;">Persistenza</span></li>
     <li><span style="font-size: 16px;">Resilienza alle disconnessioni</span></li>
 </ul>
+
+<p><span style="font-size: 30px;">JAR</span></p>
+<p><span style="font-size: 30px;">come far partire il jar lato server</span></p>
+<p><a>java -jar your/path/to/jar/server.jar path/in/which/you/want/to/put/the/game/files serverIp</a></p>
+<p><span style="font-size: 30px;">come far partire il jar lato client</span></p>
+<p><a>java -jar your/path/to/jar/client.jar serverIp</a></p>
+
 <p><span style="font-size: 30px;">Componenti del gruppo:</span></p>
 <ul>
     <li><span style="font-size: 18px;"><a href="https://github.com/FilippoGarofalo">Filippo Garofalo</a></span></li>
