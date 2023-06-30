@@ -108,7 +108,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         createPinger(username, rmiclient);
     }
 
-    public void subscribe2(String username) throws RemoteException, NotBoundException {
+    public void subscribe2(String username) throws NotBoundException, RemoteException {
         System.out.println("1");
         RMICallback rmiclient = (RMICallback)registry.lookup(username);
         subscribers.put(username, rmiclient);
