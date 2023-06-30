@@ -144,7 +144,7 @@ public class SceneController {
         stage = (Stage) ((Node) (event != null ? event.getSource() : null)).getScene().getWindow();
 
         if (sceneName.equals("login_scene")) {
-            scene = new Scene(root, 693, 200);
+            scene = new Scene(root, 693, 300);
             stage.setResizable(false);
         } else {
             scene = new Scene(root);

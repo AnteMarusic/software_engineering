@@ -24,7 +24,7 @@ import java.util.Scanner;
  * the first GUI scene
  */
 
-public class ClientStarter {
+public class  ClientStarter {
     private static final int rmiPort = 1099;
     private static final int socketPort = 8181;
     private static final int NUMBER_OF_TRIES = 1000;
