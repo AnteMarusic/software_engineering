@@ -135,7 +135,7 @@ public class RMIClient extends Client implements RMICallback  {
         }
         if (internalComunication == InternalComunication.OK) {
             clientController.loginSuccessful();
-            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 1099);
+            RMICallback clientStub = (RMICallback) UnicastRemoteObject.exportObject(this, 0);
             server.subscribe(username, clientStub);
             new Thread(new Decrementer(this)).start();
         }
