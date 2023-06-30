@@ -20,6 +20,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     private UsernameIssuer usernameIssuer;
     private LobbyController lobbyController;
     private Map<String, RMICallback> subscribers;
+
+    private Registry registry;
     public RMIServer(int rmiPort, GameCodeIssuer gameCodeIssuer, UsernameIssuer usernameIssuer, LobbyController lobbyController) throws RemoteException{
         this.gameCodeIssuer = gameCodeIssuer;
         this.usernameIssuer = usernameIssuer;
@@ -27,9 +29,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
         this.subscribers = new HashMap<>();
 
         try {
-            Registry registry = LocateRegistry.createRegistry(rmiPort);
+            System.setProperty("java.rmi.server.hostname", "192.168.244.63");
+            this.registry = LocateRegistry.createRegistry(rmiPort);
             //Decrementer decrementer = new Decrementer(usernameIssuer);
             registry.bind("server", this);
+            RMIinterface stub = (RMIinterface) UnicastRemoteObject.exportObject(this, 1099);
             //new Thread(decrementer).start();
             System.out.println("RMI server is up");
         } catch (IOException | AlreadyBoundException e) {
@@ -79,6 +83,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
     }
 
     public Message getMessage(String username)throws RemoteException{
+        System.out.println("funziona");
         RMIClientHandler clientHandler = (RMIClientHandler) usernameIssuer.getClientHandler(username);
         return clientHandler.popMessageRMI();
     }
@@ -90,7 +95,23 @@ public class RMIServer extends UnicastRemoteObject implements RMIinterface {
      * @throws RemoteException
      */
     public void subscribe(String username, RMICallback rmiclient) throws RemoteException{
+        System.out.println("1");
         subscribers.put(username, rmiclient);
+        System.out.println("1");
+        //Message usernameMessage = new Message(username);
+        ClientHandler clientHandler = new RMIClientHandler(rmiclient, usernameIssuer, gameCodeIssuer, lobbyController);
+        clientHandler.setUsername(username);
+        this.usernameIssuer.setClientHandler(clientHandler, username);
+        //onMessage(usernameMessage);
+        clientHandler.sendMessage (new Message(username, MessageType.CHOOSE_GAME_MODE ));
+        createPinger(username, rmiclient);
+    }
+
+    public void subscribe2(String username) throws RemoteException, NotBoundException {
+        System.out.println("1");
+        RMICallback rmiclient = (RMICallback)registry.lookup(username);
+        subscribers.put(username, rmiclient);
+        System.out.println("1");
         //Message usernameMessage = new Message(username);
         ClientHandler clientHandler = new RMIClientHandler(rmiclient, usernameIssuer, gameCodeIssuer, lobbyController);
         clientHandler.setUsername(username);
