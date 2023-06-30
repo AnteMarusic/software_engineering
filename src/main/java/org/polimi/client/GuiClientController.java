@@ -87,7 +87,7 @@ public class GuiClientController implements ClientControllerInterface{
      * @return Returns a boolean value based on the notification type and the performed actions.
      * @throws RemoteException if a remote communication error occurs.
      */
-    public static boolean getNotified(String notificationType) throws RemoteException {
+    public static boolean getNotified(String notificationType) throws Exception {
         if(rmi){
             switch(notificationType){
                 case "username" ->{
@@ -170,7 +170,7 @@ public class GuiClientController implements ClientControllerInterface{
                     while (!receivedgamemodemess) {
                         Thread.onSpinWait();
                     }
-                    ((RMIClient) client).sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1));
+                    client.sendMessage(new ChosenGameModeMessage(username, GameMode.JOIN_RANDOM_GAME_4_PLAYER, -1));
                     numOfPlayers=4;
                 }
                 case "startgame"->{
