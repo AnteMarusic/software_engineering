@@ -66,7 +66,7 @@ public class RMIClientHandler extends ClientHandler{
     /**
      * Handles the reconnection of a client to a game session.
      * This method is called when a client attempts to reconnect to a game.
-     * It associates the client handler with the corresponding game controller and updates the username and connection status.
+     * It associates the client handler with the corresponding game controller and updates the usernameIssuer and connection status.
      * Finally, it triggers the game controller's reconnect method to resume the game for the reconnected client.
      */
 

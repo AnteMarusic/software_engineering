@@ -169,7 +169,7 @@ public class Game implements Serializable {
 
     /**
      * Ends the game and calculates the final ranking based on the players' total scores.
-     * If there is someone managed to fill his bookshelf, the win point is assigned to the winning player.
+     * If there is someone managed to fill his bookshelf, the win point is assigned to him.
      * Returns a map representing the ranking with players' names as keys and their total scores as values.
      *
      * @return A map representing the ranking with players' names as keys and their total scores as values.

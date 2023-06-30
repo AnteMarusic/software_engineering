@@ -114,66 +114,6 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
         }
     }
     public void reconnection(){
-
     }
-     /*
-    public void onMessage(Message message){
-        switch (message.getMessageType()){
 
-            case USERNAME -> {
-
-                InternalComunication internalComunication = usernameIssuer.login(message.getUsername());
-                if(internalComunication == InternalComunication.OK) {
-                    usernameIssuer.setClientHandler(this, message.getUsername());
-                    this.username = message.getUsername();
-                    sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-                }
-                if(internalComunication == InternalComunication.ALREADY_TAKEN_USERNAME) {
-                    sendMessage(new ErrorMessage(this.username, ErrorType.ALREADY_TAKEN_USERNAME));
-                }
-                //to test
-                if(internalComunication == InternalComunication.RECONNECTION){
-                    this.username = message.getUsername();
-                    int gameId = usernameIssuer.getGameID(message.getUsername());
-                    GameController gameController = gameCodeIssuer.getGameController(gameId);
-                    usernameIssuer.setClientHandler(this, message.getUsername());
-                    setGameController(gameController);
-                    usernameIssuer.setConnect(this.getUsername());
-                    gameController.reconnect(this);
-                }
-            }
-
-            case CHOOSE_GAME_MODE -> {
-                ChosenGameModeMessage chosenGameModeMessage = (ChosenGameModeMessage) message;
-                switch (chosenGameModeMessage.getGameMode()) {
-                    case JOIN_RANDOM_GAME_2_PLAYER -> lobbyController.insertPlayer(this, 2);
-                    case JOIN_RANDOM_GAME_3_PLAYER -> lobbyController.insertPlayer(this, 3);
-                    case JOIN_RANDOM_GAME_4_PLAYER -> lobbyController.insertPlayer(this , 4);
-                    case JOIN_PRIVATE_GAME -> lobbyController.addInAPrivateGame(chosenGameModeMessage.getCode(), this);
-                    case CREATE_PRIVATE_GAME -> {
-                        if(gameCodeIssuer.alreadyExistGameCode(chosenGameModeMessage.getCode()) || lobbyController.readyToCreatePrivateGame(chosenGameModeMessage.getCode())){
-                            sendMessage(new Message(this.username, MessageType.ALREADYTAKENGAMECODEMESSAGE ));
-                            sendMessage(new Message(this.username, MessageType.CHOOSE_GAME_MODE ));
-                        }
-                        else{
-                            lobbyController.addPrivateGameCode(chosenGameModeMessage.getCode(), this, chosenGameModeMessage.getNumOfPlayer());
-                        }
-                    }
-                    default-> System.out.println("errore nella ricezione del messaggio gamemode");
-                }
-
-            }
-            case CHOSEN_CARDS_REPLY -> {
-                ChosenCardsMessage chosenCards = (ChosenCardsMessage) message;
-                gameController.removeCards(chosenCards.getCoordinates());
-                sendMessage(new Message(this.username, MessageType.CHOOSE_COLUMN_REQUEST));
-            }
-            case CHOSEN_COLUMN_REPLY -> {
-                ChosenColumnMessage chosenColumn = (ChosenColumnMessage) message;
-                gameController.insertInBookshelf(chosenColumn.getColumn());
-                gameController.notifyNextPlayer();
-            }
-        }
-    }
-    */
 }

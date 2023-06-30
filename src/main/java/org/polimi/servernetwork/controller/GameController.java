@@ -383,7 +383,7 @@ public class GameController {
 
     /**
      * Handles the disconnection of a client represented by the provided `clientHandler` object.
-     * If `destruction` is set to `true`, no disconnections are handled as the game has already closed.
+     * If `destruction` is set to `true`, no disconnections are handled because the game has already closed.
      *
      * @param clientHandler The `ClientHandler` object representing the disconnected client.
      */
@@ -518,7 +518,7 @@ public class GameController {
     }
 
     /**
-     * Decreases the countDown value by 1. If the countDown value becomes equal to COUNT_DOWN - 1,
+     * Decreases the countDown value by 60. If the countDown value becomes equal to COUNT_DOWN - 1,
      * it prints a message indicating that the countdown has started. If the countDown value reaches 0,
      * it stops the decrementer, declares the winner, sends a end game message, and closes the game.
      */

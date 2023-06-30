@@ -102,10 +102,7 @@ public class Bookshelf implements Serializable {
     }
 
     /**
-     * Updates the maximum number of cards that can be inserted into any column in the game board.
-     * It iterates over each column and calculates the number of insertable cards using the getInsertable() method.
-     * The maximum insertable value is capped at 3, following the game rules.
-     * Finally, it sets the maximum insertable value as the new value for maxInsertable.
+     * Updates the maximum number of cards that can be inserted into the bookshelf.
      */
     private void updateMaxInsertable () {
         int max = 0;
@@ -125,7 +122,7 @@ public class Bookshelf implements Serializable {
 
 
     /**
-     * Inserts a list of cards into the specified column of the game board.
+     * Inserts a list of cards into the specified column of the bookshelf.
      *
      * @param cards The list of cards to be inserted.
      * @param col   The column index where the cards should be inserted.
